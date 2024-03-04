@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
@@ -7,43 +8,31 @@ namespace RPGKarawara
     {
         protected PlayerMovementStateMachine stateMachine;
 
-        protected Vector2 movementInput;
+        protected PlayerGroundedData movementData;
 
-        protected float baseSpeed = 5f;
-        protected float speedModifier = 1f;
-        protected Vector3 currentTargetRotation;
-        protected Vector3 timeToReachTargetRotation;
-        protected Vector3 dampedTargetRotationCurrentVelocity;
-        protected Vector3 dampedTargetRotationPassedTime;
         public PlayerMovementState(PlayerMovementStateMachine playerMovementStateMachine) 
         { 
             stateMachine = playerMovementStateMachine;
+            movementData = stateMachine.Player.Data.GroundedData;
             InitializeData();
-        }
+    }
 
         private void InitializeData()
         {
-            timeToReachTargetRotation.y = 0.14f;
+            stateMachine.ReusableData.TimeToReachTargetRotation = movementData.BaseRotationData.TargetRotationReachTime;
         }
         #region IState Methods
         public virtual void Enter()
         {
-            Vector3 movementDirection = GetMovementInputDirection();
-
-            float targetRotationYAngle = Rotate(movementDirection);
-
-            Vector3 targetRotationDirection = GetTargetRotationDirection(targetRotationYAngle);
-
-            float movementSpeed = GetMovementSpeed();
-
-            Vector3 currentPlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
-
-            stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
+            Debug.Log("State: " + GetType().Name);
+            AddInputActionsCallbacks();
         }
+
+        
 
         public virtual void Exit()
         {
-            
+            RemoveInputActionsCallbacks();
         }
 
         public virtual void HandleInput()
@@ -65,11 +54,11 @@ namespace RPGKarawara
         #region Main Methods
         private void ReadMovementInput()
         {
-            movementInput = stateMachine.Player.Input.PlayerActions.Movement.ReadValue<Vector2>();
+            stateMachine.ReusableData.MovementInput = stateMachine.Player.Input.PlayerActions.Movement.ReadValue<Vector2>();
         }
         private void Move()
         {
-            if (movementInput == Vector2.zero || speedModifier == 0f)
+            if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier == 0f)
             {
                 return;
             }
@@ -105,7 +94,7 @@ namespace RPGKarawara
                 directionAngle = AddCameraRotationToAngle(directionAngle);
             }
 
-            if (directionAngle != currentTargetRotation.y)
+            if (directionAngle != stateMachine.ReusableData.CurrentTargetRotation.y)
             {
                 UpdateTargetRotationData(directionAngle);
             }
@@ -139,23 +128,23 @@ namespace RPGKarawara
 
         private void UpdateTargetRotationData(float targetAngle)
         {
-            currentTargetRotation.y = targetAngle;
+            stateMachine.ReusableData.CurrentTargetRotation.y = targetAngle;
 
-            dampedTargetRotationPassedTime.y = 0f;
+            stateMachine.ReusableData.DampedTargetRotationPassedTime.y = 0f;
         }
 
         protected void RotateTowardsTargetRotation()
         {
             float currentYAngle = stateMachine.Player.Rigidbody.rotation.eulerAngles.y;
 
-            if (currentYAngle == currentTargetRotation.y)
+            if (currentYAngle == stateMachine.ReusableData.CurrentTargetRotation.y)
             {
                 return;
             }
 
-            float smoothedYAngle = Mathf.SmoothDampAngle(currentYAngle, currentTargetRotation.y, ref dampedTargetRotationCurrentVelocity.y, timeToReachTargetRotation.y - dampedTargetRotationPassedTime.y);
+            float smoothedYAngle = Mathf.SmoothDampAngle(currentYAngle, stateMachine.ReusableData.CurrentTargetRotation.y, ref stateMachine.ReusableData.DampedTargetRotationCurrentVelocity.y, stateMachine.ReusableData.TimeToReachTargetRotation.y - stateMachine.ReusableData.DampedTargetRotationPassedTime.y);
 
-            dampedTargetRotationPassedTime.y += Time.deltaTime;
+            stateMachine.ReusableData.DampedTargetRotationPassedTime.y += Time.deltaTime;
 
             Quaternion targetRotation = Quaternion.Euler(0f, smoothedYAngle, 0f);
 
@@ -173,18 +162,41 @@ namespace RPGKarawara
 
         protected Vector3 GetMovementInputDirection()
         {
-            return new Vector3(movementInput.x, 0f, movementInput.y);
+            return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
         }
 
         protected float GetMovementSpeed()
         {
-            return baseSpeed * speedModifier;
+            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
         }
         protected Vector3 GetPlayerHorizontalVelocity()
         {
             Vector3 playerHorizontalVelocity = stateMachine.Player.Rigidbody.velocity;
             playerHorizontalVelocity.y = 0f;
             return playerHorizontalVelocity;
+        }
+
+        protected void ResetVelocity()
+        {
+            stateMachine.Player.Rigidbody.velocity = Vector3.zero;
+        }
+        protected virtual void AddInputActionsCallbacks()
+        {
+            stateMachine.Player.Input.PlayerActions.WalkToggle.started += OnWalkToggleStarted;
+        }
+
+        
+
+        protected virtual void RemoveInputActionsCallbacks()
+        {
+            stateMachine.Player.Input.PlayerActions.WalkToggle.started -= OnWalkToggleStarted;
+        }
+        #endregion
+
+        #region Input Meethods
+        protected virtual void OnWalkToggleStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
         }
         #endregion
     }

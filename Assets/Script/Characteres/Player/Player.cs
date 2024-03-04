@@ -5,6 +5,9 @@ namespace RPGKarawara
     [RequireComponent(typeof(PlayerInput))]
     public class Player : MonoBehaviour
     {
+        [field: Header("References")]
+        [field: SerializeField] public PlayerSO Data { get; private set; }
+
         public Rigidbody Rigidbody {  get; private set; }
 
         public PlayerInput Input { get; private set; }
