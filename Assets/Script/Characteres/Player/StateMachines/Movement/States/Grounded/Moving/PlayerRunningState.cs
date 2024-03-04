@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
-    public class PlayerRunningState : PlayerGroundedState
+    public class PlayerRunningState : PlayerMovingState
     {
         public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
