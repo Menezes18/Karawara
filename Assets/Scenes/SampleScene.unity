@@ -878,6 +878,7 @@ GameObject:
   - component: {fileID: 929098104}
   - component: {fileID: 929098103}
   - component: {fileID: 929098106}
+  - component: {fileID: 929098107}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -986,6 +987,23 @@ MonoBehaviour:
   m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!114 &929098107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929098102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0700fc77507c4b46a3df542e309e1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultDistance: 6
+  minimumDistance: 1
+  maximumDistance: 6
+  smoothing: 4
+  zoomSensitivity: 1
 --- !u!1 &1032622605
 GameObject:
   m_ObjectHideFlags: 0
