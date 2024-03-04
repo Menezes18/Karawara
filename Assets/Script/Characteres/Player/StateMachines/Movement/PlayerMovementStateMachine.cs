@@ -15,11 +15,12 @@ namespace RPGKarawara
         public PlayerMovementStateMachine(Player player)
         {
             Player = player;
-            IdlingState = new PlayerIdlingState();
 
-            WalkingState = new PlayerWalkingState();
-            RunningState = new PlayerRunningState();
-            SprintingState = new PlayerSprintingState();
+            IdlingState = new PlayerIdlingState(this);
+
+            WalkingState = new PlayerWalkingState(this);
+            RunningState = new PlayerRunningState(this);
+            SprintingState = new PlayerSprintingState(this);
 
         }
     }
