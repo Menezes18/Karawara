@@ -8,6 +8,8 @@ namespace RPGKarawara
     public class PlayerDashingState : PlayerGroundedState
     {
         private PlayerDashData dashData;
+        private float startTime;
+        private int consecutiveDashesUsed;
 
         public PlayerDashingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine){
             dashData = movementData.DashData;
@@ -21,6 +23,8 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementSpeedModifier = movementData.DashData.SpeedModifier;
 
             AddForceOnTransitionFromStationaryState();
+
+            UpdateConsecutiveDashes();
         }
         #endregion
 
@@ -35,6 +39,22 @@ namespace RPGKarawara
             characterRotationDirection.y = 0f;
 
             stateMachine.Player.Rigidbody.velocity = characterRotationDirection * GetMovementSpeed();
+        }
+
+        private void UpdateConsecutiveDashes(){
+            if(!IsConsecutive()){
+                consecutiveDashesUsed = 0;
+            }
+
+            ++consecutiveDashesUsed;
+
+            if(consecutiveDashesUsed == dashData.ConsecutiveDashesLimitAmount){
+                consecutiveDashesUsed = 0;
+            }
+        }
+
+        private bool IsConsecutive(){
+            return Time.time < startTime + dashData.TimeToBeConsideredConsecutive;
         }
         #endregion
     }
