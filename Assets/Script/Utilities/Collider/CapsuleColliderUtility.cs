@@ -30,7 +30,7 @@ namespace RPGKarawara
 
             RecalculateCapsuleColliderCenter();
             float halfColliderHeight = CapsuleColliderData.Collider.height;
-            if (halfColliderHeight / 2f  < CapsuleColliderData.Collider.radius) 
+            if (halfColliderHeight / 2f  < CapsuleColliderData.Collider.radius) //Calculando raio
             {
                 SetCapsuleColliderRadius(CapsuleColliderData.Collider.height / 2f);
             }
