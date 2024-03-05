@@ -16,7 +16,7 @@ namespace RPGKarawara
         {
             base.Enter();
 
-            stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
+            stateMachine.ReusableData.MovementOnSlopesSpeedModifier = movementData.RunData.SpeedModifier;
         }
 
         #endregion

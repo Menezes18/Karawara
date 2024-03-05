@@ -58,7 +58,7 @@ namespace RPGKarawara
         }
         private void Move()
         {
-            if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier == 0f)
+            if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementOnSlopesSpeedModifier == 0f)
             {
                 return;
             }
@@ -167,7 +167,7 @@ namespace RPGKarawara
 
         protected float GetMovementSpeed()
         {
-            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
+            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopesSpeedModifier;
         }
         protected Vector3 GetPlayerHorizontalVelocity()
         {
@@ -175,7 +175,10 @@ namespace RPGKarawara
             playerHorizontalVelocity.y = 0f;
             return playerHorizontalVelocity;
         }
-
+        protected Vector3 GetPlayerVerticalVelocity()
+        {
+            return new Vector3(0f, stateMachine.Player.Rigidbody.velocity.y, 0f);
+        }
         protected void ResetVelocity()
         {
             stateMachine.Player.Rigidbody.velocity = Vector3.zero;
