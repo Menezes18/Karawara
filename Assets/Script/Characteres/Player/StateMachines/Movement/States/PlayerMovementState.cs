@@ -104,7 +104,7 @@ namespace RPGKarawara
 
         private float GetDirectionAngle(Vector3 direction)
         {
-            float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg; //Mathf.Rad2Deg é uma constante que representa o fator de conversão de radianos para graus.
+            float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg; //Mathf.Rad2Deg ï¿½ uma constante que representa o fator de conversï¿½o de radianos para graus.
 
             if (directionAngle < 0f)
             {
@@ -200,6 +200,18 @@ namespace RPGKarawara
         protected virtual void OnWalkToggleStarted(InputAction.CallbackContext context)
         {
             stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
+        }
+
+        public virtual void OnAnimationEnterEvent(){
+            throw new System.NotImplementedException();
+        }
+
+        public virtual void OnAnimationExitEvent(){
+            throw new System.NotImplementedException();
+        }
+
+        public virtual void OnAnimationTransitionEvent(){
+            throw new System.NotImplementedException();
         }
         #endregion
     }
