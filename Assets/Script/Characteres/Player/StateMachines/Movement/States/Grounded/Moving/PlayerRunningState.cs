@@ -7,8 +7,11 @@ namespace RPGKarawara
 {
     public class PlayerRunningState : PlayerMovingState
     {
-        public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
-        {
+        private PlayerSprintData spintData;
+        private float starTime;
+
+        public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine){
+            spintData = movementData.SprintData;
         }
 
         #region IState Methods
@@ -17,9 +20,38 @@ namespace RPGKarawara
             base.Enter();
 
             stateMachine.ReusableData.MovementOnSlopesSpeedModifier = movementData.RunData.SpeedModifier;
+
+            starTime = Time.time;
         }
 
+        public override void Update()
+        {
+            base.Update();
+
+            if(!stateMachine.ReusableData.ShouldWalk){
+                return;
+            }
+
+            if(Time.time < starTime + spintData.RunToWalkTime){
+                return;
+            }
+
+            StopRunning();
+        }
         #endregion
+
+        #region Main Methods
+        private void StopRunning(){
+            if(stateMachine.ReusableData.MovementInput == Vector2.zero){
+                stateMachine.ChangeState(stateMachine.IdlingState);
+
+                return;
+            }
+
+            stateMachine.ChangeState(stateMachine.WalkingState);
+        }
+        #endregion
+
         #region Input Methods
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
