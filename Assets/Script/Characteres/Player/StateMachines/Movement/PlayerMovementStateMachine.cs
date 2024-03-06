@@ -15,6 +15,10 @@ namespace RPGKarawara
         public PlayerSprintingState SprintingState { get; }
         public PlayerWalkingState WalkingState { get; }
 
+        public PlayerLightStoppingState LightStoppingState { get; }
+        public PlayerMediumStoppingState MediumStoppingState { get; }
+        public PlayerHardStoppingState HardStoppingState { get; }
+
         public PlayerMovementStateMachine(Player player)
         {
             Player = player;
@@ -27,6 +31,9 @@ namespace RPGKarawara
             RunningState = new PlayerRunningState(this);
             SprintingState = new PlayerSprintingState(this);
 
+            LightStoppingState = new PlayerLightStoppingState(this);
+            MediumStoppingState = new PlayerMediumStoppingState(this);
+            HardStoppingState = new PlayerHardStoppingState(this);
         }
     }
 }
