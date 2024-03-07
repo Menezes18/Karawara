@@ -79,9 +79,14 @@ namespace RPGKarawara
         #endregion
 
         #region Input Methods
-            private void OnSprintPerformed(InputAction.CallbackContext context){
-                keepSprinting = true;
-            }
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.HardStoppingState);
+        }
+
+        private void OnSprintPerformed(InputAction.CallbackContext context){
+            keepSprinting = true;
+        }
         #endregion
     }
 }

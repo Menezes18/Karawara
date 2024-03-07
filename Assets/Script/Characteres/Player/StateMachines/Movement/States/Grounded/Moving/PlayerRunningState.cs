@@ -53,6 +53,10 @@ namespace RPGKarawara
         #endregion
 
         #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.MediumStoppingState);
+        }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
         {

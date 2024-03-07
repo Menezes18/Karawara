@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
@@ -10,6 +11,7 @@ namespace RPGKarawara
 
         }
 
+        #region IState Methods
         public override void Enter()
         {
             base.Enter();
@@ -27,5 +29,37 @@ namespace RPGKarawara
 
             DecelerateHorizontally();
         }
+
+        public override void OnAnimationTransitionEvent()
+        {
+            stateMachine.ChangeState(stateMachine.IdlingState);
+        }
+        #endregion
+
+        #region Reusable Methods
+        protected override void AddInputActionsCallbacks()
+        {
+            base.AddInputActionsCallbacks();
+
+            stateMachine.Player.Input.PlayerActions.Movement.started += OnMovementStarted;
+        }
+
+        protected override void RemoveInputActionsCallbacks()
+        {
+            base.RemoveInputActionsCallbacks();
+
+            stateMachine.Player.Input.PlayerActions.Movement.started -= OnMovementStarted;
+        }
+        #endregion
+
+        #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+        }
+
+        private void OnMovementStarted(InputAction.CallbackContext context){
+            OnMove();
+        }
+        #endregion
     }
 }

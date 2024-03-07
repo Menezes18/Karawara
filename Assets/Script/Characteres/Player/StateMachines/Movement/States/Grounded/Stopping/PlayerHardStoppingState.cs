@@ -18,5 +18,15 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.HardDecelerationForce;
         }
         #endregion
+
+        #region Reusable Methods
+        protected override void OnMove(){
+            if(stateMachine.ReusableData.ShouldWalk){
+                return;
+            }
+
+            stateMachine.ChangeState(stateMachine.RunningState);
+        }
+        #endregion
     }
 }
