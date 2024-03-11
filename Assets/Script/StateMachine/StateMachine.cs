@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 namespace RPGKarawara
 {
     public abstract class StateMachine
@@ -38,6 +40,10 @@ namespace RPGKarawara
         
         public void OnAnimationTransitionEvent(){
             _currentState?.OnAnimationTransitionEvent();
+        }
+        public void OnTriggerEnter(Collider collider)
+        {
+            _currentState.OnTriggerEnter(collider);
         }
     }
 }

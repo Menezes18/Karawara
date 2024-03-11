@@ -9,18 +9,22 @@ namespace RPGKarawara
         protected PlayerMovementStateMachine stateMachine;
 
         protected PlayerGroundedData movementData;
+        protected PlayerAirborneData airborneData;
 
         public PlayerMovementState(PlayerMovementStateMachine playerMovementStateMachine) 
         { 
             stateMachine = playerMovementStateMachine;
             movementData = stateMachine.Player.Data.GroundedData;
+            airborneData = stateMachine.Player.Data.AirborneData;
             InitializeData();
     }
 
         private void InitializeData()
         {
-            stateMachine.ReusableData.TimeToReachTargetRotation = movementData.BaseRotationData.TargetRotationReachTime;
+            SetBaseRotationData();
         }
+
+        
         #region IState Methods
         public virtual void Enter()
         {
@@ -155,11 +159,42 @@ namespace RPGKarawara
         {
             return Quaternion.Euler(0f, targetRotationAngle, 0f) * Vector3.forward;
         }
+        public virtual void OnAnimationEnterEvent()
+        {
+            throw new System.NotImplementedException();
+        }
 
+        public virtual void OnAnimationExitEvent()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual void OnAnimationTransitionEvent()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual void OnTriggerEnter(Collider collider)
+        {
+            if(stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+            {
+                OnContactWithGround(collider);
+                return;
+            }
+        }
+
+        protected virtual void OnContactWithGround(Collider collider)
+        {
+            
+        }
 
         #endregion
         #region Reusable Methods
-
+        protected void SetBaseRotationData()
+        {
+            stateMachine.ReusableData.RotationData = movementData.BaseRotationData;
+            stateMachine.ReusableData.TimeToReachTargetRotation = stateMachine.ReusableData.RotationData.TargetRotationReachTime;
+        }
         protected Vector3 GetMovementInputDirection()
         {
             return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
@@ -216,17 +251,7 @@ namespace RPGKarawara
             stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
         }
 
-        public virtual void OnAnimationEnterEvent(){
-            throw new System.NotImplementedException();
-        }
 
-        public virtual void OnAnimationExitEvent(){
-            throw new System.NotImplementedException();
-        }
-
-        public virtual void OnAnimationTransitionEvent(){
-            throw new System.NotImplementedException();
-        }
         #endregion
     }
 }

@@ -18,6 +18,8 @@ namespace RPGKarawara
             base.Enter();
             stateMachine.ReusableData.MovementOnSlopesSpeedModifier = 0;
 
+            stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StationaryForce;
+
             ResetVelocity();
         }
 

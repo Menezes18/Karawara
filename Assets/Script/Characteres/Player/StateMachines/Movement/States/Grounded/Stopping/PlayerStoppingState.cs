@@ -19,6 +19,8 @@ namespace RPGKarawara
         {
             base.PhysicsUpdate();
 
+            RotateTowardsTargetRotation();
+
             if (!IsMovingHorizontally())
             {
                 return;

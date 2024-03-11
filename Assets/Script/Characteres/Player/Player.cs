@@ -44,6 +44,10 @@ namespace RPGKarawara
         {
             movementStateMachine.ChangeState(movementStateMachine.IdlingState);
         }
+        private void OnTriggerEnter(Collider collider)
+        {
+            movementStateMachine.OnTriggerEnter(collider);
+        }
 
         private void Update()
         {

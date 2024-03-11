@@ -18,6 +18,7 @@ namespace RPGKarawara
             base.Enter();
 
             stateMachine.ReusableData.MovementOnSlopesSpeedModifier = movementData.WalkData.SpeedModifier;
+            stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.WeakForce;
         }
 
         #endregion
