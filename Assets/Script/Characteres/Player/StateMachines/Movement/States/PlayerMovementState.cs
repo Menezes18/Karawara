@@ -201,7 +201,7 @@ namespace RPGKarawara
             stateMachine.Player.Rigidbody.AddForce(-playerHorizontalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
         }
 
-        protected bool IsMovingHorizontally(float minimumMagnitude = .1f){
+        protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f){
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
             Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);

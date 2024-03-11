@@ -31,6 +31,7 @@ namespace RPGKarawara
             RunningState = new PlayerRunningState(this);
             SprintingState = new PlayerSprintingState(this);
 
+
             LightStoppingState = new PlayerLightStoppingState(this);
             MediumStoppingState = new PlayerMediumStoppingState(this);
             HardStoppingState = new PlayerHardStoppingState(this);

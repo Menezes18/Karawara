@@ -29,6 +29,7 @@ namespace RPGKarawara
 
         public override void OnAnimationTransitionEvent()
         {
+            
             if(stateMachine.ReusableData.MovementInput == Vector2.zero){
                 stateMachine.ChangeState(stateMachine.HardStoppingState);
 
