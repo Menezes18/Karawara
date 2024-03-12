@@ -1121,6 +1121,9 @@ MonoBehaviour:
   maximumDistance: 6
   smoothing: 4
   zoomSensitivity: 1
+  framingTransposer: {fileID: 0}
+  inputProvider: {fileID: 0}
+  currentTargetDistance: 0
 --- !u!1 &1032622605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,8 +1445,8 @@ GameObject:
   - component: {fileID: 1222627894}
   - component: {fileID: 1222627897}
   - component: {fileID: 1222627896}
-  - component: {fileID: 1222627893}
-  - component: {fileID: 1222627895}
+  - component: {fileID: 1222627899}
+  - component: {fileID: 1222627898}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1451,33 +1454,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1222627893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222627892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cca3c9c19add7b48a4d1fa82dbdbe5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Data>k__BackingField: {fileID: 11400000, guid: 3b008828db7479c4cac348e5bc75a0d6,
-    type: 2}
-  <ColliderUtility>k__BackingField:
-    <DefaultColliderData>k__BackingField:
-      <Height>k__BackingField: 1.8
-      <CenterY>k__BackingField: 0.9
-      <Radius>k__BackingField: 0.2
-    <SlopeData>k__BackingField:
-      <StepHeightPercentage>k__BackingField: 0.25
-      <FloatRayDistance>k__BackingField: 2
-      <StepReachForce>k__BackingField: 25
-  <LayerData>k__BackingField:
-    <GroundLayer>k__BackingField:
-      serializedVersion: 2
-      m_Bits: 64
 --- !u!4 &1222627894
 Transform:
   m_ObjectHideFlags: 0
@@ -1496,18 +1472,6 @@ Transform:
   - {fileID: 448936678}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1222627895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222627892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21b8dd50d545254e882893bfd27fa44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1222627896
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1555,9 +1519,54 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2
-  m_Height: 1.3499999
+  m_Height: 1.2
   m_Direction: 1
-  m_Center: {x: 0, y: 1.125, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1222627898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222627892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d243cc0b3910fdc4f93c6c562fd95f4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1222627899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222627892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18acd49eefc53134f93b3a84ad4c3b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Data>k__BackingField: {fileID: 11400000, guid: 3ad2cf86f04362a4b9b8db5daebaae0f,
+    type: 2}
+  <ColliderUtility>k__BackingField:
+    <DefaultColliderData>k__BackingField:
+      <Height>k__BackingField: 1.6
+      <CenterY>k__BackingField: 0.8
+      <Radius>k__BackingField: 0.2
+    <SlopeData>k__BackingField:
+      <StepHeightPercentage>k__BackingField: 0.25
+      <FloatRayDistance>k__BackingField: 2
+      <StepReachForce>k__BackingField: 25
+    <TriggerColliderData>k__BackingField:
+      <GroundCheckCollider>k__BackingField: {fileID: 488697057}
+  <LayerData>k__BackingField:
+    <GroundLayer>k__BackingField:
+      serializedVersion: 2
+      m_Bits: 64
+  <CameraUtility>k__BackingField:
+    <VirtualCamera>k__BackingField: {fileID: 929098104}
+    <DefaultHorizontalWaitTime>k__BackingField: 0
+    <DefaultHorizontalRecenteringTime>k__BackingField: 4
 --- !u!1 &1595945092 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 257ebe7b5ed4d8f40b6adc6dba5afb8b,
