@@ -18,9 +18,9 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            base.Enter();
-
             stateMachine.ReusableData.MovementSpeedModifier = rollData.SpeedModifier;
+
+            base.Enter();
 
             stateMachine.ReusableData.ShouldSprint = false;
         }

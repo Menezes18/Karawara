@@ -21,9 +21,9 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            base.Enter();
-
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
+
+            base.Enter();
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
@@ -73,6 +73,9 @@ namespace RPGKarawara
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.MediumStoppingState);
+
+            base.OnMovementCanceled(context);
+
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)

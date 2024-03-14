@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
@@ -24,10 +25,10 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            base.Enter();
-            
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
+            base.Enter();
+            
             stateMachine.ReusableData.MovementDecelerationForce = jumpData.DecelerationForce;
 
             shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
@@ -129,6 +130,14 @@ namespace RPGKarawara
             ResetVelocity();
 
             stateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
+        }
+
+        #endregion
+
+        #region Input Methods
+
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
         }
 
         #endregion

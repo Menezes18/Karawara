@@ -22,8 +22,12 @@ namespace RPGKarawara
 
             airborneData = stateMachine.Player.Data.AirborneData;
 
+            SetBaseCameraRecenteringData();
+
             InitializeData();
         }
+
+
 
         private void InitializeData()
         {
@@ -161,6 +165,13 @@ namespace RPGKarawara
         #endregion
 
         #region Reusable Methods
+
+        protected void SetBaseCameraRecenteringData()
+        {
+            stateMachine.ReusableData.BackwardsCameraRecenteringData = movementData.BackwardsCameraRecenteringData;
+            stateMachine.ReusableData.SidewaysCameraRecenteringData = movementData.SidewaysCameraRecenteringData;
+
+        }
 
         protected void SetBaseRotationData()
         {
@@ -335,17 +346,24 @@ namespace RPGKarawara
 
             if (movementInput == Vector2.down)
             {
-                SetCameraRecenteringState(cameraVerticalAngle, movementData.BackwardsCameraRecenteringData);
+                SetCameraRecenteringState(cameraVerticalAngle, stateMachine.ReusableData.BackwardsCameraRecenteringData);
 
                 return;
             }
 
-            SetCameraRecenteringState(cameraVerticalAngle, movementData.SidewaysCameraRecenteringData);
+            SetCameraRecenteringState(cameraVerticalAngle, stateMachine.ReusableData.SidewaysCameraRecenteringData);
         }
 
         protected void EnableCameraRecentering(float waitTime = -1f, float recenteringTime = -1f)
         {
-            stateMachine.Player.CameraUtility.EnableRecentering(waitTime, recenteringTime);
+            float movementSpeed = GetMovementSpeed();
+            
+            if (movementSpeed == 0f)
+            {
+                movementSpeed = movementData.BaseSpeed;
+            }
+
+            stateMachine.Player.CameraUtility.EnableRecentering(waitTime, recenteringTime, movementData.BaseSpeed, movementSpeed);
         }
 
         protected void DisableCameraRecentering()
@@ -390,7 +408,7 @@ namespace RPGKarawara
             UpdateCameraRecenteringState(context.ReadValue<Vector2>());
         }
 
-        private void OnMovementCanceled(InputAction.CallbackContext context)
+        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
         {
             DisableCameraRecentering();
         }

@@ -20,12 +20,12 @@ namespace RPGKarawara
 
         public override void Enter()
         {
+            stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
             base.Enter();
 
             playerPositionOnEnter = stateMachine.Player.transform.position;
 
-            stateMachine.ReusableData.MovementSpeedModifier = 0f;
-            
             ResetVericalVelocity();
         }
 
