@@ -39,7 +39,17 @@ namespace RPGKarawara
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
         }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
 
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            ResetVelocity();
+        }
         #endregion
     }
 }
