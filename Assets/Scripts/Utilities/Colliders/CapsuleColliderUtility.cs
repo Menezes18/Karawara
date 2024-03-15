@@ -25,8 +25,12 @@ namespace RPGKarawara
             CapsuleColliderData = new CapsuleColliderData();
 
             CapsuleColliderData.Initialize(gameObject);
+            OnInitialize();
         }
+        protected virtual void OnInitialize()
+        {
 
+        }
         public void CalculateCapsuleColliderDimensions()
         {
             SetCapsuleColliderRadius(DefaultColliderData.Radius);
