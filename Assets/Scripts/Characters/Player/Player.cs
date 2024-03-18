@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GenshinImpactMovementSystem;
 using UnityEngine;
 
 namespace RPGKarawara
@@ -19,6 +20,9 @@ namespace RPGKarawara
         [field: Header("Cameras")]
         [field: SerializeField] public PlayerCameraUtility CameraUtility { get; private set; }
 
+        [field: Header("Animations")]
+        [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
+        public Animator Animator { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
 
         public PlayerInput Input { get; private set; }
@@ -30,12 +34,14 @@ namespace RPGKarawara
         private void Awake() 
         {
             Rigidbody = GetComponent<Rigidbody>();
+            Animator = GetComponentInChildren<Animator>();
             
             Input = GetComponent<PlayerInput>();
 
             ColliderUtility.Initialize(gameObject);
             ColliderUtility.CalculateCapsuleColliderDimensions();
             CameraUtility.Initialize();
+            AnimationData.Initialize();
 
             MainCameraTransform = Camera.main.transform;
 

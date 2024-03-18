@@ -24,6 +24,7 @@ namespace RPGKarawara
 
 
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.WalkParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.WeakForce;
         }
@@ -31,6 +32,7 @@ namespace RPGKarawara
         public override void Exit()
         {
             base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.WalkParameterHash);
 
             SetBaseCameraRecenteringData();
         }

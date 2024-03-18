@@ -24,12 +24,17 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
 
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.RunParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
             startTime = Time.time;
         }
-
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.RunParameterHash);
+        }
         public override void Update()
         {
             base.Update();

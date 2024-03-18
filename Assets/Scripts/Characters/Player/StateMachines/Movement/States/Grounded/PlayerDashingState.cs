@@ -30,6 +30,7 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementSpeedModifier = dashData.SpeedModifier;
 
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.DashParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
 
@@ -46,8 +47,8 @@ namespace RPGKarawara
 
         public override void Exit()
         {
-            base.Exit(); 
-
+            base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.DashParameterHash);
             SetBaseRotationData();
         }
 

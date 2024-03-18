@@ -19,6 +19,7 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.HardLandParameterHash);
 
             stateMachine.Player.Input.PlayerActions.Movement.Disable();
 
@@ -28,8 +29,8 @@ namespace RPGKarawara
         public override void Exit()
         {
             base.Exit();
-
             stateMachine.Player.Input.PlayerActions.Movement.Enable();
+            StopAnimation(stateMachine.Player.AnimationData.HardLandParameterHash);
         }
         public override void PhysicsUpdate()
         {

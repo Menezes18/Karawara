@@ -28,7 +28,7 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             base.Enter();
-            
+
             stateMachine.ReusableData.MovementDecelerationForce = jumpData.DecelerationForce;
 
             shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
