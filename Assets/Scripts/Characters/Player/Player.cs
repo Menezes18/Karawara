@@ -81,5 +81,20 @@ namespace RPGKarawara
             movementStateMachine.PhysicsUpdate();
         }
 
+        public void OnMovementStateAnimationEnterEvent()
+        {
+            movementStateMachine.OnAnimationEnterEvent();
+        }
+
+        public void OnMovementStateAnimationExitEvent()
+        {
+            movementStateMachine.OnAnimationExitEvent();
+        }
+
+        public void OnMovementStateAnimationTransitionEvent()
+        {
+            movementStateMachine.OnAnimationTransitionEvent();
+        }
+
     }
 }
