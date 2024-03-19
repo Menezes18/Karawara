@@ -25,9 +25,10 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            base.Enter();
-
             stateMachine.ReusableData.MovementSpeedModifier = sprintData.SpeedModifier;
+
+            base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.SprintParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
 
@@ -39,7 +40,7 @@ namespace RPGKarawara
         public override void Exit()
         {
             base.Exit();
-
+            StopAnimation(stateMachine.Player.AnimationData.SprintParameterHash);
             if (shouldResetSprintState)
             {
             keepSprinting = false;
@@ -113,6 +114,8 @@ namespace RPGKarawara
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.HardStoppingState);
+
+            base.OnMovementCanceled(context);
         }
 
         protected override void OnJumpStarted(InputAction.CallbackContext context)

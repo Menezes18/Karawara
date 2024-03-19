@@ -15,13 +15,17 @@ namespace RPGKarawara
         public override void Enter()
         {
             base.Enter();
-
+            
             stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.LightDecelerationForce;
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.WeakForce;
         }
-
+        public override void Exit()
+        {
+            base.Exit();
+            
+        }
         #endregion
-        
+
     }
 }

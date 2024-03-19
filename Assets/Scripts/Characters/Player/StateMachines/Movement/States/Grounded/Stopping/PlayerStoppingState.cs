@@ -16,11 +16,19 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            base.Enter();
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
-        }
 
+            SetBaseCameraRecenteringData(); 
+            
+            base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.StoppingParameterHash);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.StoppingParameterHash);
+        }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
@@ -62,9 +70,6 @@ namespace RPGKarawara
 
         #region Input Methods
 
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-        }
 
         private void OnMovementStarted(InputAction.CallbackContext context)
         {

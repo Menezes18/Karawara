@@ -22,8 +22,12 @@ namespace RPGKarawara
 
             airborneData = stateMachine.Player.Data.AirborneData;
 
+            SetBaseCameraRecenteringData();
+
             InitializeData();
         }
+
+
 
         private void InitializeData()
         {
@@ -161,6 +165,20 @@ namespace RPGKarawara
         #endregion
 
         #region Reusable Methods
+        protected void StartAnimation(int animationHash)
+        {
+            stateMachine.Player.Animator.SetBool(animationHash, true);
+        }
+        protected void StopAnimation(int animationHash)
+        {
+            stateMachine.Player.Animator.SetBool(animationHash, false);
+        }
+        protected void SetBaseCameraRecenteringData()
+        {
+            stateMachine.ReusableData.BackwardsCameraRecenteringData = movementData.BackwardsCameraRecenteringData;
+            stateMachine.ReusableData.SidewaysCameraRecenteringData = movementData.SidewaysCameraRecenteringData;
+
+        }
 
         protected void SetBaseRotationData()
         {
@@ -197,9 +215,15 @@ namespace RPGKarawara
             return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
         }
 
-        protected float GetMovementSpeed()
+        protected float GetMovementSpeed(bool shouldConsiderSlopes = true)
         {
-            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopeSpeedModifier;
+            float movementSpeed = movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
+
+            if(shouldConsiderSlopes)
+            {
+                movementSpeed *= stateMachine.ReusableData.MovementOnSlopeSpeedModifier;
+            }
+            return movementSpeed;
         }
 
         protected Vector3 GetPlayerHorizontalVelocity()
@@ -335,17 +359,24 @@ namespace RPGKarawara
 
             if (movementInput == Vector2.down)
             {
-                SetCameraRecenteringState(cameraVerticalAngle, movementData.BackwardsCameraRecenteringData);
+                SetCameraRecenteringState(cameraVerticalAngle, stateMachine.ReusableData.BackwardsCameraRecenteringData);
 
                 return;
             }
 
-            SetCameraRecenteringState(cameraVerticalAngle, movementData.SidewaysCameraRecenteringData);
+            SetCameraRecenteringState(cameraVerticalAngle, stateMachine.ReusableData.SidewaysCameraRecenteringData);
         }
 
         protected void EnableCameraRecentering(float waitTime = -1f, float recenteringTime = -1f)
         {
-            stateMachine.Player.CameraUtility.EnableRecentering(waitTime, recenteringTime);
+            float movementSpeed = GetMovementSpeed();
+            
+            if (movementSpeed == 0f)
+            {
+                movementSpeed = movementData.BaseSpeed;
+            }
+
+            stateMachine.Player.CameraUtility.EnableRecentering(waitTime, recenteringTime, movementData.BaseSpeed, movementSpeed);
         }
 
         protected void DisableCameraRecentering()
@@ -390,7 +421,7 @@ namespace RPGKarawara
             UpdateCameraRecenteringState(context.ReadValue<Vector2>());
         }
 
-        private void OnMovementCanceled(InputAction.CallbackContext context)
+        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
         {
             DisableCameraRecentering();
         }

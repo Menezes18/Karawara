@@ -14,9 +14,9 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            base.Enter();
-
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
+            base.Enter();
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StationaryForce;
 
@@ -39,7 +39,17 @@ namespace RPGKarawara
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
         }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
 
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            ResetVelocity();
+        }
         #endregion
     }
 }

@@ -20,15 +20,20 @@ namespace RPGKarawara
 
         public override void Enter()
         {
+            stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.FallParameterHash);
 
             playerPositionOnEnter = stateMachine.Player.transform.position;
 
-            stateMachine.ReusableData.MovementSpeedModifier = 0f;
-            
             ResetVericalVelocity();
         }
-
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.FallParameterHash);
+        }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
@@ -46,7 +51,7 @@ namespace RPGKarawara
 
         protected override void OnContactWithGround(Collider collider)
         {
-            float fallDistance = Mathf.Abs(playerPositionOnEnter.y - stateMachine.Player.transform.position.y);
+            float fallDistance = playerPositionOnEnter.y - stateMachine.Player.transform.position.y;
 
             if (fallDistance < fallData.MinimumDistanceToBeConsideredHardFall)
             {

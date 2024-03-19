@@ -16,11 +16,12 @@ namespace RPGKarawara
 
         public override void Enter()
         {
+            stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
             base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.HardLandParameterHash);
 
             stateMachine.Player.Input.PlayerActions.Movement.Disable();
-
-            stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             ResetVelocity();
         }
@@ -28,10 +29,20 @@ namespace RPGKarawara
         public override void Exit()
         {
             base.Exit();
-
             stateMachine.Player.Input.PlayerActions.Movement.Enable();
+            StopAnimation(stateMachine.Player.AnimationData.HardLandParameterHash);
         }
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
 
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            ResetVelocity();
+        }
         public override void OnAnimationEnterEvent()
         {
             stateMachine.Player.Input.PlayerActions.Movement.Enable();

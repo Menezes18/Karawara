@@ -21,7 +21,17 @@ namespace RPGKarawara
         {
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.GroundedParameterHash);
+
             UpdateShouldSprintState();
+
+            UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.GroundedParameterHash);
         }
 
         public override void PhysicsUpdate()
@@ -85,7 +95,14 @@ namespace RPGKarawara
         {
             float slopeSpeedModifier = movementData.SlopeSpeedAngles.Evaluate(angle);
 
-            stateMachine.ReusableData.MovementOnSlopeSpeedModifier = slopeSpeedModifier;
+            if(stateMachine.ReusableData.MovementOnSlopeSpeedModifier != slopeSpeedModifier)
+            {
+                stateMachine.ReusableData.MovementOnSlopeSpeedModifier = slopeSpeedModifier;
+
+                UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
+            }
+
+            
 
             return slopeSpeedModifier;
         }
@@ -96,7 +113,7 @@ namespace RPGKarawara
 
             Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
 
-            Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace, groundCheckCollider.bounds.extents, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+            Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace, stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckColliderExtents, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
 
             return overlappedGroundColliders.Length > 0; 
         }
@@ -109,8 +126,6 @@ namespace RPGKarawara
         {
             base.AddInputActionsCallbacks();
 
-            stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled; 
-
             stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted; 
 
             stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
@@ -119,8 +134,6 @@ namespace RPGKarawara
         protected override void RemoveInputActionsCallbacks()
         {
             base.RemoveInputActionsCallbacks();
-
-            stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled; 
 
             stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted; 
 
@@ -162,24 +175,19 @@ namespace RPGKarawara
             if (!Physics.Raycast(downwardsRayFromCapsuleBottom, out _, movementData.GroundToFallRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
             {
 
-            OnFall();
+                OnFall();
 
             }
-        }
-
-        protected virtual void OnFall()
-        {
-            stateMachine.ChangeState(stateMachine.FallingState);
         }
 
         #endregion
 
         #region Input Methods
-
-        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+        protected virtual void OnFall()
         {
-           stateMachine.ChangeState(stateMachine.IdlingState);
+            stateMachine.ChangeState(stateMachine.FallingState);
         }
+
 
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {

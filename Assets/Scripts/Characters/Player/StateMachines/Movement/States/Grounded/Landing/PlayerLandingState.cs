@@ -11,13 +11,17 @@ namespace RPGKarawara
         {
         }
 
-        #region Input Methods
-
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        #region Methods 
+        public override void Enter()
         {
-            base.OnMovementCanceled(context);
+            base.Enter();
+            StartAnimation(stateMachine.Player.AnimationData.LandingParameterHash);
         }
-
+        public override void Exit()
+        {
+            base.Exit();
+            StopAnimation(stateMachine.Player.AnimationData.LandingParameterHash);
+        }
         #endregion
     }
 }
