@@ -560,7 +560,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -991,6 +991,7 @@ GameObject:
   - component: {fileID: 397228338}
   - component: {fileID: 397228340}
   - component: {fileID: 397228339}
+  - component: {fileID: 397228341}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -1055,6 +1056,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 397228337}
   m_CullTransparentMesh: 1
+--- !u!114 &397228341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397228337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c1e796193bcda46b533f08f06b9b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  element: Terra
+  displayElement: {fileID: 1113461419}
+  roda: {fileID: 621621150}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,13 +1519,14 @@ GameObject:
   - component: {fileID: 621621148}
   - component: {fileID: 621621147}
   - component: {fileID: 621621146}
+  - component: {fileID: 621621150}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &621621146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1568,7 +1585,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1594,6 +1611,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &621621150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621621145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8afede68eeca04982722606d955eea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Roda: {fileID: 908718368}
+  elementoAtual: 
+  canTransform: 1
 --- !u!1 &749836701
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,6 +1637,7 @@ GameObject:
   - component: {fileID: 749836702}
   - component: {fileID: 749836704}
   - component: {fileID: 749836703}
+  - component: {fileID: 749836705}
   m_Layer: 5
   m_Name: Image (3)
   m_TagString: Untagged
@@ -1669,6 +1702,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 749836701}
   m_CullTransparentMesh: 1
+--- !u!114 &749836705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749836701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c1e796193bcda46b533f08f06b9b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  element: Ar
+  displayElement: {fileID: 1113461419}
+  roda: {fileID: 621621150}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2249,6 +2297,7 @@ GameObject:
   - component: {fileID: 1148636798}
   - component: {fileID: 1148636800}
   - component: {fileID: 1148636799}
+  - component: {fileID: 1148636801}
   m_Layer: 5
   m_Name: Image (1)
   m_TagString: Untagged
@@ -2313,6 +2362,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148636797}
   m_CullTransparentMesh: 1
+--- !u!114 &1148636801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148636797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c1e796193bcda46b533f08f06b9b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  element: "\xC1gua"
+  displayElement: {fileID: 1113461419}
+  roda: {fileID: 621621150}
 --- !u!1 &1212857415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3110,6 +3174,7 @@ GameObject:
   - component: {fileID: 2117766712}
   - component: {fileID: 2117766714}
   - component: {fileID: 2117766713}
+  - component: {fileID: 2117766715}
   m_Layer: 5
   m_Name: Image (2)
   m_TagString: Untagged
@@ -3174,6 +3239,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2117766711}
   m_CullTransparentMesh: 1
+--- !u!114 &2117766715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117766711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c1e796193bcda46b533f08f06b9b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  element: Fogo
+  displayElement: {fileID: 1113461419}
+  roda: {fileID: 621621150}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
