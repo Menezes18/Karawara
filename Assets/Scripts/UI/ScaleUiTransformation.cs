@@ -9,6 +9,7 @@ using TMPro;
        [SerializeField] private GameObject Roda;
         public string elementoAtual;
         public bool canTransform = true;
+        public GameObject CurrentAnimal;
 
         public void Start()
         {

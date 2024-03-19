@@ -13,6 +13,7 @@ namespace RPGKarawara
         public string element;
         public TMP_Text displayElement;
         public ScaleUiTransformation roda;
+        public GameObject animal;
 
         void Start()
         {
@@ -40,13 +41,16 @@ namespace RPGKarawara
             }
 
             //Garente que quando o mouse eh solto perto da imagem o elemento atual se torna aquele
-            if (dist <= 150 && Keyboard.current.tabKey.wasPressedThisFrame && roda.canTransform == true)
+            if (dist <= 150 && Keyboard.current.tabKey.wasReleasedThisFrame && roda.canTransform == true)
             {
                 roda.elementoAtual = element;
                 displayElement.text = element;
                 roda.canTransform = false;
                 StartCoroutine(Transformation());
                 StartCoroutine(FadeTextToFullAlpha());
+                roda.CurrentAnimal.SetActive(false);
+                roda.CurrentAnimal = animal;
+                roda.CurrentAnimal.SetActive(true);
             }
         }
 
