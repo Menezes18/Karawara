@@ -28,9 +28,9 @@ namespace RPGKarawara
             if(_hand != null)
             {
                 
-                for(int i = 0; i == _hand.Length; i++)
+                for(int i = 0; i < _hand.Length; i++)
                 {
-                    Debug.Log(i);
+                   // Debug.Log(i);
                     _handCollider[i] = _hand[i].GetComponent<SphereCollider>();
                     _handCollider[i].enabled = false; 
 
@@ -48,12 +48,16 @@ namespace RPGKarawara
                 
             }
         }
-
+        public void FixedUpdate()
+        {
+            Debug.Log(attackState); 
+        }
         IEnumerator Attack()
         {
+            
             InAction = true;
             attackState = AttackStates.Windup;
-            float impactStartTime = 0.45f; //Trocar quando for a animação *NOSSA*
+            float impactStartTime = 0.33f; //Trocar quando for a animação *NOSSA*
             float impactEndTime = 0.55f;
             _animator.CrossFade("Slash", 0.2f);
 
@@ -61,6 +65,7 @@ namespace RPGKarawara
 
             var animState = _animator.GetNextAnimatorClipInfo(1);
             float timer = 0f;
+
             while (timer <= animState.Length)
             {
                 timer += Time.deltaTime;
@@ -70,29 +75,29 @@ namespace RPGKarawara
                 {
                     if (normalizedTime >= impactStartTime)
                     {
-                        attackState = AttackStates.Impact;
                         ForHandCollider(true);
+                        attackState = AttackStates.Impact;
 
                     }
-                    else if (attackState == AttackStates.Impact)
-                    {
-                        if (normalizedTime >= impactEndTime)
-                        {
-                            attackState = AttackStates.Cooldown;
-                            ForHandCollider(false);
-                        }
-                    }
-                    else if (attackState == AttackStates.Cooldown)
-                    {
-                        // TODO: Handle Combos
-                    }
-
-                    yield return null;
                 }
+                else if (attackState == AttackStates.Impact)
+                {
+                    if (normalizedTime >= impactEndTime)
+                    {
+                        Debug.Log("entrou2");
+                          ForHandCollider(false);
+    
+                        attackState = AttackStates.Cooldown;
+                    }
+                }
+                else if (attackState == AttackStates.Cooldown)
+                {
+                    // TODO: Handle Combos
+                }
+                yield return null;
+            }       
                 attackState = AttackStates.Idle;
                 InAction = false;
-            }
-
         }
         private void OnTriggerEnter(Collider other)
         {
@@ -117,7 +122,7 @@ namespace RPGKarawara
 
         private void ForHandCollider(bool condicao)
         {
-            for (int i = 0; i == _hand.Length; i++)
+            for (int i = 0; i < _hand.Length; i++)
             {
                 _handCollider[i].enabled = condicao;
             }
