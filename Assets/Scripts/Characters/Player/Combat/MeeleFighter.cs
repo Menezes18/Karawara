@@ -10,8 +10,8 @@ namespace RPGKarawara
     public class MeeleFighter : MonoBehaviour
     {
         [SerializeField] List<AttackData> attacks;
-        [SerializeField] GameObject[] _hand;
-        [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
+        [SerializeField] GameObject _hand;
+         SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
         public static MeeleFighter instance;
         Animator _animator;
         public bool InAction { get; set; } = false;
@@ -101,7 +101,7 @@ namespace RPGKarawara
                 yield return null;
             }       
                 attackState = AttackStates.Idle;
-            ComboCount = 0;
+                ComboCount = 0;
                 InAction = false;
         }
         private void OnTriggerEnter(Collider other)
@@ -147,7 +147,7 @@ namespace RPGKarawara
         }
         private void DesativarAllHitboxes()
         {
-            leftFootCollider.enabled = false;
+            leftHandCollider.enabled = false;
             rightHandCollider.enabled = false;
             leftFootCollider.enabled = false;
             rightFootCollider.enabled = false;
