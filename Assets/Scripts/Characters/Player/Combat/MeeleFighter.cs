@@ -11,7 +11,7 @@ namespace RPGKarawara
     {
         [SerializeField] List<AttackData> attacks;
         [SerializeField] GameObject[] _hand;
-        [SerializeField] SphereCollider[] _handCollider;
+        [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
         public static MeeleFighter instance;
         Animator _animator;
         public bool InAction { get; set; } = false;
@@ -28,14 +28,13 @@ namespace RPGKarawara
         {
             if(_hand != null)
             {
-                _handCollider = new SphereCollider[_hand.Length];
-                for (int i = 0; i < _hand.Length; i++)
-                {
-                   // Debug.Log(i);
-                    _handCollider[i] = _hand[i].GetComponent<SphereCollider>();
-                    _handCollider[i].enabled = false; 
+                leftHandCollider = _animator.GetBoneTransform(HumanBodyBones.LeftHand).GetComponentInChildren<SphereCollider>();
+                rightHandCollider = _animator.GetBoneTransform(HumanBodyBones.RightHand).GetComponentInChildren<SphereCollider>();
+                leftFootCollider = _animator.GetBoneTransform(HumanBodyBones.LeftFoot).GetComponentInChildren<SphereCollider>();
+                rightFootCollider = _animator.GetBoneTransform(HumanBodyBones.RightFoot).GetComponentInChildren<SphereCollider>();
 
-                }
+                DesativarAllHitboxes();
+
             }
         }
 
@@ -75,8 +74,8 @@ namespace RPGKarawara
                 {
                     if (normalizedTime >= attacks[ComboCount].ImpactStartTime)
                     {
-                        ForHandCollider(true);
                         attackState = AttackStates.Impact;
+                        AtivarHitbox(attacks[ComboCount]);
 
                     }
                 }
@@ -84,10 +83,8 @@ namespace RPGKarawara
                 {
                     if (normalizedTime >= attacks[ComboCount].ImpactEndTime)
                     {
-                        
-                          ForHandCollider(false);
-    
                         attackState = AttackStates.Cooldown;
+                        DesativarAllHitboxes();
                     }
                 }
                 else if (attackState == AttackStates.Cooldown)
@@ -111,7 +108,7 @@ namespace RPGKarawara
         {
             if(other.tag == "Hitbox" && !InAction)
             {
-                Debug.Log("BATEU");
+                
                 StartCoroutine(PlayerHitReaction());
             }
         }
@@ -128,13 +125,32 @@ namespace RPGKarawara
 
             InAction = false;
         }
-
-        private void ForHandCollider(bool condicao)
+        void AtivarHitbox(AttackData attack)
         {
-            for (int i = 0; i < _hand.Length; i++)
+            switch (attack.HitboxToUse)
             {
-                _handCollider[i].enabled = condicao;
+                case AttackHitbox.LeftHand:
+                    leftHandCollider.enabled = true;
+                    break;
+                case AttackHitbox.RightHand:
+                    rightHandCollider.enabled = true;
+                    break;
+                case AttackHitbox.LeftFoot:
+                    leftFootCollider.enabled = true;
+                    break;
+                case AttackHitbox.RightFoot:
+                    rightFootCollider.enabled = true;
+                    break;
+                default:
+                    break;
             }
+        }
+        private void DesativarAllHitboxes()
+        {
+            leftFootCollider.enabled = false;
+            rightHandCollider.enabled = false;
+            leftFootCollider.enabled = false;
+            rightFootCollider.enabled = false;
         }
     }
 }
