@@ -71,7 +71,7 @@ namespace RPGKarawara
         }
 
         private void Update() 
-        {
+        {          
            movementStateMachine.HandleInput();
 
            movementStateMachine.Update(); 

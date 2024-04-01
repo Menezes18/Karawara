@@ -19,7 +19,6 @@ namespace RPGKarawara
         public override void Enter()
         {
             stateMachine.ReusableData.MovementSpeedModifier = movementData.WalkData.SpeedModifier;
-
             stateMachine.ReusableData.BackwardsCameraRecenteringData = walkData.BackwardsCameraRecenteringData;
 
 

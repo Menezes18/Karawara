@@ -25,7 +25,7 @@ namespace RPGKarawara
         {
             //Distancia do Mouse e a imagem e a imagem pra transformar
             var dist = Vector2.Distance(transform.position, Mouse.current.position.value);
-            Debug.Log(dist);
+            //Debug.Log(dist);
 
             // Se distancia for menor que 200 aumenta a imagem
             if (dist <= 200)

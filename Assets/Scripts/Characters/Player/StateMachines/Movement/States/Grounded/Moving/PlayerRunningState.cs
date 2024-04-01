@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,8 @@ namespace RPGKarawara
 
         public override void Enter()
         {
+            
+            
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
 
             base.Enter();
@@ -29,6 +32,8 @@ namespace RPGKarawara
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
             startTime = Time.time;
+
+            
         }
         public override void Exit()
         {
@@ -39,6 +44,10 @@ namespace RPGKarawara
         {
             base.Update();
 
+            if(MeeleFighter.instance.InAction)
+            {
+                return;
+            }
             if (!stateMachine.ReusableData.ShouldWalk)
             {
                 return;
