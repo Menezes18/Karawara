@@ -9,6 +9,7 @@ namespace RPGKarawara
     public enum AttackStates { Idle, Windup, Impact, Cooldown }
     public class MeeleFighter : MonoBehaviour
     {
+        [SerializeField] List<AttackData> attacks;
         [SerializeField] GameObject[] _hand;
         [SerializeField] SphereCollider[] _handCollider;
         public static MeeleFighter instance;
@@ -27,8 +28,8 @@ namespace RPGKarawara
         {
             if(_hand != null)
             {
-                
-                for(int i = 0; i < _hand.Length; i++)
+                _handCollider = new SphereCollider[_hand.Length];
+                for (int i = 0; i < _hand.Length; i++)
                 {
                    // Debug.Log(i);
                     _handCollider[i] = _hand[i].GetComponent<SphereCollider>();
@@ -38,33 +39,32 @@ namespace RPGKarawara
             }
         }
 
-        
+        bool doCombo;
+        int ComboCount = 0;
         public void TryToAttack()
         {
             if(!InAction)
             {
-                //Arrumar para n andar, zerar a velocidade 
+                
                 StartCoroutine(Attack());
                 
+            }else if(attackState == AttackStates.Impact || attackState == AttackStates.Cooldown)
+            {
+                doCombo = true;
             }
-        }
-        public void FixedUpdate()
-        {
-            Debug.Log(attackState); 
         }
         IEnumerator Attack()
         {
             
             InAction = true;
             attackState = AttackStates.Windup;
-            float impactStartTime = 0.33f; //Trocar quando for a animação *NOSSA*
-            float impactEndTime = 0.55f;
-            _animator.CrossFade("Slash", 0.2f);
+            _animator.CrossFade(attacks[ComboCount].AnimName, 0.2f);
 
             yield return null;
 
             var animState = _animator.GetNextAnimatorClipInfo(1);
             float timer = 0f;
+
 
             while (timer <= animState.Length)
             {
@@ -73,7 +73,7 @@ namespace RPGKarawara
 
                 if (attackState == AttackStates.Windup)
                 {
-                    if (normalizedTime >= impactStartTime)
+                    if (normalizedTime >= attacks[ComboCount].ImpactStartTime)
                     {
                         ForHandCollider(true);
                         attackState = AttackStates.Impact;
@@ -82,9 +82,9 @@ namespace RPGKarawara
                 }
                 else if (attackState == AttackStates.Impact)
                 {
-                    if (normalizedTime >= impactEndTime)
+                    if (normalizedTime >= attacks[ComboCount].ImpactEndTime)
                     {
-                        Debug.Log("entrou2");
+                        
                           ForHandCollider(false);
     
                         attackState = AttackStates.Cooldown;
@@ -92,17 +92,26 @@ namespace RPGKarawara
                 }
                 else if (attackState == AttackStates.Cooldown)
                 {
-                    // TODO: Handle Combos
+                   if(doCombo)
+                    {
+                        doCombo = false;
+                        ComboCount = (ComboCount + 1) % attacks.Count;
+
+                        StartCoroutine(Attack());
+                        yield break;
+                    }
                 }
                 yield return null;
             }       
                 attackState = AttackStates.Idle;
+            ComboCount = 0;
                 InAction = false;
         }
         private void OnTriggerEnter(Collider other)
         {
             if(other.tag == "Hitbox" && !InAction)
             {
+                Debug.Log("BATEU");
                 StartCoroutine(PlayerHitReaction());
             }
         }
@@ -115,7 +124,7 @@ namespace RPGKarawara
 
             var animState = _animator.GetNextAnimatorClipInfo(1);
 
-            yield return new WaitForSeconds(animState.Length);
+            yield return new WaitForSeconds(0.1f);
 
             InAction = false;
         }
