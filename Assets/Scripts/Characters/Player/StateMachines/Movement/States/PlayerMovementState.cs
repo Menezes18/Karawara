@@ -58,6 +58,12 @@ namespace RPGKarawara
         }
         public virtual void PhysicsUpdate()
         {
+            if (MeeleFighter.instance.InAction)
+            {
+                resetvelocitycombat();
+                //stateMachine.ReusableData.MovementSpeedModifier = 0f;
+                return;
+            }
             Move();
         }
 
@@ -109,6 +115,11 @@ namespace RPGKarawara
                 return;
             }
 
+            if(MeeleFighter.instance.InAction)
+            {
+                //stateMachine.ReusableData.MovementSpeedModifier = 0f;
+                resetvelocitycombat();
+            }
             Vector3 movementDirection = GetMovementInputDirection();
 
             float targetRotationYAngle = Rotate(movementDirection);
@@ -219,6 +230,11 @@ namespace RPGKarawara
         {
             float movementSpeed = movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
 
+            if(MeeleFighter.instance.InAction)
+            {
+                stateMachine.ReusableData.MovementOnSlopeSpeedModifier = 0;
+                movementSpeed = 0;
+            }
             if(shouldConsiderSlopes)
             {
                 movementSpeed *= stateMachine.ReusableData.MovementOnSlopeSpeedModifier;
@@ -384,7 +400,15 @@ namespace RPGKarawara
             stateMachine.Player.CameraUtility.DisableRecentering();
         }
 
-       protected void SetCameraRecenteringState(float cameraVerticalAngle, List<PlayerCameraRecenteringData> cameraRecenteringData)
+        protected void resetvelocitycombat()
+        {
+            Vector3 playervelocity = stateMachine.Player.Rigidbody.velocity;
+
+            playervelocity.x = 0f;
+            playervelocity.z = 0f;
+            stateMachine.Player.Rigidbody.velocity = playervelocity;
+        }
+        protected void SetCameraRecenteringState(float cameraVerticalAngle, List<PlayerCameraRecenteringData> cameraRecenteringData)
         {
             foreach (PlayerCameraRecenteringData recenteringData in cameraRecenteringData)
             {
