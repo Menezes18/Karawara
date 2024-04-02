@@ -32,11 +32,39 @@ namespace RPGKarawara
         {
             StateMachine.ChangeState(stateDict[state]);
         }
+        Vector3 prevPos;
         private void Update()
         {
             StateMachine.Execute();
 
-            Animator.SetFloat("forwardSpeed", NavAgent.velocity.magnitude / NavAgent.speed);
+            // v = dx / dt
+            var deltaPos = Animator.applyRootMotion ? Vector3.zero : transform.position - prevPos;
+            var velocity = deltaPos / Time.deltaTime;
+
+            float forwardSpeed = Vector3.Dot(velocity, transform.forward);
+            Animator.SetFloat("forwardSpeed", forwardSpeed / NavAgent.speed, 0.2f, Time.deltaTime);
+
+            float angle = Vector3.SignedAngle(transform.forward, velocity, Vector3.up);
+            float strafeSpeed = Mathf.Sin(angle * Mathf.Deg2Rad);
+            Animator.SetFloat("strafeSpeed", strafeSpeed, 0.2f, Time.deltaTime);
+
+            prevPos = transform.position;
         }
+        public MeeleFighter FindTarget()
+        {
+            foreach (var target in TargetsInRange)
+            {
+                var vecToTarget = target.transform.position - transform.position;
+                float angle = Vector3.Angle(transform.forward, vecToTarget);
+
+                if (angle <= Fov / 2)
+                {
+                    return target;
+                }
+            }
+
+            return null;
+        }
+        
     }
 }

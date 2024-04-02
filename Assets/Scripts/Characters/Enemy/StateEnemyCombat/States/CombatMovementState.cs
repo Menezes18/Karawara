@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using RPGKarawara;
 using UnityEngine;
 
 namespace RPGKarawara
 {
     public enum AICombatStates { Idle, Chase, Circling }
+
     public class CombatMovementState : State<EnemyController>
     {
+
         [SerializeField] float ciclingSpeed = 20f;
         [SerializeField] float distanceToStand = 3f;
         [SerializeField] float adjustDistanceThreshold = 1f;
@@ -16,13 +19,18 @@ namespace RPGKarawara
         float timer = 0f;
 
         int circlingDir = 1;
+
         AICombatStates state;
+
         EnemyController enemy;
         public override void Enter(EnemyController owner)
         {
             enemy = owner;
 
             enemy.NavAgent.stoppingDistance = distanceToStand;
+            enemy.CombatMovementTimer = 0f;
+
+            enemy.Animator.SetBool("combatMode", true);
         }
 
         public override void Execute()
@@ -84,29 +92,31 @@ namespace RPGKarawara
 
             enemy.CombatMovementTimer += Time.deltaTime;
         }
+
         void StartChase()
         {
             state = AICombatStates.Chase;
-            enemy.Animator.SetBool("combatMode", false);
         }
 
         void StartIdle()
         {
             state = AICombatStates.Idle;
             timer = Random.Range(idleTimeRange.x, idleTimeRange.y);
-            enemy.Animator.SetBool("combatMode", true);
         }
 
         void StartCircling()
         {
             state = AICombatStates.Circling;
+
+            enemy.NavAgent.ResetPath();
             timer = Random.Range(circlingTimeRange.x, circlingTimeRange.y);
 
             circlingDir = Random.Range(0, 2) == 0 ? 1 : -1;
         }
+
         public override void Exit()
         {
-            Debug.Log("Exit CombatMovement State");
+            enemy.CombatMovementTimer = 0f;
         }
     }
 }
