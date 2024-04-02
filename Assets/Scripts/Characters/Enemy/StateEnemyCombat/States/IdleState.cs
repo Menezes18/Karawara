@@ -15,10 +15,18 @@ namespace RPGKarawara
 
         public override void Execute()
         {
-            Debug.Log("Execute Idle State");
-            if(Keyboard.current.tKey.wasPressedThisFrame)
+            foreach(var target in enemy.TargetsInRange)
             {
-                enemy.ChangeState(EnemyStates.Chase);
+                var vecToTarget = target.transform.position - transform.position;
+                float angle = Vector3.Angle(transform.forward, vecToTarget);
+
+                if(angle <= enemy.Fov / 2)
+                {
+                    Debug.Log("EMntou");
+                    enemy.Target = target;
+                    enemy.ChangeState(EnemyStates.CombatMovement);
+                    break;
+                }
             }
         }
 
