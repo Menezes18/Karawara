@@ -5,21 +5,18 @@ using UnityEngine;
 
 namespace RPGKarawara
 {
-
     public enum AttackStates { Idle, Windup, Impact, Cooldown }
     public class MeeleFighter : MonoBehaviour
     {
         [SerializeField] List<AttackData> attacks;
         [SerializeField] GameObject _hand;
          SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
-        public static MeeleFighter instance;
         Animator _animator;
         public bool InAction { get; set; } = false;
         public AttackStates attackState;
         public PlayerMovementStateMachine movementStateMachine;
         private void Awake()
         {
-            instance = this;
             _animator = GetComponentInChildren<Animator>();
             
         }

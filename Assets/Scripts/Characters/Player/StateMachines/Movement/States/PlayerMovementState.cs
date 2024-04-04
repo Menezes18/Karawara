@@ -58,7 +58,7 @@ namespace RPGKarawara
         }
         public virtual void PhysicsUpdate()
         {
-            if (MeeleFighter.instance.InAction)
+            if (Player.instancia.meeleFighter.InAction)
             {
                 resetvelocitycombat();
                 //stateMachine.ReusableData.MovementSpeedModifier = 0f;
@@ -115,7 +115,7 @@ namespace RPGKarawara
                 return;
             }
 
-            if(MeeleFighter.instance.InAction)
+            if(Player.instancia.meeleFighter.InAction)
             {
                 //stateMachine.ReusableData.MovementSpeedModifier = 0f;
                 resetvelocitycombat();
@@ -230,7 +230,7 @@ namespace RPGKarawara
         {
             float movementSpeed = movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
 
-            if(MeeleFighter.instance.InAction)
+            if(Player.instancia.meeleFighter.InAction)
             {
                 stateMachine.ReusableData.MovementOnSlopeSpeedModifier = 0;
                 movementSpeed = 0;

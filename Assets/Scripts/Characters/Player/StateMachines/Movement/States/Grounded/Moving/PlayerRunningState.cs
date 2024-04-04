@@ -44,7 +44,7 @@ namespace RPGKarawara
         {
             base.Update();
 
-            if(MeeleFighter.instance.InAction)
+            if(Player.instancia.meeleFighter.InAction)
             {
                 return;
             }
