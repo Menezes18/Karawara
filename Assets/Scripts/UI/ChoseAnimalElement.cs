@@ -51,6 +51,7 @@ namespace RPGKarawara
                 roda.CurrentAnimal.SetActive(false);
                 roda.CurrentAnimal = animal;
                 roda.CurrentAnimal.SetActive(true);
+                Player.player.Animator = animal.GetComponent<Animator>();
             }
         }
 

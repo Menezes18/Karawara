@@ -8,7 +8,8 @@ namespace RPGKarawara
     [RequireComponent(typeof(PlayerInput))]
     
     public class Player : MonoBehaviour
-    {   
+    {
+        public static Player player;
         [field: Header("References")]
         [field: SerializeField] public PlayerSO Data { get; private set; }
 
@@ -22,7 +23,7 @@ namespace RPGKarawara
 
         [field: Header("Animations")]
         [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
-        public Animator Animator { get; private set; }
+        public Animator Animator;
         public Rigidbody Rigidbody { get; private set; }
 
         public PlayerInput Input { get; private set; }
@@ -31,8 +32,10 @@ namespace RPGKarawara
 
         private PlayerMovementStateMachine movementStateMachine;
 
+        
         private void Awake() 
         {
+            player = this;
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             
