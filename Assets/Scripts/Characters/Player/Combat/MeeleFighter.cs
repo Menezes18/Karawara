@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace RPGKarawara
 {
@@ -9,7 +10,8 @@ namespace RPGKarawara
     public class MeeleFighter : MonoBehaviour
     {
         [SerializeField] List<AttackData> attacks;
-        [SerializeField] GameObject _hand;
+        [SerializeField] private GameObject _sword;
+        [SerializeField] private BoxCollider _boxColliderSword;
          SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
         Animator _animator;
         public bool InAction { get; set; } = false;
@@ -23,14 +25,16 @@ namespace RPGKarawara
 
         private void Start()
         {
-            if(_hand != null)
+            if (_sword != null)
             {
+                _boxColliderSword = _sword.GetComponent<BoxCollider>();
+            
                 leftHandCollider = _animator.GetBoneTransform(HumanBodyBones.LeftHand).GetComponentInChildren<SphereCollider>();
                 rightHandCollider = _animator.GetBoneTransform(HumanBodyBones.RightHand).GetComponentInChildren<SphereCollider>();
                 leftFootCollider = _animator.GetBoneTransform(HumanBodyBones.LeftFoot).GetComponentInChildren<SphereCollider>();
                 rightFootCollider = _animator.GetBoneTransform(HumanBodyBones.RightFoot).GetComponentInChildren<SphereCollider>();
 
-                DesativarAllHitboxes();
+                DisableAllHitboxes();
 
             }
         }
@@ -81,7 +85,7 @@ namespace RPGKarawara
                     if (normalizedTime >= attacks[ComboCount].ImpactEndTime)
                     {
                         attackState = AttackStates.Cooldown;
-                        DesativarAllHitboxes();
+                        DisableAllHitboxes();
                     }
                 }
                 else if (attackState == AttackStates.Cooldown)
@@ -138,16 +142,29 @@ namespace RPGKarawara
                 case AttackHitbox.RightFoot:
                     rightFootCollider.enabled = true;
                     break;
+                case AttackHitbox.Sword:
+                    _boxColliderSword.enabled = true;
+                    break;
                 default:
                     break;
             }
         }
-        private void DesativarAllHitboxes()
+        void DisableAllHitboxes()
         {
-            leftHandCollider.enabled = false;
-            rightHandCollider.enabled = false;
-            leftFootCollider.enabled = false;
-            rightFootCollider.enabled = false;
+            if (_boxColliderSword != null)
+                _boxColliderSword.enabled = false;
+        
+            if (leftHandCollider != null)
+                leftHandCollider.enabled = false;
+
+            if (rightHandCollider != null)
+                rightHandCollider.enabled = false;
+
+            if (leftFootCollider != null)
+                leftFootCollider.enabled = false;
+
+            if (rightFootCollider != null)
+                rightFootCollider.enabled = false;
         }
     }
 }

@@ -18,4 +18,4 @@ namespace RPGKarawara
 }
 
 
-public enum AttackHitbox { LeftHand, RightHand, LeftFoot, RightFoot}
+public enum AttackHitbox { LeftHand, RightHand, LeftFoot, RightFoot, Sword}

@@ -20,7 +20,7 @@ namespace RPGKarawara
 
         int circlingDir = 1;
 
-        AICombatStates state;
+        public AICombatStates state;
 
         EnemyController enemy;
         public override void Enter(EnemyController owner)
@@ -50,6 +50,7 @@ namespace RPGKarawara
 
             if (state == AICombatStates.Idle)
             {
+                Debug.Log("Enemy Idle");
                 if (timer <= 0)
                 {
                     if (Random.Range(0, 2) == 0)
@@ -64,6 +65,7 @@ namespace RPGKarawara
             }
             else if (state == AICombatStates.Chase)
             {
+                Debug.Log("Enemy Chase");
                 if (Vector3.Distance(enemy.Target.transform.position, enemy.transform.position) <= distanceToStand + 0.03f)
                 {
                     StartIdle();
@@ -74,6 +76,7 @@ namespace RPGKarawara
             }
             else if (state == AICombatStates.Circling)
             {
+                Debug.Log("Enemy Circling");
                 if (timer <= 0)
                 {
                     StartIdle();
