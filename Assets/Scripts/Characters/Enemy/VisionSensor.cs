@@ -5,6 +5,7 @@ namespace RPGKarawara
 {
     public class VisionSensor : MonoBehaviour
     {
+        
         [SerializeField] EnemyController enemy;
 
         private void Awake()
@@ -14,12 +15,11 @@ namespace RPGKarawara
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("TESTETRIGGER");
             var fighter = other.GetComponent<MeeleFighter>();
             if (fighter != null)
             {
                 enemy.TargetsInRange.Add(fighter);
-                //EnemyManager.i.AddEnemyInRange(enemy);
+                EnemyManager.i.AddEnemyInRange(enemy);
             }
         }
 
@@ -29,7 +29,7 @@ namespace RPGKarawara
             if (fighter != null)
             {
                 enemy.TargetsInRange.Remove(fighter);
-                //EnemyManager.i.RemoveEnemyInRange(enemy);
+                EnemyManager.i.RemoveEnemyInRange(enemy);
             }
         }
     }
