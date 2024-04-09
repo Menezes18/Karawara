@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Cinemachine;
 namespace RPGKarawara
 {
     public class PlayerMovementState : IState
@@ -13,7 +13,7 @@ namespace RPGKarawara
         protected PlayerGroundedData movementData;
 
         protected PlayerAirborneData airborneData;
-
+        Quaternion targetRotation;
         public PlayerMovementState(PlayerMovementStateMachine playerMovementStateMachine)
         {
             stateMachine = playerMovementStateMachine;
@@ -27,8 +27,30 @@ namespace RPGKarawara
             InitializeData();
         }
 
+        public void t()
+        {
+            CinemachineVirtualCamera virtualCamera = Player.instancia.virtualCamera;
 
+            // Verifique se a câmera virtual foi encontrada
+            if (virtualCamera != null)
+            {
+                // Obtenha a rotação planar da câmera
+                Quaternion planarRotation = Quaternion.Euler(0f, virtualCamera.transform.rotation.eulerAngles.y, 0f);
 
+                // Use a rotação planar da câmera para calcular a direção de movimento
+                Vector3 moveDir = planarRotation * new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
+
+                // Salve a direção de movimento para uso posterior, se necessário
+                Player.instancia.movedir = moveDir;
+            }
+            HandleInput();
+
+            Update(); 
+        }
+        public Quaternion GetTargetRotation()
+        {
+            return targetRotation;
+        }
         private void InitializeData()
         {
             SetBaseRotationData();
@@ -38,7 +60,7 @@ namespace RPGKarawara
 
         public virtual void Enter()
         {
-            Debug.Log("State: " + GetType().Name);
+            //Debug.Log("State: " + GetType().Name);
 
             AddInputActionsCallbacks();
         }
@@ -51,6 +73,7 @@ namespace RPGKarawara
         public virtual void HandleInput()
         {
             ReadMovementInput();
+            Player.instancia.moveAmount = Mathf.Clamp01(Mathf.Abs(stateMachine.ReusableData.MovementInput.x) + Mathf.Abs(stateMachine.ReusableData.MovementInput.y));
         }
 
         public virtual void Update()
@@ -58,12 +81,12 @@ namespace RPGKarawara
         }
         public virtual void PhysicsUpdate()
         {
-            if (MeeleFighter.instance.InAction)
-            {
-                resetvelocitycombat();
+           // if (Player.instancia.meeleFighter.InAction)
+           // {
+             //   resetvelocitycombat();
                 //stateMachine.ReusableData.MovementSpeedModifier = 0f;
-                return;
-            }
+           //     return;
+          //  }
             Move();
         }
 
@@ -115,11 +138,11 @@ namespace RPGKarawara
                 return;
             }
 
-            if(MeeleFighter.instance.InAction)
-            {
-                //stateMachine.ReusableData.MovementSpeedModifier = 0f;
-                resetvelocitycombat();
-            }
+            // if(Player.instancia.meeleFighter.InAction)
+            // {
+            //     //stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            //     resetvelocitycombat();
+            // }
             Vector3 movementDirection = GetMovementInputDirection();
 
             float targetRotationYAngle = Rotate(movementDirection);
@@ -217,8 +240,8 @@ namespace RPGKarawara
 
             stateMachine.Player.Input.PlayerActions.Movement.performed -= OnMovementPerformed;
 
-            stateMachine.Player.Input.PlayerActions.Movement.canceled -=  OnMovementCanceled;
-    
+            stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
+
         }
 
         protected Vector3 GetMovementInputDirection()
@@ -230,7 +253,7 @@ namespace RPGKarawara
         {
             float movementSpeed = movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
 
-            if(MeeleFighter.instance.InAction)
+            if(CombatController.instacia._meeleFighter.InAction)
             {
                 stateMachine.ReusableData.MovementOnSlopeSpeedModifier = 0;
                 movementSpeed = 0;
@@ -364,7 +387,7 @@ namespace RPGKarawara
                 return;
             }
 
-           float cameraVerticalAngle = stateMachine.Player.MainCameraTransform.eulerAngles.x;
+            float cameraVerticalAngle = stateMachine.Player.MainCameraTransform.eulerAngles.x;
 
             if (cameraVerticalAngle >= 270f)
             {
