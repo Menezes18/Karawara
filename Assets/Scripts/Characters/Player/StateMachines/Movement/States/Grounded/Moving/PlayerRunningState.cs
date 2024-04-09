@@ -44,8 +44,9 @@ namespace RPGKarawara
         {
             base.Update();
 
-            if(Player.instancia.meeleFighter.InAction)
+            if(CombatController.instacia._meeleFighter.InAction)
             {
+                //tirar a corrida de andar depois
                 return;
             }
             if (!stateMachine.ReusableData.ShouldWalk)

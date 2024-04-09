@@ -31,7 +31,6 @@ namespace RPGKarawara
         public Transform MainCameraTransform { get; private set; }
 
         private PlayerMovementStateMachine movementStateMachine;
-        [field: SerializeField] public MeeleFighter meeleFighter;
         private void Awake() 
         {
             instancia = this;
@@ -48,7 +47,6 @@ namespace RPGKarawara
             MainCameraTransform = Camera.main.transform;
 
             movementStateMachine = new PlayerMovementStateMachine(this);
-            meeleFighter = GetComponent<MeeleFighter>();
         }
 
         private void OnValidate() 
