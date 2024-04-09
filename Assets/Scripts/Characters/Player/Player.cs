@@ -9,7 +9,10 @@ namespace RPGKarawara
     
     public class Player : MonoBehaviour
     {
+
         public static Player instancia;
+
+        //public static Player player;
         [field: Header("References")]
         [field: SerializeField] public PlayerSO Data { get; private set; }
 
@@ -23,7 +26,7 @@ namespace RPGKarawara
 
         [field: Header("Animations")]
         [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
-        public Animator Animator { get; private set; }
+        public Animator Animator;
         public Rigidbody Rigidbody { get; private set; }
 
         public PlayerInput Input { get; private set; }
@@ -31,6 +34,7 @@ namespace RPGKarawara
         public Transform MainCameraTransform { get; private set; }
 
         private PlayerMovementStateMachine movementStateMachine;
+
 
         private CombatController _combatController;
         private Quaternion targetRotation;
@@ -40,6 +44,11 @@ namespace RPGKarawara
         private void Awake() 
         {
             instancia = this;
+        
+        private void Awake() 
+        {
+            //player = this;
+
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             _combatController = GetComponent<CombatController>();
