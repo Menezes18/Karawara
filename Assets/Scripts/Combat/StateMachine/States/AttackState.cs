@@ -21,18 +21,23 @@ namespace RPGKarawara
             if (Vector3.Distance(_enemyController.Target.transform.position, _enemyController.transform.position) <=
                 attackDistance + 0.03f)
             {
-                StartCoroutine(Attack());
+                StartCoroutine(Attack(Random.Range(0, _enemyController.Fighter.Attacks.Count + 1)));
             }
 
         }
 
-        IEnumerator Attack()
+        IEnumerator Attack(int comboCount = 1)
         {
             isAttacking = true;
             _enemyController.animator.applyRootMotion = true;
             
             _enemyController.Fighter.TryToAttack();
-            
+            for (int i = 1; i < comboCount; i++)
+            {
+                yield return new WaitUntil(() => _enemyController.Fighter._attackStates == AttackStates.Cooldown);
+                _enemyController.Fighter.TryToAttack();
+                // _enemyController.Fighter.TryToAttack(_enemyController.Target);
+            }
             yield return new WaitUntil(() => _enemyController.Fighter._attackStates == AttackStates.Idle);
             
             _enemyController.animator.applyRootMotion = false;

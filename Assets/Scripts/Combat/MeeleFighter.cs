@@ -157,5 +157,8 @@ namespace RPGKarawara
             if(rightFootCollider != null)
                 rightFootCollider.enabled = false;
         }
+        public List<AttackData> Attacks => attacks;
+
+       // public bool IsCounterable => AttackState == AttackStates.Windup && comboCount == 0;
     }
 }
