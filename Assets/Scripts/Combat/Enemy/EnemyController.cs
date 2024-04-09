@@ -22,13 +22,15 @@ namespace RPGKarawara
         public MeeleFighter Fighter;
         private void Start()
         {
-            animator = GetComponent<Animator>();
             NavAgent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
             Fighter = GetComponent<MeeleFighter>();
             stateDict = new Dictionary<EnemyStates, StateEnemy<EnemyController>>();
             stateDict[EnemyStates.Idle] = GetComponent<IdleState>();
             stateDict[EnemyStates.CombatMovement] = GetComponent<CombatMovementState>();
             stateDict[EnemyStates.Attack] = GetComponent<AttackState>();
+            stateDict[EnemyStates.RetreatAfterAttack] = GetComponent<RetreatAfterAttackState>();
+            
             StateMachineEnemy = new StateMachineEnemy<EnemyController>(this);
             StateMachineEnemy.ChangeState(stateDict[EnemyStates.Idle]);
 
@@ -47,9 +49,8 @@ namespace RPGKarawara
             StateMachineEnemy.Execute();
             
             // v = dx / dt
-           // var deltaPos = animator.applyRootMotion? Vector3.zero : transform.position - prevPos;
-           var deltaPos = transform.position - prevPos;
-            var velocity = deltaPos / Time.deltaTime;
+            var deltaPos = animator.applyRootMotion? Vector3.zero : transform.position - prevPos;
+           var velocity = deltaPos / Time.deltaTime;
 
             float forwardSpeed = Vector3.Dot(velocity, transform.forward);
             animator.SetFloat("forwardSpeed", forwardSpeed / NavAgent.speed, 0.2f, Time.deltaTime);

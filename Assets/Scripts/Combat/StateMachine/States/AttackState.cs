@@ -35,9 +35,14 @@ namespace RPGKarawara
             
             yield return new WaitUntil(() => _enemyController.Fighter._attackStates == AttackStates.Idle);
             
-            _enemyController.animator.applyRootMotion = true;
+            _enemyController.animator.applyRootMotion = false;
             isAttacking = false;
-            
+            _enemyController.ChangeState(EnemyStates.RetreatAfterAttack);
+        }
+
+        public override void Exit()
+        {
+            _enemyController.NavAgent.ResetPath();
         }
     }
 }
