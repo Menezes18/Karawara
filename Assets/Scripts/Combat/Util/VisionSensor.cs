@@ -8,6 +8,11 @@ namespace RPGKarawara
     public class VisionSensor : MonoBehaviour
     {
         [SerializeField] private EnemyController enemy;
+        private void Awake()
+        {
+            enemy.VisionSensor = this;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
            var fighter = other.GetComponent<MeeleFighter>();

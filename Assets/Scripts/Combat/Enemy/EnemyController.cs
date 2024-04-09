@@ -14,14 +14,17 @@ namespace RPGKarawara
         public float CombatMovementTimer { get; set; } = 0f;
         public MeeleFighter Target { get; set; }
         public StateMachineEnemy<EnemyController> StateMachineEnemy { get; private set; }
-        public NavMeshAgent NavAgent { get; private set; }
 
         Dictionary<EnemyStates, StateEnemy<EnemyController>> stateDict;
 
-        public Animator animator;
-        public MeeleFighter Fighter;
+        public NavMeshAgent NavAgent { get; private set; }
+        public CharacterController CharacterController { get; private set; }
+        public Animator animator{ get; private set; }
+        public MeeleFighter Fighter{ get; private set; }
+        public VisionSensor VisionSensor { get; set; }
         private void Start()
         {
+            CharacterController = GetComponent<CharacterController>();
             NavAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             Fighter = GetComponent<MeeleFighter>();
@@ -30,6 +33,7 @@ namespace RPGKarawara
             stateDict[EnemyStates.CombatMovement] = GetComponent<CombatMovementState>();
             stateDict[EnemyStates.Attack] = GetComponent<AttackState>();
             stateDict[EnemyStates.RetreatAfterAttack] = GetComponent<RetreatAfterAttackState>();
+            stateDict[EnemyStates.Dead] = GetComponent<DeadState>();
             
             StateMachineEnemy = new StateMachineEnemy<EnemyController>(this);
             StateMachineEnemy.ChangeState(stateDict[EnemyStates.Idle]);

@@ -14,6 +14,7 @@ namespace RPGKarawara
         [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
         private Animator _animator;
         public bool InAction { get; private set; } = false; 
+        public bool InCounter { get; set; } = false;
         public AttackStates _attackStates { get; private set; }
         private bool _doCombo;
         private int _comboCount = 0;
@@ -69,6 +70,7 @@ namespace RPGKarawara
                 float normalizedTime = timer / animState.length;
                 if (_attackStates == AttackStates.Windup)
                 {
+                    if (InCounter) break;
                     if (normalizedTime >= attacks[_comboCount].ImpactStartTime)
                     {
                         _attackStates = AttackStates.Impact;
@@ -121,6 +123,39 @@ namespace RPGKarawara
 
             InAction = false;
         }
+        public IEnumerator PerformCounterAttack(EnemyController opponent)
+        {
+            InAction = true;
+
+            InCounter = true;
+            opponent.Fighter.InCounter = true;
+            opponent.ChangeState(EnemyStates.Dead);
+            
+            var dispVec = opponent.transform.position - transform.position;
+            dispVec.y = 0f;
+            transform.rotation = Quaternion.LookRotation(dispVec);
+            opponent.transform.rotation = Quaternion.LookRotation(-dispVec);
+
+            var targetPos = opponent.transform.position - dispVec.normalized * 1f;
+            _animator.CrossFade("CounterAttack", 0.2f);
+            opponent.animator.CrossFade("CounterAttackVictim", 0.2f);
+            yield return null;
+
+            var animState = _animator.GetNextAnimatorStateInfo(1);
+            float timer = 0f;
+            while (timer <= animState.length)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, 5 * Time.deltaTime);
+
+                yield return null;
+
+                timer += Time.deltaTime;
+            }
+            
+            InCounter = false;
+            opponent.Fighter.InCounter = false;
+            InAction = false;
+        }
         void EnableHitbox(AttackData attack)
         {
             switch (attack.HitboxToUse)
@@ -159,6 +194,6 @@ namespace RPGKarawara
         }
         public List<AttackData> Attacks => attacks;
 
-       // public bool IsCounterable => AttackState == AttackStates.Windup && comboCount == 0;
+       public bool IsCounterable => _attackStates == AttackStates.Windup && _comboCount == 0;
     }
 }

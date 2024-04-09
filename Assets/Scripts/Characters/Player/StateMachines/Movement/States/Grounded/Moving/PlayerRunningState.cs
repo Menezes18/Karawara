@@ -46,7 +46,10 @@ namespace RPGKarawara
 
             if(CombatController.instacia._meeleFighter.InAction)
             {
-                //tirar a corrida de andar depois
+                // Supondo que você tenha uma instância de PlayerMovementState chamada playerMovementState
+                // Quaternion targetRotation = GetTargetRotation();
+                // Player.instancia.transform.rotation = targetRotation;
+
                 return;
             }
             if (!stateMachine.ReusableData.ShouldWalk)
@@ -64,6 +67,7 @@ namespace RPGKarawara
         
         #region Main Methods
 
+        
         private void StopRunning()
         {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)

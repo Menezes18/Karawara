@@ -42,7 +42,8 @@ namespace RPGKarawara
             
             _enemyController.animator.applyRootMotion = false;
             isAttacking = false;
-            _enemyController.ChangeState(EnemyStates.RetreatAfterAttack);
+            if(_enemyController.IsInState(EnemyStates.Attack))
+                _enemyController.ChangeState(EnemyStates.RetreatAfterAttack);
         }
 
         public override void Exit()

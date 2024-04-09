@@ -55,5 +55,9 @@ namespace RPGKarawara
         {
             return enemiesInRange.OrderByDescending(e => e.CombatMovementTimer).FirstOrDefault();
         }
+        public EnemyController GetAttackingEnemy()
+        {
+            return enemiesInRange.FirstOrDefault(e => e.IsInState(EnemyStates.Attack));
+        }
     }
 }
