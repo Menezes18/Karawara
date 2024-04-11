@@ -44,14 +44,19 @@ namespace RPGKarawara
         {
             base.Update();
 
-            if(CombatController.instacia._meeleFighter.InAction)
-            {
-                // Supondo que você tenha uma instância de PlayerMovementState chamada playerMovementState
-                // Quaternion targetRotation = GetTargetRotation();
-                // Player.instancia.transform.rotation = targetRotation;
+            if (CombatController.instacia._meeleFighter.InAction) {
+                // Obtenha a rotação atual do jogador
+                Quaternion currentPlayerRotation = GetCurrentPlayerRotation();
+
+                // Defina a rotação alvo para a rotação atual do jogador
+                Player.instancia.targetRotation = currentPlayerRotation;
+
+                // Atribua a rotação alvo ao jogador
+                stateMachine.Player.transform.rotation = Player.instancia.targetRotation;
 
                 return;
             }
+
             if (!stateMachine.ReusableData.ShouldWalk)
             {
                 return;
@@ -67,7 +72,11 @@ namespace RPGKarawara
         
         #region Main Methods
 
-        
+        protected Quaternion GetCurrentPlayerRotation()
+        {
+            return stateMachine.Player.transform.rotation;
+        }
+
         private void StopRunning()
         {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)

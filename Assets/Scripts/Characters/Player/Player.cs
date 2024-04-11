@@ -37,16 +37,13 @@ namespace RPGKarawara
 
 
         private CombatController _combatController;
-        private Quaternion targetRotation;
+        public Quaternion targetRotation;
         public CinemachineVirtualCamera virtualCamera;
         public Vector3 movedir;
         public float moveAmount;
         private void Awake() 
         {
             instancia = this;
-        
-        private void Awake() 
-        {
             //player = this;
 
             Rigidbody = GetComponent<Rigidbody>();

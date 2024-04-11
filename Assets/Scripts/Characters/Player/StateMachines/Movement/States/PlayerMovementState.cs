@@ -26,27 +26,6 @@ namespace RPGKarawara
 
             InitializeData();
         }
-
-        public void t()
-        {
-            CinemachineVirtualCamera virtualCamera = Player.instancia.virtualCamera;
-
-            // Verifique se a câmera virtual foi encontrada
-            if (virtualCamera != null)
-            {
-                // Obtenha a rotação planar da câmera
-                Quaternion planarRotation = Quaternion.Euler(0f, virtualCamera.transform.rotation.eulerAngles.y, 0f);
-
-                // Use a rotação planar da câmera para calcular a direção de movimento
-                Vector3 moveDir = planarRotation * new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
-
-                // Salve a direção de movimento para uso posterior, se necessário
-                Player.instancia.movedir = moveDir;
-            }
-            HandleInput();
-
-            Update(); 
-        }
         public Quaternion GetTargetRotation()
         {
             return targetRotation;
