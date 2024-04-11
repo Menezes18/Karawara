@@ -9,8 +9,33 @@ namespace RPGKarawara
     
     public class CombatController : MonoBehaviour
     {
+        bool combatMode;
+        public bool CombatMode
+        {
+            get => combatMode;
+            set {
+                combatMode = value;
+
+                if (TargetEnemy == null)
+                    combatMode = false;
+
+               //_animator.SetBool("combatMode", combatMode);
+            }
+        }
         public static CombatController instacia;
-        public EnemyController TargetEnemy;
+        
+        EnemyController targetEnemy; 
+        public EnemyController TargetEnemy
+        {
+            get => targetEnemy;
+            set
+            {
+                targetEnemy = value;
+
+                if (targetEnemy == null)
+                    CombatMode = false;
+            }
+        }
         private Animator _animator;
         public MeeleFighter _meeleFighter;
         public CinemachineVirtualCamera _cinemachineCamera;
@@ -19,7 +44,7 @@ namespace RPGKarawara
             instacia = this;
             _meeleFighter = GetComponent<MeeleFighter>();
             _animator = GetComponentInChildren<Animator>();
-            _cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>(); // Encontramos a câmera Cinemachine na cena
+            _cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
         }
 
         private void Update()
@@ -34,8 +59,14 @@ namespace RPGKarawara
                 else
                 {
                     _meeleFighter.TryToAttack();
-                    
+                    CombatMode = true;
+
                 }
+            }
+
+            if (Mouse.current.middleButton.wasPressedThisFrame)
+            {
+                CombatMode = !CombatMode;
             }
         }
         private void OnAnimatorMove()

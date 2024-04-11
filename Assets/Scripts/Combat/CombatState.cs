@@ -1,29 +1,22 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
-    public class PlayerRunningState : PlayerMovingState
+    public class CombatState : PlayerGroundedState
     {
-        private PlayerSprintData sprintData;
+        
 
-        private float startTime;
-
-        public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
+        public CombatState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            sprintData = movementData.SprintData;
+            
         }
-
-        #region IState Methods
 
         public override void Enter()
         {
-            Debug.Log("Entrou");
-            
+            ResetVericalVelocity();
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
 
             base.Enter();
@@ -31,52 +24,42 @@ namespace RPGKarawara
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
-            startTime = Time.time;
-
-            
         }
+
         public override void Exit()
         {
             base.Exit();
             StopAnimation(stateMachine.Player.AnimationData.RunParameterHash);
         }
+
         public override void Update()
         {
+            Debug.Log("AA");
             base.Update();
-            Debug.Log("TESTE");
-            if (CombatController.instacia._meeleFighter.InAction) {
-                // Obtenha a rotação atual do jogador
-                Quaternion currentPlayerRotation = GetCurrentPlayerRotation();
+            stateMachine.ReusableData.MovementSpeedModifier = 1f;
+            // Obter a velocidade do jogador a partir do Rigidbody
+            Vector3 velocity = Player.instancia.Rigidbody.velocity;
+            // Obter a velocidade do jogador no eixo "forward" (frente)
+            float forwardSpeed = Vector3.Dot(velocity, Player.instancia.transform.forward);
+            // Definir a variável de animação "forwardSpeed"
+            Player.instancia.Animator.SetFloat("forwardSpeed", forwardSpeed / velocity.magnitude, 0.2f, Time.deltaTime);
 
-                // Defina a rotação alvo para a rotação atual do jogador
-                Player.instancia.targetRotation = currentPlayerRotation;
-
-                // Atribua a rotação alvo ao jogador
-                stateMachine.Player.transform.rotation = Player.instancia.targetRotation;
-
-                return;
-            }
-
+            // Calcular o ângulo entre a frente do jogador e sua velocidade
+            float angle = Vector3.SignedAngle(Player.instancia.transform.forward, velocity, Vector3.up);
+            // Calcular a velocidade de movimentação lateral (strafe)
+            float strafeSpeed = Mathf.Sin(angle * Mathf.Deg2Rad);
+            // Definir a variável de animação "strafeSpeed"
+            Player.instancia.Animator.SetFloat("strafeSpeed", strafeSpeed, 0.2f, Time.deltaTime);
+            
+            
             if (!stateMachine.ReusableData.ShouldWalk)
             {
                 return;
             }
-
-            if (Time.time < startTime + sprintData.RunToWalkTime)
-            {
-                return;
-            }
+            
             
             StopRunning();
         }
-        
-        #region Main Methods
-
-        protected Quaternion GetCurrentPlayerRotation()
-        {
-            return stateMachine.Player.transform.rotation;
-        }
-
         private void StopRunning()
         {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)
@@ -91,11 +74,10 @@ namespace RPGKarawara
             stateMachine.ChangeState(stateMachine.WalkingState);
 
         }
-
-        #endregion
-
-        #endregion
-
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+        }
         #region Input Methods
 
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
@@ -114,6 +96,5 @@ namespace RPGKarawara
         }
 
         #endregion
-
     }
 }

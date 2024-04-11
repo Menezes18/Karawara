@@ -32,6 +32,12 @@ namespace RPGKarawara
         {
             
                 enemiesInRange.Remove(enemy);
+                if (enemy == player.TargetEnemy)
+                {
+                    enemy.MeshHighlighter?.HighlightMesh(false);
+                    player.TargetEnemy = GetClosestEnemyToPlayerDir();
+                    player.TargetEnemy?.MeshHighlighter?.HighlightMesh(true);
+                }
         }
 
         private void Update()
