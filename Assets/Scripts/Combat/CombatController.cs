@@ -19,7 +19,7 @@ namespace RPGKarawara
                 if (TargetEnemy == null)
                     combatMode = false;
 
-               //_animator.SetBool("combatMode", combatMode);
+               _animator.SetBool("combatMode", combatMode);
             }
         }
         public static CombatController instacia;

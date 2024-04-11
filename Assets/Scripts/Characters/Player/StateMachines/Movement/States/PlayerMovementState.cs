@@ -110,19 +110,40 @@ namespace RPGKarawara
             stateMachine.ReusableData.MovementInput = stateMachine.Player.Input.PlayerActions.Movement.ReadValue<Vector2>();
         }
 
-       private void Move()
+        private void Move()
         {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier == 0f)
             {
                 return;
             }
 
-            // if(Player.instancia.meeleFighter.InAction)
-            // {
-            //     //stateMachine.ReusableData.MovementSpeedModifier = 0f;
-            //     resetvelocitycombat();
-            // }
-            Vector3 movementDirection = GetMovementInputDirection();
+            Vector3 movementDirection = new Vector3();
+
+            // Se estiver em combate, mover em direção ao inimigo
+            if (Player.instancia._combatController.CombatMode)
+            {
+                stateMachine.ReusableData.MovementSpeedModifier = 0.4f;
+                var targetVec = Player.instancia._combatController.TargetEnemy.transform.position - Player.instancia.transform.position;
+                targetVec.y = 0;
+
+                targetRotation = Quaternion.LookRotation(targetVec).normalized;
+                Player.instancia.transform.rotation = Quaternion.RotateTowards(Player.instancia.transform.rotation, targetRotation, 300f * Time.deltaTime).normalized;
+
+                float forwardSpeed = Vector3.Dot(Player.instancia.transform.forward, Player.instancia.Rigidbody.velocity);
+                float strafeSpeed = Vector3.Dot(Player.instancia.transform.right, Player.instancia.Rigidbody.velocity);
+
+                // Atualizar os parâmetros do Animator com as velocidades calculadas
+                Player.instancia.Animator.SetFloat("forwardSpeed", forwardSpeed, 0.1f, Time.deltaTime);
+                Player.instancia.Animator.SetFloat("strafeSpeed", strafeSpeed, 0.1f, Time.deltaTime);
+
+            }
+            // mover de acordo com a entrada do jogador
+            else
+            {
+                
+            }
+
+            movementDirection = GetMovementInputDirection();
 
             float targetRotationYAngle = Rotate(movementDirection);
 
@@ -135,7 +156,7 @@ namespace RPGKarawara
             stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
         }
 
-         private float Rotate(Vector3 direction)
+        private float Rotate(Vector3 direction)
         {
             float directionAngle = UpdateTargetRotation(direction);
 

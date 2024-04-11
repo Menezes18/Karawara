@@ -38,7 +38,7 @@ namespace RPGKarawara
         private PlayerMovementStateMachine movementStateMachine;
 
 
-        private CombatController _combatController;
+        public CombatController _combatController;
         public Quaternion targetRotation;
         public CinemachineVirtualCamera virtualCamera;
         public Vector3 movedir;
@@ -96,37 +96,7 @@ namespace RPGKarawara
             }
 
         private void Update() 
-        {         
-            if (_combatController.CombatMode)
-            {
-                
-                // Obter a direção do movimento do jogador
-                Vector2 movementInput = Input.PlayerActions.Movement.ReadValue<Vector2>();
-                Vector3 moveDir = CalculateMoveDirection(movementInput);
-
-                // Obter a posição do inimigo alvo
-                Vector3 targetEnemyPosition = _combatController.TargetEnemy.transform.position;
-
-                // Calcular a rotação para mirar no inimigo
-                Vector3 targetVec = targetEnemyPosition - transform.position;
-                targetVec.y = 0;
-
-                // Verificar se o jogador está se movendo
-                if (moveDir.magnitude > 0)
-                {
-                    targetRotation = Quaternion.LookRotation(targetVec);
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-                }
-
-                // Calcular as velocidades de movimento do jogador
-                float forwardSpeed = Vector3.Dot(transform.forward, Rigidbody.velocity);
-                float strafeSpeed = Vector3.Dot(transform.right, Rigidbody.velocity);
-
-                // Atualizar os parâmetros do Animator com as velocidades calculadas
-                Animator.SetFloat("forwardSpeed", forwardSpeed / 10, 0.1f, Time.deltaTime);
-                Animator.SetFloat("strafeSpeed", strafeSpeed / 10, 0.1f, Time.deltaTime);
-            }
-
+        {
             if (virtualCamera != null)
             {
                 // Obtenha a rotação planar da câmera
@@ -138,6 +108,7 @@ namespace RPGKarawara
                 // Salve a direção de movimento para uso posterior, se necessário
                 movedir = moveDir;
             }
+
             movementStateMachine.HandleInput();
 
            movementStateMachine.Update(); 
