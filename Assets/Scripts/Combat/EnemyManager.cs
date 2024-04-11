@@ -59,7 +59,16 @@ namespace RPGKarawara
             if (timer >= 0.1f)
             {
                 timer = 0f;
-                player.TargetEnemy = GetClosestEnemyToPlayerDir();
+                var closestEnemy = GetClosestEnemyToPlayerDir();
+                if (closestEnemy != null && closestEnemy != player.TargetEnemy)
+                {
+                    var prevEnemy = player.TargetEnemy;
+                    player.TargetEnemy = closestEnemy;
+                    
+                    
+                    player?.TargetEnemy?.MeshHighlighter.HighlightMesh(true);
+                    prevEnemy?.MeshHighlighter?.HighlightMesh(false);
+                }
             }
             timer += Time.deltaTime;
 
@@ -75,7 +84,8 @@ namespace RPGKarawara
         }
         public EnemyController GetClosestEnemyToPlayerDir()
         {
-
+            //fazer para depois no scrow mudar o target
+            //mudar a logica
             var targetingDir = player.GetTargetingDir();
 
             float minDitance = Mathf.Infinity;
