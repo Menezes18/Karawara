@@ -30,7 +30,7 @@ namespace RPGKarawara
             // Se distancia for menor que 200 aumenta a imagem
             if (dist <= 200)
             {
-                // Calcula a escala proporcional à distância, evitando valores muito grandes
+                // Calcula a escala proporcional ï¿½ distï¿½ncia, evitando valores muito grandes
                 var newScale = Vector3.Lerp(initialScale, initialScale * maxScaleFactor, 1 - dist / 200);
                 transform.localScale = Vector3.Lerp(transform.localScale, newScale, 5f);
             }
@@ -51,7 +51,7 @@ namespace RPGKarawara
                 roda.CurrentAnimal.SetActive(false);
                 roda.CurrentAnimal = animal;
                 roda.CurrentAnimal.SetActive(true);
-                Player.player.Animator = animal.GetComponent<Animator>();
+                Player.instancia.Animator = animal.GetComponent<Animator>();
             }
         }
 

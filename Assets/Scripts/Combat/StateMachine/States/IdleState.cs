@@ -13,7 +13,7 @@ namespace RPGKarawara
         public override void Enter(EnemyController owner)
         {
             _enemyController = owner;
-            
+            _enemyController.animator.SetBool("combatMode", false);
         }
 
         public override void Execute()

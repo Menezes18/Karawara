@@ -8,6 +8,7 @@ namespace RPGKarawara
     public enum AICombatStates { Idle, Chase, Circling }
     public class CombatMovementState : StateEnemy<EnemyController>
     {
+        
         [SerializeField] float ciclingSpeed = 20f;
         [SerializeField] private float distanceToStand = 3f;
         [SerializeField] float adjustDistanceThreshold = 1f;
@@ -24,6 +25,7 @@ namespace RPGKarawara
             _enemyController = owner;
             _enemyController.NavAgent.stoppingDistance = distanceToStand;
             _enemyController.CombatMovementTimer = 0f;
+            _enemyController.animator.SetBool("combatMode", true);
         }
 
         public override void Execute()
@@ -93,13 +95,13 @@ namespace RPGKarawara
         void StartChase()
         {
             _state = AICombatStates.Chase;
-            _enemyController.animator.SetBool("combatMode", false);
+            
         }
         void StartIdle()
         {
             _state = AICombatStates.Idle;
             timer = Random.Range(idleTimeRange.x, idleTimeRange.y);
-            _enemyController.animator.SetBool("combatMode", true);
+            
         }
         public override void Exit()
         {

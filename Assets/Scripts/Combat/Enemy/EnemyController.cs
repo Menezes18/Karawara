@@ -21,6 +21,7 @@ namespace RPGKarawara
         public CharacterController CharacterController { get; private set; }
         public Animator animator{ get; private set; }
         public MeeleFighter Fighter{ get; private set; }
+        public SkinnedMeshHighlighter MeshHighlighter{ get; private set; }
         public VisionSensor VisionSensor { get; set; }
         private void Start()
         {
@@ -28,6 +29,7 @@ namespace RPGKarawara
             NavAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             Fighter = GetComponent<MeeleFighter>();
+            MeshHighlighter = GetComponent<SkinnedMeshHighlighter>();
             stateDict = new Dictionary<EnemyStates, StateEnemy<EnemyController>>();
             stateDict[EnemyStates.Idle] = GetComponent<IdleState>();
             stateDict[EnemyStates.CombatMovement] = GetComponent<CombatMovementState>();

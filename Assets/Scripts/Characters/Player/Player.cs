@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using GenshinImpactMovementSystem;
 using UnityEngine;
 using Cinemachine;
+using Unity.Mathematics;
+
 namespace RPGKarawara
 {   
     [RequireComponent(typeof(PlayerInput))]
@@ -37,16 +39,14 @@ namespace RPGKarawara
 
 
         private CombatController _combatController;
-        private Quaternion targetRotation;
+        public Quaternion targetRotation;
         public CinemachineVirtualCamera virtualCamera;
         public Vector3 movedir;
         public float moveAmount;
+        [SerializeField] float rotationSpeed = 500f;
         private void Awake() 
         {
             instancia = this;
-        
-        private void Awake() 
-        {
             //player = this;
 
             Rigidbody = GetComponent<Rigidbody>();
@@ -84,10 +84,49 @@ namespace RPGKarawara
         {
             movementStateMachine.OnTriggerExit(collider);
         }
+            Vector3 CalculateMoveDirection(Vector2 input)
+            {
+                // Obter a rotação planar da câmera
+                Quaternion planarRotation = Quaternion.Euler(0f, virtualCamera.transform.rotation.eulerAngles.y, 0f);
+
+                // Calcular a direção do movimento baseada na rotação planar da câmera
+                Vector3 moveDir = planarRotation * new Vector3(input.x, 0f, input.y);
+
+                return moveDir;
+            }
 
         private void Update() 
         {         
-            
+            if (_combatController.CombatMode)
+            {
+                
+                // Obter a direção do movimento do jogador
+                Vector2 movementInput = Input.PlayerActions.Movement.ReadValue<Vector2>();
+                Vector3 moveDir = CalculateMoveDirection(movementInput);
+
+                // Obter a posição do inimigo alvo
+                Vector3 targetEnemyPosition = _combatController.TargetEnemy.transform.position;
+
+                // Calcular a rotação para mirar no inimigo
+                Vector3 targetVec = targetEnemyPosition - transform.position;
+                targetVec.y = 0;
+
+                // Verificar se o jogador está se movendo
+                if (moveDir.magnitude > 0)
+                {
+                    targetRotation = Quaternion.LookRotation(targetVec);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                }
+
+                // Calcular as velocidades de movimento do jogador
+                float forwardSpeed = Vector3.Dot(transform.forward, Rigidbody.velocity);
+                float strafeSpeed = Vector3.Dot(transform.right, Rigidbody.velocity);
+
+                // Atualizar os parâmetros do Animator com as velocidades calculadas
+                Animator.SetFloat("forwardSpeed", forwardSpeed / 10, 0.1f, Time.deltaTime);
+                Animator.SetFloat("strafeSpeed", strafeSpeed / 10, 0.1f, Time.deltaTime);
+            }
+
             if (virtualCamera != null)
             {
                 // Obtenha a rotação planar da câmera
@@ -99,7 +138,7 @@ namespace RPGKarawara
                 // Salve a direção de movimento para uso posterior, se necessário
                 movedir = moveDir;
             }
-           movementStateMachine.HandleInput();
+            movementStateMachine.HandleInput();
 
            movementStateMachine.Update(); 
         }

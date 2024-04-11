@@ -36,7 +36,7 @@ namespace RPGKarawara
 
         public PlayerFallingState FallingState { get; }
 
-
+        public CombatState CombatState { get; }
         public PlayerMovementStateMachine(Player player)
         {   
             Player = player;
@@ -55,6 +55,7 @@ namespace RPGKarawara
             HardLandingState = new PlayerHardLandingState(this);
             JumpingState = new PlayerJumpingState(this);
             FallingState = new PlayerFallingState(this);
+            CombatState = new CombatState(this);
 
         }
     }
