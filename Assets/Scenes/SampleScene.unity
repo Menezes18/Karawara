@@ -539,6 +539,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6421,11 +6426,13 @@ MonoBehaviour:
     rollParameterName: isRolling
     hardLandParameterName: isHardLanding
     fallParameterName: isFalling
-  Animator: {fileID: 0}
+  Animator: {fileID: 2079109530}
+  _combatController: {fileID: 0}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   virtualCamera: {fileID: 929098104}
   movedir: {x: 0, y: 0, z: 0}
   moveAmount: 0
+  rotationSpeed: 500
 --- !u!114 &1222627900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6438,7 +6445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a959a0506b14e842a4d7329a9abac0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetEnemy: {fileID: 0}
   _meeleFighter: {fileID: 1222627901}
   _cinemachineCamera: {fileID: 929098104}
 --- !u!114 &1222627901
@@ -9806,6 +9812,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e53ffed31e97d4a95eb4ece61010e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &2079109530 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+    type: 3}
+  m_PrefabInstance: {fileID: 547735829}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2096568234
 GameObject:
   m_ObjectHideFlags: 0
