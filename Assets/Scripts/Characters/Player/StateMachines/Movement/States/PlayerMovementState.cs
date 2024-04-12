@@ -11,6 +11,7 @@ namespace RPGKarawara
         protected PlayerMovementStateMachine stateMachine;
         
         protected PlayerGroundedData movementData;
+        
 
         protected PlayerAirborneData airborneData;
         Quaternion targetRotation;
@@ -60,12 +61,7 @@ namespace RPGKarawara
         }
         public virtual void PhysicsUpdate()
         {
-           // if (Player.instancia.meeleFighter.InAction)
-           // {
-             //   resetvelocitycombat();
-                //stateMachine.ReusableData.MovementSpeedModifier = 0f;
-           //     return;
-          //  }
+           
             Move();
         }
 
@@ -122,25 +118,25 @@ namespace RPGKarawara
             // Se estiver em combate, mover em direção ao inimigo
             if (Player.instancia._combatController.CombatMode)
             {
-                stateMachine.ReusableData.MovementSpeedModifier = 0.4f;
+                if (CombatController.instacia._meeleFighter.InAction)
+                {
+                    resetvelocitycombat();
+                    ResetVericalVelocity();
+                    return;
+                }
+                //stateMachine.ReusableData.MovementSpeedModifier = 0.4f;
                 var targetVec = Player.instancia._combatController.TargetEnemy.transform.position - Player.instancia.transform.position;
                 targetVec.y = 0;
 
                 targetRotation = Quaternion.LookRotation(targetVec).normalized;
                 Player.instancia.transform.rotation = Quaternion.RotateTowards(Player.instancia.transform.rotation, targetRotation, 300f * Time.deltaTime).normalized;
 
-                float forwardSpeed = Vector3.Dot(Player.instancia.transform.forward, Player.instancia.Rigidbody.velocity);
-                float strafeSpeed = Vector3.Dot(Player.instancia.transform.right, Player.instancia.Rigidbody.velocity);
-
-                // Atualizar os parâmetros do Animator com as velocidades calculadas
-                Player.instancia.Animator.SetFloat("forwardSpeed", forwardSpeed, 0.1f, Time.deltaTime);
-                Player.instancia.Animator.SetFloat("strafeSpeed", strafeSpeed, 0.1f, Time.deltaTime);
-
+                AnimationCombat();
             }
-            // mover de acordo com a entrada do jogador
             else
             {
                 
+             //stateMachine.ReusableData.MovementSpeedModifier = 1f;
             }
 
             movementDirection = GetMovementInputDirection();
@@ -154,6 +150,16 @@ namespace RPGKarawara
             Vector3 currentPlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
             stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
+        }
+
+        private void AnimationCombat()
+        {
+            float forwardSpeed = Vector3.Dot(Player.instancia.transform.forward, Player.instancia.Rigidbody.velocity);
+            float strafeSpeed = Vector3.Dot(Player.instancia.transform.right, Player.instancia.Rigidbody.velocity);
+
+            // Atualizar os parâmetros do Animator com as velocidades calculadas
+            Player.instancia.Animator.SetFloat("forwardSpeed", forwardSpeed, 0.1f, Time.deltaTime);
+            Player.instancia.Animator.SetFloat("strafeSpeed", strafeSpeed, 0.1f, Time.deltaTime);
         }
 
         private float Rotate(Vector3 direction)

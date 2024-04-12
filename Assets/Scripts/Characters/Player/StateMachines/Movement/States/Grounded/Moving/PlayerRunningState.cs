@@ -43,9 +43,9 @@ namespace RPGKarawara
         public override void Update()
         {
             base.Update();
-            Debug.Log("TESTE");
+           // Debug.Log("TESTE");
             if (CombatController.instacia._meeleFighter.InAction) {
-                // Obtenha a rotação atual do jogador
+                 //Obtenha a rotação atual do jogador
                 Quaternion currentPlayerRotation = GetCurrentPlayerRotation();
 
                 // Defina a rotação alvo para a rotação atual do jogador
