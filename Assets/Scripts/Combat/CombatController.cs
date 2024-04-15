@@ -58,10 +58,8 @@ namespace RPGKarawara
                 // else{
 
                     var enemyToAttack = EnemyManager.i.GetClosestEnemyToDirection(Player.instancia.InputDir);
-                    Vector3? dirToAttack = null;
-                    if (enemyToAttack != null)
-                        dirToAttack = enemyToAttack.transform.position - transform.position;
-                    _meeleFighter.TryToAttack(Player.instancia.InputDir);
+
+                    _meeleFighter.TryToAttack(enemyToAttack.Fighter);
                     CombatMode = true;
 
                // }

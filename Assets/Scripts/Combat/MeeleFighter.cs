@@ -14,10 +14,12 @@ namespace RPGKarawara{
 
     public class MeeleFighter : MonoBehaviour{
         [SerializeField] private List<AttackData> attacks;
+        [SerializeField] private List<AttackData> longRangeAttacks;
+        [SerializeField] private float longRangeAttacksThreshold = 1.5f;
         [SerializeField] private GameObject swordOrHand;
         private BoxCollider _swordOrHandSphereCollider;
         [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
-        private Animator _animator;
+        public Animator _animator;
         [SerializeField] private float rotationspeed = 500f;
         public event Action OnGotHit;
         public event Action OnHitComplete;
@@ -29,7 +31,10 @@ namespace RPGKarawara{
         private int _comboCount = 0;
 
        // public bool _stopAttack = false;
-
+       
+       
+       public Transform parentTransform;
+       public Vector3 offset;
         private void Start(){
             if (swordOrHand != null){
                 _swordOrHandSphereCollider = swordOrHand.GetComponent<BoxCollider>();
@@ -44,26 +49,54 @@ namespace RPGKarawara{
                 DisableAllHitboxes();
             }
         }
-
+        public void ChangeParentPosition()
+        {
+            if (parentTransform != null)
+            {
+                parentTransform.position += offset;
+            }
+        }
         private void Awake(){
             _animator = GetComponentInChildren<Animator>();
         }
 
-        public void TryToAttack(Vector3? attackDir = null){
+        public void TryToAttack(MeeleFighter target = null){
            // if (_stopAttack) return;
             if (!InAction){
-                StartCoroutine(Attack(attackDir));
+                StartCoroutine(Attack(target));
             }
             else if (_attackStates == AttackStates.Impact || _attackStates == AttackStates.Cooldown){
                 _doCombo = true;
             }
         }
 
-        IEnumerator Attack(Vector3? attackDir = null){
+        IEnumerator Attack(MeeleFighter target = null){
             InAction = true;
             _attackStates = AttackStates.Windup;
 
-            _animator.CrossFade(attacks[_comboCount].AnimName, 0.2f);
+            var attack = attacks[_comboCount];
+
+            var attackDir = transform.forward;
+            if (target != null){
+                var vecToTarget = target.transform.position - transform.position;
+                vecToTarget.y = 0;
+
+                attackDir = vecToTarget.normalized;
+
+                float distance = vecToTarget.magnitude;
+
+                if (distance > longRangeAttacksThreshold){
+                    Debug.Log("long");
+                    attack = longRangeAttacks[0];
+                    Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
+                    Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 1) * Time.deltaTime;
+                    this.transform.position = newPosition;
+
+                }
+                
+            }
+
+            _animator.CrossFade(attack.AnimName, 0.2f);
 
             yield return null;
 
@@ -85,13 +118,13 @@ namespace RPGKarawara{
 
                 if (_attackStates == AttackStates.Windup){
                     if (InCounter) break;
-                    if (normalizedTime >= attacks[_comboCount].ImpactStartTime){
+                    if (normalizedTime >= attack.ImpactStartTime){
                         _attackStates = AttackStates.Impact;
-                        EnableHitbox(attacks[_comboCount]);
+                        EnableHitbox(attack);
                     }
                 }
                 else if (_attackStates == AttackStates.Impact){
-                    if (normalizedTime >= attacks[_comboCount].ImpactEndTime){
+                    if (normalizedTime >= attack.ImpactEndTime){
                         _attackStates = AttackStates.Cooldown;
                         DisableAllHitboxes();
                     }
