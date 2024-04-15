@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPGKarawara{
@@ -25,6 +26,7 @@ namespace RPGKarawara{
         public event Action OnHitComplete;
         public bool InAction{ get; private set; } = false;
         public bool InCounter{ get; set; } = false;
+        public bool moving = false;
         
         public AttackStates _attackStates{ get; private set; }
         private bool _doCombo;
@@ -70,6 +72,27 @@ namespace RPGKarawara{
             }
         }
 
+        public void Update()
+        {
+            if (moving)
+            {
+                Debug.Log("long");
+                //attack = longRangeAttacks[0];
+                Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
+                Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 7f*Time.deltaTime);
+
+                Debug.Log("Posição atual: " + transform.position);
+                Debug.Log("Posição alvo: " + targetPosition);
+
+
+                this.transform.position = newPosition;
+                if (Vector3.Distance(transform.position,targetPosition) <= 0.4f )
+                {
+                    moving = false;
+                }
+            } 
+        }
+
         IEnumerator Attack(MeeleFighter target = null){
             InAction = true;
             _attackStates = AttackStates.Windup;
@@ -86,12 +109,8 @@ namespace RPGKarawara{
                 float distance = vecToTarget.magnitude;
 
                 if (distance > longRangeAttacksThreshold){
-                    Debug.Log("long");
-                    attack = longRangeAttacks[0];
-                    Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
-                    Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 1) * Time.deltaTime;
-                    this.transform.position = newPosition;
 
+                    moving = true;
                 }
                 
             }
