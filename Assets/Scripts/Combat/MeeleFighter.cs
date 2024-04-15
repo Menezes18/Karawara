@@ -79,7 +79,7 @@ namespace RPGKarawara{
                 Debug.Log("long");
                 //attack = longRangeAttacks[0];
                 Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
-                Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 7f*Time.deltaTime);
+                Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 7f *Time.deltaTime);
 
                 Debug.Log("Posição atual: " + transform.position);
                 Debug.Log("Posição alvo: " + targetPosition);
