@@ -10,10 +10,10 @@ namespace RPGKarawara{
         EnemyController enemy;
 
         public override void Enter(EnemyController owner){
-            StopAllCoroutines();
-
+            //StopAllCoroutines();
+            Debug.Log("OU STUNN");
             enemy = owner;
-            //enemy.Fighter.OnHitComplete += () => StartCoroutine(GoToCombatMovement());
+            enemy.Fighter.OnHitComplete += () => StartCoroutine(GoToCombatMovement());
         }
 
         IEnumerator GoToCombatMovement(){

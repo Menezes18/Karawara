@@ -1022,14 +1022,15 @@ GameObject:
   - component: {fileID: 8411038227559600287}
   - component: {fileID: 2959426583597043801}
   - component: {fileID: 2959426583597043781}
-  - component: {fileID: 7655235082914600772}
+  - component: {fileID: 3385277875088383923}
+  - component: {fileID: 7720150458721120070}
   - component: {fileID: 5023591465648694543}
   - component: {fileID: 1705217525729735023}
-  - component: {fileID: 7720150458721120070}
-  - component: {fileID: 3385277875088383923}
   - component: {fileID: 5128735056706635976}
   - component: {fileID: 7765516386914516581}
   - component: {fileID: 552531795398217540}
+  - component: {fileID: 3053433663934777457}
+  - component: {fileID: 7655235082914600772}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
@@ -1127,7 +1128,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7655235082914600772
+--- !u!114 &3385277875088383923
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1136,15 +1137,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 2959426583597043807}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32d3ae518a3d03643bbaddaf39b9deef, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d74bdd67a9352944b245fc436d578d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshesToHiglight:
-  - {fileID: 8140880084215734618}
-  - {fileID: 3200763652217145759}
-  originalMaterial: {fileID: 1106563633393636324, guid: 59461f319b66ad64f907712456c55c32,
-    type: 3}
-  highlightedMaterial: {fileID: 2100000, guid: cfe147cf4d5a3614fb17d0891549158d, type: 2}
+  ciclingSpeed: 20
+  distanceToStand: 3
+  adjustDistanceThreshold: 1
+  idleTimeRange: {x: 2, y: 5}
+  circlingTimeRange: {x: 3, y: 6}
+--- !u!114 &7720150458721120070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959426583597043807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b46dc2d5f59caf4582c63506639e823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5023591465648694543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,6 +1177,7 @@ MonoBehaviour:
   rightHandCollider: {fileID: 0}
   leftFootCollider: {fileID: 0}
   rightFootCollider: {fileID: 0}
+  rotationspeed: 500
 --- !u!114 &1705217525729735023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,35 +1191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Fov>k__BackingField: 180
---- !u!114 &7720150458721120070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2959426583597043807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b46dc2d5f59caf4582c63506639e823, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3385277875088383923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2959426583597043807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d74bdd67a9352944b245fc436d578d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ciclingSpeed: 20
-  distanceToStand: 3
-  adjustDistanceThreshold: 1
-  idleTimeRange: {x: 2, y: 5}
-  circlingTimeRange: {x: 3, y: 6}
 --- !u!114 &5128735056706635976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,6 +1230,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9252ff9862c30b843801fd4258f6dff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3053433663934777457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959426583597043807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4b55b16fb0dd4f41b2b1e41370069f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stunnTime: 0.5
+--- !u!114 &7655235082914600772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959426583597043807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d3ae518a3d03643bbaddaf39b9deef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshesToHiglight:
+  - {fileID: 8140880084215734618}
+  - {fileID: 3200763652217145759}
+  originalMaterial: {fileID: 1106563633393636324, guid: 59461f319b66ad64f907712456c55c32,
+    type: 3}
+  highlightedMaterial: {fileID: 2100000, guid: cfe147cf4d5a3614fb17d0891549158d, type: 2}
 --- !u!1 &3086539700245607172
 GameObject:
   m_ObjectHideFlags: 0

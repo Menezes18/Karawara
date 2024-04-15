@@ -36,16 +36,14 @@ namespace RPGKarawara
             stateDict[EnemyStates.Attack] = GetComponent<AttackState>();
             stateDict[EnemyStates.RetreatAfterAttack] = GetComponent<RetreatAfterAttackState>();
             stateDict[EnemyStates.Dead] = GetComponent<DeadState>();
+            stateDict[EnemyStates.GettingHit] = GetComponent<GettingHitState>();
             
             StateMachineEnemy = new StateMachineEnemy<EnemyController>(this);
             StateMachineEnemy.ChangeState(stateDict[EnemyStates.Idle]);
 
-            Fighter.OnGotHit += ReactToHit;
+            Fighter.OnGotHit += () => ChangeState(EnemyStates.GettingHit);
         }
-
-        public void ReactToHit(){
-            
-        }
+        
         public void ChangeState(EnemyStates state)
         {
             StateMachineEnemy.ChangeState(stateDict[state]);
@@ -72,6 +70,21 @@ namespace RPGKarawara
 
             prevPos = transform.position;
             //animator.SetFloat("forwardSpeed", NavAgent.velocity.magnitude / NavAgent.speed);
+        }
+        public MeeleFighter FindTarget()
+        {
+            foreach (var target in TargetInRange)
+            {
+                var vecToTarget = target.transform.position - transform.position;
+                float angle = Vector3.Angle(transform.forward, vecToTarget);
+
+                if (angle <= Fov / 2)
+                {
+                    return target;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -30,9 +30,19 @@ namespace RPGKarawara
 
         public override void Execute()
         {
+
+            if (_enemyController.Target == null){
+
+                _enemyController.Target = _enemyController.FindTarget();
+                
+                if (_enemyController.Target == null){
+                    _enemyController.ChangeState(EnemyStates.Idle);
+                    return;
+                }
+                    
+            }
             if (Vector3.Distance(_enemyController.Target.transform.position, _enemyController.transform.position) >
-                distanceToStand + adjustDistanceThreshold)
-            {
+                distanceToStand + adjustDistanceThreshold){
                 StartChase();
             }
             if (_state == AICombatStates.Idle)

@@ -18,16 +18,9 @@ namespace RPGKarawara
 
         public override void Execute()
         {
-            foreach (var target in _enemyController.TargetInRange)
-            {
-                var vecToTarget = target.transform.position - transform.position;
-                float angle = Vector3.Angle(transform.forward, vecToTarget);
-                if (angle <= _enemyController.Fov / 2)
-                {
-                    _enemyController.Target = target;
-                    _enemyController.ChangeState(EnemyStates.CombatMovement);
-                    break;
-                }
+            _enemyController.Target = _enemyController.FindTarget();
+            if (_enemyController.Target != null){
+                _enemyController.ChangeState(EnemyStates.CombatMovement);
             }
         }
 

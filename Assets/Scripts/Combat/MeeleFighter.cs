@@ -19,12 +19,16 @@ namespace RPGKarawara{
         [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
         private Animator _animator;
         [SerializeField] private float rotationspeed = 500f;
-        public Action OnGotHit;
+        public event Action OnGotHit;
+        public event Action OnHitComplete;
         public bool InAction{ get; private set; } = false;
         public bool InCounter{ get; set; } = false;
+        
         public AttackStates _attackStates{ get; private set; }
         private bool _doCombo;
         private int _comboCount = 0;
+
+       // public bool _stopAttack = false;
 
         private void Start(){
             if (swordOrHand != null){
@@ -46,6 +50,7 @@ namespace RPGKarawara{
         }
 
         public void TryToAttack(Vector3? attackDir = null){
+           // if (_stopAttack) return;
             if (!InAction){
                 StartCoroutine(Attack(attackDir));
             }
@@ -71,7 +76,10 @@ namespace RPGKarawara{
 
                 if (attackDir != null){
                     Debug.Log("A");
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Player.instancia._combatController.TargetEnemy.transform.position - transform.position), rotationspeed * Time.deltaTime);
+                    if (Player.instancia._combatController.TargetEnemy != null){
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Player.instancia._combatController.TargetEnemy.transform.position - transform.position), rotationspeed * Time.deltaTime);
+                        
+                    }
 
                 }
 
@@ -107,11 +115,19 @@ namespace RPGKarawara{
 
         private void OnTriggerEnter(Collider other){
             if (other.CompareTag("Hitbox") && !InAction){
+                //StartCoroutine(Hit());
                 Debug.Log(other);
                 StartCoroutine(PlayHitReaction(other.GetComponentInParent<MeeleFighter>().transform));
             }
         }
-
+        // IEnumerator Hit(){
+        //     _stopAttack = true;
+        //     yield return new WaitForSeconds(0.1f);
+        //     _stopAttack = false;
+        //
+        //
+        //
+        // }
         IEnumerator PlayHitReaction(Transform attacker){
             InAction = true;
 
@@ -119,7 +135,7 @@ namespace RPGKarawara{
             dispVec.y = 0;
             transform.rotation = Quaternion.LookRotation(dispVec);
 
-            OnGotHit();
+            OnGotHit?.Invoke();
             _animator.CrossFade("SwordImpact", 0.2f);
 
             yield return null;
@@ -127,7 +143,9 @@ namespace RPGKarawara{
             var animState = _animator.GetNextAnimatorStateInfo(1);
 
             yield return new WaitForSeconds(0.1f);
-
+            
+            OnHitComplete?.Invoke();
+            
             InAction = false;
         }
 

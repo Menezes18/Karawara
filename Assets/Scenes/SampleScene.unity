@@ -542,7 +542,7 @@ PrefabInstance:
     - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -616,6 +616,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7878351b05eaa6a42bb0bf7cf7b2ac50,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7878351b05eaa6a42bb0bf7cf7b2ac50,
         type: 3}
@@ -4682,6 +4687,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 257ebe7b5ed4d8f40b6adc6dba5afb8b,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 257ebe7b5ed4d8f40b6adc6dba5afb8b,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -6096,7 +6106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1212857416
 Transform:
   m_ObjectHideFlags: 0
@@ -6250,6 +6260,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 257ebe7b5ed4d8f40b6adc6dba5afb8b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 257ebe7b5ed4d8f40b6adc6dba5afb8b,
         type: 3}
@@ -6427,8 +6442,8 @@ MonoBehaviour:
     hardLandParameterName: isHardLanding
     fallParameterName: isFalling
   Animator: {fileID: 2079109530}
-  Input: {fileID: 0}
-  _combatController: {fileID: 0}
+  Input: {fileID: 1222627898}
+  _combatController: {fileID: 1222627900}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   virtualCamera: {fileID: 929098104}
   rotationY: 0
@@ -7693,6 +7708,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3053433663934777457, guid: 4075dbe45435e2f439942c8f0b87f6ad,
+        type: 3}
+      propertyPath: stunnTime
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8042,7 +8062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1618674435
 Transform:
   m_ObjectHideFlags: 0
@@ -9707,6 +9727,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dc4a2f4c81c2ef7409726ed9ada2c09c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dc4a2f4c81c2ef7409726ed9ada2c09c,
         type: 3}

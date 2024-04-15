@@ -51,11 +51,11 @@ namespace RPGKarawara
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 var enemy = EnemyManager.i.GetAttackingEnemy();
-                if (enemy != null && enemy.Fighter.IsCounterable && !_meeleFighter.InAction)
-                {
-                    StartCoroutine(_meeleFighter.PerformCounterAttack(enemy));
-                }
-                else{
+                // if (enemy != null && enemy.Fighter.IsCounterable && !_meeleFighter.InAction)
+                // {
+                //     StartCoroutine(_meeleFighter.PerformCounterAttack(enemy));
+                // }
+                // else{
 
                     var enemyToAttack = EnemyManager.i.GetClosestEnemyToDirection(Player.instancia.InputDir);
                     Vector3? dirToAttack = null;
@@ -64,7 +64,7 @@ namespace RPGKarawara
                     _meeleFighter.TryToAttack(Player.instancia.InputDir);
                     CombatMode = true;
 
-                }
+               // }
             }
 
             if (Mouse.current.middleButton.wasPressedThisFrame)
