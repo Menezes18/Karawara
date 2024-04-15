@@ -4,6 +4,8 @@ using GenshinImpactMovementSystem;
 using UnityEngine;
 using Cinemachine;
 using Unity.Mathematics;
+using UnityEngine.InputSystem;
+
 
 namespace RPGKarawara
 {   
@@ -31,7 +33,7 @@ namespace RPGKarawara
         public Animator Animator;
         public Rigidbody Rigidbody { get; private set; }
 
-        public PlayerInput Input { get; private set; }
+        public PlayerInput Input;
 
         public Transform MainCameraTransform { get; private set; }
 
@@ -41,14 +43,18 @@ namespace RPGKarawara
         public CombatController _combatController;
         public Quaternion targetRotation;
         public CinemachineVirtualCamera virtualCamera;
-        public Vector3 movedir;
+        public float rotationY;
+        public MeeleFighter meeleFighter;
+        public Quaternion PlanarRotation => Quaternion.Euler(0, rotationY, 0);
         public float moveAmount;
-        [SerializeField] float rotationSpeed = 500f;
+        public Vector3 InputDir;
+        public Vector3? attackDirPlayer;
+        
         private void Awake() 
         {
             instancia = this;
             //player = this;
-
+    
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             _combatController = GetComponent<CombatController>();
@@ -84,35 +90,32 @@ namespace RPGKarawara
         {
             movementStateMachine.OnTriggerExit(collider);
         }
-            Vector3 CalculateMoveDirection(Vector2 input)
-            {
-                // Obter a rotação planar da câmera
-                Quaternion planarRotation = Quaternion.Euler(0f, virtualCamera.transform.rotation.eulerAngles.y, 0f);
 
-                // Calcular a direção do movimento baseada na rotação planar da câmera
-                Vector3 moveDir = planarRotation * new Vector3(input.x, 0f, input.y);
+        private void Update(){
+            
+            Vector2 movementInput = Input.GetMovementInput();
 
-                return moveDir;
-            }
+            // Convertendo o movementInput para um Vector3, mantendo a componente y como 0
+            Vector3 moveInput = new Vector3(movementInput.x, 0f, movementInput.y);
 
-        private void Update() 
-        {
-            if (virtualCamera != null)
-            {
-                // Obtenha a rotação planar da câmera
-                Quaternion planarRotation = Quaternion.Euler(0f, virtualCamera.transform.rotation.eulerAngles.y, 0f);
+            // Normalizando o vetor de movimento
+            moveInput = moveInput.normalized;
 
-                // Use a rotação planar da câmera para calcular a direção de movimento
-                Vector3 moveDir = planarRotation * new Vector3(Input.PlayerActions.Movement.ReadValue<Vector2>().x, 0f, Input.PlayerActions.Movement.ReadValue<Vector2>().y);
+            // Obtendo a rotação planar da câmera
+            Quaternion cameraRotation = Quaternion.Euler(0f, MainCameraTransform.eulerAngles.y, 0f);
 
-                // Salve a direção de movimento para uso posterior, se necessário
-                movedir = moveDir;
-            }
+            // Rotacionando o vetor de movimento de acordo com a rotação da câmera
+            Vector3 moveDirection = cameraRotation * moveInput;
 
-            movementStateMachine.HandleInput();
+            // Definindo o InputDir como o vetor de movimento resultante
+            InputDir = moveDirection;
+
+           movementStateMachine.HandleInput();
 
            movementStateMachine.Update(); 
         }
+        
+        
         private void FixedUpdate() 
         {
             movementStateMachine.PhysicsUpdate();

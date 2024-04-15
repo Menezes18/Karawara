@@ -40,6 +40,11 @@ namespace RPGKarawara
             StateMachineEnemy = new StateMachineEnemy<EnemyController>(this);
             StateMachineEnemy.ChangeState(stateDict[EnemyStates.Idle]);
 
+            Fighter.OnGotHit += ReactToHit;
+        }
+
+        public void ReactToHit(){
+            
         }
         public void ChangeState(EnemyStates state)
         {

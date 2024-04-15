@@ -18,8 +18,7 @@ namespace RPGKarawara
 
                 if (TargetEnemy == null)
                     combatMode = false;
-
-               _animator.SetBool("combatMode", combatMode);
+                _animator.SetBool("combatMode", combatMode);
             }
         }
         public static CombatController instacia;
@@ -56,9 +55,13 @@ namespace RPGKarawara
                 {
                     StartCoroutine(_meeleFighter.PerformCounterAttack(enemy));
                 }
-                else
-                {
-                    _meeleFighter.TryToAttack();
+                else{
+
+                    var enemyToAttack = EnemyManager.i.GetClosestEnemyToDirection(Player.instancia.InputDir);
+                    Vector3? dirToAttack = null;
+                    if (enemyToAttack != null)
+                        dirToAttack = enemyToAttack.transform.position - transform.position;
+                    _meeleFighter.TryToAttack(Player.instancia.InputDir);
                     CombatMode = true;
 
                 }
@@ -80,10 +83,18 @@ namespace RPGKarawara
         {
             if (_cinemachineCamera != null)
             {
+                if (!CombatMode)
+                {
+                    Vector3 camForward = _cinemachineCamera.transform.forward;
+                    camForward.y = 0f; // Mantemos a direção apenas no plano horizontal
+                    return camForward.normalized;
+                    
+                }
+                else
+                {
+                    return transform.forward;
+                }
                 // A direção de mira será a direção para onde a câmera Cinemachine está olhando
-                Vector3 camForward = _cinemachineCamera.transform.forward;
-                camForward.y = 0f; // Mantemos a direção apenas no plano horizontal
-                return camForward.normalized;
             }
             else
             {

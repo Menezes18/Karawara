@@ -101,6 +101,7 @@ namespace RPGKarawara
 
         #region Main Methods
 
+        public Vector3? attack;
         private void ReadMovementInput()
         {
             stateMachine.ReusableData.MovementInput = stateMachine.Player.Input.PlayerActions.Movement.ReadValue<Vector2>();
@@ -124,6 +125,11 @@ namespace RPGKarawara
                     ResetVericalVelocity();
                     return;
                 }
+
+                if (Player.instancia.meeleFighter.InAction){
+                    
+                    return;
+                }
                 //stateMachine.ReusableData.MovementSpeedModifier = 0.4f;
                 var targetVec = Player.instancia._combatController.TargetEnemy.transform.position - Player.instancia.transform.position;
                 targetVec.y = 0;
@@ -133,11 +139,7 @@ namespace RPGKarawara
 
                 AnimationCombat();
             }
-            else
-            {
-                
-             //stateMachine.ReusableData.MovementSpeedModifier = 1f;
-            }
+            
 
             movementDirection = GetMovementInputDirection();
 
@@ -151,7 +153,7 @@ namespace RPGKarawara
 
             stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
         }
-
+        
         private void AnimationCombat()
         {
             float forwardSpeed = Vector3.Dot(Player.instancia.transform.forward, Player.instancia.Rigidbody.velocity);

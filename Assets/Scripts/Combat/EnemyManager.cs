@@ -35,7 +35,7 @@ namespace RPGKarawara
                 if (enemy == player.TargetEnemy)
                 {
                     enemy.MeshHighlighter?.HighlightMesh(false);
-                    player.TargetEnemy = GetClosestEnemyToPlayerDir();
+                    player.TargetEnemy = GetClosestEnemyToDirection(player.GetTargetingDir());
                     player.TargetEnemy?.MeshHighlighter?.HighlightMesh(true);
                 }
         }
@@ -65,7 +65,7 @@ namespace RPGKarawara
             if (timer >= 0.1f)
             {
                 timer = 0f;
-                var closestEnemy = GetClosestEnemyToPlayerDir();
+                var closestEnemy = GetClosestEnemyToDirection(player.GetTargetingDir());
                 if (closestEnemy != null && closestEnemy != player.TargetEnemy)
                 {
                     var prevEnemy = player.TargetEnemy;
@@ -88,11 +88,11 @@ namespace RPGKarawara
         {
             return enemiesInRange.FirstOrDefault(e => e.IsInState(EnemyStates.Attack));
         }
-        public EnemyController GetClosestEnemyToPlayerDir()
+        public EnemyController GetClosestEnemyToDirection(Vector3 direction)
         {
             //fazer para depois no scrow mudar o target
             //mudar a logica
-            var targetingDir = player.GetTargetingDir();
+            //var targetingDir = player.GetTargetingDir();
 
             float minDitance = Mathf.Infinity;
             EnemyController closestEnemy = null;
@@ -100,7 +100,7 @@ namespace RPGKarawara
             {
                 var vecToEnemy = enemy.transform.position - player.transform.position;
                 vecToEnemy.y = 0;
-                float angle = Vector3.Angle(targetingDir, vecToEnemy);
+                float angle = Vector3.Angle(direction, vecToEnemy);
                 float distance = vecToEnemy.magnitude * Mathf.Sin(angle * Mathf.Deg2Rad);
 
 

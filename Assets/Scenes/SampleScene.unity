@@ -542,7 +542,7 @@ PrefabInstance:
     - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6427,12 +6427,14 @@ MonoBehaviour:
     hardLandParameterName: isHardLanding
     fallParameterName: isFalling
   Animator: {fileID: 2079109530}
+  Input: {fileID: 0}
   _combatController: {fileID: 0}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
   virtualCamera: {fileID: 929098104}
-  movedir: {x: 0, y: 0, z: 0}
+  rotationY: 0
+  meeleFighter: {fileID: 1222627901}
   moveAmount: 0
-  rotationSpeed: 500
+  InputDir: {x: 0, y: 0, z: 0}
 --- !u!114 &1222627900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6468,6 +6470,7 @@ MonoBehaviour:
   rightHandCollider: {fileID: 0}
   leftFootCollider: {fileID: 0}
   rightFootCollider: {fileID: 0}
+  rotationspeed: 500
 --- !u!1001 &1240964102
 PrefabInstance:
   m_ObjectHideFlags: 0

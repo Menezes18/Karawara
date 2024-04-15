@@ -23,6 +23,10 @@ namespace RPGKarawara
         {
             InputActions.Enable();
         }
+        public Vector2 GetMovementInput()
+        {
+            return PlayerActions.Movement.ReadValue<Vector2>();
+        }
 
         private void OnDisable() 
         {    
