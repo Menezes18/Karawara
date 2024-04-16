@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace RPGKarawara
 {
@@ -14,11 +15,13 @@ namespace RPGKarawara
         public TMP_Text displayElement;
         public ScaleUiTransformation roda;
         public GameObject animal;
+        public Slider slider;
 
         void Start()
         {
             initialScale = transform.localScale;
             StartCoroutine(FadeTextToZeroAlpha());
+            slider = GetComponent<Slider>();
         }
 
         public void Update()
