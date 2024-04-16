@@ -61,7 +61,18 @@ namespace RPGKarawara
         //tempo para transformar de novo
         public IEnumerator Transformation()
         {
-            yield return new WaitForSeconds(5f);
+            // Define o valor inicial do slider para 0
+            slider.value = 0;
+
+            // Espera 5 segundos, aumentando o valor do slider gradualmente durante esse tempo
+            for (float t = 0; t < 5f; t += Time.deltaTime)
+            {
+                slider.value = t / 5f;
+                yield return null;
+            }
+
+            // Garante que o valor do slider seja 1 no final
+            slider.value = 1;
             roda.canTransform = true;
             yield return null;
         }
