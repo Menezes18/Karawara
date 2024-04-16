@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+
+using UnityEngine.InputSystem;
 using Random = System.Random;
 
 namespace RPGKarawara
@@ -39,9 +41,22 @@ namespace RPGKarawara
                     player.TargetEnemy?.MeshHighlighter?.HighlightMesh(true);
                 }
         }
-
+        private bool hasClickedThisFrame = false;
         private void Update()
         {
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+               
+                if (!hasClickedThisFrame)
+                {
+                    SelectNextEnemy();
+                    hasClickedThisFrame = true;
+                }
+            }
+            else if (Mouse.current.rightButton.wasReleasedThisFrame)
+            {
+                hasClickedThisFrame = false;
+            }
             if(enemiesInRange.Count == 0)
                 return;
             if (!enemiesInRange.Any(e => e.IsInState(EnemyStates.Attack)))
@@ -77,9 +92,37 @@ namespace RPGKarawara
                 }
             }
             timer += Time.deltaTime;
-
+            
         }
 
+
+        private void SelectNextEnemy()
+        {
+            int currentIndex = enemiesInRange.IndexOf(player.TargetEnemy);
+            if (currentIndex == -1)
+            {
+                return;
+            }
+
+            if (currentIndex == enemiesInRange.Count - 1)
+            {
+                player.TargetEnemy = enemiesInRange[0];
+            }
+            else
+            {
+                player.TargetEnemy = enemiesInRange[currentIndex + 1];
+            }
+
+            UpdateTargetingVisuals();
+        }
+        
+        private void UpdateTargetingVisuals()
+        {
+            foreach (var enemy in enemiesInRange)
+            {
+                enemy.MeshHighlighter.HighlightMesh(enemy == player.TargetEnemy);
+            }
+        }
         EnemyController SelectEnemyForAttack()
         {
             return enemiesInRange.OrderByDescending(e => e.CombatMovementTimer).FirstOrDefault(e => e.Target != null && e.IsInState(EnemyStates.CombatMovement));

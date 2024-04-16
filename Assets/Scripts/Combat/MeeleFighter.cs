@@ -32,12 +32,9 @@ namespace RPGKarawara{
         private bool _doCombo;
         private int _comboCount = 0;
 
-       // public bool _stopAttack = false;
-       
-       
-       public Transform parentTransform;
-       public Vector3 offset;
-        private void Start(){
+       // public bool _stopAttack = false
+
+       private void Start(){
             if (swordOrHand != null){
                 _swordOrHandSphereCollider = swordOrHand.GetComponent<BoxCollider>();
                 leftHandCollider = _animator.GetBoneTransform(HumanBodyBones.LeftHand)
@@ -49,13 +46,6 @@ namespace RPGKarawara{
                 rightFootCollider = _animator.GetBoneTransform(HumanBodyBones.RightFoot)
                     .GetComponentInChildren<SphereCollider>();
                 DisableAllHitboxes();
-            }
-        }
-        public void ChangeParentPosition()
-        {
-            if (parentTransform != null)
-            {
-                parentTransform.position += offset;
             }
         }
         private void Awake(){
@@ -74,27 +64,30 @@ namespace RPGKarawara{
 
         public void Update()
         {
-            if (moving)
-            {
-                Debug.Log("long");
-                //attack = longRangeAttacks[0];
-                Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
-                Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 7f *Time.deltaTime);
-
-                Debug.Log("Posição atual: " + transform.position);
-                Debug.Log("Posição alvo: " + targetPosition);
-
-
-                this.transform.position = newPosition;
-                if (Vector3.Distance(transform.position,targetPosition) <= 0.4f )
-                {
-                    moving = false;
-                }
+            if (moving){
+                AttackLong();
             } 
+        }
+
+        private void AttackLong(){
+            Debug.Log("long");
+            //attack = longRangeAttacks[0];
+            Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
+            Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 7f * Time.deltaTime);
+
+            //Debug.Log("Posiï¿½ï¿½o atual: " + transform.position);
+            //Debug.Log("Posiï¿½ï¿½o alvo: " + targetPosition);
+
+
+            this.transform.position = newPosition;
+            if (Vector3.Distance(transform.position, targetPosition) <= 0.4f){
+                moving = false;
+            }
         }
 
         IEnumerator Attack(MeeleFighter target = null){
             InAction = true;
+            Debug.Log("ATAQUE");
             _attackStates = AttackStates.Windup;
 
             var attack = attacks[_comboCount];
@@ -109,7 +102,7 @@ namespace RPGKarawara{
                 float distance = vecToTarget.magnitude;
 
                 if (distance > longRangeAttacksThreshold){
-
+                    attack = longRangeAttacks[0];
                     moving = true;
                 }
                 

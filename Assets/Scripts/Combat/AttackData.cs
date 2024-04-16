@@ -12,6 +12,11 @@ namespace RPGKarawara
         [field: SerializeField] public float ImpactStartTime { get; private set; }
         [field: SerializeField] public float ImpactEndTime { get; private set; }
         
+        [field: SerializeField] public bool MoveToTarget { get; private set; }
+        
+        
+        
+        
        
     }
 }
