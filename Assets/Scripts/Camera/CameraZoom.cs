@@ -12,8 +12,8 @@ namespace RPGKarawara
         [SerializeField] [Range(0f, 10f)] float minimumDistance = 1f;
         [SerializeField] [Range(0f, 10f)] private float maximumDistance = 6f;
 
-        [SerializeField] [Range(0f, 10f)] private float smoothing = 4f;
-        [SerializeField] [Range(0f, 10f)] private float zoomSensitivity = 1f;
+        [SerializeField] [Range(0f, 10f)] private float smoothing = 1f;
+        [SerializeField] [Range(0f, 10f)] private float zoomSensitivity = 3f;
 
         private CinemachineFramingTransposer framingTransposer;
 
@@ -47,7 +47,7 @@ namespace RPGKarawara
                 return;
             }
 
-            float lerpedZoomValue = Mathf.Lerp(currentDistance, currentTargetDistance, smoothing * Time.deltaTime);
+            float lerpedZoomValue = Mathf.Lerp(currentDistance, currentTargetDistance, smoothing * Time.deltaTime * 2f);
 
             framingTransposer.m_CameraDistance = lerpedZoomValue;
         }
