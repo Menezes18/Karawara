@@ -20,7 +20,7 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            //stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            stateMachine.ReusableData.MovementSpeedModifier = stateMachine.ReusableData.MovementSpeedModifier - 0.2f;
 
             base.Enter();
             StartAnimation(stateMachine.Player.AnimationData.FallParameterHash);

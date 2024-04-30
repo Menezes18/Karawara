@@ -25,7 +25,7 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            //stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            stateMachine.ReusableData.MovementSpeedModifier = stateMachine.ReusableData.MovementSpeedModifier - 0.2f;
 
             base.Enter();
 
@@ -99,7 +99,7 @@ namespace RPGKarawara
             {
                 UpdateTargetRotation(GetMovementInputDirection());
 
-                jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
+                //jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 
             jumpForce.x *= jumpDirection.x;

@@ -16,7 +16,7 @@ namespace RPGKarawara{
     public class MeeleFighter : MonoBehaviour{
         [SerializeField] private List<AttackData> attacks;
         [SerializeField] private List<AttackData> longRangeAttacks;
-        [SerializeField] private float longRangeAttacksThreshold = 1.5f;
+        [SerializeField] private float longRangeAttacksThreshold = 5f;
         [SerializeField] private GameObject swordOrHand;
         private BoxCollider _swordOrHandSphereCollider;
         [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
@@ -80,7 +80,7 @@ namespace RPGKarawara{
 
 
             this.transform.position = newPosition;
-            if (Vector3.Distance(transform.position, targetPosition) <= 0.4f){
+            if (Vector3.Distance(transform.position, targetPosition) <= 0.6f){
                 moving = false;
             }
         }
@@ -101,7 +101,7 @@ namespace RPGKarawara{
 
                 float distance = vecToTarget.magnitude;
 
-                if (distance > longRangeAttacksThreshold){
+                if (distance > longRangeAttacksThreshold && distance < 3.5f){
                     attack = longRangeAttacks[0];
                     moving = true;
                 }

@@ -126,7 +126,7 @@ namespace RPGKarawara
         {
             base.AddInputActionsCallbacks();
 
-            stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted; 
+            stateMachine.Player.Input.PlayerActions.Sprint.started += OnDashStarted; 
 
             stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
         }
@@ -135,7 +135,7 @@ namespace RPGKarawara
         {
             base.RemoveInputActionsCallbacks();
 
-            stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted; 
+            stateMachine.Player.Input.PlayerActions.Sprint.started -= OnDashStarted; 
 
             stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
         }
@@ -191,7 +191,7 @@ namespace RPGKarawara
 
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {
-            stateMachine.ChangeState(stateMachine.DashingState);
+            stateMachine.ChangeState(stateMachine.SprintingState);
         }
 
         protected virtual void OnJumpStarted(InputAction.CallbackContext context)
