@@ -23,6 +23,8 @@ namespace RPGKarawara
         public MeeleFighter Fighter{ get; private set; }
         public SkinnedMeshHighlighter MeshHighlighter{ get; private set; }
         public VisionSensor VisionSensor { get; set; }
+
+        private Vector3 kb;
         private void Start()
         {
             CharacterController = GetComponent<CharacterController>();
@@ -40,8 +42,13 @@ namespace RPGKarawara
             
             StateMachineEnemy = new StateMachineEnemy<EnemyController>(this);
             StateMachineEnemy.ChangeState(stateDict[EnemyStates.Idle]);
+            kb = kb.normalized;
+            Fighter.OnGotHit += () => {
+                
+                ChangeState(EnemyStates.GettingHit);
 
-            Fighter.OnGotHit += () => ChangeState(EnemyStates.GettingHit);
+                CharacterController.Move(kb * 10 * Time.deltaTime);
+            };
         }
         
         public void ChangeState(EnemyStates state)

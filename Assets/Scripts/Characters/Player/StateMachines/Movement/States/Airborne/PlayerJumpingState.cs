@@ -25,6 +25,7 @@ namespace RPGKarawara
 
         public override void Enter()
         {
+            Debug.Log("Pulei");
             //stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             base.Enter();
@@ -93,18 +94,17 @@ namespace RPGKarawara
         {
             Vector3 jumpForce = stateMachine.ReusableData.CurrentJumpForce;
 
-            Vector3 jumpDirection = stateMachine.Player.transform.forward;
+            
 
             if (shouldKeepRotating)
             {
                 UpdateTargetRotation(GetMovementInputDirection());
 
-                jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
+                
             }
-
-            jumpForce.x *= jumpDirection.x;
-            jumpForce.z *= jumpDirection.z;
-
+            // Tirar a força do x e z do pulo ele pular e ficar parado
+            jumpForce.x = 0f;
+            jumpForce.z = 0f;
             Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
 
             Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);

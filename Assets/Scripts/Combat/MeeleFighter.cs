@@ -70,21 +70,29 @@ namespace RPGKarawara{
         }
 
         private void AttackLong(){
-            Debug.Log("long");
+           
             //attack = longRangeAttacks[0];
             Vector3 targetPosition = Player.instancia._combatController.TargetEnemy.transform.position;
-            Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 7f * Time.deltaTime);
+            Vector3 newPosition = Vector3.MoveTowards(transform.position, targetPosition, 2f * Time.fixedDeltaTime);
 
             //Debug.Log("Posi��o atual: " + transform.position);
             //Debug.Log("Posi��o alvo: " + targetPosition);
 
 
             this.transform.position = newPosition;
-            if (Vector3.Distance(transform.position, targetPosition) <= 0.4f){
+            if (Vector3.Distance(transform.position, targetPosition) <= 0.8f){
+                resetvelocitycombat();
                 moving = false;
             }
         }
+        protected void resetvelocitycombat()
+        {
+            Vector3 playervelocity = Player.instancia.Rigidbody.velocity;
 
+            playervelocity.x = 0f;
+            playervelocity.z = 0f;
+            Player.instancia.Rigidbody.velocity = playervelocity;
+        }
         IEnumerator Attack(MeeleFighter target = null){
             InAction = true;
             Debug.Log("ATAQUE");
@@ -120,7 +128,7 @@ namespace RPGKarawara{
                 float normalizedTime = timer / animState.length;
 
                 if (attackDir != null){
-                    Debug.Log("A");
+                   
                     if (Player.instancia._combatController.TargetEnemy != null){
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Player.instancia._combatController.TargetEnemy.transform.position - transform.position), rotationspeed * Time.deltaTime);
                         
@@ -161,7 +169,8 @@ namespace RPGKarawara{
         private void OnTriggerEnter(Collider other){
             if (other.CompareTag("Hitbox") && !InAction){
                 //StartCoroutine(Hit());
-                Debug.Log(other);
+                
+                //Debug.Log(other);
                 StartCoroutine(PlayHitReaction(other.GetComponentInParent<MeeleFighter>().transform));
             }
         }
@@ -175,11 +184,11 @@ namespace RPGKarawara{
         // }
         IEnumerator PlayHitReaction(Transform attacker){
             InAction = true;
-
+            Debug.Log(("HIT"));
             var dispVec = attacker.position - transform.position;
             dispVec.y = 0;
             transform.rotation = Quaternion.LookRotation(dispVec);
-
+            
             OnGotHit?.Invoke();
             _animator.CrossFade("SwordImpact", 0.2f);
 
@@ -190,6 +199,7 @@ namespace RPGKarawara{
             yield return new WaitForSeconds(0.1f);
             
             OnHitComplete?.Invoke();
+            
             
             InAction = false;
         }
