@@ -34,6 +34,7 @@ namespace RPGKarawara
         public Rigidbody Rigidbody { get; private set; }
 
         public PlayerInput Input;
+        public int Level;
 
         public Transform MainCameraTransform { get; private set; }
 
