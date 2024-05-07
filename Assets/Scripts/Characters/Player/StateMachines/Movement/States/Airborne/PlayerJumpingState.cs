@@ -93,17 +93,10 @@ namespace RPGKarawara
         {
             Vector3 jumpForce = stateMachine.ReusableData.CurrentJumpForce;
 
-            Vector3 jumpDirection = stateMachine.Player.transform.forward;
-
             if (shouldKeepRotating)
             {
                 UpdateTargetRotation(GetMovementInputDirection());
-
-                //jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
-
-            jumpForce.x *= jumpDirection.x;
-            jumpForce.z *= jumpDirection.z;
 
             Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
 
@@ -113,14 +106,6 @@ namespace RPGKarawara
             {
                 float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 
-                if (IsMovingUp())
-                {
-                    float forceModifier = jumpData.JumpForceModifierOnSlopeUpwards.Evaluate(groundAngle);
-
-                    jumpForce.x *= forceModifier;
-                    jumpForce.z *= forceModifier;
-                }
-
                 if(IsMovingDown())
                 {
                     float forceModifier = jumpData.JumpForceModifierOnSlopeDownwards.Evaluate(groundAngle);
@@ -129,9 +114,9 @@ namespace RPGKarawara
                 }
             }
 
-            ResetVelocity();
+            //ResetVelocity();
 
-            stateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
+            stateMachine.Player.Rigidbody.AddForce(0,jumpForce.y, 0, ForceMode.VelocityChange);
         }
 
         #endregion

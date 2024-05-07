@@ -191,7 +191,10 @@ namespace RPGKarawara
 
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {
-            stateMachine.ChangeState(stateMachine.SprintingState);
+            if (stateMachine.ReusableData.MovementInput != Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier != 0f)
+            {
+                stateMachine.ChangeState(stateMachine.SprintingState);
+            }
         }
 
         protected virtual void OnJumpStarted(InputAction.CallbackContext context)
