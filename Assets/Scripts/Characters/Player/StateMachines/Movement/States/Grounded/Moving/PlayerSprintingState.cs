@@ -58,12 +58,12 @@ namespace RPGKarawara
                 return;
             }
 
-            if(Time.time < startTime + sprintData.SprintToRunTime)
-            {
-                return;
-            }
+            // if(Time.time < startTime + sprintData.SprintToRunTime)
+            // {
+            //     return;
+            // }
 
-            StopSprinting();
+            //StopSprinting();
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace RPGKarawara
         {
             base.RemoveInputActionsCallbacks();
 
-            stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnSprintPerformed;
+            stateMachine.Player.Input.PlayerActions.Sprint.performed -= stop;;
         }
 
         protected override void OnFall()
@@ -124,9 +124,19 @@ namespace RPGKarawara
 
             base.OnJumpStarted(context);
         }
+        private void stop(InputAction.CallbackContext context)
+        {
+            Debug.Log("SP");
+                stateMachine.ChangeState(stateMachine.IdlingState);
 
+                return;
+            
+
+            //stateMachine.ChangeState(stateMachine.RunningState);
+        }
         private void OnSprintPerformed(InputAction.CallbackContext context)
         {
+            Debug.Log("SP2");
             keepSprinting = true;
 
             stateMachine.ReusableData.ShouldSprint = true;

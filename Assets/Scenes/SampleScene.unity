@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3892612, g: 0.17590488, b: 0.17162976, a: 1}
+  m_IndirectSpecularColor: {r: 0.38926262, g: 0.17590709, b: 0.17163546, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1008,7 +1008,7 @@ PrefabInstance:
     - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12659,7 +12659,7 @@ MonoBehaviour:
   roda: {fileID: 621621150}
   animal: {fileID: 1949911359}
   slider: {fileID: 0}
-  PlayerFighter: {fileID: 1222627901}
+  PlayerFighter: {fileID: 0}
 --- !u!114 &397228342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20695,7 +20695,7 @@ MonoBehaviour:
   roda: {fileID: 621621150}
   animal: {fileID: 1673828706}
   slider: {fileID: 0}
-  PlayerFighter: {fileID: 1222627901}
+  PlayerFighter: {fileID: 0}
 --- !u!114 &749836706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26254,7 +26254,7 @@ MonoBehaviour:
   roda: {fileID: 621621150}
   animal: {fileID: 2079109528}
   slider: {fileID: 0}
-  PlayerFighter: {fileID: 1222627901}
+  PlayerFighter: {fileID: 0}
 --- !u!114 &931970579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32334,7 +32334,7 @@ MonoBehaviour:
   roda: {fileID: 621621150}
   animal: {fileID: 425859829}
   slider: {fileID: 0}
-  PlayerFighter: {fileID: 1222627901}
+  PlayerFighter: {fileID: 0}
 --- !u!114 &1148636802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34020,7 +34020,7 @@ MonoBehaviour:
   Level: 0
   _combatController: {fileID: 1222627900}
   targetRotation: {x: 0, y: 0, z: 0, w: 0}
-  virtualCamera: {fileID: 929098104}
+  virtualCamera: {fileID: 0}
   rotationY: 0
   meeleFighter: {fileID: 1222627901}
   moveAmount: 0
@@ -35706,6 +35706,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3053433663934777457, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: stunnTime
@@ -36777,7 +36782,7 @@ PrefabInstance:
     - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44613,7 +44618,7 @@ MonoBehaviour:
   roda: {fileID: 621621150}
   animal: {fileID: 1120461423}
   slider: {fileID: 0}
-  PlayerFighter: {fileID: 1222627901}
+  PlayerFighter: {fileID: 0}
 --- !u!114 &2117766716
 MonoBehaviour:
   m_ObjectHideFlags: 0
