@@ -34025,6 +34025,7 @@ MonoBehaviour:
   meeleFighter: {fileID: 1222627901}
   moveAmount: 0
   InputDir: {x: 0, y: 0, z: 0}
+  stamina: 5
 --- !u!114 &1222627900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35709,7 +35710,7 @@ PrefabInstance:
     - target: {fileID: 2959426583597043807, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3053433663934777457, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
