@@ -201,7 +201,7 @@ namespace RPGKarawara
         //Soltando o botao do sprint
         protected virtual void StopSprint(InputAction.CallbackContext context)
         {
-            
+            Player.instancia.StartCoroutine("IncreaseStaminaOverTime");
             if (stateMachine.ReusableData.MovementInput != Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier != 0f)
             {
                 stateMachine.ChangeState(stateMachine.RunningState);

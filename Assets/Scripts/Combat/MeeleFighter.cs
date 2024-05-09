@@ -121,12 +121,11 @@ namespace RPGKarawara{
 
                 if (attackDir != null){
                     
-                    if (GameObject.FindGameObjectWithTag("Player") != null){
-                        Transform playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(playerTransform.position - transform.position), rotationspeed * Time.deltaTime);
+                    if (Player.instancia._combatController.TargetEnemy != null){
+                        Debug.Log("Inimigo");
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Player.instancia._combatController.TargetEnemy.transform.position - transform.position),
+                            rotationspeed * Time.deltaTime);
                     }
-
-
                     if (_attackStates == AttackStates.Impact)
                     {
                         float moveDistance = attack.ImpactMoveDistance * Time.deltaTime;

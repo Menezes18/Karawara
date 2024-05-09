@@ -23,8 +23,8 @@ namespace RPGKarawara
 
         #region IState Methods
 
-        public override void Enter()
-        {
+        public override void Enter(){
+            Player.instancia.StopStaminaCoroutine();
             stateMachine.ReusableData.MovementSpeedModifier = sprintData.SpeedModifier;
 
             base.Enter();
@@ -58,7 +58,7 @@ namespace RPGKarawara
             if (Player.instancia.stamina <= 0){
 
                 StopSprinting();
-                Player.instancia.StartCoroutine("IncreaseStaminaOverTime");
+                
             }
 
             if (keepSprinting)
@@ -135,7 +135,9 @@ namespace RPGKarawara
         }
         private void stop(InputAction.CallbackContext context)
         {
-            Debug.Log("SP");
+            //n colocar nesse metodo so no PlayerGroundedState
+            Debug.Log("Aaaa");
+           
                 stateMachine.ChangeState(stateMachine.IdlingState);
 
                 return;

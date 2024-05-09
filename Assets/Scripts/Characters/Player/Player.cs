@@ -140,6 +140,10 @@ namespace RPGKarawara
             movementStateMachine.OnAnimationTransitionEvent();
         }
 
+        public void StopStaminaCoroutine(){
+            StopCoroutine("IncreaseStaminaOverTime");
+        }
+        
         IEnumerator IncreaseStaminaOverTime()
         {
             while (stamina <= 5f)
@@ -148,7 +152,7 @@ namespace RPGKarawara
                 yield return null;
             }
 
-
+    
         }
     }
 }
