@@ -13,11 +13,12 @@ namespace RPGKarawara
         [field: SerializeField] public float ImpactEndTime { get; private set; }
         
         [field: SerializeField] public bool MoveToTarget { get; private set; }
-        
-        
-        
-        
-       
+
+        [field: SerializeField] public float ImpactMoveDistance { get; private set; }
+
+
+
+
     }
 }
 public enum AttackHitbox { LeftHand, RightHand, LeftFoot, RightFoot, Sword }

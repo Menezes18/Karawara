@@ -22,7 +22,7 @@ namespace RPGKarawara
 
         public override void Enter()
         {
-            Debug.Log("Entrou");
+//            Debug.Log("Entrou");
             
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
 

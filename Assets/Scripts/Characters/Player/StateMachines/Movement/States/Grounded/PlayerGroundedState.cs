@@ -135,7 +135,7 @@ namespace RPGKarawara
         {
             base.RemoveInputActionsCallbacks();
 
-            stateMachine.Player.Input.PlayerActions.Sprint.canceled += stop;
+            stateMachine.Player.Input.PlayerActions.Sprint.canceled += StopSprint;
             stateMachine.Player.Input.PlayerActions.Sprint.started -= OnDashStarted; 
 
             stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
@@ -198,9 +198,10 @@ namespace RPGKarawara
                 stateMachine.ChangeState(stateMachine.SprintingState);
             }
         }
-        protected virtual void stop(InputAction.CallbackContext context)
+        //Soltando o botao do sprint
+        protected virtual void StopSprint(InputAction.CallbackContext context)
         {
-            Debug.Log("Estou andando a gora");
+            
             if (stateMachine.ReusableData.MovementInput != Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier != 0f)
             {
                 stateMachine.ChangeState(stateMachine.RunningState);
