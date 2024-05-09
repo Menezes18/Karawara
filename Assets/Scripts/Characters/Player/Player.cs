@@ -8,9 +8,9 @@ using UnityEngine.InputSystem;
 
 
 namespace RPGKarawara
-{   
+{
     [RequireComponent(typeof(PlayerInput))]
-    
+
     public class Player : MonoBehaviour
     {
 
@@ -50,12 +50,14 @@ namespace RPGKarawara
         public float moveAmount;
         public Vector3 InputDir;
         public Vector3? attackDirPlayer;
-        
-        private void Awake() 
+
+        public float stamina = 5f;
+
+        private void Awake()
         {
             instancia = this;
             //player = this;
-    
+
             Rigidbody = GetComponent<Rigidbody>();
             Animator = GetComponentInChildren<Animator>();
             _combatController = GetComponent<CombatController>();
@@ -71,29 +73,30 @@ namespace RPGKarawara
             movementStateMachine = new PlayerMovementStateMachine(this);
         }
 
-        private void OnValidate() 
+        private void OnValidate()
         {
             ColliderUtility.Initialize(gameObject);
             ColliderUtility.CalculateCapsuleColliderDimensions();
-            
+
         }
 
-        private void Start() 
+        private void Start()
         {
             movementStateMachine.ChangeState(movementStateMachine.IdlingState);
         }
-        private void OnTriggerEnter(Collider collider) 
+        private void OnTriggerEnter(Collider collider)
         {
             movementStateMachine.OnTriggerEnter(collider);
         }
 
-        private void OnTriggerExit(Collider collider) 
+        private void OnTriggerExit(Collider collider)
         {
             movementStateMachine.OnTriggerExit(collider);
         }
 
-        private void Update(){
-            
+        private void Update()
+        {
+
             Vector2 movementInput = Input.GetMovementInput();
 
             // Convertendo o movementInput para um Vector3, mantendo a componente y como 0
@@ -111,13 +114,13 @@ namespace RPGKarawara
             // Definindo o InputDir como o vetor de movimento resultante
             InputDir = moveDirection;
 
-           movementStateMachine.HandleInput();
+            movementStateMachine.HandleInput();
 
-           movementStateMachine.Update(); 
+            movementStateMachine.Update();
         }
-        
-        
-        private void FixedUpdate() 
+
+
+        private void FixedUpdate()
         {
             movementStateMachine.PhysicsUpdate();
         }
@@ -137,5 +140,15 @@ namespace RPGKarawara
             movementStateMachine.OnAnimationTransitionEvent();
         }
 
+        IEnumerator IncreaseStaminaOverTime()
+        {
+            while (stamina <= 5f)
+            {
+                stamina += Time.deltaTime;
+                yield return null;
+            }
+
+
+        }
     }
 }

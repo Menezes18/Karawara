@@ -9,7 +9,7 @@ namespace RPGKarawara
     public class PlayerSprintingState : PlayerMovingState
     {
         private PlayerSprintData sprintData;
-
+        
         private float startTime;
 
         private bool keepSprinting;
@@ -53,10 +53,19 @@ namespace RPGKarawara
         {
             base.Update();
 
+            Player.instancia.stamina -= Time.deltaTime;
+
+            if (Player.instancia.stamina <= 0){
+
+                StopSprinting();
+                Player.instancia.StartCoroutine("IncreaseStaminaOverTime");
+            }
+
             if (keepSprinting)
             {
                 return;
             }
+            
 
             // if(Time.time < startTime + sprintData.SprintToRunTime)
             // {
