@@ -17,17 +17,6 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "f03123f0-21f6-4f71-afe6-19c2d3c9488e",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "2D Vector",
                     "id": "57ae3a4d-00ee-4138-a644-0dc7f4e2937f",
                     "path": "2DVector",
@@ -79,6 +68,78 @@
                     "processors": "",
                     "groups": "",
                     "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Player Camera",
+            "id": "18b43deb-ac9b-49b9-9ba6-419fa5ae1f3f",
+            "actions": [
+                {
+                    "name": "Camera Controls",
+                    "type": "PassThrough",
+                    "id": "1eea247d-96e5-4837-a48f-6cc3fd861c04",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "2D Vector",
+                    "id": "9f41ac80-9e83-49b3-8645-c1cf084709fa",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Controls",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "d890b648-6b27-43d6-8764-87b64e5390a2",
+                    "path": "<Mouse>/delta/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Controls",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "f38840f3-86fb-41ac-a8e7-cb1c2cd5f5cc",
+                    "path": "<Mouse>/delta/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Controls",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "b1b1eb77-27e6-4a93-ac08-ebbaeb409ac0",
+                    "path": "<Mouse>/delta/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Controls",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "b8a2487b-3af8-4758-b461-efba3913feeb",
+                    "path": "<Mouse>/delta/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Controls",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

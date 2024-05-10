@@ -21,5 +21,14 @@ namespace RPGKarawara
 
             locomotionManager.HandleAllMovemmment();
         }
+
+        protected override void LateUpdate()
+        {
+            base.LateUpdate();
+
+            PlayerCamera.instance.HandleAllCameraActions();
+        }
+
+
     }
 }

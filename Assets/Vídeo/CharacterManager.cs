@@ -19,5 +19,10 @@ namespace RPGKarawara
         {
 
         }
+
+        protected virtual void LateUpdate()
+        {
+
+        }
     }
 }

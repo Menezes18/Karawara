@@ -40,16 +40,18 @@ namespace RPGKarawara
             GetVerticalAndHorizontalMovement();
 
             moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
-            moveDirection = moveDirection + PlayerCamera.instance.transform.forward * horizontalMovement;
+            moveDirection = moveDirection + PlayerCamera.instance.transform.right * horizontalMovement;
             moveDirection.Normalize();
             moveDirection.y = 0;
 
             if(PlayerInputManager.instance.moveAmount > 0.5f)
             {
+                Debug.Log("Correndo");
                 player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
             }
             else if (PlayerInputManager.instance.moveAmount <= 0.5f)
             {
+                Debug.Log("Andando");
                 player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
             }
         }
