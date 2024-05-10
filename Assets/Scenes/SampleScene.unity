@@ -34060,6 +34060,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5e3bbf4765c85c749bd893d9e1ce89d9, type: 2}
   longRangeAttacksThreshold: 0
   swordOrHand: {fileID: 1805604254}
+  enemy: 0
   leftHandCollider: {fileID: 0}
   rightHandCollider: {fileID: 0}
   leftFootCollider: {fileID: 0}
@@ -35695,7 +35696,7 @@ PrefabInstance:
     - target: {fileID: 2959426583597043801, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: m_Radius
-      value: 0.5
+      value: 0.68
       objectReference: {fileID: 0}
     - target: {fileID: 2959426583597043801, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
@@ -35715,7 +35716,17 @@ PrefabInstance:
     - target: {fileID: 3053433663934777457, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}
       propertyPath: stunnTime
-      value: 10
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023591465648694543, guid: 4075dbe45435e2f439942c8f0b87f6ad,
+        type: 3}
+      propertyPath: enemy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5023591465648694543, guid: 4075dbe45435e2f439942c8f0b87f6ad,
+        type: 3}
+      propertyPath: moving
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5023591465648694543, guid: 4075dbe45435e2f439942c8f0b87f6ad,
         type: 3}

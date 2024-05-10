@@ -18,6 +18,7 @@ namespace RPGKarawara{
         [SerializeField] private List<AttackData> longRangeAttacks;
         [SerializeField] private float longRangeAttacksThreshold = 5f;
         [SerializeField] private GameObject swordOrHand;
+        [field: SerializeField] private bool enemy;
         private BoxCollider _swordOrHandSphereCollider;
         [SerializeField] SphereCollider leftHandCollider, rightHandCollider, leftFootCollider, rightFootCollider;
         public Animator _animator;
@@ -120,7 +121,14 @@ namespace RPGKarawara{
                 float normalizedTime = timer / animState.length;
 
                 if (attackDir != null){
-                    
+
+                    if (enemy){
+                        if (Player.instancia._combatController.TargetEnemy != null){
+                            Transform playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+                            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(playerTransform.position - transform.position), rotationspeed * Time.deltaTime);
+                            
+                        }
+                    }
                     if (Player.instancia._combatController.TargetEnemy != null){
                         Debug.Log("Inimigo");
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Player.instancia._combatController.TargetEnemy.transform.position - transform.position),

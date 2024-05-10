@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RPGKarawara{
     public class GettingHitState : StateEnemy<EnemyController>{
-        [SerializeField] float stunnTime = 0.5f;
+        [field: SerializeField] float stunnTime = 0.5f;
 
         EnemyController enemy;
 

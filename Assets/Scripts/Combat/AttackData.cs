@@ -16,7 +16,8 @@ namespace RPGKarawara
 
         [field: SerializeField] public float ImpactMoveDistance { get; private set; }
 
-
+        [field: SerializeField] public float DistanceFromTarget{ get; private set; } = 1f;
+        [field: SerializeField] public float MaxMoveDistance { get; private set; } = 1f;
 
 
     }
