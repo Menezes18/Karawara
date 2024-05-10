@@ -7,8 +7,8 @@ using UnityEngine.AI;
 namespace RPGKarawara
 {
     public enum EnemyStates { Idle, CombatMovement, Attack, RetreatAfterAttack, Dead, GettingHit }
-    public class EnemyController : MonoBehaviour
-    {
+    public class EnemyController : MonoBehaviour{
+        public float vida = 100f;
         [field: SerializeField] public float Fov { get; private set; } = 180f;
         public List<MeeleFighter> TargetInRange { get; set; } = new List<MeeleFighter>();
         public float CombatMovementTimer { get; set; } = 0f;
