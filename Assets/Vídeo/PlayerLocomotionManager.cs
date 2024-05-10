@@ -23,21 +23,28 @@ namespace RPGKarawara
 
             player = GetComponent<PlayerManager>();
         }
+
+        protected override void Update()
+        {
+            base.Update();
+        }
+
         public void HandleAllMovemmment()
         {
             HandleGroundMovement();
             HandleRotation();
         }
 
-        private void GetVerticalAndHorizontalMovement()
+        private void GetMovementValues()
         {
             verticalMovement = PlayerInputManager.instance.verticalInput;
             horizontalMovement = PlayerInputManager.instance.horizontalInput;
+            moveAmount = PlayerInputManager.instance.moveAmount;
         }
 
         private void HandleGroundMovement()
         {
-            GetVerticalAndHorizontalMovement();
+            GetMovementValues();
 
             moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
             moveDirection = moveDirection + PlayerCamera.instance.transform.right * horizontalMovement;

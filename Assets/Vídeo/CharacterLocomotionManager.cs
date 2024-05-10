@@ -11,5 +11,10 @@ namespace RPGKarawara
 
 
         }
+
+        protected virtual void Update()
+        {
+
+        }
     }
 }

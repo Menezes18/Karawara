@@ -9,6 +9,7 @@ namespace RPGKarawara
     public class PlayerInputManager : MonoBehaviour
     {
         public static PlayerInputManager instance;
+        public PlayerManager player;
         PlayerControls playerControls;
 
         [Header("Movement Input")]
@@ -68,6 +69,14 @@ namespace RPGKarawara
             {
                 moveAmount = 1;
             }
+
+            if(player == null)
+            {
+                return;
+            }
+
+            //Vamos passar o horizontal apenas no strafe;
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
         }
 
         private void HandleCameraMovementInput()

@@ -7,12 +7,14 @@ namespace RPGKarawara
     public class PlayerManager : CharacterManager
     {
         PlayerLocomotionManager locomotionManager;
+        public PlayerAnimatorManager playerAnimatorManager;
 
         protected override void Awake()
         {
             base.Awake();
 
             locomotionManager = GetComponent<PlayerLocomotionManager>();
+            playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
         }
 
         protected override void Update()
