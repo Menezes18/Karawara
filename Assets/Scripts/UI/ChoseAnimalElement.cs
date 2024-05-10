@@ -16,7 +16,6 @@ namespace RPGKarawara
         public ScaleUiTransformation roda;
         public GameObject animal;
         public Slider slider;
-        public MeeleFighter PlayerFighter;
 
         void Start()
         {
@@ -56,7 +55,6 @@ namespace RPGKarawara
                 roda.CurrentAnimal = animal;
                 roda.CurrentAnimal.SetActive(true);
                 Player.instancia.Animator = animal.GetComponent<Animator>();
-                PlayerFighter._animator = Player.instancia.Animator;
             }
         }
 
