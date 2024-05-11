@@ -2,114 +2,122 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGKarawara
+namespace RPGKarawara 
 {
     public class PlayerCamera : MonoBehaviour
     {
         public static PlayerCamera instance;
-        public Camera cameraObj;
         public PlayerManager player;
+        public Camera cameraObject;
         [SerializeField] Transform cameraPivotTransform;
 
-        [Header("Cammera Settings")]//Performance
-        private float cameraSmoothSpeed = 1; //quanto maior, tempo da camera aumenta pra chegar na posicao durante o movimento
+        //  CHANGE THESE TO TWEAK CAMERA PERFORMANCE
+        [Header("Camera Settings")]
+        private float cameraSmoothSpeed = 1;    // THE BIGGER THIS NUMBER, THE LONGER FOR THE CAMERA TO REACH ITS POSITION DURING MOVEMENT
         [SerializeField] float leftAndRightRotationSpeed = 220;
         [SerializeField] float upAndDownRotationSpeed = 220;
-        [SerializeField] float minimumPivot = -30; //o menor ponto q da pra olhar
-        [SerializeField] float maximumPivot = 60; // o maior ponto q da pra olhar
+        [SerializeField] float minimumPivot = -30;  //  THE LOWEST POINT YOU ARE ABLE TO LOOK DOWN
+        [SerializeField] float maximumPivot = 60;   //  THE HIGHEST POINT YOU ARE ABLE TO LOOK UP
         [SerializeField] float cameraCollisionRadius = 0.2f;
         [SerializeField] LayerMask collideWithLayers;
 
-        [Header("Cammera Values")]
+        [Header("Camera Values")]
         private Vector3 cameraVelocity;
-        private Vector3 cameraObjectPosition; //Usado para a colisao da camera mover o obj da camera para essa posicao quando colidir
-        [SerializeField] float leftAndRighLookAngle;
+        private Vector3 cameraObjectPosition;   //USED FOR CAMERA COLLISIONS (MOVES THE CAMERA OBJECT TO THIS POSITION UPON COLLIDING)
+        [SerializeField] float leftAndRightLookAngle;
         [SerializeField] float upAndDownLookAngle;
-        private float cameraZPosition; //Colisao da camera
-        private float targetCameraZPosition; //Colisao da camera
+        private float cameraZPosition;    //  VALUES USED FOR CAMERA COLLISIONS
+        private float targetCameraZPosition;    //  VALUES USED FOR CAMERA COLLISIONS
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
             }
             else
             {
-                Destroy(instance);
+                Destroy(gameObject);
             }
         }
 
         private void Start()
         {
-            cameraZPosition = cameraObj.transform.localPosition.z;
+            DontDestroyOnLoad(gameObject);
+            cameraZPosition = cameraObject.transform.localPosition.z;
         }
 
         public void HandleAllCameraActions()
         {
-            if(player!=null)
+            if (player != null)
             {
-                HandleFollowTargert();
+                HandleFollowTarget();
                 HandleRotations();
-                HandleCollisons();
+                HandleCollisions();
             }
         }
 
-        private void HandleFollowTargert()
+        private void HandleFollowTarget()
         {
-            Vector3 targetCammeraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothSpeed * Time.deltaTime);
-            transform.position = targetCammeraPosition;
+            Vector3 targetCameraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothSpeed * Time.deltaTime);
+            transform.position = targetCameraPosition;
         }
 
         private void HandleRotations()
         {
-            //Rotaciona pra esquerda e pra direita
-            leftAndRighLookAngle += (PlayerInputManager.instance.cameraHorizontalInput * leftAndRightRotationSpeed * Time.deltaTime);
-            //Rotaciona para cima e pra baixo
-            upAndDownLookAngle -= (PlayerInputManager.instance.cameraVerticalInput * upAndDownRotationSpeed * Time.deltaTime);
-            //Coloca o maximo pra rotacionar
+            //  IF LOCKED ON, FORCE ROTATION TOWARDS TARGET
+            //  ELSE ROTATE REGULARLY
+
+            //  ROTATE LEFT AND RIGHT BASED ON HORIZONTAL MOVEMENT ON THE RIGHT JOYSTICK
+            leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontalInput * leftAndRightRotationSpeed) * Time.deltaTime;
+            //  ROTATE UP AND DOWN BASED ON VERTICAL MOVEMENT ON THE RIGHT JOYSTICK
+            upAndDownLookAngle -= (PlayerInputManager.instance.cameraVerticalInput * upAndDownRotationSpeed) * Time.deltaTime;
+            //  CLAMP THE UP AND DOWN LOOK ANGLE BETWEEN A MIN AND MAX VALUE
             upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
+
 
             Vector3 cameraRotation = Vector3.zero;
             Quaternion targetRotation;
-            //Rotaciona o objeto pra esquerda e direita
 
-            cameraRotation.y = leftAndRighLookAngle;
+            //  ROTATE THIS GAMEOBJECT LEFT AND RIGHT
+            cameraRotation.y = leftAndRightLookAngle;
             targetRotation = Quaternion.Euler(cameraRotation);
             transform.rotation = targetRotation;
 
-            //Rotaciona esse objeto pra cima e pra baixo
+            //  ROTATE THE PIVOT GAMEOBJECT UP AND DOWN
             cameraRotation = Vector3.zero;
             cameraRotation.x = upAndDownLookAngle;
             targetRotation = Quaternion.Euler(cameraRotation);
             cameraPivotTransform.localRotation = targetRotation;
         }
 
-        private void HandleCollisons()
+        private void HandleCollisions()
         {
             targetCameraZPosition = cameraZPosition;
+
             RaycastHit hit;
-            //Direcao para colisao
-            Vector3 direction = cameraObj.transform.position - cameraPivotTransform.position;
+            //  DIRECTION FOR COLLISION CHECK
+            Vector3 direction = cameraObject.transform.position - cameraPivotTransform.position;
             direction.Normalize();
-            
-            //Chegando se tem um obj na frente da camera na direcao para colisao
-            if(Physics.SphereCast(cameraPivotTransform.position, cameraCollisionRadius, direction, out hit, Mathf.Abs(targetCameraZPosition), collideWithLayers)){
-                //se tem, pegamos a distancia dele
+
+            //  WE CHECK IF THERE IS AN OBJECT IN FRONT OF OUR DESIRED DIRECTION ^ (SEE ABOVE)
+            if (Physics.SphereCast(cameraPivotTransform.position, cameraCollisionRadius, direction, out hit, Mathf.Abs(targetCameraZPosition), collideWithLayers))
+            {
+                //  IF THERE IS, WE GET OUR DISTANCE FROM IT
                 float distanceFromHitObject = Vector3.Distance(cameraPivotTransform.position, hit.point);
-                // fazemos a equacao para acharmos o posicao alvo Z
+                //  WE THEN EQUATE OUR TARGET Z POSITION TO THE FOLLOWING
                 targetCameraZPosition = -(distanceFromHitObject - cameraCollisionRadius);
             }
 
-            //se nossa posicao alvo eh menor que o raio da colisao, subtraimos a colisao do raio para dar um snap
-            if(Mathf.Abs(targetCameraZPosition)< cameraCollisionRadius)
+            //  IF OUR TARGET POSITION IS LESS THAN OUR COLLISION RADIUS, WE SUBTRACT OUR COLLISION RADIUS (MAKING IT SNAP BACK)
+            if (Mathf.Abs(targetCameraZPosition) < cameraCollisionRadius)
             {
                 targetCameraZPosition = -cameraCollisionRadius;
             }
 
-            // Ent nos aplicamos a posicao final usando lerp pelo tempo
-            cameraObjectPosition.z = Mathf.Lerp(cameraObj.transform.localPosition.z, targetCameraZPosition, 0.2f);
-            cameraObj.transform.localPosition = cameraObjectPosition;
+            //  WE THEN APPLY OUR FINAL POSITION USING A LERP OVER A TIME OF 0.2F
+            cameraObjectPosition.z = Mathf.Lerp(cameraObject.transform.localPosition.z, targetCameraZPosition, 0.2f);
+            cameraObject.transform.localPosition = cameraObjectPosition;
         }
     }
 }

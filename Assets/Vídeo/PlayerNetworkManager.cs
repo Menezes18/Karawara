@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPGKarawara
 {
-    public class PlayerAnimatorManager : CharacterAnimatorManager
+    public class PlayerNetworkManager : CharacterNetworkManager
     {
 
     }

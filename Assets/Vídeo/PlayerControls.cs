@@ -100,7 +100,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""18b43deb-ac9b-49b9-9ba6-419fa5ae1f3f"",
             ""actions"": [
                 {
-                    ""name"": ""Camera Controls"",
+                    ""name"": ""Movement"",
                     ""type"": ""PassThrough"",
                     ""id"": ""1eea247d-96e5-4837-a48f-6cc3fd861c04"",
                     ""expectedControlType"": ""Vector2"",
@@ -117,7 +117,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera Controls"",
+                    ""action"": ""Movement"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -128,7 +128,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera Controls"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -139,7 +139,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera Controls"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -150,7 +150,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera Controls"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -161,7 +161,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Camera Controls"",
+                    ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -175,7 +175,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
         // Player Camera
         m_PlayerCamera = asset.FindActionMap("Player Camera", throwIfNotFound: true);
-        m_PlayerCamera_CameraControls = m_PlayerCamera.FindAction("Camera Controls", throwIfNotFound: true);
+        m_PlayerCamera_Movement = m_PlayerCamera.FindAction("Movement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -283,12 +283,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // Player Camera
     private readonly InputActionMap m_PlayerCamera;
     private List<IPlayerCameraActions> m_PlayerCameraActionsCallbackInterfaces = new List<IPlayerCameraActions>();
-    private readonly InputAction m_PlayerCamera_CameraControls;
+    private readonly InputAction m_PlayerCamera_Movement;
     public struct PlayerCameraActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerCameraActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @CameraControls => m_Wrapper.m_PlayerCamera_CameraControls;
+        public InputAction @Movement => m_Wrapper.m_PlayerCamera_Movement;
         public InputActionMap Get() { return m_Wrapper.m_PlayerCamera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -298,16 +298,16 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerCameraActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerCameraActionsCallbackInterfaces.Add(instance);
-            @CameraControls.started += instance.OnCameraControls;
-            @CameraControls.performed += instance.OnCameraControls;
-            @CameraControls.canceled += instance.OnCameraControls;
+            @Movement.started += instance.OnMovement;
+            @Movement.performed += instance.OnMovement;
+            @Movement.canceled += instance.OnMovement;
         }
 
         private void UnregisterCallbacks(IPlayerCameraActions instance)
         {
-            @CameraControls.started -= instance.OnCameraControls;
-            @CameraControls.performed -= instance.OnCameraControls;
-            @CameraControls.canceled -= instance.OnCameraControls;
+            @Movement.started -= instance.OnMovement;
+            @Movement.performed -= instance.OnMovement;
+            @Movement.canceled -= instance.OnMovement;
         }
 
         public void RemoveCallbacks(IPlayerCameraActions instance)
@@ -331,6 +331,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     }
     public interface IPlayerCameraActions
     {
-        void OnCameraControls(InputAction.CallbackContext context);
+        void OnMovement(InputAction.CallbackContext context);
     }
 }

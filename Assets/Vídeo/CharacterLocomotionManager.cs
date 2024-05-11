@@ -9,7 +9,6 @@ namespace RPGKarawara
         protected virtual void Awake()
         {
 
-
         }
 
         protected virtual void Update()

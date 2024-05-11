@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SG
+namespace RPGKarawara
 {
     public class WorldSaveGameManager : MonoBehaviour
     {
@@ -34,6 +34,11 @@ namespace SG
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
 
             yield return null;
+        }
+
+        public int GetWorldSceneIndex()
+        {
+            return worldSceneIndex;
         }
     }
 }
