@@ -7,14 +7,14 @@ namespace RPGKarawara
 {
     public class PlayerInputManager : MonoBehaviour
     {
+        //  INPUT CONTROLS
+        private PlayerControls playerControls;
+
+        //  SINGLETON
         public static PlayerInputManager instance;
 
+        //  LOCAL PLAYER
         public PlayerManager player;
-        //  THINK ABOUT GOALS IN STEPS
-        //  2. MOVE CHARACTER BASED ON THOSE VALUES
-
-        PlayerControls playerControls;
-
 
         [Header("CAMERA MOVEMENT INPUT")]
         [SerializeField] Vector2 cameraInput;
@@ -29,6 +29,7 @@ namespace RPGKarawara
 
         [Header("PLAYER ACTION INPUT")]
         [SerializeField] bool dodgeInput = false;
+        [SerializeField] bool sprintInput = false;
 
         private void Awake()
         {
@@ -76,6 +77,11 @@ namespace RPGKarawara
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
                 playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
+
+                //  HOLDING THE INPUT, SETS THE BOOL TO TRUE
+                playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
+                //  RELEASING THE INPUT, SETS THE BOOL TO FALSE
+                playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
             }
 
             playerControls.Enable();
@@ -113,6 +119,7 @@ namespace RPGKarawara
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
+            HandleSprinting();
         }
 
         //  MOVEMENT
@@ -142,7 +149,7 @@ namespace RPGKarawara
                 return;
 
             //  IF WE ARE NOT LOCKED ON, ONLY USE THE MOVE AMOUNT
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
 
             //  IF WE ARE LOCKED ON PASS THE HORIZONTAL MOVEMENT AS WELL
         }
@@ -164,6 +171,18 @@ namespace RPGKarawara
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
 
                 player.playerLocomotionManager.AttemptToPerformDodge();
+            }
+        }
+
+        private void HandleSprinting()
+        {
+            if (sprintInput)
+            {
+                player.playerLocomotionManager.HandleSprinting();
+            }
+            else
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
             }
         }
     }

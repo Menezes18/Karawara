@@ -127,6 +127,8 @@ MonoBehaviour:
     m_InternalValue: 0
   moveAmount:
     m_InternalValue: 0
+  isSprinting:
+    m_InternalValue: 0
 --- !u!114 &1148999998010285713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +150,7 @@ MonoBehaviour:
   canMove: 1
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
+  playerNetworkManager: {fileID: 0}
 --- !u!114 &1937844861543524253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +168,10 @@ MonoBehaviour:
   moveAmount: 0
   walkingSpeed: 6
   runningSpeed: 8
+  sprintingSpeed: 12
   rotationSpeed: 15
+  sprintingStaminaCost: 2
+  dodgeStaminaCost: 25
 --- !u!143 &8464527521044100486
 CharacterController:
   m_ObjectHideFlags: 0
