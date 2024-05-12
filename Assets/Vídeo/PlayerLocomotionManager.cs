@@ -127,11 +127,11 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
             }
 
-            // if (player.playerNetworkManager.currentStamina.Value <= 0)
-            // {
-            //     player.playerNetworkManager.isSprinting.Value = false;
-            //     return;
-            // }
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+                return;
+            }
 
             //  IF WE ARE MOVING, SPRINTING IS TRUE
             if (moveAmount >= 0.5)
@@ -144,10 +144,10 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
             }
 
-            //if (player.playerNetworkManager.isSprinting.Value)
-            //{
-                //player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
-            //}
+            if (player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+            }
         }
 
         public void AttemptToPerformDodge()
@@ -155,8 +155,8 @@ namespace RPGKarawara
             if (player.isPerformingAction)
                 return;
 
-            // if (player.playerNetworkManager.currentStamina.Value <= 0)
-            //     return;
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+                return;
 
             //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
             if (PlayerInputManager.instance.moveAmount > 0)
@@ -177,7 +177,7 @@ namespace RPGKarawara
                 player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
             }
 
-            //player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+            player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
     }
 }
