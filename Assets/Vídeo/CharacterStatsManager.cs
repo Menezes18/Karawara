@@ -19,6 +19,22 @@ namespace RPGKarawara
             character = GetComponent<CharacterManager>();
         }
 
+        protected virtual void Start()
+        {
+
+        }
+
+        public int CalculateHealthBasedOnVitalityLevel(int vitality)
+        {
+            float health = 0;
+
+            //  CREATE AN EQUATION FOR HOW YOU WANT YOUR STAMINA TO BE CALCULATED
+
+            health = vitality * 15;
+
+            return Mathf.RoundToInt(health);
+        }
+
         public int CalculateStaminaBasedOnEnduranceLevel(int endurance)
         {
             float stamina = 0;
