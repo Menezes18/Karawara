@@ -24,6 +24,7 @@ namespace RPGKarawara
         [Header("Dodge")]
         private Vector3 rollDirection;
         [SerializeField] float dodgeStaminaCost = 25;
+        [SerializeField] float jumpStaminaCost = 25;
 
         protected override void Awake()
         {
@@ -178,6 +179,37 @@ namespace RPGKarawara
             }
 
             player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+        }
+
+        public void AttemptToPerformJump()
+        {
+            //  IF WE ARE PERFORMING A GENERAL ACTION, WE DO NOT WANT TO ALLOW A JUMP (WILL CHANGE WHEN COMBAT IS ADDED)
+            if (player.isPerformingAction)
+                return;
+
+            //  IF WE ARE OUT OF STAMINA, WE DO NOT WISH TO ALLOW A JUMP
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+                return;
+
+            //  IF WE ARE ALREADY IN A JUMP, WE DO NOT WANT TO ALLOW A JUMP AGAIN UNTIL THE CURRENT JUMP HAS FINISHED
+            if (player.isJumping)
+                return;
+
+            //  IF WE ARE NOT GROUNDED, WE DO NOT WANT TO ALLOW A JUMP
+            if (player.isGrounded)
+                return;
+
+            //  IF WE ARE TWO HANDING OUR WEAPON, PLAY THE TWO HANDED JUMP ANIMATION, OTHERWISE PLAY THE ONE HANDED ANIMATION ( TO DO )
+            player.playerAnimatorManager.PlayTargetActionAnimation("Main_Jump_01", false);
+
+            player.isJumping = true;
+
+            player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+        }
+
+        public void ApplyJumpingVelocity()
+        {
+            //  APPLY AN UPWARD VELOCITY
         }
     }
 }

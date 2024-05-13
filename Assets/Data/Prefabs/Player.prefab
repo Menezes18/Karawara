@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 788076987
+  GlobalObjectIdHash: 3825751601
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -221,6 +221,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   characterNetworkManager: {fileID: 0}
   isPerformingAction: 0
+  isJumping: 0
+  isGrounded: 1
   applyRootMotion: 0
   canRotate: 1
   canMove: 1
@@ -254,6 +256,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9c6b8b3c7f950c4898e8d47e9e81bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gravityForce: -30
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 65
+  groundCheckSphereRadius: 0.3
+  yVelocity: {x: 0, y: 0, z: 0}
+  groundedYVelocity: -20
+  fallStartYVelocity: -5
+  inAirTimer: 0
   verticalMovement: 0
   horizontalMovement: 0
   moveAmount: 0
@@ -263,6 +274,7 @@ MonoBehaviour:
   rotationSpeed: 15
   sprintingStaminaCost: 2
   dodgeStaminaCost: 5
+  jumpStaminaCost: 25
 --- !u!143 &8464527521044100486
 CharacterController:
   m_ObjectHideFlags: 0
@@ -282,7 +294,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.37
+  m_Height: 1.8
   m_Radius: 0.17
   m_SlopeLimit: 45
   m_StepOffset: 0.3
