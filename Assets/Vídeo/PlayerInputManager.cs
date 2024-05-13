@@ -122,6 +122,7 @@ namespace RPGKarawara
             HandleCameraMovementInput();
             HandleDodgeInput();
             HandleSprintInput();
+            HandleJumpInput();
         }
 
         //  MOVEMENT
