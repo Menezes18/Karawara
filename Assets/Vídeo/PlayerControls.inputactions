@@ -192,6 +192,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "4f7703d9-e503-4517-ad0a-c0372682612f",
+            "actions": [
+                {
+                    "name": "X",
+                    "type": "Button",
+                    "id": "f0e3cc88-13d1-4bba-96e9-04baca9c7a2b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7f9a5300-3753-4244-a63a-84eb0b3189c6",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

@@ -8,8 +8,11 @@ namespace RPGKarawara
     //  SINCE WE WANT TO REFERENCE THIS DATA FOR EVERY SAVE FILE, THIS SCRIPT IS NOT A MONOBEHAVIOUR AND IS INSTEAD SERIALIZABLE
     public class CharacterSaveData
     {
+        [Header("SCENE INDEX")]
+        public int sceneIndex = 1;
+
         [Header("Character Name")]
-        public string characterName;
+        public string characterName = "Character";
 
         [Header("Time Played")]
         public float secondsPlayed;
