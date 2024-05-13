@@ -8,6 +8,9 @@ namespace RPGKarawara
     {
         public static WorldCharacterEffectsManager instance;
 
+        [Header("Damage")]
+        public TakeDamageEffect takeDamageEffect;
+
         [SerializeField] List<InstantCharacterEffect> instantEffects;
 
         private void Awake()
