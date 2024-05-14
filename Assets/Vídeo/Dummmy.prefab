@@ -1290,13 +1290,13 @@ GameObject:
   - component: {fileID: 1110379149039168717}
   - component: {fileID: 8442535417963434555}
   - component: {fileID: 2748228628730882029}
-  - component: {fileID: 3695880540923311901}
   - component: {fileID: 991040504385213196}
   - component: {fileID: 7310389180656767062}
   - component: {fileID: 4664985181629435814}
   - component: {fileID: 85879399909429195}
   - component: {fileID: 6876254505622355902}
   - component: {fileID: 8152242920993952262}
+  - component: {fileID: -8092907690966883936}
   m_Layer: 3
   m_Name: Dummmy
   m_TagString: Untagged
@@ -1353,7 +1353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 281531634
+  GlobalObjectIdHash: 498448855
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1384,11 +1384,14 @@ MonoBehaviour:
   characterCombatManager: {fileID: 0}
   characterSoundFXManager: {fileID: 0}
   characterLocomotionManager: {fileID: 0}
+  characterGroup: 1
   isPerformingAction: 0
   isGrounded: 1
   applyRootMotion: 0
   canRotate: 1
   canMove: 1
+  aiCharacterCombatManager: {fileID: 0}
+  currentState: {fileID: 11400000, guid: 0da7980e7a2076846ae443f1ea41237e, type: 2}
 --- !u!114 &2748228628730882029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1414,22 +1417,6 @@ MonoBehaviour:
   backward_Medium_Damage: []
   left_Medium_Damage: []
   right_Medium_Damage: []
---- !u!114 &3695880540923311901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5679174857681126544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba9a2e0b7a07764499824d04d5b08c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lastAttackAnimationPerformed: 
-  currentTarget: {fileID: 0}
-  currentAttackType: 0
-  lockOnTransform: {fileID: 0}
 --- !u!114 &991040504385213196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1542,6 +1529,25 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.06, z: 0}
+--- !u!114 &-8092907690966883936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5679174857681126544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ef930359738e7468d1bcfeceff293f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastAttackAnimationPerformed: 
+  currentTarget: {fileID: 0}
+  currentAttackType: 0
+  lockOnTransform: {fileID: 0}
+  detectionRadius: 15
+  minimumDetectionAngle: -35
+  maximumDetectionAngle: 35
 --- !u!1 &5724279853581212606
 GameObject:
   m_ObjectHideFlags: 0

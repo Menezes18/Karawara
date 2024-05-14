@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using RPGKarawara;
 
 namespace RPGKarawara
 {
     public class CharacterCombatManeger : NetworkBehaviour
     {
-        CharacterManager character;
+        protected CharacterManager character;
 
         [Header("Last Attack Animation Performed")]
         public string lastAttackAnimationPerformed;
