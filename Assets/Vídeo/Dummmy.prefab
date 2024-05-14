@@ -1421,7 +1421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2375048294
+  GlobalObjectIdHash: 3526625479
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1514,6 +1514,8 @@ MonoBehaviour:
   currentState: {fileID: 11400000, guid: 0da7980e7a2076846ae443f1ea41237e, type: 2}
   idle: {fileID: 11400000, guid: 0da7980e7a2076846ae443f1ea41237e, type: 2}
   pursueTarget: {fileID: 11400000, guid: 46a124bca52793446bcb4e19208a673a, type: 2}
+  combatStance: {fileID: 11400000, guid: aadb5ca115e8fa6429821cbb0d2325d3, type: 2}
+  attack: {fileID: 11400000, guid: eaef9a4de849bae449b7ac53c5dc24c2, type: 2}
 --- !u!114 &2386473894482796835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1552,11 +1554,14 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTransform: {fileID: 2586196219980303445}
+  actionRecoveryTimer: 0
+  distanceFromTarget: 0
   viewableAngle: 0
   targetsDirection: {x: 0, y: 0, z: 0}
   detectionRadius: 15
   minimumFOV: -35
   maximumFOV: 35
+  attackRotationSpeed: 25
 --- !u!114 &4455335659870862001
 MonoBehaviour:
   m_ObjectHideFlags: 0
