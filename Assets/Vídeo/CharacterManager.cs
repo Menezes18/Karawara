@@ -18,6 +18,7 @@ namespace RPGKarawara
         [HideInInspector] public CharacterAnimatorManager characterAnimatorManager;
         [HideInInspector] public CharacterCombatManeger characterCombatManager;
         [HideInInspector] public CharacterSoundFXManager characterSoundFXManager;
+        [HideInInspector] public CharacterLocomotionManager characterLocomotionManager;
 
         [Header("Flags")]
         public bool isPerformingAction = false;
@@ -38,6 +39,7 @@ namespace RPGKarawara
             characterAnimatorManager = GetComponent<CharacterAnimatorManager>();
             characterCombatManager = GetComponent<CharacterCombatManeger>();
             characterSoundFXManager = GetComponent<CharacterSoundFXManager>();
+            characterLocomotionManager = GetComponent<CharacterLocomotionManager>();
         }
 
         protected virtual void Start()
@@ -60,14 +62,14 @@ namespace RPGKarawara
             {
                 //  Position
                 transform.position = Vector3.SmoothDamp
-                    (transform.position, 
-                    characterNetworkManager.networkPosition.Value, 
-                    ref characterNetworkManager.networkPositionVelocity, 
+                    (transform.position,
+                    characterNetworkManager.networkPosition.Value,
+                    ref characterNetworkManager.networkPositionVelocity,
                     characterNetworkManager.networkPositionSmoothTime);
                 //  Rotation
                 transform.rotation = Quaternion.Slerp
-                    (transform.rotation, 
-                    characterNetworkManager.networkRotation.Value, 
+                    (transform.rotation,
+                    characterNetworkManager.networkRotation.Value,
                     characterNetworkManager.networkRotationSmoothTime);
             }
         }
