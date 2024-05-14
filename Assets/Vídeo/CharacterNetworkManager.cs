@@ -84,5 +84,33 @@ namespace RPGKarawara
             character.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(animationID, 0.2f);
         }
+
+        //  A SERVER RPC IS A FUNCTION CALLED FROM A CLIENT, TO THE SERVER (IN OUR CASE THE HOST)
+        [ServerRpc]
+        public void NotifyTheServerOfAttackActionAnimationServerRpc(ulong clientID, string animationID, bool applyRootMotion)
+        {
+            //  IF THIS CHARACTER IS THE HOST/SERVER, THEN ACTIVATE THE CLIENT RPC
+            if (IsServer)
+            {
+                PlayAttackActionAnimationForAllClientsClientRpc(clientID, animationID, applyRootMotion);
+            }
+        }
+
+        //  A CLIENT RPC IS SENT TO ALL CLIENTS PRESENT, FROM THE SERVER
+        [ClientRpc]
+        public void PlayAttackActionAnimationForAllClientsClientRpc(ulong clientID, string animationID, bool applyRootMotion)
+        {
+            //  WE MAKE SURE TO NOT RUN THE FUNCTION ON THE CHARACTER WHO SENT IT (SO WE DONT PLAY THE ANIMATION TWICE)
+            if (clientID != NetworkManager.Singleton.LocalClientId)
+            {
+                PerformAttackActionAnimationFromServer(animationID, applyRootMotion);
+            }
+        }
+
+        private void PerformAttackActionAnimationFromServer(string animationID, bool applyRootMotion)
+        {
+            character.applyRootMotion = applyRootMotion;
+            character.animator.CrossFade(animationID, 0.2f);
+        }
     }
 }
