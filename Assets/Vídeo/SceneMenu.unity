@@ -2932,6 +2932,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6, type: 3}
+--- !u!1 &1288440269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8943629745883813141, guid: 42d506ff94522a54fbec839cd81601e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 657493805747915350}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1288440273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288440269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 209713b7a179e5049a9751ef0bf4d2d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  players: []
 --- !u!1 &1305806485
 GameObject:
   m_ObjectHideFlags: 0
@@ -5116,7 +5135,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8943629745883813141, guid: 42d506ff94522a54fbec839cd81601e6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1288440273}
   m_SourcePrefab: {fileID: 100100000, guid: 42d506ff94522a54fbec839cd81601e6, type: 3}
 --- !u!222 &1615862478099957390
 CanvasRenderer:
@@ -6263,6 +6286,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3163135232474397607, guid: 1b52b7cab15aa354eab3b2e5fc78c3e5,
+        type: 3}
+      propertyPath: physicalDamageSFX.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3163135232474397607, guid: 1b52b7cab15aa354eab3b2e5fc78c3e5,
+        type: 3}
+      propertyPath: physicalDamageSFX.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 482611fe6bc559142a00be6e726b4862, type: 3}
+    - target: {fileID: 3163135232474397607, guid: 1b52b7cab15aa354eab3b2e5fc78c3e5,
+        type: 3}
+      propertyPath: physicalDamageSFX.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: a65d792d6907f744490c9b15bb70edfe, type: 3}
+    - target: {fileID: 3163135232474397607, guid: 1b52b7cab15aa354eab3b2e5fc78c3e5,
+        type: 3}
+      propertyPath: physicalDamageSFX.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4d4ef7516a431934681038a3dc391e55, type: 3}
     - target: {fileID: 5495787275324727981, guid: 1b52b7cab15aa354eab3b2e5fc78c3e5,
         type: 3}
       propertyPath: m_Name

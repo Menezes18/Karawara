@@ -54,8 +54,8 @@ namespace RPGKarawara
             //  CHECK WHICH DIRECTIONAL DAMAGE CAME FROM
             //  PLAY A DAMAGE ANIMATION
             //  CHECK FOR BUILD UPS (POISON, BLEED ECT)
-            //  PLAY DAMAGE SOUND FX
-            //  PLAY DAMAGE VFX (BlOOD)
+            PlayDamageSFX(character);
+            PlayDamageVFX(character);
 
             //  IF CHARACTER IS A.I, CHECK FOR NEW TARGET IF CHARACTER CAUSING DAMAGE IS PRESENT
         }
@@ -86,6 +86,23 @@ namespace RPGKarawara
             character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
 
             //  CALCULATE POISE DAMAGE TO DETERMINE IF THE CHARACTER WILL BE STUNNED
+        }
+
+        private void PlayDamageVFX(CharacterManager character)
+        {
+            //  IF WE HAVE FIRE DAMAGE, PLAY FIRE PARTICLES
+            //  LIGHTNING DAMAGE, LIGHTNING PARTICLES ECT
+
+            character.characterEffectsManager.PlayBloodSplatterVFX(contactPoint);
+        }
+
+        private void PlayDamageSFX(CharacterManager character)
+        {
+            AudioClip physicalDamageSFX = WorldSoundFXManager.instance.ChooseRandomSFXFromArray(WorldSoundFXManager.instance.physicalDamageSFX);
+
+            character.characterSoundFXManager.PlaySoundFX(physicalDamageSFX);
+            //  IF FIRE DAMAGE IS GREATER THAN 0, PLAY BURN SFX
+            //  IF LIGHTNING DAMAGE IS GREATER THAN 0, PLAY ZAP SFX
         }
     }
 }

@@ -17,6 +17,7 @@ namespace RPGKarawara
         [HideInInspector] public CharacterEffectsManager characterEffectsManager;
         [HideInInspector] public CharacterAnimatorManager characterAnimatorManager;
         [HideInInspector] public CharacterCombatManeger characterCombatManager;
+        [HideInInspector] public CharacterSoundFXManager characterSoundFXManager;
 
         [Header("Flags")]
         public bool isPerformingAction = false;
@@ -36,6 +37,7 @@ namespace RPGKarawara
             characterEffectsManager = GetComponent<CharacterEffectsManager>();
             characterAnimatorManager = GetComponent<CharacterAnimatorManager>();
             characterCombatManager = GetComponent<CharacterCombatManeger>();
+            characterSoundFXManager = GetComponent<CharacterSoundFXManager>();
         }
 
         protected virtual void Start()
