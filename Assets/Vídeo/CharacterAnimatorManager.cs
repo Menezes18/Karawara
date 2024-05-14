@@ -12,12 +12,73 @@ namespace RPGKarawara
         int vertical;
         int horizontal;
 
+        [Header("Damage Animations")]
+        public string lastDamageAnimationPlayed;
+
+        [SerializeField] string hit_Forward_Medium_01 = "Hit_Forward_Medium_01";
+        [SerializeField] string hit_Forward_Medium_02 = "Hit_Forward_Medium_02";
+
+        [SerializeField] string hit_Backward_Medium_01 = "Hit_Backward_Medium_01";
+        [SerializeField] string hit_Backward_Medium_02 = "Hit_Backward_Medium_02";
+
+        [SerializeField] string hit_Left_Medium_01 = "Hit_Left_Medium_01";
+        [SerializeField] string hit_Left_Medium_02 = "Hit_Left_Medium_02";
+
+        [SerializeField] string hit_Right_Medium_01 = "Hit_Right_Medium_01";
+        [SerializeField] string hit_Right_Medium_02 = "Hit_Right_Medium_02";
+
+        public List<string> forward_Medium_Damage = new List<string>();
+        public List<string> backward_Medium_Damage = new List<string>();
+        public List<string> left_Medium_Damage = new List<string>();
+        public List<string> right_Medium_Damage = new List<string>();
+
         protected virtual void Awake()
         {
             character = GetComponent<CharacterManager>();
 
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");
+        }
+
+        protected virtual void Start()
+        {
+            forward_Medium_Damage.Add(hit_Forward_Medium_01);
+            forward_Medium_Damage.Add(hit_Forward_Medium_02);
+
+            backward_Medium_Damage.Add(hit_Backward_Medium_01);
+            backward_Medium_Damage.Add(hit_Backward_Medium_02);
+
+            left_Medium_Damage.Add(hit_Left_Medium_01);
+            left_Medium_Damage.Add(hit_Left_Medium_02);
+
+            right_Medium_Damage.Add(hit_Right_Medium_01);
+            right_Medium_Damage.Add(hit_Right_Medium_02);
+        }
+
+        public string GetRandomAnimationFromList(List<string> animationList)
+        {
+            List<string> finalList = new List<string>();
+
+            foreach (var item in animationList)
+            {
+                finalList.Add(item);
+            }
+
+            //  CHECK IF WE HAVE ALREADY PLAYED THIS DAMAGE ANIMATION SO IT DOESNT REPEAT
+            finalList.Remove(lastDamageAnimationPlayed);
+
+            //  CHECK THE LIST FOR NULL ENTRIES, AND REMOVE THEM
+            for (int i = finalList.Count - 1; i > -1; i--)
+            {
+                if (finalList[i] == null)
+                {
+                    finalList.RemoveAt(i);
+                }
+            }
+
+            int randomValue = Random.Range(0, finalList.Count);
+
+            return finalList[randomValue];
         }
 
         public void UpdateAnimatorMovementParameters(float horizontalMovement, float verticalMovement, bool isSprinting)
@@ -41,6 +102,7 @@ namespace RPGKarawara
             bool canRotate = false, 
             bool canMove = false)
         {
+            Debug.Log("PLAYING ANIMATION: " + targetAnimation);
             character.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(targetAnimation, 0.2f);
             //  CAN BE USED TO STOP CHARACTER FROM ATTEMPTING NEW ACTIONS
