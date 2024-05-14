@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 7752656440610504955}
   - component: {fileID: 8079164572829421841}
   - component: {fileID: 8187106614497794246}
-  m_Layer: 0
+  - component: {fileID: 7726761757592084735}
+  - component: {fileID: 6056588822789298540}
+  m_Layer: 14
   m_Name: Lanca
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,6 +85,45 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7726761757592084735
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5843204293841922719}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.19881558, y: 0.026509259, z: 0.010015299}
+  m_Center: {x: 0.15741219, y: -0.00006013252, z: 0.00019541928}
+--- !u!114 &6056588822789298540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5843204293841922719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a50508bb843d64faa78910bbc06e33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physicalDamage: 0
+  magicDamage: 0
+  fireDamage: 0
+  lightningDamage: 0
+  holyDamage: 0
+  characterCausingDamage: {fileID: 0}
 --- !u!1 &7003736831794437496
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4770849696042654689}
+  - component: {fileID: 8105513678412466710}
   m_Layer: 0
   m_Name: Lanca
   m_TagString: Untagged
@@ -147,3 +189,16 @@ Transform:
   - {fileID: 8936662365327991960}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8105513678412466710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165431050239479360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4472a7058cb57ef4fb1caab1ed9da69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeDamageCollider: {fileID: 6056588822789298540}

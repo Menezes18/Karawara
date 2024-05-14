@@ -23,7 +23,7 @@ namespace RPGKarawara {
 
         private void OnTriggerEnter(Collider other)
         {
-            CharacterManager damageTarget = other.GetComponentInParent<CharacterManager>();
+            CharacterManager damageTarget = other.GetComponent<CharacterManager>();
 
             if (damageTarget != null)
             {
