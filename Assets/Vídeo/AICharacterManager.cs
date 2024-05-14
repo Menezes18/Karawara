@@ -44,7 +44,8 @@ namespace RPGKarawara
         {
             base.FixedUpdate();
 
-            ProcessStateMachine();
+            if (IsOwner)
+                ProcessStateMachine();
         }
 
         //  OPTION 01
@@ -60,6 +61,12 @@ namespace RPGKarawara
             //  THE POSITION/ROTATION SHOULD BE RESET ONLY AFTER THE STATE MACHINE HAS PROCESSED IT'S TICK
             navMeshAgent.transform.localPosition = Vector3.zero;
             navMeshAgent.transform.localRotation = Quaternion.identity;
+
+            if (aiCharacterCombatManager.currentTarget != null)
+            {
+                aiCharacterCombatManager.targetsDirection = aiCharacterCombatManager.currentTarget.transform.position - transform.position;
+                aiCharacterCombatManager.viewableAngle = WorldUtilityManager.Instance.GetAngleOfTarget(transform, aiCharacterCombatManager.targetsDirection);
+            }
 
             if (navMeshAgent.enabled)
             {
