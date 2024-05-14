@@ -1,3 +1,4 @@
+using RPGKarawara;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,5 +52,7 @@ namespace RPGKarawara
         //  ASH OF WAR
 
         //  BLOCKING SOUNDS
+        [Header("Whooshes")]
+        public AudioClip[] whooshes;
     }
 }

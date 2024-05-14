@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace RPGKarawara
 {
@@ -29,6 +30,7 @@ namespace RPGKarawara
 
         public void OpenRightHandDamageCollider()
         {
+            aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             rightHandDamageCollider.EnableDamageCollider();
         }
 
@@ -39,6 +41,7 @@ namespace RPGKarawara
 
         public void OpenLeftHandDamageCollider()
         {
+            aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             leftHandDamageCollider.EnableDamageCollider();
         }
 

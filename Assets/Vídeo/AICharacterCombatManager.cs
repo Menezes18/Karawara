@@ -6,6 +6,8 @@ namespace RPGKarawara
 {
     public class AICharacterCombatManager : CharacterCombatManeger
     {
+        protected AICharacterManager aiCharacter;
+
         [Header("Action Recovery")]
         public float actionRecoveryTimer = 0;
 
@@ -26,6 +28,7 @@ namespace RPGKarawara
         {
             base.Awake();
 
+            aiCharacter = GetComponent<AICharacterManager>();
             lockOnTransform = GetComponentInChildren<LockOnTransform>().transform;
         }
 
@@ -60,8 +63,8 @@ namespace RPGKarawara
                     {
                         //  LASTLY, WE CHECK FOR ENVIRO BLOCKS
                         if (Physics.Linecast(
-                            aiCharacter.characterCombatManager.lockOnTransform.position, 
-                            targetCharacter.characterCombatManager.lockOnTransform.position, 
+                            aiCharacter.characterCombatManager.lockOnTransform.position,
+                            targetCharacter.characterCombatManager.lockOnTransform.position,
                             WorldUtilityManager.Instance.GetEnviroLayers()))
                         {
                             Debug.DrawLine(aiCharacter.characterCombatManager.lockOnTransform.position, targetCharacter.characterCombatManager.lockOnTransform.position);
@@ -112,7 +115,7 @@ namespace RPGKarawara
             {
                 aiCharacter.characterAnimatorManager.PlayTargetActionAnimation("Turn_Right_180", true);
             }
-            else if (viewableAngle <= -146 &&viewableAngle >= -180)
+            else if (viewableAngle <= -146 && viewableAngle >= -180)
             {
                 aiCharacter.characterAnimatorManager.PlayTargetActionAnimation("Turn_Left_180", true);
             }
