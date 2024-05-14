@@ -26,7 +26,7 @@ namespace RPGKarawara
             if (aiCharacter.aiCharacterCombatManager.currentTarget.isDead.Value)
                 return SwitchState(aiCharacter, aiCharacter.idle);
 
-            //  ROTATE TOWARDS THE TARGET WHILST ATTACKING
+            aiCharacter.aiCharacterCombatManager.RotateTowardsTargetWhilstAttacking(aiCharacter);
 
             aiCharacter.characterAnimatorManager.UpdateAnimatorMovementParameters(0, 0, false);
 
@@ -41,13 +41,13 @@ namespace RPGKarawara
                 }
             }
 
+            if (aiCharacter.isPerformingAction)
+                return this;
+
             if (!hasPerformedAttack)
             {
                 //  IF WE ARE STILL RECOVERING FROM AN ACTION, WAIT BEFORE PERFORMING ANOTHER
                 if (aiCharacter.aiCharacterCombatManager.actionRecoveryTimer > 0)
-                    return this;
-
-                if (aiCharacter.isPerformingAction)
                     return this;
 
                 PerformAttack(aiCharacter);

@@ -22,6 +22,13 @@ namespace RPGKarawara
         [Header("Attack Rotation Speed")]
         public float attackRotationSpeed = 25;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            lockOnTransform = GetComponentInChildren<LockOnTransform>().transform;
+        }
+
         public void FindATargetViaLineOfSight(AICharacterManager aiCharacter)
         {
             if (currentTarget != null)
@@ -124,7 +131,7 @@ namespace RPGKarawara
             if (currentTarget == null)
                 return;
 
-            if (!aiCharacter.canRotate)
+            if (!aiCharacter.characterLocomotionManager.canRotate)
                 return;
 
             if (!aiCharacter.isPerformingAction)

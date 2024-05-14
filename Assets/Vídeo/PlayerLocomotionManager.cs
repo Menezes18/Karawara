@@ -86,7 +86,7 @@ namespace RPGKarawara
 
         private void HandleGroundedMovement()
         {
-            if (!player.canMove)
+            if (!player.characterLocomotionManager.canMove)
                 return;
 
             GetMovementValues();
@@ -123,7 +123,7 @@ namespace RPGKarawara
 
         private void HandleFreeFallMovement()
         {
-            if (!player.isGrounded)
+            if (!player.characterLocomotionManager.isGrounded)
             {
                 Vector3 freeFallDirection;
 
@@ -140,7 +140,7 @@ namespace RPGKarawara
             if (player.isDead.Value)
                 return;
 
-            if (!player.canRotate)
+            if (!player.characterLocomotionManager.canRotate)
                 return;
 
             if (player.playerNetworkManager.isLockedOn.Value)
@@ -270,7 +270,7 @@ namespace RPGKarawara
                 return;
 
             //  IF WE ARE NOT GROUNDED, WE DO NOT WANT TO ALLOW A JUMP
-            if (!player.isGrounded)
+            if (!player.characterLocomotionManager.isGrounded)
                 return;
 
             //  IF WE ARE TWO HANDING OUR WEAPON, PLAY THE TWO HANDED JUMP ANIMATION, OTHERWISE PLAY THE ONE HANDED ANIMATION ( TO DO )

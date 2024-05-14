@@ -1,4 +1,3 @@
-using RPGKarawara;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +17,7 @@ namespace RPGKarawara
 
         private void OnAnimatorMove()
         {
-            if (player.applyRootMotion)
+            if (applyRootMotion)
             {
                 Vector3 velocity = player.animator.deltaPosition;
                 player.characterController.Move(velocity);

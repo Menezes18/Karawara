@@ -12,6 +12,9 @@ namespace RPGKarawara
         int vertical;
         int horizontal;
 
+        [Header("Flags")]
+        public bool applyRootMotion = false;
+
         [Header("Damage Animations")]
         public string lastDamageAnimationPlayed;
 
@@ -147,15 +150,15 @@ namespace RPGKarawara
             bool canRotate = false, 
             bool canMove = false)
         {
-            character.applyRootMotion = applyRootMotion;
+            this.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(targetAnimation, 0.2f);
             //  CAN BE USED TO STOP CHARACTER FROM ATTEMPTING NEW ACTIONS
             //  FOR EXAMPLE, IF YOU GET DAMAGED, AND BEGIN PERFORMING A DAMAGE ANIMATION
             //  THIS FLAG WILL TURN TRUE IF YOU ARE STUNNED
             //  WE CAN THEN CHECK FOR THIS BEFORE ATTEMPTING NEW ACTIONS
             character.isPerformingAction = isPerformingAction;
-            character.canRotate = canRotate;
-            character.canMove = canMove;
+            character.characterLocomotionManager.canRotate = canRotate;
+            character.characterLocomotionManager.canMove = canMove;
 
             //  TELL THE SERVER/HOST WE PLAYED AN ANIMATION, AND TO PLAY THAT ANIMATION FOR EVERYBODY ELSE PRESENT
             character.characterNetworkManager.NotifyTheServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
@@ -175,11 +178,11 @@ namespace RPGKarawara
             //  TELL THE NETWORK OUR "ISATTACKING" FLAG IS ACTIVE (For counter damage ect)
             character.characterCombatManager.currentAttackType = attackType;
             character.characterCombatManager.lastAttackAnimationPerformed = targetAnimation;
-            character.applyRootMotion = applyRootMotion;
+            this.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(targetAnimation, 0.2f);
             character.isPerformingAction = isPerformingAction;
-            character.canRotate = canRotate;
-            character.canMove = canMove;
+            character.characterLocomotionManager.canRotate = canRotate;
+            character.characterLocomotionManager.canMove = canMove;
 
             //  TELL THE SERVER/HOST WE PLAYED AN ANIMATION, AND TO PLAY THAT ANIMATION FOR EVERYBODY ELSE PRESENT
             character.characterNetworkManager.NotifyTheServerOfAttackActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);

@@ -20,6 +20,9 @@ namespace RPGKarawara
 
         [Header("Flags")]
         public bool isRolling = false;
+        public bool canRotate = true;
+        public bool canMove = true;
+        public bool isGrounded = true;
 
 
         protected virtual void Awake()
@@ -31,7 +34,7 @@ namespace RPGKarawara
         {
             HandleGroundCheck();
 
-            if (character.isGrounded)
+            if (character.characterLocomotionManager.isGrounded)
             {
                 //  IF WE ARE NOT ATTEMPTING TO JUMP OR MOVE UPWARD
                 if (yVelocity.y < 0)
@@ -62,13 +65,23 @@ namespace RPGKarawara
 
         protected void HandleGroundCheck()
         {
-            character.isGrounded = Physics.CheckSphere(character.transform.position, groundCheckSphereRadius, groundLayer);
+            isGrounded = Physics.CheckSphere(character.transform.position, groundCheckSphereRadius, groundLayer);
         }
 
         //  DRAWS OUR GROUND CHECK SPHERE IN SCENE VIEW
         protected void OnDrawGizmosSelected()
         {
             //Gizmos.DrawSphere(character.transform.position, groundCheckSphereRadius);
+        }
+
+        public void EnableCanRotate()
+        {
+            canRotate = true;
+        }
+
+        public void DisableCanRotate()
+        {
+            canRotate = false;
         }
     }
 }
