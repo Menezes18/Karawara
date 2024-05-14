@@ -167,5 +167,36 @@ namespace RPGKarawara
                 leftWeaponManager.SetWeaponDamage(player, player.playerInventoryManager.currentLeftHandWeapon);
             }
         }
+
+        //  DAMAGE COLLIDERS
+        public void OpenDamageCollider()
+        {
+            //  OPEN RIGHT WEAPON DAMAGE COLLIDER
+            if (player.playerNetworkManager.isUsingRightHand.Value)
+            {
+                rightWeaponManager.meleeDamageCollider.EnableDamageCollider();
+            }
+            //  OPEN LEFT WEAPON DAMAGE COLLIDER
+            else if (player.playerNetworkManager.isUsingLeftHand.Value)
+            {
+                leftWeaponManager.meleeDamageCollider.EnableDamageCollider();
+            }
+
+            //  PLAY WHOOSH SFX
+        }
+
+        public void CloseDamageCollider()
+        {
+            //  OPEN RIGHT WEAPON DAMAGE COLLIDER
+            if (player.playerNetworkManager.isUsingRightHand.Value)
+            {
+                rightWeaponManager.meleeDamageCollider.DisableDamageCollider();
+            }
+            //  OPEN LEFT WEAPON DAMAGE COLLIDER
+            else if (player.playerNetworkManager.isUsingLeftHand.Value)
+            {
+                leftWeaponManager.meleeDamageCollider.DisableDamageCollider();
+            }
+        }
     }
 }
