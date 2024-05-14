@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7596113526713734043
+--- !u!1 &7617186343041930430
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,58 +8,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5669469786567779646}
-  - component: {fileID: 1553431252647432328}
+  - component: {fileID: 2838995963741846417}
+  - component: {fileID: 6168874221105646850}
   m_Layer: 0
-  m_Name: PlayerInputManager
+  m_Name: World  Utility Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5669469786567779646
+--- !u!4 &2838995963741846417
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7596113526713734043}
+  m_GameObject: {fileID: 7617186343041930430}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.869118, y: -0.20913297, z: -0.8594862}
+  m_LocalPosition: {x: -0.48677382, y: -0.2968585, z: 1.1779476}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1553431252647432328
+--- !u!114 &6168874221105646850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7596113526713734043}
+  m_GameObject: {fileID: 7617186343041930430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7f5495f06cb1ee4bb22a65873929123, type: 3}
+  m_Script: {fileID: 11500000, guid: 6682b0b2a071e744db955a8a240edbcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  camera_Input: {x: 0, y: 0}
-  cameraVertical_Input: 0
-  cameraHorizontal_Input: 0
-  lockOn_Input: 0
-  lockOn_Left_Input: 0
-  lockOn_Right_Input: 0
-  movementInput: {x: 0, y: 0}
-  vertical_Input: 0
-  horizontal_Input: 0
-  moveAmount: 0
-  dodge_Input: 0
-  sprint_Input: 0
-  jump_Input: 0
-  switch_Right_Weapon_Input: 0
-  switch_Left_Weapon_Input: 0
-  RB_Input: 0
-  RT_Input: 0
-  Hold_RT_Input: 0
+  characterLayers:
+    serializedVersion: 2
+    m_Bits: 8200
+  enviroLayers:
+    serializedVersion: 2
+    m_Bits: 1

@@ -1,22 +1,43 @@
-using RPGKarawara;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace RPGKarawara
 {
     public class AICharacterManager : CharacterManager
     {
-        public AICharacterCombatManager aiCharacterCombatManager;
+        [HideInInspector] public AICharacterNetworkManager aiCharacterNetworkManager;
+        [HideInInspector] public AICharacterCombatManager aiCharacterCombatManager;
+        [HideInInspector] public AICharacterLocomotionManager aiCharacterLocomotionManager;
+
+        [Header("Navmesh Agent")]
+        public NavMeshAgent navMeshAgent;
 
         [Header("Current State")]
         [SerializeField] AIState currentState;
+
+        [Header("States")]
+        public IdleState idle;
+        public PursueTargetState pursueTarget;
+        //  COMBAT STANCE
+        //  ATTACK
 
         protected override void Awake()
         {
             base.Awake();
 
+            aiCharacterNetworkManager = GetComponent<AICharacterNetworkManager>();
             aiCharacterCombatManager = GetComponent<AICharacterCombatManager>();
+            aiCharacterLocomotionManager = GetComponent<AICharacterLocomotionManager>();
+
+            navMeshAgent = GetComponentInChildren<NavMeshAgent>();
+
+            //  USE A COPY OF THE SCRIPTABLE OBJECTS, SO THE ORIGINALS ARE NOT MODIFIED
+            idle = Instantiate(idle);
+            pursueTarget = Instantiate(pursueTarget);
+
+            currentState = idle;
         }
 
         protected override void FixedUpdate()
@@ -34,6 +55,29 @@ namespace RPGKarawara
             if (nextState != null)
             {
                 currentState = nextState;
+            }
+
+            //  THE POSITION/ROTATION SHOULD BE RESET ONLY AFTER THE STATE MACHINE HAS PROCESSED IT'S TICK
+            navMeshAgent.transform.localPosition = Vector3.zero;
+            navMeshAgent.transform.localRotation = Quaternion.identity;
+
+            if (navMeshAgent.enabled)
+            {
+                Vector3 agentDestination = navMeshAgent.destination;
+                float remainingDistance = Vector3.Distance(agentDestination, transform.position);
+
+                if (remainingDistance > navMeshAgent.stoppingDistance)
+                {
+                    aiCharacterNetworkManager.isMoving.Value = true;
+                }
+                else
+                {
+                    aiCharacterNetworkManager.isMoving.Value = false;
+                }
+            }
+            else
+            {
+                aiCharacterNetworkManager.isMoving.Value = false;
             }
         }
     }

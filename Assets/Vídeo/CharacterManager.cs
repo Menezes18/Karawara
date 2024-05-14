@@ -65,14 +65,14 @@ namespace RPGKarawara
             {
                 //  Position
                 transform.position = Vector3.SmoothDamp
-                    (transform.position,
-                    characterNetworkManager.networkPosition.Value,
-                    ref characterNetworkManager.networkPositionVelocity,
+                    (transform.position, 
+                    characterNetworkManager.networkPosition.Value, 
+                    ref characterNetworkManager.networkPositionVelocity, 
                     characterNetworkManager.networkPositionSmoothTime);
                 //  Rotation
                 transform.rotation = Quaternion.Slerp
-                    (transform.rotation,
-                    characterNetworkManager.networkRotation.Value,
+                    (transform.rotation, 
+                    characterNetworkManager.networkRotation.Value, 
                     characterNetworkManager.networkRotationSmoothTime);
             }
         }
@@ -85,6 +85,20 @@ namespace RPGKarawara
         protected virtual void LateUpdate()
         {
 
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            characterNetworkManager.isMoving.OnValueChanged += characterNetworkManager.OnIsMovingChanged;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+
+            characterNetworkManager.isMoving.OnValueChanged -= characterNetworkManager.OnIsMovingChanged;
         }
 
         public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)

@@ -11,16 +11,12 @@ namespace RPGKarawara
         {
             if (aiCharacter.characterCombatManager.currentTarget != null)
             {
-                //  RETURN THE PURSUE TARGET STATE (CHANGE THE STATE TO THE PURSUE TARGET STATE)
-                Debug.Log("WE HAVE A TARGET");
-
-                return this;
+                return SwitchState(aiCharacter, aiCharacter.pursueTarget);
             }
             else
             {
                 //  RETURN THIS STATE, TO CONTINUALLY SEARCH FOR A TARGET (KEEP THE STATE HERE, UNTIL A TARGET IS FOUND)
                 aiCharacter.aiCharacterCombatManager.FindATargetViaLineOfSight(aiCharacter);
-                Debug.Log("SEARCHING FOR A TARGET");
                 return this;
             }
         }
