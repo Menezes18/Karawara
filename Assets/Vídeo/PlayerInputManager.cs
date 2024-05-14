@@ -17,20 +17,23 @@ namespace RPGKarawara
         public PlayerManager player;
 
         [Header("CAMERA MOVEMENT INPUT")]
-        [SerializeField] Vector2 cameraInput;
-        public float cameraVerticalInput;
-        public float cameraHorizontalInput;
+        [SerializeField] Vector2 camera_Input;
+        public float cameraVertical_Input;
+        public float cameraHorizontal_Input;
+
+        [Header("LOCK ON INPUT")]
+        [SerializeField] bool lockOn_Input;
 
         [Header("PLAYER MOVEMENT INPUT")]
         [SerializeField] Vector2 movementInput;
-        public float verticalInput;
-        public float horizontalInput;
+        public float vertical_Input;
+        public float horizontal_Input;
         public float moveAmount;
 
         [Header("PLAYER ACTION INPUT")]
-        [SerializeField] bool dodgeInput = false;
-        [SerializeField] bool sprintInput = false;
-        [SerializeField] bool jumpInput = false;
+        [SerializeField] bool dodge_Input = false;
+        [SerializeField] bool sprint_Input = false;
+        [SerializeField] bool jump_Input = false;
         [SerializeField] bool RB_Input = false;
 
         private void Awake()
@@ -92,15 +95,18 @@ namespace RPGKarawara
                 playerControls = new PlayerControls();
 
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
-                playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
-                playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
-                playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
+                playerControls.PlayerCamera.Movement.performed += i => camera_Input = i.ReadValue<Vector2>();
+                playerControls.PlayerActions.Dodge.performed += i => dodge_Input = true;
+                playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
 
+                //  LOCK ON
+                playerControls.PlayerActions.LockOn.performed += i => lockOn_Input = true;
+
                 //  HOLDING THE INPUT, SETS THE BOOL TO TRUE
-                playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
+                playerControls.PlayerActions.Sprint.performed += i => sprint_Input = true;
                 //  RELEASING THE INPUT, SETS THE BOOL TO FALSE
-                playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
+                playerControls.PlayerActions.Sprint.canceled += i => sprint_Input = false;
             }
 
             playerControls.Enable();
@@ -135,6 +141,7 @@ namespace RPGKarawara
 
         private void HandleAllInputs()
         {
+            HandleLockOnInput();
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
@@ -143,15 +150,58 @@ namespace RPGKarawara
             HandleRBInput();
         }
 
+        //  LOCK ON
+        private void HandleLockOnInput()
+        {
+            //  CHECK FOR DEAD TARGET
+            if (player.playerNetworkManager.isLockedOn.Value)
+            {
+                if (player.playerCombatManager.currentTarget == null)
+                    return;
+ 
+                if (player.playerCombatManager.currentTarget.isDead.Value)
+                {
+                    player.playerNetworkManager.isLockedOn.Value = false;
+                }
+
+                //  ATTEMPT TO FIND NEW TARGET
+            }
+
+
+            if (lockOn_Input && player.playerNetworkManager.isLockedOn.Value)
+            {
+                lockOn_Input = false;
+                PlayerCamera.instance.ClearLockOnTargets();
+                player.playerNetworkManager.isLockedOn.Value = false;
+                //  DISABLE LOCK ON
+                return;
+            }
+
+            if (lockOn_Input && !player.playerNetworkManager.isLockedOn.Value)
+            {
+                lockOn_Input = false;
+
+                //  IF WE ARE AIMING USING RANGED WEAPONS RETURN (DO NOT ALLOW LOCK WHILST AIMING)
+
+                PlayerCamera.instance.HandleLocatingLockOnTargets();
+
+                if (PlayerCamera.instance.nearestLockOnTarget != null)
+                {
+                    player.playerCombatManager.SetTarget(PlayerCamera.instance.nearestLockOnTarget);
+                    player.playerNetworkManager.isLockedOn.Value = true;
+                }
+            }
+        }
+
         //  MOVEMENT
 
         private void HandlePlayerMovementInput()
         {
-            verticalInput = movementInput.y;
-            horizontalInput = movementInput.x;
+            vertical_Input = movementInput.y;
+            horizontal_Input = movementInput.x;
 
             //  RETURNS THE ABSOLUTE NUMBER, (Meaning number without the negative sign, so its always positive)
-            moveAmount = Mathf.Clamp01(Mathf.Abs(verticalInput) + Mathf.Abs(horizontalInput));
+            moveAmount = Mathf.Clamp01(Mathf.Abs(vertical_Input) + Mathf.Abs(horizontal_Input));
 
             //  WE CLAMP THE VALUES, SO THEY ARE 0, 0.5 OR 1 (OPTIONAL)
             if (moveAmount <= 0.5 && moveAmount > 0)
@@ -177,17 +227,17 @@ namespace RPGKarawara
 
         private void HandleCameraMovementInput()
         {
-            cameraVerticalInput = cameraInput.y;
-            cameraHorizontalInput = cameraInput.x;
+            cameraVertical_Input = camera_Input.y;
+            cameraHorizontal_Input = camera_Input.x;
         }
 
         //  ACTION
 
         private void HandleDodgeInput()
         {
-            if (dodgeInput)
+            if (dodge_Input)
             {
-                dodgeInput = false;
+                dodge_Input = false;
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
 
@@ -197,7 +247,7 @@ namespace RPGKarawara
 
         private void HandleSprintInput()
         {
-            if (sprintInput)
+            if (sprint_Input)
             {
                 player.playerLocomotionManager.HandleSprinting();
             }
@@ -209,9 +259,9 @@ namespace RPGKarawara
 
         private void HandleJumpInput()
         {
-            if (jumpInput)
+            if (jump_Input)
             {
-                jumpInput = false;
+                jump_Input = false;
 
                 //  IF WE HAVE A UI WINDOW OPEN, SIMPLY RETURN WITHOUT DOING ANYTHING
 

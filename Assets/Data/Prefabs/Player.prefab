@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 788076987
+  GlobalObjectIdHash: 3406588913
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -132,6 +132,8 @@ MonoBehaviour:
   verticalMovement:
     m_InternalValue: 0
   moveAmount:
+    m_InternalValue: 0
+  isLockedOn:
     m_InternalValue: 0
   isSprinting:
     m_InternalValue: 0
@@ -247,6 +249,8 @@ MonoBehaviour:
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
+  characterCombatManager: {fileID: 0}
+  characterSoundFXManager: {fileID: 0}
   isPerformingAction: 0
   isGrounded: 1
   applyRootMotion: 0
@@ -273,6 +277,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323ab07af6964584c9da7b7693cf32c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentTarget: {fileID: 0}
+  currentAttackType: 0
+  lockOnTransform: {fileID: 1428938815506599873}
   currentWeaponBeingUsed: {fileID: 0}
 --- !u!114 &1085547174913268491
 MonoBehaviour:
@@ -378,6 +385,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3c80fce431e6748951b1758cfa5b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastDamageAnimationPlayed: 
+  hit_Forward_Medium_01: Hit_Forward_Medium_01
+  hit_Forward_Medium_02: Hit_Forward_Medium_02
+  hit_Backward_Medium_01: Hit_Backward_Medium_01
+  hit_Backward_Medium_02: Hit_Backward_Medium_02
+  hit_Left_Medium_01: Hit_Left_Medium_01
+  hit_Left_Medium_02: Hit_Left_Medium_02
+  hit_Right_Medium_01: Hit_Right_Medium_01
+  hit_Right_Medium_02: Hit_Right_Medium_02
+  forward_Medium_Damage: []
+  backward_Medium_Damage: []
+  left_Medium_Damage: []
+  right_Medium_Damage: []
 --- !u!114 &-1553742407583369837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21aab5f08393e2d40969d05bf9ef6944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bloodSplatterVFX: {fileID: 0}
   effectToTest: {fileID: 11400000, guid: b4aa7a26a84c8114c91acbe7378c2e51, type: 2}
   processEffect: 0
 --- !u!143 &8464527521044100486
@@ -831,6 +852,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 0.2, z: 0.25}
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!1 &6477693664788160220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1428938815506599873}
+  m_Layer: 13
+  m_Name: Lock On Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1428938815506599873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6477693664788160220}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.000000021073433, y: 0.000000029802322, z: 0.000000021073417,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4073238822881181152}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7453295597394760452
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,6 +1026,37 @@ Transform:
   m_Children:
   - {fileID: 8132566242805051342}
   m_Father: {fileID: 3745861818980309521}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8012250294556005305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7995924104476061471}
+  m_Layer: 13
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7995924104476061471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8012250294556005305}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4073238822881181152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1489867376256810678
 PrefabInstance:
@@ -5580,6 +5664,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1071879560821507226}
+    - targetCorrespondingSourceObject: {fileID: 934018805973237786, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7995924104476061471}
+    - targetCorrespondingSourceObject: {fileID: 934018805973237786, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1428938815506599873}
     - targetCorrespondingSourceObject: {fileID: -6975156597616762093, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
       insertIndex: 0
@@ -5932,6 +6024,12 @@ CapsuleCollider:
 --- !u!4 &3745861818980309521 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3778871961765576186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4073238822881181152 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 934018805973237786, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
     type: 3}
   m_PrefabInstance: {fileID: 3778871961765576186}
   m_PrefabAsset: {fileID: 0}

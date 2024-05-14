@@ -102,7 +102,6 @@ namespace RPGKarawara
             bool canRotate = false, 
             bool canMove = false)
         {
-            Debug.Log("PLAYING ANIMATION: " + targetAnimation);
             character.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(targetAnimation, 0.2f);
             //  CAN BE USED TO STOP CHARACTER FROM ATTEMPTING NEW ACTIONS
