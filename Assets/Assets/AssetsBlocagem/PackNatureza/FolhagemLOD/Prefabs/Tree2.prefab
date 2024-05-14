@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 8734776762479625367}
   - component: {fileID: 5031903987059748473}
   - component: {fileID: 2654957285258722917}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk2_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8734776762479625367
 Transform:
@@ -94,12 +94,12 @@ GameObject:
   - component: {fileID: 4464890146225072449}
   - component: {fileID: 6719372839268147254}
   - component: {fileID: 1426325441537235319}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Leaves2.1_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4464890146225072449
 Transform:
@@ -176,12 +176,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4606503295551941379}
   - component: {fileID: 6767971104433298497}
-  m_Layer: 0
+  - component: {fileID: -2877910947565487451}
+  m_Layer: 3
   m_Name: Tree2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4606503295551941379
 Transform:
@@ -193,7 +194,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9979742, y: 0.9979742, z: 0.9979742}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1117784476480755306}
@@ -215,25 +216,47 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.4886977
+  - screenRelativeHeight: 0.546444
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 8803436249079143637}
     - renderer: {fileID: 2894580615911561850}
     - renderer: {fileID: 8273227224685596439}
-  - screenRelativeHeight: 0.19504046
+  - screenRelativeHeight: 0.24812205
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2174012851487329821}
     - renderer: {fileID: 8423184212378130547}
     - renderer: {fileID: 678622474475250676}
-  - screenRelativeHeight: 0.038483325
+  - screenRelativeHeight: 0.048036173
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 1426325441537235319}
     - renderer: {fileID: 4336301583226747652}
     - renderer: {fileID: 2654957285258722917}
   m_Enabled: 1
+--- !u!64 &-2877910947565487451
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2492298339839642700}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5666141424504731491, guid: fc72c572a2a23e148bd2941d30f620db, type: 3}
 --- !u!1 &2572977925945179301
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,12 +268,12 @@ GameObject:
   - component: {fileID: 7949042488798825405}
   - component: {fileID: 1299233517343592433}
   - component: {fileID: 8273227224685596439}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk2_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7949042488798825405
 Transform:
@@ -326,12 +349,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1117784476480755306}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1117784476480755306
 Transform:
@@ -362,12 +385,12 @@ GameObject:
   - component: {fileID: 3122833815139497046}
   - component: {fileID: 5392115457344209256}
   - component: {fileID: 678622474475250676}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk2_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3122833815139497046
 Transform:
@@ -445,12 +468,12 @@ GameObject:
   - component: {fileID: 5792173056435640993}
   - component: {fileID: 7413335556557436925}
   - component: {fileID: 2174012851487329821}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Leaves2.1_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5792173056435640993
 Transform:
@@ -528,12 +551,12 @@ GameObject:
   - component: {fileID: 5824031523769296422}
   - component: {fileID: 44949752027652262}
   - component: {fileID: 8803436249079143637}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Leaves2.1_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5824031523769296422
 Transform:
@@ -611,12 +634,12 @@ GameObject:
   - component: {fileID: 2730955240212001615}
   - component: {fileID: 3345195967446043586}
   - component: {fileID: 2894580615911561850}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Leaves2_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2730955240212001615
 Transform:
@@ -694,12 +717,12 @@ GameObject:
   - component: {fileID: 8531292719231886429}
   - component: {fileID: 4509194199752192957}
   - component: {fileID: 4336301583226747652}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Leaves2_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8531292719231886429
 Transform:
@@ -775,12 +798,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 599407102610717032}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &599407102610717032
 Transform:
@@ -811,12 +834,12 @@ GameObject:
   - component: {fileID: 7995611651107970058}
   - component: {fileID: 4088093786666590007}
   - component: {fileID: 8423184212378130547}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Leaves2_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7995611651107970058
 Transform:
@@ -892,12 +915,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5436606805552454171}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5436606805552454171
 Transform:
