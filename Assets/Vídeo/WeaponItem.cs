@@ -42,7 +42,8 @@ namespace RPGKarawara
         //  HEAVY ATTACK STAMINA COST MODIFIER ECT
 
 
-        //  ITEM BASED ACTIONS (RB, RT, LB, LT)
+        [Header("Actions")]
+        public WeaponItemAction oh_RB_Action;   // ONE HAND RIGHT BUMPER ACTION
         
         //  ASH OF WAR
 
