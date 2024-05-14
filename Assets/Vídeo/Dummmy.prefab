@@ -907,10 +907,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.10576257
-  m_Height: 0.21152514
+  m_Radius: 0.22493199
+  m_Height: 0.44986397
   m_Direction: 1
-  m_Center: {x: 0.12, y: 0, z: 0}
+  m_Center: {x: 0.0008305906, y: -0.000000014845482, z: 2.5221183e-11}
 --- !u!114 &7053175136183758474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2555,10 +2555,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.10576257
-  m_Height: 0.21152514
+  m_Radius: 0.22493199
+  m_Height: 0.44986397
   m_Direction: 1
-  m_Center: {x: -0.12, y: 0, z: 0}
+  m_Center: {x: 0.0008305906, y: -0.000000014845482, z: 2.5221183e-11}
 --- !u!114 &1214826959437349787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2683,7 +2683,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
