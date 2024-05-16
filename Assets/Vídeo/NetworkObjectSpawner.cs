@@ -5,11 +5,11 @@ using Unity.Netcode;
 
 namespace RPGKarawara
 {
-    public class AICharacterSpawner : MonoBehaviour
+    public class NetworkObjectSpawner : MonoBehaviour
     {
-        [Header("Character")]
-        [SerializeField] GameObject characterGameObject;
-        [SerializeField] GameObject instantiatedGameObject;
+        [Header("Object")]
+        [SerializeField] protected GameObject networkGameObject;
+        [SerializeField] protected GameObject instantiatedGameObject;
 
         private void Awake()
         {
@@ -18,19 +18,18 @@ namespace RPGKarawara
 
         private void Start()
         {
-            WorldAIManager.instance.SpawnCharacter(this);
+            WorldObjectManager.instance.SpawnObject(this);
             gameObject.SetActive(false);
         }
 
-        public void AttemptToSpawnCharacter()
+        public virtual void AttemptToSpawnObject()
         {
-            if (characterGameObject != null)
+            if (networkGameObject != null)
             {
-                instantiatedGameObject = Instantiate(characterGameObject);
+                instantiatedGameObject = Instantiate(networkGameObject);
                 instantiatedGameObject.transform.position = transform.position;
                 instantiatedGameObject.transform.rotation = transform.rotation;
                 instantiatedGameObject.GetComponent<NetworkObject>().Spawn();
-                WorldAIManager.instance.AddCharacterToSpawnedCharactersList(instantiatedGameObject.GetComponent<AICharacterManager>());
             }
         }
     }

@@ -30,7 +30,7 @@ namespace RPGKarawara
 
         public void OpenRightHandDamageCollider()
         {
-            aiCharacter.characterSoundFXManager.PlayAttackGrunt();
+            aiCharacter.characterSoundFXManager.PlayDamageGruntSoundFX();
             rightHandDamageCollider.EnableDamageCollider();
         }
 
@@ -41,7 +41,7 @@ namespace RPGKarawara
 
         public void OpenLeftHandDamageCollider()
         {
-            aiCharacter.characterSoundFXManager.PlayAttackGrunt();
+            aiCharacter.characterSoundFXManager.PlayDamageGruntSoundFX();
             leftHandDamageCollider.EnableDamageCollider();
         }
 

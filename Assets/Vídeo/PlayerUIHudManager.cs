@@ -7,13 +7,17 @@ namespace RPGKarawara
 {
     public class PlayerUIHudManager : MonoBehaviour
     {
-        [Header("STAT BARS")]
+        [Header("Stat Bars")]
         [SerializeField] UI_StatBar healthBar;
         [SerializeField] UI_StatBar staminaBar;
 
-        [Header("QUICK SLOTS")]
+        [Header("Quick Slots")]
         [SerializeField] Image rightWeaponQuickSlotIcon;
         [SerializeField] Image leftWeaponQuickSlotIcon;
+
+        [Header("Boss Health Bar")]
+        public Transform bossHealthBarParent;
+        public GameObject bossHealthBarObject;
 
         public void RefreshHUD()
         {

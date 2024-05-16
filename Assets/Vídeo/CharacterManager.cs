@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using RPGKarawara;
 
 namespace RPGKarawara
 {
@@ -62,14 +61,14 @@ namespace RPGKarawara
             {
                 //  Position
                 transform.position = Vector3.SmoothDamp
-                    (transform.position,
-                    characterNetworkManager.networkPosition.Value,
-                    ref characterNetworkManager.networkPositionVelocity,
+                    (transform.position, 
+                    characterNetworkManager.networkPosition.Value, 
+                    ref characterNetworkManager.networkPositionVelocity, 
                     characterNetworkManager.networkPositionSmoothTime);
                 //  Rotation
                 transform.rotation = Quaternion.Slerp
-                    (transform.rotation,
-                    characterNetworkManager.networkRotation.Value,
+                    (transform.rotation, 
+                    characterNetworkManager.networkRotation.Value, 
                     characterNetworkManager.networkRotationSmoothTime);
             }
         }
@@ -89,7 +88,10 @@ namespace RPGKarawara
             base.OnNetworkSpawn();
 
             animator.SetBool("isMoving", characterNetworkManager.isMoving.Value);
+            characterNetworkManager.OnIsActiveChanged(false, characterNetworkManager.isActive.Value);
+
             characterNetworkManager.isMoving.OnValueChanged += characterNetworkManager.OnIsMovingChanged;
+            characterNetworkManager.isActive.OnValueChanged += characterNetworkManager.OnIsActiveChanged;
         }
 
         public override void OnNetworkDespawn()
@@ -97,6 +99,7 @@ namespace RPGKarawara
             base.OnNetworkDespawn();
 
             characterNetworkManager.isMoving.OnValueChanged -= characterNetworkManager.OnIsMovingChanged;
+            characterNetworkManager.isActive.OnValueChanged -= characterNetworkManager.OnIsActiveChanged;
         }
 
         public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)

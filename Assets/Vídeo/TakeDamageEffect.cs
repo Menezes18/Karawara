@@ -42,13 +42,15 @@ namespace RPGKarawara
 
         public override void ProcessEffect(CharacterManager character)
         {
+            if (character.characterNetworkManager.isInvulnerable.Value)
+                return;
+
             base.ProcessEffect(character);
 
             //  IF THE CHARACTER IS DEAD, NO ADDITIONAL DAMAGE EFFECTS SHOULD BE PROCESSED
             if (character.isDead.Value)
                 return;
 
-            //  CHECK FOR "INVULNERABILITY"
             CalculateDamage(character);
             PlayDirectionalBasedDamageAnimation(character);
             //  CHECK FOR BUILD UPS (POISON, BLEED ECT)
@@ -99,7 +101,7 @@ namespace RPGKarawara
             AudioClip physicalDamageSFX = WorldSoundFXManager.instance.ChooseRandomSFXFromArray(WorldSoundFXManager.instance.physicalDamageSFX);
 
             character.characterSoundFXManager.PlaySoundFX(physicalDamageSFX);
-            character.characterSoundFXManager.PlayDamageGrunt();
+            character.characterSoundFXManager.PlayDamageGruntSoundFX();
             //  IF FIRE DAMAGE IS GREATER THAN 0, PLAY BURN SFX
             //  IF LIGHTNING DAMAGE IS GREATER THAN 0, PLAY ZAP SFX
         }
