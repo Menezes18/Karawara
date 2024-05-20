@@ -32,13 +32,10 @@ namespace RPGKarawara
                 aiCharacter.navMeshAgent.enabled = true;
 
             //  IF YOU WANT THE AI CHARACTER TO FACE AND TURN TOWARDS ITS TARGET WHEN ITS OUTSIDE IT'S FOV INCLUDE THIS
-            if (aiCharacter.aiCharacterCombatManager.enablePivot)
+            if (!aiCharacter.aiCharacterNetworkManager.isMoving.Value)
             {
-                if (!aiCharacter.aiCharacterNetworkManager.isMoving.Value)
-                {
-                    if (aiCharacter.aiCharacterCombatManager.viewableAngle < -30 || aiCharacter.aiCharacterCombatManager.viewableAngle > 30)
-                        aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
-                }
+                if (aiCharacter.aiCharacterCombatManager.viewableAngle < -30 || aiCharacter.aiCharacterCombatManager.viewableAngle > 30)
+                    aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
             }
 
             aiCharacter.aiCharacterCombatManager.RotateTowardsAgent(aiCharacter);

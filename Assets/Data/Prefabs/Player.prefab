@@ -24,7 +24,6 @@ GameObject:
   - component: {fileID: 8464527521044100486}
   - component: {fileID: 2867793869143155619}
   - component: {fileID: 1983101499933469384}
-  - component: {fileID: 8006927280248703481}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -422,7 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21aab5f08393e2d40969d05bf9ef6944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodSplatterVFX: {fileID: 0}
+  bloodSplatterVFX: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d,
+    type: 3}
   effectToTest: {fileID: 11400000, guid: b4aa7a26a84c8114c91acbe7378c2e51, type: 2}
   processEffect: 0
 --- !u!143 &8464527521044100486
@@ -574,20 +574,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8006927280248703481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 219663029150363108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9919c5be9cbac945bdb9abfa76da9a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageGrunts: []
-  attackGrunts: []
 --- !u!1 &1192176898164503204
 GameObject:
   m_ObjectHideFlags: 0

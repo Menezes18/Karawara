@@ -23,13 +23,9 @@ namespace RPGKarawara
                 aiCharacter.navMeshAgent.enabled = true;
 
             //  IF OUR TARGET GOES OUTSIDE OF THE CHARACTERS F.O.V, PIVOT TO FACE THEM
-
-            if (aiCharacter.aiCharacterCombatManager.enablePivot)
-            {
-                if (aiCharacter.aiCharacterCombatManager.viewableAngle < aiCharacter.aiCharacterCombatManager.minimumFOV
-                    || aiCharacter.aiCharacterCombatManager.viewableAngle > aiCharacter.aiCharacterCombatManager.maximumFOV)
-                    aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
-            }
+            if (aiCharacter.aiCharacterCombatManager.viewableAngle < aiCharacter.aiCharacterCombatManager.minimumFOV
+                || aiCharacter.aiCharacterCombatManager.viewableAngle > aiCharacter.aiCharacterCombatManager.maximumFOV)
+                aiCharacter.aiCharacterCombatManager.PivotTowardsTarget(aiCharacter);
 
             aiCharacter.aiCharacterLocomotionManager.RotateTowardsAgent(aiCharacter);
 
