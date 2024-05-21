@@ -122,6 +122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f919221b463fa40abef6f253729f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive:
+    m_InternalValue: 1
   networkPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
@@ -335,7 +337,7 @@ MonoBehaviour:
   rotationSpeed: 15
   sprintingStaminaCost: 2
   jumpStaminaCost: 25
-  jumpHeight: 4
+  jumpHeight: 2
   jumpForwardSpeed: 5
   freeFallSpeed: 2
   dodgeStaminaCost: 5
