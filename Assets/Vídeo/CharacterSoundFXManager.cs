@@ -21,29 +21,31 @@ namespace RPGKarawara
 
         public void PlaySoundFX(AudioClip soundFX, float volume = 1, bool randomizePitch = true, float pitchRandom = 0.1f)
         {
-            //audioSource.PlayOneShot(soundFX, volume);
+            audioSource.PlayOneShot(soundFX, volume);
             //  RESETS PITCH
-            //audioSource.pitch = 1;
+            audioSource.pitch = 1;
 
-            //if (randomizePitch)
-            //{
-            //    audioSource.pitch += Random.Range(-pitchRandom, pitchRandom);
-           // }
+            if (randomizePitch)
+            {
+                audioSource.pitch += Random.Range(-pitchRandom, pitchRandom);
+            }
         }
 
         public void PlayRollSoundFX()
         {
-           // audioSource.PlayOneShot(WorldSoundFXManager.instance.rollSFX);
+            audioSource.PlayOneShot(WorldSoundFXManager.instance.rollSFX);
         }
 
         public virtual void PlayDamageGrunt()
         {
-            //PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(damageGrunts));
+            if (damageGrunts.Length > 0)
+                PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(damageGrunts));
         }
 
         public virtual void PlayAttackGrunt()
         {
-            //PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(attackGrunts));
+           // if (attackGrunts.Length > 0)
+               // PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(attackGrunts));
         }
     }
 }

@@ -1640,6 +1640,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d123b8a2a0727c447a165062a351bd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive:
+    m_InternalValue: 1
   networkPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
@@ -1656,6 +1658,8 @@ MonoBehaviour:
   moveAmount:
     m_InternalValue: 0
   currentTargetNetworkObjectID:
+    m_InternalValue: 0
+  isInvulnerable:
     m_InternalValue: 0
   isLockedOn:
     m_InternalValue: 0
@@ -1725,8 +1729,8 @@ MonoBehaviour:
   gravityForce: -5.55
   groundLayer:
     serializedVersion: 2
-    m_Bits: 65
-  groundCheckSphereRadius: 1
+    m_Bits: 1
+  groundCheckSphereRadius: 0.5
   yVelocity: {x: 0, y: 0, z: 0}
   groundedYVelocity: -20
   fallStartYVelocity: -5
@@ -1825,6 +1829,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4023900b56ee44b9bc83cd489e7495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageGrunts: []
+  attackGrunts: []
 --- !u!54 &6876254505622355902
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1895,6 +1901,7 @@ MonoBehaviour:
   currentAttackType: 0
   lockOnTransform: {fileID: 3476448277769722756}
   actionRecoveryTimer: 0
+  enablePivot: 1
   distanceFromTarget: 0
   viewableAngle: 0
   targetsDirection: {x: 0, y: 0, z: 0}

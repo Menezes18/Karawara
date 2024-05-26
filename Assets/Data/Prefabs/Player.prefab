@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 788076987
+  GlobalObjectIdHash: 3825751601
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -140,6 +140,8 @@ MonoBehaviour:
   moveAmount:
     m_InternalValue: 0
   currentTargetNetworkObjectID:
+    m_InternalValue: 0
+  isInvulnerable:
     m_InternalValue: 0
   isLockedOn:
     m_InternalValue: 0
@@ -4982,6 +4984,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -2682143117002717627, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2663937949546340909, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
       propertyPath: m_Layer
@@ -5462,6 +5469,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6180234659716265187, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6314202340215636259, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
       propertyPath: m_Layer
@@ -5486,6 +5498,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6595274818584344866, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6692844854672745808, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
