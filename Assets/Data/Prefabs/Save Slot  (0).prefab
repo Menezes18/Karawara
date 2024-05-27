@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6528119438354362522}
   - component: {fileID: 6549388546664048626}
   - component: {fileID: 3300416025049972679}
+  - component: {fileID: -38680386786475142}
   m_Layer: 5
   m_Name: Save Slot  (0)
   m_TagString: Untagged
@@ -180,6 +181,19 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &-38680386786475142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510341817296599899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27f01b83df7710e469da45abd6c349ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 6528119438354362522}
 --- !u!1 &4464281469554675605
 GameObject:
   m_ObjectHideFlags: 0
