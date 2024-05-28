@@ -974,6 +974,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 409228876}
   m_CullTransparentMesh: 1
+--- !u!114 &420647762 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1385895572}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &423273565
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1520,7 +1532,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 2090679131}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -1818,7 +1830,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 2089959771}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -2064,7 +2076,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 1307520147}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -2891,7 +2903,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 420647762}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -3078,6 +3090,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1397548935}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1180306554 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1397548935}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1234362152 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6141918740832462153, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
@@ -3101,7 +3125,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 1180306554}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -3819,6 +3843,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1305806485}
   m_CullTransparentMesh: 1
+--- !u!114 &1307520147 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1253670659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1310644434 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6141918740832462153, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
@@ -3842,7 +3878,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 2134032384}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -3969,7 +4005,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 2097430713}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -3998,7 +4034,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1312400113}
+      objectReference: {fileID: 1312400117}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RPGKarawara.TitleScreenLoadMenuInputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1510341817296599899, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
         type: 3}
       propertyPath: m_Name
@@ -4443,7 +4494,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 1960509025}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -5484,6 +5535,18 @@ PrefabInstance:
       insertIndex: 3
       addedObject: {fileID: 1953842602}
   m_SourcePrefab: {fileID: 100100000, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6, type: 3}
+--- !u!114 &1919809772 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1876761472}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1953842597 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6141918740832462153, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
@@ -5507,7 +5570,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1967348018}
+        - m_Target: {fileID: 1919809772}
           m_TargetAssemblyTypeName: RPGKarawara.UI_Character_Save_Slot, Assembly-CSharp
           m_MethodName: SelectCurrentSlot
           m_Mode: 1
@@ -5525,6 +5588,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 423273565}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1960509025 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 423273565}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1960927185
 GameObject:
   m_ObjectHideFlags: 0
@@ -5986,18 +6061,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041606062}
   m_CullTransparentMesh: 1
+--- !u!114 &2089959771 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1278012207}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2090679128 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6382231423707249876, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
     type: 3}
   m_PrefabInstance: {fileID: 2122178452}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2090679131 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2122178452}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2097430710 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6382231423707249876, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
     type: 3}
   m_PrefabInstance: {fileID: 1656335095}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2097430713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1656335095}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2119686683 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6382231423707249876, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
@@ -6241,6 +6352,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27f01b83df7710e469da45abd6c349ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2134032384 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549388546664048626, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1084030838}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca12ed2a7b290cc4482da3c729f81628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2135489511
