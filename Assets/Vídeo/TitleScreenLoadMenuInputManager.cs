@@ -34,7 +34,7 @@ namespace RPGKarawara
             {
                 playerControls = new PlayerControls();
                 playerControls.UI.X.performed += i => deleteCharacterSlot = true;
-                //playerControls.UI.PauseBack += i => back = true;
+                playerControls.UI.PauseBack.performed += i => back = true;
             }
 
             playerControls.Enable();
