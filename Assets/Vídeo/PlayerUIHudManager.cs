@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 namespace RPGKarawara
 {
     public class PlayerUIHudManager : MonoBehaviour
@@ -17,7 +17,7 @@ namespace RPGKarawara
 
         [Header("PAUSE MENU")]
         [SerializeField] GameObject pauseMenu;
-
+        public string sceneName;
         bool active = false;
 
         public void RefreshHUD()
@@ -143,5 +143,11 @@ namespace RPGKarawara
                 Cursor.visible = false;
             }
         }
+        public void ChangeScene()
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+        
+        
     }
 }
