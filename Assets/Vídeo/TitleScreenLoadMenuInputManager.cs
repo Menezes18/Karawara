@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPGKarawara
@@ -10,6 +11,7 @@ namespace RPGKarawara
 
         [Header("Title Screen Inputs")]
         [SerializeField] bool deleteCharacterSlot = false;
+        [SerializeField] bool back = false;
 
         private void Update()
         {
@@ -17,6 +19,12 @@ namespace RPGKarawara
             {
                 deleteCharacterSlot = false;
                 TitleScreenManager.Instance.AttemptToDeleteCharacterSlot();
+            }
+            
+            if(back)
+            {
+                back = false;
+                TitleScreenManager.Instance.CloseLoadGameMenu();
             }
         }
 
@@ -26,9 +34,15 @@ namespace RPGKarawara
             {
                 playerControls = new PlayerControls();
                 playerControls.UI.X.performed += i => deleteCharacterSlot = true;
+                //playerControls.UI.PauseBack += i => back = true;
             }
 
             playerControls.Enable();
+        }
+
+        public void OnButtonClick()
+        {
+            deleteCharacterSlot = true;
         }
 
         private void OnDisable()

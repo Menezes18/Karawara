@@ -407,6 +407,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Tap"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6183ee7-4250-4bf3-a052-19f6abd32624"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Tap"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -418,6 +427,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""X"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34cc99ec-b028-4ecb-a87e-3831dbf33623"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -448,6 +468,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_X = m_UI.FindAction("X", throwIfNotFound: true);
+        m_UI_PauseBack = m_UI.FindAction("PauseBack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -728,11 +749,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_X;
+    private readonly InputAction m_UI_PauseBack;
     public struct UIActions
     {
         private @PlayerControls m_Wrapper;
         public UIActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @X => m_Wrapper.m_UI_X;
+        public InputAction @PauseBack => m_Wrapper.m_UI_PauseBack;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -745,6 +768,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @X.started += instance.OnX;
             @X.performed += instance.OnX;
             @X.canceled += instance.OnX;
+            @PauseBack.started += instance.OnPauseBack;
+            @PauseBack.performed += instance.OnPauseBack;
+            @PauseBack.canceled += instance.OnPauseBack;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -752,6 +778,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @X.started -= instance.OnX;
             @X.performed -= instance.OnX;
             @X.canceled -= instance.OnX;
+            @PauseBack.started -= instance.OnPauseBack;
+            @PauseBack.performed -= instance.OnPauseBack;
+            @PauseBack.canceled -= instance.OnPauseBack;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -794,5 +823,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnX(InputAction.CallbackContext context);
+        void OnPauseBack(InputAction.CallbackContext context);
     }
 }
