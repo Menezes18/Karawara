@@ -2552,7 +2552,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1312400113}
+      objectReference: {fileID: 1312400117}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RPGKarawara.TitleScreenLoadMenuInputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1510341817296599899, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
         type: 3}
       propertyPath: m_Name
@@ -5340,7 +5355,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1312400113}
+      objectReference: {fileID: 1312400117}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RPGKarawara.TitleScreenLoadMenuInputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347090535088980441, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1510341817296599899, guid: 6d8fdf13f14e1f246b0dfaac9dd707c6,
         type: 3}
       propertyPath: m_Name
@@ -8052,8 +8082,8 @@ SceneRoots:
   - {fileID: 131259083}
   - {fileID: 4094973942776195953}
   - {fileID: 2017783614380299799}
-  - {fileID: 2956646832163645304}
   - {fileID: 6468518519152762679}
   - {fileID: 2032148307530898638}
   - {fileID: 976734680}
   - {fileID: 8828822691283626853}
+  - {fileID: 2956646832163645304}

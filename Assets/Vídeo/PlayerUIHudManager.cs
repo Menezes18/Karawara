@@ -15,6 +15,11 @@ namespace RPGKarawara
         [SerializeField] Image rightWeaponQuickSlotIcon;
         [SerializeField] Image leftWeaponQuickSlotIcon;
 
+        [Header("PAUSE MENU")]
+        [SerializeField] GameObject pauseMenu;
+
+        bool active = false;
+
         public void RefreshHUD()
         {
             healthBar.gameObject.SetActive(false);
@@ -119,6 +124,24 @@ namespace RPGKarawara
 
             leftWeaponQuickSlotIcon.sprite = weapon.itemIcon;
             leftWeaponQuickSlotIcon.enabled = true;
+        }
+
+        public void activatePause()
+        {
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+            active = !active;
+            if (active)
+            {
+                Time.timeScale = 0f;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 }

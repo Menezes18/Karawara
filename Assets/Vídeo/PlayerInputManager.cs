@@ -39,6 +39,7 @@ namespace RPGKarawara
         [SerializeField] bool jump_Input = false;
         [SerializeField] bool switch_Right_Weapon_Input = false;
         [SerializeField] bool switch_Left_Weapon_Input = false;
+        [SerializeField] bool esc_Input = false;
 
         [Header("BUMPER INPUTS")]
         [SerializeField] bool RB_Input = false;
@@ -114,6 +115,7 @@ namespace RPGKarawara
                 playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
                 playerControls.PlayerActions.SwitchRightWeapon.performed += i => switch_Right_Weapon_Input = true;
                 playerControls.PlayerActions.SwitchLeftWeapon.performed += i => switch_Left_Weapon_Input = true;
+                playerControls.UI.PauseBack.performed += i => esc_Input = true;
 
                 //  BUMPERS
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
@@ -178,6 +180,7 @@ namespace RPGKarawara
             HandleChargeRTInput();
             HandleSwitchRightWeaponInput();
             HandleSwitchLeftWeaponInput();
+            HandlePauseUi();
         }
 
         //  LOCK ON
@@ -415,6 +418,15 @@ namespace RPGKarawara
             {
                 switch_Left_Weapon_Input = false;
                 player.playerEquipmentManager.SwitchLeftWeapon();
+            }
+        }
+
+        public void HandlePauseUi()
+        {
+            if(esc_Input)
+            {
+               esc_Input = false;
+               PlayerUIManager.instance.playerUIHudManager.activatePause();
             }
         }
     }
