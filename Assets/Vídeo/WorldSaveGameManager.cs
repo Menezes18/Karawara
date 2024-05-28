@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -341,7 +342,10 @@ namespace RPGKarawara
 
             player.LoadGameDataFromCurrentCharacterData(ref currentCharacterData);
 
-            yield return null;
+            while (!loadOperation.isDone)
+            {
+                yield return null;
+            }
         }
 
         public int GetWorldSceneIndex()
