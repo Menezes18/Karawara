@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2661987912144734744}
   - component: {fileID: 6488051167550791759}
   - component: {fileID: -5380933364631445324}
+  - component: {fileID: -7005967089872361676}
   m_Layer: 0
   m_Name: BRock2
   m_TagString: Untagged
@@ -27,9 +28,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6190929118611890706}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8978888, y: 0.89788866, z: 0.8978888}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -106,3 +107,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8721152772551041459, guid: 1cbaf6ebaba08af43a0d71982553c3bc, type: 3}
+--- !u!205 &-7005967089872361676
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6190929118611890706}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -0.033609986, y: 1.054502, z: 0.1332578}
+  m_Size: 2.1006742
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.05
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 6488051167550791759}
+  m_Enabled: 1

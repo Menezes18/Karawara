@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8734776762479625367}
   - component: {fileID: 5031903987059748473}
   - component: {fileID: 2654957285258722917}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Trunk2_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4464890146225072449}
   - component: {fileID: 6719372839268147254}
   - component: {fileID: 1426325441537235319}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Leaves2.1_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 4606503295551941379}
   - component: {fileID: 6767971104433298497}
   - component: {fileID: -2877910947565487451}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Tree2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9979742, y: 0.9979742, z: 0.9979742}
+  m_LocalScale: {x: 1.06838, y: 1.06838, z: 1.0683801}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1117784476480755306}
@@ -212,23 +212,23 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: -0.112101555, y: 3.2683034, z: -0.1386739}
   m_Size: 6.537161
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.546444
+  - screenRelativeHeight: 0.25
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 8803436249079143637}
     - renderer: {fileID: 2894580615911561850}
     - renderer: {fileID: 8273227224685596439}
-  - screenRelativeHeight: 0.24812205
+  - screenRelativeHeight: 0.1
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 2174012851487329821}
     - renderer: {fileID: 8423184212378130547}
     - renderer: {fileID: 678622474475250676}
-  - screenRelativeHeight: 0.048036173
+  - screenRelativeHeight: 0.05
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 1426325441537235319}
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 7949042488798825405}
   - component: {fileID: 1299233517343592433}
   - component: {fileID: 8273227224685596439}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Trunk2_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -349,7 +349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1117784476480755306}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 3122833815139497046}
   - component: {fileID: 5392115457344209256}
   - component: {fileID: 678622474475250676}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Trunk2_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 5792173056435640993}
   - component: {fileID: 7413335556557436925}
   - component: {fileID: 2174012851487329821}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Leaves2.1_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,7 +551,7 @@ GameObject:
   - component: {fileID: 5824031523769296422}
   - component: {fileID: 44949752027652262}
   - component: {fileID: 8803436249079143637}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Leaves2.1_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -634,7 +634,7 @@ GameObject:
   - component: {fileID: 2730955240212001615}
   - component: {fileID: 3345195967446043586}
   - component: {fileID: 2894580615911561850}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Leaves2_LOD_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -717,7 +717,7 @@ GameObject:
   - component: {fileID: 8531292719231886429}
   - component: {fileID: 4509194199752192957}
   - component: {fileID: 4336301583226747652}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Leaves2_LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -798,7 +798,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 599407102610717032}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: LOD_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -834,7 +834,7 @@ GameObject:
   - component: {fileID: 7995611651107970058}
   - component: {fileID: 4088093786666590007}
   - component: {fileID: 8423184212378130547}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Leaves2_LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -915,7 +915,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5436606805552454171}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: LOD_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
