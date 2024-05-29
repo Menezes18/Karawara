@@ -426,7 +426,7 @@ namespace RPGKarawara
             if(esc_Input)
             {
                esc_Input = false;
-               PlayerUIManager.instance.playerUIHudManager.activatePause();
+               //PlayerUIManager.instance.playerUIHudManager.activatePause();
             }
         }
     }

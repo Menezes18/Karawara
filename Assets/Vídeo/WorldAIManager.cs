@@ -61,7 +61,7 @@ namespace RPGKarawara
             return spawnedInBosses.FirstOrDefault(boss => boss.bossID == ID);
         }
 
-        public void DespawnAllCharacters()
+        private void DespawnAllCharacters()
         {
             foreach (var character in spawnedInCharacters)
             {

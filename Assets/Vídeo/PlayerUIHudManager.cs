@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 namespace RPGKarawara
 {
     public class PlayerUIHudManager : MonoBehaviour
     {
-        [Header("STAT BARS")]
+        [Header("Stat Bars")]
         [SerializeField] UI_StatBar healthBar;
         [SerializeField] UI_StatBar staminaBar;
 
-        [Header("QUICK SLOTS")]
+        [Header("Quick Slots")]
         [SerializeField] Image rightWeaponQuickSlotIcon;
         [SerializeField] Image leftWeaponQuickSlotIcon;
 
-        [Header("PAUSE MENU")]
-        [SerializeField] GameObject pauseMenu;
-        public string sceneName;
-        bool active = false;
+        [Header("Boss Health Bar")]
+        public Transform bossHealthBarParent;
+        public GameObject bossHealthBarObject;
 
         public void RefreshHUD()
         {
@@ -125,30 +124,5 @@ namespace RPGKarawara
             leftWeaponQuickSlotIcon.sprite = weapon.itemIcon;
             leftWeaponQuickSlotIcon.enabled = true;
         }
-
-        public void activatePause()
-        {
-            pauseMenu.SetActive(!pauseMenu.activeSelf);
-            active = !active;
-            if (active)
-            {
-                Time.timeScale = 0f;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-        }
-        public void ChangeScene()
-        {
-            WorldAIManager.instance.DespawnAllCharacters();
-            SceneManager.LoadScene(sceneName);
-        }
-        
-        
     }
 }

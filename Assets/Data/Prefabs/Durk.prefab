@@ -1383,7 +1383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 218241860
+  GlobalObjectIdHash: 95866527
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1434,13 +1434,13 @@ MonoBehaviour:
   isChargingAttack:
     m_InternalValue: 0
   currentHealth:
-    m_InternalValue: 0
+    m_InternalValue: 785
   maxHealth:
-    m_InternalValue: 0
+    m_InternalValue: 785
   currentStamina:
-    m_InternalValue: 0
+    m_InternalValue: 500
   maxStamina:
-    m_InternalValue: 0
+    m_InternalValue: 500
   vitality:
     m_InternalValue: 1
   endurance:
@@ -1494,6 +1494,7 @@ MonoBehaviour:
   characterLocomotionManager: {fileID: 0}
   characterGroup: 1
   isPerformingAction: 0
+  characterName: "Mapinguari, Guardi\xE3o dos Mist\xE9rios Amaz\xF4nicos"
   aiCharacterNetworkManager: {fileID: 0}
   aiCharacterCombatManager: {fileID: 0}
   aiCharacterLocomotionManager: {fileID: 0}
@@ -1504,10 +1505,16 @@ MonoBehaviour:
   combatStance: {fileID: 11400000, guid: 0a55554c1bdad73408cf47130d29015f, type: 2}
   attack: {fileID: 11400000, guid: 5b25504b331b09b4ba409cef89427d56, type: 2}
   bossID: 0
-  hasBeenDefeated: 0
-  hasBeenAwakened: 0
+  bossFightIsActive:
+    m_InternalValue: 0
+  hasBeenAwakened:
+    m_InternalValue: 0
+  hasBeenDefeated:
+    m_InternalValue: 0
   fogWalls: []
-  wakeBossUp: 0
+  sleepAnimation: Sleep_01
+  awakenAnimation: Awaken_01
+  sleepState: {fileID: 11400000, guid: cf10ac187dd1d4b4e860bb0cfdd3da3d, type: 2}
   durkSoundFXManager: {fileID: 0}
   durkCombatManager: {fileID: 0}
 --- !u!114 &7820532096592131387
