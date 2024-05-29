@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6897633392522285464}
   - component: {fileID: 1046274775521017345}
   - component: {fileID: 1203993034127612950}
-  - component: {fileID: 2996424925658927293}
   m_Layer: 0
   m_Name: EstanteExport
   m_TagString: Untagged
@@ -106,24 +105,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.9607003, y: 2.5632226, z: 0.6144048}
   m_Center: {x: 0, y: 1.2816113, z: 0}
---- !u!95 &2996424925658927293
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6992091981515428949}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7f9e149f08db27d4193169de512106ff, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
