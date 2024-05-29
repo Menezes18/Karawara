@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6742121361150417134}
   - component: {fileID: 8876352194872645062}
   - component: {fileID: -3020329433538763182}
+  - component: {fileID: -3161562119876353102}
   - component: {fileID: 5111329972562194323}
-  - component: {fileID: 5545135506232787355}
   - component: {fileID: 1148999998010285713}
   - component: {fileID: 1893489224507998437}
   - component: {fileID: 1085547174913268491}
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3825751601
+  GlobalObjectIdHash: 788076987
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -96,21 +96,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &5111329972562194323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 219663029150363108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9919c5be9cbac945bdb9abfa76da9a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageGrunts: []
-  attackGrunts: []
---- !u!114 &5545135506232787355
+--- !u!114 &-3161562119876353102
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,9 +138,9 @@ MonoBehaviour:
   isChargingAttack:
     m_InternalValue: 0
   currentHealth:
-    m_InternalValue: 0
+    m_InternalValue: 400
   maxHealth:
-    m_InternalValue: 0
+    m_InternalValue: 400
   currentStamina:
     m_InternalValue: 0
   maxStamina:
@@ -242,6 +228,21 @@ MonoBehaviour:
     m_InternalValue: 0
   isUsingLeftHand:
     m_InternalValue: 0
+--- !u!114 &5111329972562194323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9919c5be9cbac945bdb9abfa76da9a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageGrunts: []
+  attackGrunts: []
+  footSteps: []
 --- !u!114 &1148999998010285713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,6 +265,7 @@ MonoBehaviour:
   characterCombatManager: {fileID: 0}
   characterSoundFXManager: {fileID: 0}
   characterLocomotionManager: {fileID: 0}
+  characterUIManager: {fileID: 0}
   characterGroup: 0
   isPerformingAction: 0
   playerAnimatorManager: {fileID: 0}
@@ -289,6 +291,8 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTransform: {fileID: 1428938815506599873}
+  canPerformRollingAttack: 0
+  canPerformBackstepAttack: 0
   currentWeaponBeingUsed: {fileID: 0}
   canComboWithMainHandWeapon: 0
 --- !u!114 &1085547174913268491

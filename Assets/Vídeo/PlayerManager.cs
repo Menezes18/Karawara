@@ -15,7 +15,7 @@ namespace RPGKarawara
         [HideInInspector] public PlayerInventoryManager playerInventoryManager;
         [HideInInspector] public PlayerEquipmentManager playerEquipmentManager;
         [HideInInspector] public PlayerCombatManager playerCombatManager;
-        public bool isRevived = false;
+
         protected override void Awake()
         {
             base.Awake();
@@ -34,7 +34,7 @@ namespace RPGKarawara
         protected override void Update()
         {
             base.Update();
-    
+
             //  IF WE DO NOT OWN THIS GAMEOBJECT, WE DO NOT CONTROL OR EDIT IT
             if (!IsOwner)
                 return;
@@ -44,11 +44,6 @@ namespace RPGKarawara
 
             //  REGEN STAMINA
             playerStatsManager.RegenerateStamina();
-
-            if (isRevived){
-                ReviveCharacter();
-                
-            }
         }
 
         protected override void LateUpdate()
@@ -59,6 +54,16 @@ namespace RPGKarawara
             base.LateUpdate();
 
             PlayerCamera.instance.HandleAllCameraActions();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
         }
 
         public override void OnNetworkSpawn()
@@ -83,6 +88,10 @@ namespace RPGKarawara
                 playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
                 playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRegenTimer;
             }
+
+            //  ONLY UPDATE FLOATING HP BAR IF THIS CHARACTER IS NOT THE LOCAL PLAYERS CHARACTER (YOU DONT WANNA SEE A HP BAR FLOATING ABOVE YOUR OWN HEAD)
+            if (!IsOwner)
+                characterNetworkManager.currentHealth.OnValueChanged += characterUIManager.OnHPChanged;
 
             //  STATS
             playerNetworkManager.currentHealth.OnValueChanged += playerNetworkManager.CheckHP;
@@ -125,6 +134,9 @@ namespace RPGKarawara
                 playerNetworkManager.currentStamina.OnValueChanged -= PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
                 playerNetworkManager.currentStamina.OnValueChanged -= playerStatsManager.ResetStaminaRegenTimer;
             }
+
+            if (!IsOwner)
+                characterNetworkManager.currentHealth.OnValueChanged -= characterUIManager.OnHPChanged;
 
             //  STATS
             playerNetworkManager.currentHealth.OnValueChanged -= playerNetworkManager.CheckHP;
@@ -185,8 +197,6 @@ namespace RPGKarawara
 
                 //  PLAY REBIRTH EFFECTS
                 playerAnimatorManager.PlayTargetActionAnimation("Empty", false);
-                isRevived = false;
-                
             }
         }
 
@@ -237,5 +247,6 @@ namespace RPGKarawara
                 playerNetworkManager.OnLockOnTargetIDChange(0, playerNetworkManager.currentTargetNetworkObjectID.Value);
             }
         }
+
     }
 }

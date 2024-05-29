@@ -19,6 +19,7 @@ namespace RPGKarawara
         [HideInInspector] public CharacterCombatManeger characterCombatManager;
         [HideInInspector] public CharacterSoundFXManager characterSoundFXManager;
         [HideInInspector] public CharacterLocomotionManager characterLocomotionManager;
+        [HideInInspector] public CharacterUIManager characterUIManager;
 
         [Header("Character Group")]
         public CharacterGroup characterGroup;
@@ -39,6 +40,7 @@ namespace RPGKarawara
             characterCombatManager = GetComponent<CharacterCombatManeger>();
             characterSoundFXManager = GetComponent<CharacterSoundFXManager>();
             characterLocomotionManager = GetComponent<CharacterLocomotionManager>();
+            characterUIManager = GetComponent<CharacterUIManager>();
         }
 
         protected virtual void Start()
@@ -79,6 +81,16 @@ namespace RPGKarawara
         }
 
         protected virtual void LateUpdate()
+        {
+
+        }
+
+        protected virtual void OnEnable()
+        {
+
+        }
+
+        protected virtual void OnDisable()
         {
 
         }
