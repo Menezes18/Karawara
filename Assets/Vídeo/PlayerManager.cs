@@ -15,7 +15,7 @@ namespace RPGKarawara
         [HideInInspector] public PlayerInventoryManager playerInventoryManager;
         [HideInInspector] public PlayerEquipmentManager playerEquipmentManager;
         [HideInInspector] public PlayerCombatManager playerCombatManager;
-
+        public bool isRevived = false;
         protected override void Awake()
         {
             base.Awake();
@@ -34,7 +34,7 @@ namespace RPGKarawara
         protected override void Update()
         {
             base.Update();
-
+    
             //  IF WE DO NOT OWN THIS GAMEOBJECT, WE DO NOT CONTROL OR EDIT IT
             if (!IsOwner)
                 return;
@@ -44,6 +44,11 @@ namespace RPGKarawara
 
             //  REGEN STAMINA
             playerStatsManager.RegenerateStamina();
+
+            if (isRevived){
+                ReviveCharacter();
+                
+            }
         }
 
         protected override void LateUpdate()
@@ -180,6 +185,8 @@ namespace RPGKarawara
 
                 //  PLAY REBIRTH EFFECTS
                 playerAnimatorManager.PlayTargetActionAnimation("Empty", false);
+                isRevived = false;
+                
             }
         }
 
