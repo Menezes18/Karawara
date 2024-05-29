@@ -105,9 +105,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Que RB",
+                    "type": "Button",
+                    "id": "91239245-cc85-4e7a-a867-338e9302f772",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "RT",
                     "type": "Button",
                     "id": "1200d899-abd7-4784-b003-bc393917b9a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Que RT",
+                    "type": "Button",
+                    "id": "46eeac00-0b43-436f-9d46-d3a012305e21",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -316,6 +334,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Teleport",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7913674d-2210-4e67-b337-00af6ef00c58",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Que RB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "80f6da5a-2b56-4aee-bd94-b55b22e024f6",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Que RT",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

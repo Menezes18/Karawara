@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGKarawara
+namespace RPGKarawara 
 {
     public class PlayerCamera : MonoBehaviour
     {
@@ -13,7 +13,7 @@ namespace RPGKarawara
 
         //  CHANGE THESE TO TWEAK CAMERA PERFORMANCE
         [Header("Camera Settings")]
-        private float cameraSmoothSpeed = 1;    // THE BIGGER THIS NUMBER, THE LONGER FOR THE CAMERA TO REACH ITS POSITION DURING MOVEMENT
+        [SerializeField] private float cameraSmoothSpeed = 1;    // THE BIGGER THIS NUMBER, THE LONGER FOR THE CAMERA TO REACH ITS POSITION DURING MOVEMENT
         [SerializeField] float leftAndRightRotationSpeed = 220;
         [SerializeField] float upAndDownRotationSpeed = 220;
         [SerializeField] float minimumPivot = -30;  //  THE LOWEST POINT YOU ARE ABLE TO LOOK DOWN
@@ -189,8 +189,8 @@ namespace RPGKarawara
                     {
                         RaycastHit hit;
 
-                        if (Physics.Linecast(player.playerCombatManager.lockOnTransform.position,
-                            lockOnTarget.characterCombatManager.lockOnTransform.position,
+                        if (Physics.Linecast(player.playerCombatManager.lockOnTransform.position, 
+                            lockOnTarget.characterCombatManager.lockOnTransform.position, 
                             out hit, WorldUtilityManager.Instance.GetEnviroLayers()))
                         {
                             //  WE HIT SOMETHING, WE CANNOT SEE OUR LOCK ON TARGET
@@ -305,15 +305,15 @@ namespace RPGKarawara
                 {
                     if (player.playerCombatManager.currentTarget != null)
                     {
-                        cameraPivotTransform.transform.localPosition =
+                        cameraPivotTransform.transform.localPosition = 
                             Vector3.SmoothDamp(cameraPivotTransform.transform.localPosition, newLockedCameraHeight, ref velocity, setCameraHeightSpeed);
 
-                        cameraPivotTransform.transform.localRotation =
+                        cameraPivotTransform.transform.localRotation = 
                             Quaternion.Slerp(cameraPivotTransform.transform.localRotation, Quaternion.Euler(0, 0, 0), lockOnTargetFollowSpeed);
                     }
                     else
                     {
-                        cameraPivotTransform.transform.localPosition =
+                        cameraPivotTransform.transform.localPosition = 
                             Vector3.SmoothDamp(cameraPivotTransform.transform.localPosition, newUnlockedCameraHeight, ref velocity, setCameraHeightSpeed);
                     }
                 }
