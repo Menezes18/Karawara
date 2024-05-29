@@ -8,7 +8,7 @@ namespace RPGKarawara
     public class PlayerInputManager : MonoBehaviour
     {
         //  INPUT CONTROLS
-        private PlayerControls playerControls;
+        public PlayerControls playerControls;
 
         //  SINGLETON
         public static PlayerInputManager instance;
