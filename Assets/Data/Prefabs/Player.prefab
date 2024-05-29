@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 8464527521044100486}
   - component: {fileID: 2867793869143155619}
   - component: {fileID: 1983101499933469384}
+  - component: {fileID: 1128375074947840352}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -87,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 788076987
+  GlobalObjectIdHash: 3406588913
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -275,6 +276,7 @@ MonoBehaviour:
   playerInventoryManager: {fileID: 0}
   playerEquipmentManager: {fileID: 0}
   playerCombatManager: {fileID: 0}
+  playerInteractionManager: {fileID: 0}
 --- !u!114 &1893489224507998437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,6 +584,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1128375074947840352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7206feb54475844ac9b6f3f513628e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1192176898164503204
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,6 @@ namespace RPGKarawara
 {
     public class PlayerInputManager : MonoBehaviour
     {
-        
         //  INPUT CONTROLS
         public PlayerControls playerControls;
 
@@ -40,6 +39,7 @@ namespace RPGKarawara
         [SerializeField] bool jump_Input = false;
         [SerializeField] bool switch_Right_Weapon_Input = false;
         [SerializeField] bool switch_Left_Weapon_Input = false;
+        [SerializeField] bool interaction_Input = false;
         [SerializeField] bool esc_Input = false;
         [Header("Bumper Inputs")]
         [SerializeField] bool RB_Input = false;
@@ -47,7 +47,7 @@ namespace RPGKarawara
         [Header("Trigger Inputs")]
         [SerializeField] bool RT_Input = false;
         [SerializeField] bool Hold_RT_Input = false;
-    
+
         [Header("QUED INPUTS")]
         [SerializeField] private bool input_Que_Is_Active = false;
         [SerializeField] float default_Que_Input_Time = 0.35f;
@@ -122,6 +122,7 @@ namespace RPGKarawara
                 playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
                 playerControls.PlayerActions.SwitchRightWeapon.performed += i => switch_Right_Weapon_Input = true;
                 playerControls.PlayerActions.SwitchLeftWeapon.performed += i => switch_Left_Weapon_Input = true;
+                playerControls.PlayerActions.Interact.performed += i => interaction_Input = true;
                 playerControls.UI.PauseBack.performed += i => esc_Input = true;
                 //  BUMPERS
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
@@ -191,6 +192,7 @@ namespace RPGKarawara
             HandleSwitchRightWeaponInput();
             HandleSwitchLeftWeaponInput();
             HandleQuedInputs();
+            HandleInteractionInput();
         }
 
         //  LOCK ON
@@ -431,6 +433,16 @@ namespace RPGKarawara
             }
         }
 
+        private void HandleInteractionInput()
+        {
+            if (interaction_Input)
+            {
+                interaction_Input = false;
+
+                player.playerInteractionManager.Interact();
+            }
+        }
+
         private void QueInput(ref bool quedInput)   //  PASSING A REFERENCE MEANS WE PASS A SPECIFIC BOOL, AND NOT THE VALUE OF THAT BOOL (TRUE OR FALSE)
         {
             //  RESET ALL QUED INPUTS SO ONLY ONE CAN QUE AT A TIME
@@ -448,7 +460,14 @@ namespace RPGKarawara
                 input_Que_Is_Active = true;
             }
         }
-
+        public void HandlePauseUi()
+        {
+            if(esc_Input)
+            {
+                esc_Input = false;
+                //PlayerUIManager.instance.playerUIHudManager.activatePause();
+            }
+        }
         private void ProcessQuedInput()
         {
             if (player.isDead.Value)
@@ -480,14 +499,6 @@ namespace RPGKarawara
                     input_Que_Is_Active = false;
                     que_Input_Timer = 0;
                 }
-            }
-        }
-         public void HandlePauseUi()
-        {
-            if(esc_Input)
-            {
-               esc_Input = false;
-               //PlayerUIManager.instance.playerUIHudManager.activatePause();
             }
         }
     }

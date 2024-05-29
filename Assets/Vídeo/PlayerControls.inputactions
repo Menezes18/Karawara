@@ -105,6 +105,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "26db0b39-85bb-4779-8653-6ea83daf6e4d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Que RB",
                     "type": "Button",
                     "id": "91239245-cc85-4e7a-a867-338e9302f772",
@@ -356,6 +365,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Que RT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f033709-8dea-4215-8c92-81de0ec30a7c",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

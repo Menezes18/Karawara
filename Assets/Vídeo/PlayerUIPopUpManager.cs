@@ -7,6 +7,10 @@ namespace RPGKarawara
 {
     public class PlayerUIPopUpManager : MonoBehaviour
     {
+        [Header("Message Pop Up")]
+        [SerializeField] TextMeshProUGUI popUpMessageText;
+        [SerializeField] GameObject popUpMessageGameObject;
+
         [Header("YOU DIED Pop Up")]
         [SerializeField] GameObject youDiedPopUpGameObject;
         [SerializeField] TextMeshProUGUI youDiedPopUpBackgroundText;
@@ -18,6 +22,20 @@ namespace RPGKarawara
         [SerializeField] TextMeshProUGUI bossDefeatedPopUpBackgroundText;
         [SerializeField] TextMeshProUGUI bossDefeatedPopUpText;
         [SerializeField] CanvasGroup bossDefeatedPopUpCanvasGroup;   //  Allows us to set the alpha to fade over time
+
+        public void CloseAllPopUpWindows()
+        {
+            popUpMessageGameObject.SetActive(false);
+
+            PlayerUIManager.instance.popUpWindowIsOpen = false;
+        }
+
+        public void SendPlayerMessagePopUp(string messageText)
+        {
+            PlayerUIManager.instance.popUpWindowIsOpen = true;
+            popUpMessageText.text = messageText;
+            popUpMessageGameObject.SetActive(true);
+        }
 
         public void SendYouDiedPopUp()
         {
