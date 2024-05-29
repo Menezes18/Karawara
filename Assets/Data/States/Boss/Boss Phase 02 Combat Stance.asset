@@ -13,15 +13,12 @@ MonoBehaviour:
   m_Name: Boss Phase 02 Combat Stance
   m_EditorClassIdentifier: 
   aiCharacterAttacks:
-  - {fileID: 11400000, guid: 4c9aa1328dc56064c989199407385022, type: 2}
-  - {fileID: 11400000, guid: d8ab4f3e18ea9e54aa0dff2936b9cbc7, type: 2}
-  - {fileID: 11400000, guid: 66e61739666a7d944a975f15b18ecd7f, type: 2}
-  potentialAttacks:
-  - {fileID: 11400000, guid: 4c9aa1328dc56064c989199407385022, type: 2}
-  - {fileID: 11400000, guid: d8ab4f3e18ea9e54aa0dff2936b9cbc7, type: 2}
-  - {fileID: 11400000, guid: 66e61739666a7d944a975f15b18ecd7f, type: 2}
-  choosenAttack: {fileID: 11400000, guid: 66e61739666a7d944a975f15b18ecd7f, type: 2}
-  previousAttack: {fileID: 11400000, guid: 66e61739666a7d944a975f15b18ecd7f, type: 2}
+  - {fileID: 11400000, guid: 3aae0d8726ffd744985127e1fe8ff392, type: 2}
+  - {fileID: 11400000, guid: c91a4558ed8931147926e99b6379f65b, type: 2}
+  - {fileID: 11400000, guid: 474554b66d6e92b4baea9340709f91d3, type: 2}
+  potentialAttacks: []
+  choosenAttack: {fileID: 0}
+  previousAttack: {fileID: 0}
   canPerformCombo: 0
   chanceToPerformCombo: 25
   maximumEngagementDistance: 5
