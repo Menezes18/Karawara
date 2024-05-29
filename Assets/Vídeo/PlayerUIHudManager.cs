@@ -146,6 +146,7 @@ namespace RPGKarawara
         public void ChangeScene()
         {
             SceneManager.LoadScene(sceneName);
+            SceneManager.UnloadSceneAsync(SceneManager.sceneCount);
         }
         
         
