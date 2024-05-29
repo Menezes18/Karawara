@@ -832,6 +832,10 @@ MonoBehaviour:
   youDiedPopUpBackgroundText: {fileID: 7411205334421866292}
   youDiedPopUpText: {fileID: 4560477515570712314}
   youDiedPopUpCanvasGroup: {fileID: 2142961830037912552}
+  bossDefeatedPopUpGameObject: {fileID: 3818138231658192758}
+  bossDefeatedPopUpBackgroundText: {fileID: 7568984876062670608}
+  bossDefeatedPopUpText: {fileID: 7681462729720129427}
+  bossDefeatedPopUpCanvasGroup: {fileID: 2549013451937081736}
 --- !u!1 &1566562313375780135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1384,7 +1388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9103478475514329946
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1567,7 +1571,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4457227666409851198
 RectTransform:
   m_ObjectHideFlags: 0
