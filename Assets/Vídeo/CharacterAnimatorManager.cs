@@ -151,7 +151,6 @@ namespace RPGKarawara
             bool canMove = false)
         {
             this.applyRootMotion = applyRootMotion;
-            //Debug.LogError(targetAnimation);
             character.animator.CrossFade(targetAnimation, 0.2f);
             //  CAN BE USED TO STOP CHARACTER FROM ATTEMPTING NEW ACTIONS
             //  FOR EXAMPLE, IF YOU GET DAMAGED, AND BEGIN PERFORMING A DAMAGE ANIMATION
@@ -189,14 +188,5 @@ namespace RPGKarawara
             character.characterNetworkManager.NotifyTheServerOfAttackActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
 
-        public virtual void EnableCanDoCombo()
-        {
-
-        }
-
-        public virtual void DisableCanDoCombo()
-        {
-
-        }
     }
 }
