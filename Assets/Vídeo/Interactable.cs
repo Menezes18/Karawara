@@ -3,27 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-namespace RPGKarawara
-{
-    public class Interactable : MonoBehaviour
-    {
-        public string interactableText; //  TEXT PROMPT WHEN ENTERING THE INTERACTION COLLIDER (PICK UP ITEM, PULL LEVER ECT)
-        [SerializeField] protected Collider interactableCollider;   //  COLLIDER THAT CHECKS FOR PLAYER INTERACTION
-        [SerializeField] protected bool hostOnlyInteractable = true;    //  WHEN ENABLED, OBJECT CANNOT BE INTERACTED WITH BY CO-OP PLAYERS
+namespace RPGKarawara{
+    public class Interactable : MonoBehaviour{
+        public enum InteractionType{
+            Teleport,
+            ShowText,
+            ActivateLever
+        }
 
-        protected virtual void Awake()
-        {
+        public string
+            interactableText; //  TEXT PROMPT WHEN ENTERING THE INTERACTION COLLIDER (PICK UP ITEM, PULL LEVER ECT)
+
+        [SerializeField] protected Collider interactableCollider; //  COLLIDER THAT CHECKS FOR PLAYER INTERACTION
+
+        [SerializeField]
+        protected bool hostOnlyInteractable = true; //  WHEN ENABLED, OBJECT CANNOT BE INTERACTED WITH BY CO-OP PLAYERS
+
+        public InteractionType interactionType;
+        public Transform teleportTarget; // Target transform for teleportation
+        public Lever lever; // Reference to the lever script
+
+        protected virtual void Awake(){
             //  CHECK IF ITS NULL, IN SOME CASES YOU MAY WANT TO MANUALLY ASIGN A COLLIDER AS A CHILD OBJECT (DEPENDING ON INTERACTABLE)
             if (interactableCollider == null)
                 interactableCollider = GetComponent<Collider>();
         }
-        protected virtual void Start()
-        {
+
+        protected virtual void Start(){
 
         }
 
-        public virtual void Interact(PlayerManager player)
-        {
+        public virtual void Interact(PlayerManager player){
             Debug.Log("YOU HAVE INTERACTED!");
 
             if (!player.IsOwner)
@@ -33,17 +43,38 @@ namespace RPGKarawara
             interactableCollider.enabled = false;
             player.playerInteractionManager.RemoveInteractionFromList(this);
             PlayerUIManager.instance.playerUIPopUpManager.CloseAllPopUpWindows();
+
+            // Perform interaction based on the enum type
+            switch (interactionType){
+                case InteractionType.Teleport:
+                    if (teleportTarget != null){
+                        player.transform.position = teleportTarget.position;
+                    }
+
+                    break;
+
+                case InteractionType.ShowText:
+                    Debug.Log(interactableText);
+                    break;
+
+                case InteractionType.ActivateLever:
+                    if (lever != null){
+                        lever.Activate();
+                    }
+
+                    break;
+            }
+
+            // Re-enable the collider after 1 second
             Invoke("EnableCollider", 1f);
         }
 
-        public virtual void OnTriggerEnter(Collider other)
-        {
-           
+        public virtual void OnTriggerEnter(Collider other){
+            Debug.Log(other);
             PlayerManager player = other.GetComponent<PlayerManager>();
 
-            if (player != null)
-            {
-                
+            if (player != null){
+                Debug.Log("AA");
                 if (!player.playerNetworkManager.IsHost && hostOnlyInteractable)
                     return;
 
@@ -52,17 +83,13 @@ namespace RPGKarawara
 
                 //  PASS THE INTERACTION TO THE PLAYER
                 player.playerInteractionManager.AddInteractionToList(this);
-                
-                
             }
         }
 
-        public virtual void OnTriggerExit(Collider other)
-        {
+        public virtual void OnTriggerExit(Collider other){
             PlayerManager player = other.GetComponent<PlayerManager>();
 
-            if (player != null)
-            {
+            if (player != null){
                 if (!player.playerNetworkManager.IsHost && hostOnlyInteractable)
                     return;
 
@@ -70,16 +97,12 @@ namespace RPGKarawara
                     return;
 
                 //  REMOVE THE INTERACTION FROM THE PLAYER
-               // interactableCollider.enabled = true;
-                
                 player.playerInteractionManager.RemoveInteractionFromList(this);
                 PlayerUIManager.instance.playerUIPopUpManager.CloseAllPopUpWindows();
             }
         }
 
-
-        private void EnableCollider()
-        {
+        private void EnableCollider(){
             interactableCollider.enabled = true;
         }
     }

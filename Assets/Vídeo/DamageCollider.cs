@@ -64,13 +64,13 @@ namespace RPGKarawara {
 
         public virtual void EnableDamageCollider()
         {
-            damageCollider.enabled = true;
+            //damageCollider.enabled = true;
         }
 
         public virtual void DisableDamageCollider()
         {
-            damageCollider.enabled = false;
-            charactersDamaged.Clear();      //  WE RESET THE CHARACTERS THAT HAVE BEEN HIT WHEN WE RESET THE COLLIDER, SO THEY MAY BE HIT AGAIN
+            //damageCollider.enabled = false;
+            //charactersDamaged.Clear();      //  WE RESET THE CHARACTERS THAT HAVE BEEN HIT WHEN WE RESET THE COLLIDER, SO THEY MAY BE HIT AGAIN
         }
     }
 }
