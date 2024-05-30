@@ -8,7 +8,8 @@ namespace RPGKarawara{
         public enum InteractionType{
             Teleport,
             ShowText,
-            ActivateLever
+            ActivateLever,
+            Animation
         }
 
         public string
@@ -22,11 +23,16 @@ namespace RPGKarawara{
         public InteractionType interactionType;
         public Transform teleportTarget; // Target transform for teleportation
         public Lever lever; // Reference to the lever script
-
+        public Animator animator;
+        public BoxCollider colliderTrigger;
+        private bool triggerAnimation = false;
         protected virtual void Awake(){
             //  CHECK IF ITS NULL, IN SOME CASES YOU MAY WANT TO MANUALLY ASIGN A COLLIDER AS A CHILD OBJECT (DEPENDING ON INTERACTABLE)
             if (interactableCollider == null)
                 interactableCollider = GetComponent<Collider>();
+            
+            
+            
         }
 
         protected virtual void Start(){
@@ -61,7 +67,9 @@ namespace RPGKarawara{
                     if (lever != null){
                         lever.Activate();
                     }
-
+                    break;
+                case InteractionType.Animation:
+                    
                     break;
             }
 
@@ -69,12 +77,20 @@ namespace RPGKarawara{
             Invoke("EnableCollider", 1f);
         }
 
+        public void StartAnimation(){
+            animator.SetBool("cair", true);
+            
+        }
+        
         public virtual void OnTriggerEnter(Collider other){
             Debug.Log(other);
             PlayerManager player = other.GetComponent<PlayerManager>();
 
             if (player != null){
-                Debug.Log("AA");
+                if (triggerAnimation){
+                    StartAnimation();
+                }
+                
                 if (!player.playerNetworkManager.IsHost && hostOnlyInteractable)
                     return;
 
