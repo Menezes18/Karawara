@@ -35,7 +35,7 @@ namespace RPGKarawara
         {
             if (gate != null)
             {
-                gate.SetActive(true); // Assuming the gate is initially inactive
+                gate.SetActive(false); // Assuming the gate is initially inactive
                 PortaoAtivo = true;
                 Debug.Log("Gate activated!");
             }
