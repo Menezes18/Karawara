@@ -9,6 +9,7 @@ namespace RPGKarawara
         public Lever[] levers; // Array of levers to interact with
         public GameObject gate; // Reference to the gate GameObject
         public bool PortaoAtivo = false;
+        public bool trueorfalse;
         private void Start()
         {
             foreach (Lever lever in levers)
@@ -35,7 +36,7 @@ namespace RPGKarawara
         {
             if (gate != null)
             {
-                gate.SetActive(false); // Assuming the gate is initially inactive
+                gate.SetActive(trueorfalse); // Assuming the gate is initially inactive
                 PortaoAtivo = true;
                 Debug.Log("Gate activated!");
             }

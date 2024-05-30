@@ -293,17 +293,17 @@ namespace RPGKarawara
                 //  IF WE ARE SPRINTING, JUMP DIRECTION IS AT FULL DISTANCE
                 if (player.playerNetworkManager.isSprinting.Value)
                 {
-                    jumpDirection *= 1;
+                    jumpDirection *= 1.5f;
                 }
                 //  IF WE ARE RUNNING, JUMP DIRECTION IS AT HALF DISTANCE
                 else if (PlayerInputManager.instance.moveAmount > 0.5)
                 {
-                    jumpDirection *= 0.5f;
+                    jumpDirection *= 1f;
                 }
                 //  IF WE ARE WALKING, JUMP DIRECTION IS AT QUARTER DISTANCE
                 else if (PlayerInputManager.instance.moveAmount <= 0.5)
                 {
-                    jumpDirection *= 0.25f;
+                    jumpDirection *= 1f;
                 }
             }
         }
