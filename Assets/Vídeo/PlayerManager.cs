@@ -17,6 +17,7 @@ namespace RPGKarawara
         [HideInInspector] public PlayerCombatManager playerCombatManager;
         [HideInInspector] public PlayerInteractionManager playerInteractionManager;
 
+
         protected override void Awake()
         {
             base.Awake();

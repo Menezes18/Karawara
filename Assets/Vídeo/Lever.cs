@@ -7,11 +7,13 @@ namespace RPGKarawara
     public class Lever : MonoBehaviour
     {
         public bool isActive;
+        public System.Action onActivate; // Action to notify when lever is activated
 
         public void Activate()
         {
             isActive = !isActive;
             Debug.Log("Lever activated: " + isActive);
+            onActivate?.Invoke(); // Notify that the lever has been activated
         }
     }
 }
