@@ -1537,7 +1537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 218241860
+  GlobalObjectIdHash: 95866527
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1649,8 +1649,8 @@ MonoBehaviour:
   viewableAngle: 0
   targetsDirection: {x: 0, y: 0, z: 0}
   detectionRadius: 15
-  minimumFOV: -35
-  maximumFOV: 35
+  minimumFOV: 0
+  maximumFOV: 360
   attackRotationSpeed: 25
   clubDamageCollider: {fileID: 3445279623131875345}
   stompCollider: {fileID: 12212547373508569}
@@ -1660,7 +1660,7 @@ MonoBehaviour:
   attack02DamageModifier: 1.4
   attack03DamageModifier: 1.6
   stompDamage: 25
-  durkImpactVFX: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d,
+  durkImpactVFX: {fileID: 2109109792800623778, guid: 52f700880fcc55e41b33a2e012ddc9d3,
     type: 3}
 --- !u!114 &852353310095491093
 MonoBehaviour:
