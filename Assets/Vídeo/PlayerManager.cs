@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
-
+using UnityEngine.SceneManagement;
 namespace RPGKarawara
 {
     public class PlayerManager : CharacterManager

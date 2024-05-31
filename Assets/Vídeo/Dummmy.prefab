@@ -1584,8 +1584,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5296124445456215956}
-  - {fileID: 4418789414888921149}
   - {fileID: 8898917570174555359}
+  - {fileID: 4418789414888921149}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &8412491272462609278
@@ -1621,7 +1621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3526625479
+  GlobalObjectIdHash: 2375048294
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2688,7 +2688,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4418789414888921149}
-  - component: {fileID: 7183804396390648316}
+  - component: {fileID: 4075436425434530529}
   m_Layer: 0
   m_Name: NavMesh
   m_TagString: Untagged
@@ -2711,7 +2711,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7735749764116497296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &7183804396390648316
+--- !u!195 &4075436425434530529
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2720,7 +2720,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8437744147581225065}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
