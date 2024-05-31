@@ -104,8 +104,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.19881558, y: 0.026509259, z: 0.010015299}
-  m_Center: {x: 0.15741219, y: -0.00006013252, z: 0.00019541928}
+  m_Size: {x: 0.35510066, y: 0.048098166, z: 0.026569733}
+  m_Center: {x: 0.097022355, y: 0.00018258509, z: 0.0030769256}
 --- !u!114 &6056588822789298540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,6 +126,14 @@ MonoBehaviour:
   holyDamage: 0
   characterCausingDamage: {fileID: 0}
   light_Attack_01_Modifier: 0
+  light_Attack_02_Modifier: 0
+  heavy_Attack_01_Modifier: 0
+  heavy_Attack_02_Modifier: 0
+  charge_Attack_01_Modifier: 0
+  charge_Attack_02_Modifier: 0
+  running_Attack_01_Modifier: 0
+  rolling_Attack_01_Modifier: 0
+  backstep_Attack_01_Modifier: 0
 --- !u!1 &7003736831794437496
 GameObject:
   m_ObjectHideFlags: 0

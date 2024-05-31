@@ -168,5 +168,25 @@ namespace RPGKarawara
                 }
             }
         }
+        
+        // Gizmos para visualizar o campo de visão e o raio de detecção
+        private void OnDrawGizmosSelected()
+        {
+            if (aiCharacter == null)
+                return;
+
+            // Desenhar o raio de detecção
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(aiCharacter.transform.position, detectionRadius);
+
+            // Desenhar o campo de visão
+            Vector3 leftBoundary = Quaternion.Euler(0, minimumFOV, 0) * aiCharacter.transform.forward * detectionRadius;
+            Vector3 rightBoundary = Quaternion.Euler(0, maximumFOV, 0) * aiCharacter.transform.forward * detectionRadius;
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(aiCharacter.transform.position, aiCharacter.transform.position + leftBoundary);
+            Gizmos.DrawLine(aiCharacter.transform.position, aiCharacter.transform.position + rightBoundary);
+        }
+    
     }
 }
