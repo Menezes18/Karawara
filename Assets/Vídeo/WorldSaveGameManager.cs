@@ -115,139 +115,171 @@ namespace RPGKarawara
 
             return fileName;
         }
-
         public void AttemptToCreateNewGame()
         {
             saveFileDataWriter = new SaveFileDataWriter();
             saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
+            // Verifica se podemos criar um novo arquivo de salvamento (checando a existência de outros arquivos primeiro)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_01);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
+                // Se este slot de perfil não estiver ocupado, cria um novo usando este slot
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
+            // Repete o processo para o segundo slot
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_02);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_02;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
+            // Continua repetindo o processo para os próximos slots até o décimo slot
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_03);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_03;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_04);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_05);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_06);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_07);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_08);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_09);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  CHECK TO SEE IF WE CAN CREATE A NEW SAVE FILE (CHECK FOR OTHER EXISITING FILES FIRST)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_10);
 
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
-                //  IF THIS PROFILE SLOT IS NOT TAKEN, MAKE A NEW ONE USING THIS SLOT
                 currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_10;
                 currentCharacterData = new CharacterSaveData();
                 NewGame();
                 return;
             }
 
-            //  IF THERE ARE NO FREE SLOTS, NOTIFY THE PLAYER
+            // Se não houver slots livres, notifica o jogador
             TitleScreenManager.Instance.DisplayNoFreeCharacterSlotsPopUp();
-        }
 
+            //OnSlotOverwriteSelected(CharacterSlot.CharacterSlot_01);
+
+        }
+        public void OnSlotOverwriteSelected(string selectedSlot)
+        {
+
+            switch (selectedSlot)
+            {
+                case "Save-01":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
+                    break;
+                case "Save-02":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_02;
+                    break;
+                case "Save-03":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_03;
+                    break;
+                case "Save-04":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
+                    break;
+                case "Save-05":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
+                    break;
+                case "Save-06":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
+                    break;
+                case "Save-07":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
+                    break;
+                case "Save-08":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
+                    break;
+                case "Save-09":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
+                    break;
+                case "Save-10":
+                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_10;
+                    break;
+                default:
+                    Debug.LogError("Slot selecionado desconhecido.");
+                    break;
+            }
+            
+            //CharacterSlot selectedSlot
+            // Aqui você deve implementar a lógica para sobrescrever o slot selecionado
+            //currentCharacterSlotBeingUsed = selectedSlot;
+            //currentCharacterData = new CharacterSaveData();
+            DeleteGame(currentCharacterSlotBeingUsed);
+            NewGame();
+        }
         private void NewGame()
         {
-            //  SAVES THE NEWLY CREATED CHARACTERS STATS, AND ITEMS (WHEN CREATION SCREEN IS ADDED)
+            // Salva os dados do novo personagem criado, incluindo estatísticas e itens (quando a tela de criação for adicionada)
             player.playerNetworkManager.vitality.Value = 15;
             player.playerNetworkManager.endurance.Value = 10;
 
@@ -255,6 +287,8 @@ namespace RPGKarawara
             StartCoroutine(LoadWorldScene());
         }
 
+
+       
         public void LoadGame()
         {
             //  LOAD A PREVIOUS FILE, WITH A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING
