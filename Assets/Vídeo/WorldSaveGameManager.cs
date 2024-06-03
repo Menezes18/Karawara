@@ -38,7 +38,7 @@ namespace RPGKarawara
         public CharacterSaveData characterSlot08;
         public CharacterSaveData characterSlot09;
         public CharacterSaveData characterSlot10;
-
+        public LoadScene loadscene;
         private void Awake()
         {
             //  THERE CAN ONLY BE ONE INSTANCE OF THIS SCRIPT AT ONE TIME, IF ANOTHER EXISTS, DESTROY IT
@@ -284,6 +284,7 @@ namespace RPGKarawara
             player.playerNetworkManager.endurance.Value = 10;
 
             SaveGame();
+            loadscene.LoadGame();
             StartCoroutine(LoadWorldScene());
         }
 
