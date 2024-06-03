@@ -45,12 +45,12 @@ namespace RPGKarawara
             currentHealth.Value = maxHealth.Value;
         }
 
-        public void SetNewMaxStaminaValue(int oldEndurance, int newEndurance)
-        {
-            maxStamina.Value = player.playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(newEndurance);
-            PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(maxStamina.Value);
-            currentStamina.Value = maxStamina.Value;
-        }
+        // public void SetNewMaxStaminaValue(int oldEndurance, int newEndurance)
+        // {
+        //     maxStamina.Value = player.playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(newEndurance);
+        //     PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(maxStamina.Value);
+        //     currentStamina.Value = maxStamina.Value;
+        // }
 
         public void OnCurrentRightHandWeaponIDChange(int oldID, int newID)
         {

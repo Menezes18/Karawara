@@ -19,7 +19,7 @@ namespace RPGKarawara
             if (character.IsOwner)
             {
                 Debug.Log("CHARACTER IS TAKING: " + staminaDamage + " STAMINA DAMAGE");
-                character.characterNetworkManager.currentStamina.Value -= staminaDamage;
+                //character.characterNetworkManager.currentStamina.Value -= staminaDamage;
             }
         }
     }
