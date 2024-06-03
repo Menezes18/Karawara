@@ -27,8 +27,8 @@ namespace RPGKarawara
             if (!playerPerformingAction.IsOwner)
                 return;
 
-            if (playerPerformingAction.playerNetworkManager.currentStamina.Value <= 0)
-                return;
+            // if (playerPerformingAction.playerNetworkManager.currentStamina.Value <= 0)
+            //     return;
 
             if (!playerPerformingAction.characterLocomotionManager.isGrounded)
                 return;

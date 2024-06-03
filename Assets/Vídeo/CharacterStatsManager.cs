@@ -46,35 +46,35 @@ namespace RPGKarawara
             return Mathf.RoundToInt(stamina);
         }
 
-        public virtual void RegenerateStamina()
-        {
-            //  ONLY OWNERS CAN EDIT THEIR NETWORK VARAIBLES
-            if (!character.IsOwner)
-                return;
-
-            //  WE DO NOT WANT TO REGENERATE STAMINA IF WE ARE USING IT
-            if (character.characterNetworkManager.isSprinting.Value)
-                return;
-
-            if (character.isPerformingAction)
-                return;
-
-            staminaRegenerationTimer += Time.deltaTime;
-
-            if (staminaRegenerationTimer >= staminaRegenerationDelay)
-            {
-                if (character.characterNetworkManager.currentStamina.Value < character.characterNetworkManager.maxStamina.Value)
-                {
-                    staminaTickTimer += Time.deltaTime;
-
-                    if (staminaTickTimer >= 0.1)
-                    {
-                        staminaTickTimer = 0;
-                        character.characterNetworkManager.currentStamina.Value += staminaRegenerationAmount;
-                    }
-                }
-            }
-        }
+        // public virtual void RegenerateStamina()
+        // {
+        //     //  ONLY OWNERS CAN EDIT THEIR NETWORK VARAIBLES
+        //     if (!character.IsOwner)
+        //         return;
+        //
+        //     //  WE DO NOT WANT TO REGENERATE STAMINA IF WE ARE USING IT
+        //     if (character.characterNetworkManager.isSprinting.Value)
+        //         return;
+        //
+        //     if (character.isPerformingAction)
+        //         return;
+        //
+        //     staminaRegenerationTimer += Time.deltaTime;
+        //
+        //     if (staminaRegenerationTimer >= staminaRegenerationDelay)
+        //     {
+        //         if (character.characterNetworkManager.currentStamina.Value < character.characterNetworkManager.maxStamina.Value)
+        //         {
+        //             staminaTickTimer += Time.deltaTime;
+        //
+        //             if (staminaTickTimer >= 0.1)
+        //             {
+        //                 staminaTickTimer = 0;
+        //                 character.characterNetworkManager.currentStamina.Value += staminaRegenerationAmount;
+        //             }
+        //         }
+        //     }
+        // }
 
         public virtual void ResetStaminaRegenTimer(float previousStaminaAmount, float currentStaminaAmount)
         {

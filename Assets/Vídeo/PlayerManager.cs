@@ -46,7 +46,7 @@ namespace RPGKarawara
             playerLocomotionManager.HandleAllMovement();
 
             //  REGEN STAMINA
-            playerStatsManager.RegenerateStamina();
+            //playerStatsManager.RegenerateStamina();
         }
 
         protected override void LateUpdate()
@@ -84,12 +84,12 @@ namespace RPGKarawara
 
                 //  UPDATE THE TOTAL AMOUNT OF HEALTH OR STAMINA WHEN THE STAT LINKED TO EITHER CHANGES
                 playerNetworkManager.vitality.OnValueChanged += playerNetworkManager.SetNewMaxHealthValue;
-                playerNetworkManager.endurance.OnValueChanged += playerNetworkManager.SetNewMaxStaminaValue;
+               // playerNetworkManager.endurance.OnValueChanged += playerNetworkManager.SetNewMaxStaminaValue;
 
                 //  UPDATES UI STAT BARS WHEN A STAT CHANGES (HEALTH OR STAMINA)
                 playerNetworkManager.currentHealth.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewHealthValue;
-                playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
-                playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRegenTimer;
+               // playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
+               // playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRegenTimer;
             }
 
             //  ONLY UPDATE FLOATING HP BAR IF THIS CHARACTER IS NOT THE LOCAL PLAYERS CHARACTER (YOU DONT WANNA SEE A HP BAR FLOATING ABOVE YOUR OWN HEAD)
@@ -130,12 +130,12 @@ namespace RPGKarawara
             {
                 //  UPDATE THE TOTAL AMOUNT OF HEALTH OR STAMINA WHEN THE STAT LINKED TO EITHER CHANGES
                 playerNetworkManager.vitality.OnValueChanged -= playerNetworkManager.SetNewMaxHealthValue;
-                playerNetworkManager.endurance.OnValueChanged -= playerNetworkManager.SetNewMaxStaminaValue;
+               // playerNetworkManager.endurance.OnValueChanged -= playerNetworkManager.SetNewMaxStaminaValue;
 
                 //  UPDATES UI STAT BARS WHEN A STAT CHANGES (HEALTH OR STAMINA)
                 playerNetworkManager.currentHealth.OnValueChanged -= PlayerUIManager.instance.playerUIHudManager.SetNewHealthValue;
-                playerNetworkManager.currentStamina.OnValueChanged -= PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
-                playerNetworkManager.currentStamina.OnValueChanged -= playerStatsManager.ResetStaminaRegenTimer;
+                //playerNetworkManager.currentStamina.OnValueChanged -= PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
+               // playerNetworkManager.currentStamina.OnValueChanged -= playerStatsManager.ResetStaminaRegenTimer;
             }
 
             if (!IsOwner)
@@ -195,7 +195,7 @@ namespace RPGKarawara
             {
                 isDead.Value = false;
                 playerNetworkManager.currentHealth.Value = playerNetworkManager.maxHealth.Value;
-                playerNetworkManager.currentStamina.Value = playerNetworkManager.maxStamina.Value;
+                //playerNetworkManager.currentStamina.Value = playerNetworkManager.maxStamina.Value;
                 //  RESTORE FOCUS POINTS
 
                 //  PLAY REBIRTH EFFECTS
@@ -213,7 +213,7 @@ namespace RPGKarawara
             currentCharacterData.zPosition = transform.position.z;
 
             currentCharacterData.currentHealth = playerNetworkManager.currentHealth.Value;
-            currentCharacterData.currentStamina = playerNetworkManager.currentStamina.Value;
+            //currentCharacterData.currentStamina = playerNetworkManager.currentStamina.Value;
 
             currentCharacterData.vitality = playerNetworkManager.vitality.Value;
             currentCharacterData.endurance = playerNetworkManager.endurance.Value;
@@ -230,10 +230,10 @@ namespace RPGKarawara
 
             //  THIS WILL BE MOVED WHEN SAVING AND LOADING IS ADDED
             playerNetworkManager.maxHealth.Value = playerStatsManager.CalculateHealthBasedOnVitalityLevel(playerNetworkManager.vitality.Value);
-            playerNetworkManager.maxStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
+            //playerNetworkManager.maxStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
             playerNetworkManager.currentHealth.Value = currentCharacterData.currentHealth;
-            playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
-            PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
+            //playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
+            //PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
         }
 
         public void LoadOtherPlayerCharacterWhenJoiningServer()

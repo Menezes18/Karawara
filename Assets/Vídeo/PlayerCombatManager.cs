@@ -77,7 +77,7 @@ namespace RPGKarawara
                     break;
             }
 
-            player.playerNetworkManager.currentStamina.Value -= Mathf.RoundToInt(staminaDeducted);
+            //player.playerNetworkManager.currentStamina.Value -= Mathf.RoundToInt(staminaDeducted);
         }
 
         public override void SetTarget(CharacterManager newTarget)
