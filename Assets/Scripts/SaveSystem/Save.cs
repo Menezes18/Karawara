@@ -24,14 +24,14 @@ namespace RPGKarawara
             {
                 string s = File.ReadAllText(path);
                 SceneData data = JsonUtility.FromJson<SceneData>(s);
-                GameManager.manager.SetPlayerData(data.player);
+              //  GameManager.manager.SetPlayerData(data.player);
             }
         }
 
         public void Salva()
         {
             SceneData data = new SceneData();
-            data.player = GameManager.manager.GetPlayer();
+            //data.player = GameManager.manager.GetPlayer();
             string s = JsonUtility.ToJson(data, true);
             File.WriteAllText(path, s);
         }

@@ -8,7 +8,7 @@ namespace RPGKarawara
 {
     public class GameManager : MonoBehaviour
     {
-        public static GameManager manager;
+       /* public static GameManager manager;
         public PlayerData player;
         public Transform respawnPoint;
         private float vida;
@@ -60,6 +60,6 @@ namespace RPGKarawara
             Player.instancia.transform.position = respawnPoint.position;
             
            
-        }
-    }
+        }*/
+    } 
 }
