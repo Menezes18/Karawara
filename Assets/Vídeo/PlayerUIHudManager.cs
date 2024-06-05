@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace RPGKarawara
@@ -18,6 +19,10 @@ namespace RPGKarawara
         [Header("Boss Health Bar")]
         public Transform bossHealthBarParent;
         public GameObject bossHealthBarObject;
+
+        [Header("PAUSE MENU")]
+        [SerializeField] GameObject pauseMenu;
+        bool active = false;
 
         public void RefreshHUD()
         {
@@ -123,6 +128,31 @@ namespace RPGKarawara
 
             leftWeaponQuickSlotIcon.sprite = weapon.itemIcon;
             leftWeaponQuickSlotIcon.enabled = true;
+        }
+
+        public void activatePause()
+        {
+            Debug.Log("Aqtbm");
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+            active = !active;
+            if (active)
+            {
+                Time.timeScale = 0f;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+        public void ChangeScene()
+        {
+            WorldAIManager.instance.DespawnAllCharacters();
+            SceneManager.LoadScene("SceneMenu");
+            SceneManager.UnloadSceneAsync(SceneManager.sceneCount);
         }
     }
 }

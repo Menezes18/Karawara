@@ -193,6 +193,7 @@ namespace RPGKarawara
             HandleSwitchLeftWeaponInput();
             HandleQuedInputs();
             HandleInteractionInput();
+            HandlePauseUi();
         }
 
         //  LOCK ON
@@ -464,8 +465,9 @@ namespace RPGKarawara
         {
             if(esc_Input)
             {
+                Debug.Log("EntrouAq");
                 esc_Input = false;
-                //PlayerUIManager.instance.playerUIHudManager.activatePause();
+                PlayerUIManager.instance.playerUIHudManager.activatePause();
             }
         }
         private void ProcessQuedInput()
