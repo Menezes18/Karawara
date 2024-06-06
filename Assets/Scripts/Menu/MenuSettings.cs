@@ -4,24 +4,29 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using System.Linq;
-
+using UnityEngine.UI;
 namespace RPGKarawara
 {
     public class MenuSettings : MonoBehaviour
     {
         public TMP_Dropdown resolutionDropdown;
         public TMP_Dropdown refreshRateDropdown;
+        public Toggle fullscreenToggle; // Adicione este campo para o toggle de fullscreen
+        public TMP_Text fullscreenStatusText; // Opcional: Adicione este campo para o texto de status
 
         private Resolution[] resolutions;
         private Dictionary<string, List<int>> resolutionToRefreshRates;
 
         void Start()
         {
+            // Inicializa o toggle de fullscreen com o estado atual
+            fullscreenToggle.isOn = Screen.fullScreen;
+            UpdateFullscreenText(); // Atualiza o texto do toggle de fullscreen
+
             // Obtém as resoluções disponíveis
             resolutions = Screen.resolutions;
             resolutionDropdown.ClearOptions();
             refreshRateDropdown.ClearOptions();
-            
 
             // Usa um HashSet para garantir que cada resolução seja única
             HashSet<string> uniqueResolutions = new HashSet<string>();
@@ -63,6 +68,11 @@ namespace RPGKarawara
             refreshRateDropdown.onValueChanged.AddListener(delegate {
                 RefreshRateDropdownValueChanged(refreshRateDropdown);
             });
+
+            // Adiciona o listener para o evento de mudança do toggle de fullscreen
+            fullscreenToggle.onValueChanged.AddListener(delegate {
+                OnFullscreenToggleChanged(fullscreenToggle.isOn);
+            });
         }
 
         void ResolutionDropdownValueChanged(TMP_Dropdown change)
@@ -102,6 +112,17 @@ namespace RPGKarawara
             int refreshRate = resolutionToRefreshRates[resolutionDropdown.options[resolutionIndex].text][refreshRateIndex];
 
             Screen.SetResolution(width, height, Screen.fullScreen, refreshRate);
+        }
+
+        void OnFullscreenToggleChanged(bool isFullscreen)
+        {
+            Screen.fullScreen = isFullscreen;
+            UpdateFullscreenText(); // Atualiza o texto do toggle de fullscreen
+        }
+
+        void UpdateFullscreenText()
+        {
+            fullscreenStatusText.text = "Fullscreen: " + (Screen.fullScreen ? "On" : "Off");
         }
     }
 }
