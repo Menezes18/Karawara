@@ -899,6 +899,7 @@ Transform:
   - {fileID: 8414906077857807478}
   - {fileID: 1506100538803509411}
   - {fileID: 2184304817217002369}
+  - {fileID: 3887391460179173527}
   m_Father: {fileID: 651791117664874490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &5355773235976393337
@@ -1563,6 +1564,7 @@ GameObject:
   - component: {fileID: 8152242920993952262}
   - component: {fileID: 5041591194776821608}
   - component: {fileID: 4992773537249216167}
+  - component: {fileID: -7042470214836696682}
   m_Layer: 3
   m_Name: DummmyRanged
   m_TagString: Untagged
@@ -1621,7 +1623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1247853706
+  GlobalObjectIdHash: 3587063197
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1931,6 +1933,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasFloatingHPBar: 1
   characterHPBar: {fileID: 1683425107901023601}
+--- !u!114 &-7042470214836696682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5679174857681126544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e1b1a054b41ec44b3d8e5888930dd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiro: {fileID: 1183760729466706248, guid: cd288833be96e1f43bd2b1f1579e84ef, type: 3}
+  inicio: {fileID: 3887391460179173527}
+  player: {fileID: 0}
+  speed: 10
+  lifetime: 5
 --- !u!1 &5724279853581212606
 GameObject:
   m_ObjectHideFlags: 0
@@ -1962,6 +1981,37 @@ Transform:
   m_Children:
   - {fileID: 1729615798974143010}
   m_Father: {fileID: 2625455468020787987}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5827725060271409264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3887391460179173527}
+  m_Layer: 13
+  m_Name: SairTiro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3887391460179173527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827725060271409264}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.101, y: 0.053, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8945151089827150660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5865897590595416859
 GameObject:
@@ -2721,7 +2771,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 10
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
