@@ -7,7 +7,7 @@ namespace RPGKarawara
 {
     public class CharacterAnimatorManager : MonoBehaviour
     {
-        CharacterManager character;
+        public CharacterManager character;
 
         int vertical;
         int horizontal;

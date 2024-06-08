@@ -66,6 +66,17 @@ namespace RPGKarawara
                     player.playerAnimatorManager.UpdateAnimatorMovementParameters(horizontalMovement, verticalMovement, player.playerNetworkManager.isSprinting.Value);
                 }
             }
+            if (moveAmount > 0){
+                character.animator.SetBool("isMoving", true);
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
+                Debug.Log("Andando");
+            }
+            else
+            {
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
+
+                Debug.Log("Idle");
+            }
         }
 
         public void HandleAllMovement()
@@ -102,10 +113,12 @@ namespace RPGKarawara
 
             if (player.playerNetworkManager.isSprinting.Value)
             {
+                
                 player.characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
             }
             else
             {
+                MudarAvatar.instancia.TrocarPlayer();
                 if (PlayerInputManager.instance.moveAmount > 0.5f)
                 {
                     player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
@@ -205,6 +218,7 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
             }
 
+            MudarAvatar.instancia.TrocarBear();
             // if (player.playerNetworkManager.currentStamina.Value <= 0)
             // {
             //     player.playerNetworkManager.isSprinting.Value = false;

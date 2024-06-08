@@ -11,7 +11,8 @@ namespace RPGKarawara
         public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [HideInInspector] public CharacterController characterController;
-        [HideInInspector] public Animator animator;
+        
+         public Animator animator;
 
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
         [HideInInspector] public CharacterEffectsManager characterEffectsManager;
@@ -146,6 +147,9 @@ namespace RPGKarawara
 
         }
 
+        public void tes(){
+            animator.SetBool("isMoving", true);
+        }
         protected virtual void IgnoreMyOwnColliders()
         {
             Collider characterControllerCollider = GetComponent<Collider>();
