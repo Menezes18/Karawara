@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace RPGKarawara
 
         [Header("PAUSE MENU")]
         [SerializeField] GameObject pauseMenu;
+
         bool active = false;
 
         public void RefreshHUD()
@@ -132,7 +134,7 @@ namespace RPGKarawara
 
         public void activatePause()
         {
-            Debug.Log("Aqtbm");
+           
             pauseMenu.SetActive(!pauseMenu.activeSelf);
             active = !active;
             if (active)

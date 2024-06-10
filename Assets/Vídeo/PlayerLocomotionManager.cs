@@ -69,14 +69,14 @@ namespace RPGKarawara
             if (moveAmount > 0){
                 character.animator.SetBool("isMoving", true);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
-                Debug.Log("Andando");
+                
             }
             else
             {
                 character.animator.SetBool("isMoving", false);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
 
-                Debug.Log("Idle");
+                
             }
         }
 
