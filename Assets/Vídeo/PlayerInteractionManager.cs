@@ -55,18 +55,18 @@ namespace RPGKarawara
             }
         }
 
-        public void AddInteractionToList(Interactable interactableObject)
+        public void AddInteractionToList(Interactable interactable)
         {
             RefreshInteractionList();
 
-            if (!currentInteractableActions.Contains(interactableObject))
-                currentInteractableActions.Add(interactableObject);
+            if (!currentInteractableActions.Contains(interactable))
+                currentInteractableActions.Add(interactable);
         }
 
-        public void RemoveInteractionFromList(Interactable interactableObject)
+        public void RemoveInteractionFromList(Interactable interactable)
         {
-            if (currentInteractableActions.Contains(interactableObject))
-                currentInteractableActions.Remove(interactableObject);
+            if (currentInteractableActions.Contains(interactable))
+                currentInteractableActions.Remove(interactable);
 
             RefreshInteractionList();
         }
