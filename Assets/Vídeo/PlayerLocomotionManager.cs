@@ -73,6 +73,7 @@ namespace RPGKarawara
             }
             else
             {
+                character.animator.SetBool("isMoving", false);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
 
                 Debug.Log("Idle");
@@ -251,6 +252,8 @@ namespace RPGKarawara
             //     return;
 
             //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
+            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
+            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
             if (PlayerInputManager.instance.moveAmount > 0)
             {
                 rollDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
@@ -258,12 +261,18 @@ namespace RPGKarawara
                 rollDirection.y = 0;
                 rollDirection.Normalize();
 
+                // Multiplicando a direção pelo fator de distância desejado
+                float dodgeDistance = 8f; // Defina a distância desejada do dodge
+                rollDirection *= dodgeDistance;
+
                 Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
                 player.transform.rotation = playerRotation;
 
                 player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, true);
                 player.playerLocomotionManager.isRolling = true;
             }
+
+
             //  IF WE ARE STATIONARY, WE PERFORM A BACKSTEP
             else
             {
