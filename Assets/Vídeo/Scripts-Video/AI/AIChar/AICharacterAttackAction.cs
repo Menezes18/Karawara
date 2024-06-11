@@ -22,10 +22,15 @@ namespace RPGKarawara
         public float maximumAttackAngle = 35;
         public float minimumAttackDistance = 0;
         public float maximumAttackDistance = 2;
+        public bool isRanged;
 
         public void AttemptToPerformAction(AICharacterManager aiCharacter)
         {
             aiCharacter.characterAnimatorManager.PlayTargetAttackActionAnimation(attackType, attackAnimation, true);
+            if (isRanged)
+            {
+                MagicSpeel.instance.Tiro(aiCharacter.aiCharacterCombatManager.currentTarget.transform);
+            }
         }
     }
 }
