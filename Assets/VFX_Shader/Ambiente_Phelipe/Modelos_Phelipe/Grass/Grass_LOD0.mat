@@ -21,7 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Grass_LOD0
-  m_Shader: {fileID: -6465566751694194690, guid: f03ec9bf9596bf5418b19028778da094, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: f03ec9bf9596bf5418b19028778da094,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -52,11 +53,11 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WiggleOffset: 0.4
-    - _Wind_Speed: 1.2
-    - _Wind_Strength: 0.4
+    - _WiggleOffset: 1.87
+    - _Wind_Speed: 0.962
+    - _Wind_Strength: 0.3
     m_Colors:
     - _BotColor: {r: 0.36569178, g: 0.9150943, b: 0, a: 0}
-    - _TopColor: {r: 1, g: 0.60710216, b: 0, a: 0}
+    - _TopColor: {r: 1, g: 0, b: 0.9374981, a: 0}
     - _Wind_Direction: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
