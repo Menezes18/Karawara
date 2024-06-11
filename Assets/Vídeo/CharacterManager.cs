@@ -130,6 +130,7 @@ namespace RPGKarawara
                 if (!manuallySelectDeathAnimation)
                 {
                     characterAnimatorManager.PlayTargetActionAnimation("Dead_01", true);
+                    SystemXP.instance.GainXP(10);
                 }
             }
 
@@ -147,9 +148,7 @@ namespace RPGKarawara
 
         }
 
-        public void tes(){
-            animator.SetBool("isMoving", true);
-        }
+        
         protected virtual void IgnoreMyOwnColliders()
         {
             Collider characterControllerCollider = GetComponent<Collider>();

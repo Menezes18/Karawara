@@ -11,7 +11,6 @@ namespace RPGKarawara
     {
         [Header("Stat Bars")]
         [SerializeField] UI_StatBar healthBar;
-        [SerializeField] UI_StatBar staminaBar;
 
         [Header("Quick Slots")]
         [SerializeField] Image rightWeaponQuickSlotIcon;
@@ -30,8 +29,6 @@ namespace RPGKarawara
         {
             healthBar.gameObject.SetActive(false);
             healthBar.gameObject.SetActive(true);
-            staminaBar.gameObject.SetActive(false);
-            staminaBar.gameObject.SetActive(true);
         }
 
         public void SetNewHealthValue(int oldValue, int newValue)
@@ -44,15 +41,7 @@ namespace RPGKarawara
             healthBar.SetMaxStat(maxhealth);
         }
 
-        public void SetNewStaminaValue(float oldValue, float newValue)
-        {
-            staminaBar.SetStat(Mathf.RoundToInt(newValue));
-        }
-
-        public void SetMaxStaminaValue(int maxStamina)
-        {
-            staminaBar.SetMaxStat(maxStamina);
-        }
+       
 
         public void SetRightWeaponQuickSlotIcon(int weaponID)
         {
