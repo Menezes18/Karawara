@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneChecker : MonoBehaviour
-{
+public class SceneChecker : MonoBehaviour{
+
+    public GameObject statusBar;
     void Awake()
     {
         // Marca este objeto para não ser destruído ao carregar uma nova cena
@@ -29,7 +30,7 @@ public class SceneChecker : MonoBehaviour
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-
+            statusBar.SetActive(false);
             // Exibe uma mensagem no console
             Debug.Log("Estamos na SceneMenu. O cursor está ativado.");
         }
@@ -38,7 +39,7 @@ public class SceneChecker : MonoBehaviour
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-
+            statusBar.SetActive(true);
             // Exibe uma mensagem no console
             Debug.Log("Não estamos na SceneMenu. O cursor está desativado e travado.");
         }
