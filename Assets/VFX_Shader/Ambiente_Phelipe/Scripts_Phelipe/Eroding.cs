@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Eroding : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Eroding : MonoBehaviour
     public SkinnedMeshRenderer erodeObject;
     void Update()
     {
-        if(Input.GetKeyDown("space"))
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
             StartCoroutine(ErodeObject());
             Debug.Log(erodeObject.material.GetFloat("_Erode"));
