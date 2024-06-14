@@ -333,7 +333,7 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Tree1
       settings:
-        brushRadius: 1
+        brushRadius: 10.04
         brushSpacing: 0.5
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
@@ -348,11 +348,11 @@ MonoBehaviour:
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
         randomizeOrientationY: 0
-        randomizeOrientationZ: 0
+        randomizeOrientationZ: 5
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
+        scaleUniformMin: 0.8
+        scaleUniformMax: 1.3
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -610,7 +610,7 @@ MonoBehaviour:
         gridNormal: {x: 0, y: 1, z: 0}
         gridAngle: 0
       prefabSlots:
-      - gameObject: {fileID: 2079073952858857077, guid: 7e216ea4bb1727542a39cc0cca7537d5,
+      - gameObject: {fileID: 2079073952858857077, guid: e6e9342d99507c3419c6ae8ed3c84caf,
           type: 3}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
@@ -649,8 +649,8 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Tree2
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
+        brushRadius: 10.64
+        brushSpacing: 1.51
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -664,11 +664,11 @@ MonoBehaviour:
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
         randomizeOrientationY: 0
-        randomizeOrientationZ: 0
+        randomizeOrientationZ: 5
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
+        scaleUniformMin: 0.8
+        scaleUniformMax: 1.3
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -963,10 +963,10 @@ MonoBehaviour:
       selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
-    - name: Tree3
+    - name: Tree3&4
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
+        brushRadius: 16.7
+        brushSpacing: 1.58
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -980,11 +980,11 @@ MonoBehaviour:
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
         randomizeOrientationY: 0
-        randomizeOrientationZ: 0
+        randomizeOrientationZ: 5
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
+        scaleUniformMin: 0.8
+        scaleUniformMax: 1.3
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -999,7 +999,7 @@ MonoBehaviour:
         throwVelocity: 1
         throwRandomRotation: {x: 100, y: 100, z: 100}
         throwScaleMinMax: {x: 1, y: 1}
-        multibrushEnabled: 0
+        multibrushEnabled: 1
         multibrushSlots:
         - enabled: 1
           raiting: 1
@@ -1242,322 +1242,8 @@ MonoBehaviour:
         gridNormal: {x: 0, y: 1, z: 0}
         gridAngle: 0
       prefabSlots:
-      - gameObject: {fileID: 6536471247860890161, guid: 04b29a0dafc55f94bacc3098b9008785,
+      - gameObject: {fileID: 3491505087351890046, guid: 04b29a0dafc55f94bacc3098b9008785,
           type: 3}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      selectedSlot: 0
-      selected: 0
-      colorTag: 0
-      customPreviewImage: {fileID: 0}
-    - name: Tree4
-      settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
-        brushOverlapCheckLayers:
-          serializedVersion: 2
-          m_Bits: 0
-        surfaceOffset: 0
-        orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
-        rotation: {x: 0, y: 0, z: 0}
-        randomizeOrientationX: 0
-        randomizeOrientationY: 0
-        randomizeOrientationZ: 0
-        scaleTransformMode: 0
-        scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
-        scalePerAxisMin: {x: 1, y: 1, z: 1}
-        scalePerAxisMax: {x: 1, y: 1, z: 1}
-        pinFixedRotation: 0
-        pinFixedRotationValue: {x: 0, y: 0, z: 0}
-        pinFixedScale: 0
-        pinFixedScaleValue: {x: 1, y: 1, z: 1}
-        placeEulerAngles: {x: 0, y: 0, z: 0}
-        placeScale: 1
-        throwRadius: 1
-        throwSpacing: 1
-        throwHeight: 3
-        throwVelocity: 1
-        throwRandomRotation: {x: 100, y: 100, z: 100}
-        throwScaleMinMax: {x: 1, y: 1}
-        multibrushEnabled: 0
-        multibrushSlots:
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        - enabled: 1
-          raiting: 1
-          position: {x: 0, y: 0, z: 0}
-          rotation: {x: 0, y: 0, z: 0}
-          scale: {x: 1, y: 1, z: 1}
-          pivotMode: 0
-          pivotOffset: {x: 1, y: 1, z: 1}
-        multibrushPaintSelectedSlot: 0
-        multibrushMode: 0
-        multibrushPattern: 0 1 2 3 5 6 7 8 9
-        multibrushPatternContinue: 0
-        slopeEnabled: 0
-        slopeAngleMin: 0
-        slopeAngleMax: 35
-        slopeVector: 1
-        slopeVectorCustom: {x: 0, y: 1, z: 0}
-        slopeVectorFlip: 0
-        gridEnabled: 0
-        gridOrigin: {x: 0, y: 0}
-        gridStep: {x: 5, y: 5}
-        gridPlane: 1
-        gridNormal: {x: 0, y: 1, z: 0}
-        gridAngle: 0
-      prefabSlots:
       - gameObject: {fileID: 767696715803136242, guid: 18e356607736bb14984d0f35f0e2513f,
           type: 3}
       - gameObject: {fileID: 0}
@@ -1590,9 +1276,8 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      selectedSlot: 0
-      selected: 0
+      selectedSlot: 1
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Tree5
@@ -1612,11 +1297,11 @@ MonoBehaviour:
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
         randomizeOrientationY: 0
-        randomizeOrientationZ: 0
+        randomizeOrientationZ: 5
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
+        scaleUniformMin: 0.8
+        scaleUniformMax: 1.3
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -1928,11 +1613,11 @@ MonoBehaviour:
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
         randomizeOrientationY: 0
-        randomizeOrientationZ: 0
+        randomizeOrientationZ: 5
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
+        scaleUniformMin: 0.8
+        scaleUniformMax: 1.3
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -2227,10 +1912,10 @@ MonoBehaviour:
       selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
-    - name: Trees
+    - name: Tree1Burned
       settings:
-        brushRadius: 17.12
-        brushSpacing: 4.54
+        brushRadius: 20
+        brushSpacing: 3.38
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -2240,15 +1925,15 @@ MonoBehaviour:
         surfaceOffset: 0
         orientationTransformMode: 0
         orientationMode: 0
-        alongBrushStroke: 1
+        alongBrushStroke: 0
         rotation: {x: 0, y: 0, z: 0}
-        randomizeOrientationX: 3.8
-        randomizeOrientationY: 6
-        randomizeOrientationZ: 0
+        randomizeOrientationX: 0
+        randomizeOrientationY: 0
+        randomizeOrientationZ: 5
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 0.75
-        scaleUniformMax: 1.2
+        scaleUniformMin: 0.8
+        scaleUniformMax: 1.3
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -2308,7 +1993,7 @@ MonoBehaviour:
           pivotMode: 0
           pivotOffset: {x: 1, y: 1, z: 1}
         - enabled: 1
-          raiting: 0
+          raiting: 1
           position: {x: 0, y: 0, z: 0}
           rotation: {x: 0, y: 0, z: 0}
           scale: {x: 1, y: 1, z: 1}
@@ -2508,18 +2193,16 @@ MonoBehaviour:
       prefabSlots:
       - gameObject: {fileID: 2079073952858857077, guid: 7e216ea4bb1727542a39cc0cca7537d5,
           type: 3}
-      - gameObject: {fileID: 2492298339839642700, guid: fefc57dbbaccb364c8bd8e70ee8cf172,
+      - gameObject: {fileID: 3491505087351890046, guid: 71e1e986cbfce094fb89dda51e25caff,
           type: 3}
-      - gameObject: {fileID: 6536471247860890161, guid: 04b29a0dafc55f94bacc3098b9008785,
+      - gameObject: {fileID: 767696715803136242, guid: f78c7b8841ec8644f9d857a7ddaea46b,
           type: 3}
-      - gameObject: {fileID: 767696715803136242, guid: 18e356607736bb14984d0f35f0e2513f,
+      - gameObject: {fileID: 7710324249476129280, guid: 77bc8f5f6780dde40b99e9cc5b03c9cf,
           type: 3}
-      - gameObject: {fileID: 7710324249476129280, guid: 42b9ddf1798711640be4052717e8c522,
+      - gameObject: {fileID: 3883644579286371248, guid: aeafff811742b4b419e6ef6666b39eff,
           type: 3}
-      - gameObject: {fileID: 3883644579286371248, guid: a3479b8392b776045922451fcf03ff33,
-          type: 3}
-      - gameObject: {fileID: 3616387990876486657, guid: 70d3dcc2d2d088748bed055f15ac3210,
-          type: 3}
+      - gameObject: {fileID: 0}
+      - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
@@ -2546,7 +2229,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     levelsGamma: 1
@@ -5650,7 +5333,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: tree random
@@ -7066,24 +6749,24 @@ MonoBehaviour:
   paintOnSelected: 0
   paintLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 32
   placeUnder: 2
   overwritePrefabLayer: 1
-  prefabPlaceLayer: 3
+  prefabPlaceLayer: 0
   pinSnapRotationValue: 15
   pinSnapScaleValue: 0.1
   pinSnapRotation: 0
   pinSnapScale: 0
   placeAngleStep: 15
   placeScaleStep: 0.1
-  eraseBrushRadius: 19.9
-  eraseByLayer: 1
+  eraseBrushRadius: 10.81
+  eraseByLayer: 0
   eraseLayers:
     serializedVersion: 2
-    m_Bits: 40
+    m_Bits: 1
   selectBrushRadius: 18.74
   selectByLayer: 0
   selectLayers:
