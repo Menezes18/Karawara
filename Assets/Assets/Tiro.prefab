@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3771525810399577637}
   - component: {fileID: 7371315296598380739}
   - component: {fileID: 8609365931180654339}
+  - component: {fileID: 7729499912955605758}
   m_Layer: 13
   m_Name: Tiro
   m_TagString: Untagged
@@ -82,6 +83,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &7729499912955605758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183760729466706248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 496aced343253554cb06f515af6b4a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 7371315296598380739}
+  physicalDamage: 10
+  magicDamage: 0
+  fireDamage: 0
+  lightningDamage: 0
+  holyDamage: 0
 --- !u!1 &3853839125565136418
 GameObject:
   m_ObjectHideFlags: 0

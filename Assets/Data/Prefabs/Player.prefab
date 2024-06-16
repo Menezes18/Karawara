@@ -46,9 +46,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3745861818980309521}
   - {fileID: 8477329020772832638}
   - {fileID: 6548079481208618984}
-  - {fileID: 3745861818980309521}
   - {fileID: 1129780385318610701}
   - {fileID: 2935788768973104499}
   - {fileID: 7975210632576157285}
@@ -71,11 +71,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatorMudar: {fileID: 8876352194872645062}
-  avatar1: {fileID: 9000000, guid: ccf42ad85514c6346b44652698d6ba30, type: 3}
+  avatar1: {fileID: 9000000, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d, type: 3}
   animator1: {fileID: 9100000, guid: bea21026fe346204e903beb7c054bae3, type: 2}
   avatar2: {fileID: 9000000, guid: b7822eb5951163b48830b6d9bcbf48b4, type: 3}
   animator2: {fileID: 9100000, guid: 2dad2d0edfe5ee94eb9baebbb9ee7ccb, type: 2}
-  persona: {fileID: 9146341870441729988}
+  persona: {fileID: 4084810864357884075}
   animal: {fileID: 352998117226773943}
   change: 0
 --- !u!95 &8876352194872645062
@@ -87,7 +87,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219663029150363108}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: ccf42ad85514c6346b44652698d6ba30, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d, type: 3}
   m_Controller: {fileID: 9100000, guid: bea21026fe346204e903beb7c054bae3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -4594,7 +4594,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.743
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
@@ -5264,7 +5264,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 979493429257097491, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
         type: 3}
@@ -6138,6 +6138,12 @@ Transform:
 --- !u!4 &4073238822881181152 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 934018805973237786, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3778871961765576186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4084810864357884075 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8cbf9a6de1d9c2a4db9aa566e9a2733d,
     type: 3}
   m_PrefabInstance: {fileID: 3778871961765576186}
   m_PrefabAsset: {fileID: 0}
@@ -7825,6 +7831,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tainara_Rig_v2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ccf42ad85514c6346b44652698d6ba30,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: ccf42ad85514c6346b44652698d6ba30,
         type: 3}
       propertyPath: m_ApplyRootMotion
@@ -7838,12 +7849,6 @@ PrefabInstance:
 --- !u!4 &8477329020772832638 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ccf42ad85514c6346b44652698d6ba30,
-    type: 3}
-  m_PrefabInstance: {fileID: 8227861741346435733}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &9146341870441729988 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ccf42ad85514c6346b44652698d6ba30,
     type: 3}
   m_PrefabInstance: {fileID: 8227861741346435733}
   m_PrefabAsset: {fileID: 0}
