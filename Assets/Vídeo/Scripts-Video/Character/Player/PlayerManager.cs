@@ -6,6 +6,7 @@ namespace RPGKarawara
 {
     public class PlayerManager : CharacterManager
     {
+        public static PlayerManager instance;
         [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
         [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         [HideInInspector] public PlayerNetworkManager playerNetworkManager;
@@ -19,6 +20,8 @@ namespace RPGKarawara
         protected override void Awake()
         {
             base.Awake();
+
+            instance = this;
 
             //  DO MORE STUFF, ONLY FOR THE PLAYER
 
