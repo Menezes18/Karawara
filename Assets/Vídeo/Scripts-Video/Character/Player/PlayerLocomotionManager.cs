@@ -335,5 +335,9 @@ namespace RPGKarawara
         {
             yVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
         }
+        public void IncreaseSprintingSpeed(float amount)
+        {
+            sprintingSpeed += amount;
+        }
     }
 }

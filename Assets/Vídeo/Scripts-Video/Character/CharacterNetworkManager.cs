@@ -66,7 +66,51 @@ namespace RPGKarawara
                 }
             }
         }
+        [ServerRpc]
+        public void AddHealthServerRpc(int amount)
+        {
+            if (IsServer)
+            {
+                currentHealth.Value += amount;
+                if (currentHealth.Value > maxHealth.Value)
+                {
+                    currentHealth.Value = maxHealth.Value;
+                }
+                NotifyClientsOfHealthChangeClientRpc(currentHealth.Value);
+            }
+        }
+        // Method to add max health
+        [ServerRpc]
+        public void AddMaxHealthServerRpc(int amount)
+        {
+            if (IsServer)
+            {
+                maxHealth.Value += amount;
+                NotifyClientsOfMaxHealthChangeClientRpc(maxHealth.Value);
+            }
+        }
+        [ServerRpc]
+        public void IncreaseSprintingSpeedServerRpc(float amount)
+        {
+            IncreaseSprintingSpeedClientRpc(amount);
+        }
 
+        [ClientRpc]
+        private void IncreaseSprintingSpeedClientRpc(float amount)
+        {
+           FindObjectOfType<PlayerLocomotionManager>().IncreaseSprintingSpeed(amount);
+        }
+
+        [ClientRpc]
+        private void NotifyClientsOfMaxHealthChangeClientRpc(int newMaxHealth)
+        {
+            maxHealth.Value = newMaxHealth;
+        }
+        [ClientRpc]
+        private void NotifyClientsOfHealthChangeClientRpc(int newHealth)
+        {
+            currentHealth.Value = newHealth;
+        }
         public void OnLockOnTargetIDChange(ulong oldID, ulong newID)
         {
             if (!IsOwner)
