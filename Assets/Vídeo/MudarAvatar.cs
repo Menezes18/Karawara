@@ -61,9 +61,10 @@ namespace RPGKarawara
         } 
         void Update()
         {
-            if (Keyboard.current.leftCtrlKey.wasPressedThisFrame){
-                Debug.Log("TESTE");
-                TrocarJabuti();
+            if (Keyboard.current.pKey.wasPressedThisFrame){
+                var player = FindObjectOfType<PlayerManager>();
+                
+                player.ReviveCharacter();
             }
             
         }
