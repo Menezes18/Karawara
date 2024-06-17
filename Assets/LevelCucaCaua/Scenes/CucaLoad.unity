@@ -18519,6 +18519,7 @@ MonoBehaviour:
   interactionType: 0
   teleportTarget: {fileID: 0}
   lever: {fileID: 0}
+  sceneName: 
 --- !u!1001 &451014146
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29281,6 +29282,7 @@ MonoBehaviour:
   interactionType: 0
   teleportTarget: {fileID: 985633788}
   lever: {fileID: 0}
+  sceneName: 
 --- !u!65 &590010805
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -38902,6 +38904,7 @@ MonoBehaviour:
   interactionType: 0
   teleportTarget: {fileID: 1988003453}
   lever: {fileID: 0}
+  sceneName: 
 --- !u!65 &815332322
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -51235,6 +51238,7 @@ MonoBehaviour:
   interactionType: 0
   teleportTarget: {fileID: 590010803}
   lever: {fileID: 0}
+  sceneName: 
 --- !u!65 &985633790
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -59778,6 +59782,7 @@ MonoBehaviour:
   interactionType: 2
   teleportTarget: {fileID: 0}
   lever: {fileID: 1048676084}
+  sceneName: 
 --- !u!65 &1048676086
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -65872,6 +65877,7 @@ MonoBehaviour:
   interactionType: 2
   teleportTarget: {fileID: 0}
   lever: {fileID: 1236321536}
+  sceneName: 
 --- !u!65 &1236321538
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -67241,6 +67247,7 @@ MonoBehaviour:
   interactionType: 2
   teleportTarget: {fileID: 0}
   lever: {fileID: 1266673364}
+  sceneName: 
 --- !u!65 &1266673366
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -116117,6 +116124,59 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1899969945}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1901926288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901926289}
+  - component: {fileID: 1901926290}
+  m_Layer: 0
+  m_Name: CheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1901926289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901926288}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 42.99, y: -1.34, z: 28.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1901926290
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901926288}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 13.1329975, y: 6.9579744, z: 1}
+  m_Center: {x: -0.5856161, y: 0, z: 0}
 --- !u!1001 &1904774005
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120087,6 +120147,7 @@ MonoBehaviour:
   interactionType: 0
   teleportTarget: {fileID: 815332320}
   lever: {fileID: 0}
+  sceneName: 
 --- !u!65 &1988003455
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -125630,3 +125691,4 @@ SceneRoots:
   - {fileID: 500556849}
   - {fileID: 1527576151}
   - {fileID: 1345442010}
+  - {fileID: 1901926289}
