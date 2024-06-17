@@ -33,9 +33,8 @@ namespace RPGKarawara {
         {
             CharacterManager damageTarget = other.GetComponentInParent<CharacterManager>();
 
-            if (damageTarget != null)
-            {
-                contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+            if (damageTarget != null){
+                //contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
 
                 //  CHECK IF WE CAN DAMAGE THIS TARGET BASED ON FRIENDLY FIRE
 
@@ -50,8 +49,8 @@ namespace RPGKarawara {
         {
             //  WE DON'T WANT TO DAMAGE THE SAME TARGET MORE THAN ONCE IN A SINGLE ATTACK
             //  SO WE ADD THEM TO A LIST THAT CHECKS BEFORE APPLYING DAMAGE
-            if (charactersDamaged.Contains(damageTarget))
-                return;
+            // if (charactersDamaged.Contains(damageTarget))
+            //     return;
 
             charactersDamaged.Add(damageTarget);
 
