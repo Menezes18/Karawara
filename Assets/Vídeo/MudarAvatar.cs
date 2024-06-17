@@ -38,19 +38,21 @@ namespace RPGKarawara
             persona.SetActive(false);
             animal.SetActive(true);
             jabutiGameobject.SetActive(false);
-            
         }
 
         public void TrocarPlayer(){
+            change = false;
             animatorMudar.runtimeAnimatorController = animator1;
           
             animatorMudar.avatar = avatar1;
             persona.SetActive(true);
             animal.SetActive(false);
             jabutiGameobject.SetActive(false);
+            
         }
 
         public void TrocarJabuti(){
+            change = true;
             animatorMudar.runtimeAnimatorController = jabutiAnimator;
           
             animatorMudar.avatar = jabutiAvatar;
