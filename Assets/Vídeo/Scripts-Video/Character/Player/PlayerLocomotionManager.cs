@@ -262,7 +262,7 @@ namespace RPGKarawara
                 rollDirection.Normalize();
 
                 // Multiplicando a direção pelo fator de distância desejado
-                float dodgeDistance = 8f; // Defina a distância desejada do dodge
+                float dodgeDistance = 118f; // Defina a distância desejada do dodge
                 rollDirection *= dodgeDistance;
 
                 Quaternion playerRotation = Quaternion.LookRotation(rollDirection);

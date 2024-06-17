@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,9 +18,12 @@ namespace RPGKarawara
         public Avatar avatar2; 
         public RuntimeAnimatorController animator2;
 
+        public Avatar jabutiAvatar;
+        public RuntimeAnimatorController jabutiAnimator;
 
         public GameObject persona;
         public GameObject animal;
+        public GameObject jabutiGameobject;
 
         public bool change = false;
 
@@ -27,11 +31,13 @@ namespace RPGKarawara
             instancia = this;
         }
 
+        
         public void TrocarBear(){
             animatorMudar.runtimeAnimatorController = animator2;
             animatorMudar.avatar = avatar2;
             persona.SetActive(false);
             animal.SetActive(true);
+            jabutiGameobject.SetActive(false);
             
         }
 
@@ -41,11 +47,24 @@ namespace RPGKarawara
             animatorMudar.avatar = avatar1;
             persona.SetActive(true);
             animal.SetActive(false);
+            jabutiGameobject.SetActive(false);
         }
-       
+
+        public void TrocarJabuti(){
+            animatorMudar.runtimeAnimatorController = jabutiAnimator;
+          
+            animatorMudar.avatar = jabutiAvatar;
+            
+            jabutiGameobject.SetActive(true);
+            persona.SetActive(false);
+            animal.SetActive(false);
+        } 
         void Update()
         {
-            
+            if (Keyboard.current.leftCtrlKey.wasPressedThisFrame){
+                Debug.Log("TESTE");
+                TrocarJabuti();
+            }
             
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,6 +38,16 @@ namespace RPGKarawara
             navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         }
 
+        protected override void Start(){
+            base.Start();
+            navMeshAgent.enabled = false;
+            Invoke("inimigo", 1f);
+        }
+
+        void inimigo(){
+            navMeshAgent.enabled = true;
+            
+        }
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
