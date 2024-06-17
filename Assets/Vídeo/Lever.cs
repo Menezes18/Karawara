@@ -11,7 +11,7 @@ namespace RPGKarawara
 
         public void Activate()
         {
-            isActive = !isActive;
+            isActive = true;
             Debug.Log("Lever activated: " + isActive);
             onActivate?.Invoke(); // Notify that the lever has been activated
         }

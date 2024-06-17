@@ -7,6 +7,7 @@ namespace RPGKarawara
 {
     public class CharacterManager : NetworkBehaviour
     {
+        public bool isBoss;
         [Header("Status")]
         public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
