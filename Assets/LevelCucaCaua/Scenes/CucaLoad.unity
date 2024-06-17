@@ -3019,7 +3019,7 @@ GameObject:
   - component: {fileID: 59312093}
   - component: {fileID: 59312092}
   - component: {fileID: 59312091}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plataforma (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17010,7 +17010,7 @@ GameObject:
   - component: {fileID: 428643047}
   - component: {fileID: 428643046}
   - component: {fileID: 428643045}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plataforma (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74943,7 +74943,7 @@ GameObject:
   - component: {fileID: 1324936544}
   - component: {fileID: 1324936543}
   - component: {fileID: 1324936542}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plataforma (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91528,7 +91528,7 @@ GameObject:
   - component: {fileID: 1611312700}
   - component: {fileID: 1611312699}
   - component: {fileID: 1611312698}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plataforma
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111595,7 +111595,7 @@ GameObject:
   - component: {fileID: 1771121759}
   - component: {fileID: 1771121758}
   - component: {fileID: 1771121757}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plataforma (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116134,6 +116134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1901926289}
   - component: {fileID: 1901926290}
+  - component: {fileID: 1901926291}
   m_Layer: 0
   m_Name: CheckPoint
   m_TagString: Untagged
@@ -116177,6 +116178,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.1329975, y: 6.9579744, z: 1}
   m_Center: {x: -0.5856161, y: 0, z: 0}
+--- !u!114 &1901926291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901926288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1e68b31c304164f94c8e46f8007289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  savedPostion: {fileID: 1901926289}
 --- !u!1001 &1904774005
 PrefabInstance:
   m_ObjectHideFlags: 0
