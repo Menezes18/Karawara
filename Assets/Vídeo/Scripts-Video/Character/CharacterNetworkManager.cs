@@ -195,6 +195,7 @@ namespace RPGKarawara
         private void PerformAttackActionAnimationFromServer(string animationID, bool applyRootMotion)
         {
             character.characterAnimatorManager.applyRootMotion = applyRootMotion;
+            
             character.animator.CrossFade(animationID, 0.2f);
         }
 
@@ -251,6 +252,7 @@ namespace RPGKarawara
         {
             CharacterManager damagedCharacter = NetworkManager.Singleton.SpawnManager.SpawnedObjects[damagedCharacterID].gameObject.GetComponent<CharacterManager>();
             CharacterManager characterCausingDamage = NetworkManager.Singleton.SpawnManager.SpawnedObjects[characterCausingDamageID].gameObject.GetComponent<CharacterManager>();
+
             TakeDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
             damageEffect.physicalDamage = physicalDamage;
             damageEffect.magicDamage = magicDamage;
@@ -263,5 +265,7 @@ namespace RPGKarawara
 
             damagedCharacter.characterEffectsManager.ProcessInstantEffect(damageEffect);
         }
+    
+
     }
 }

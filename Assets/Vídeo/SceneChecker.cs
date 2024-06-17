@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class SceneChecker : MonoBehaviour{
 
     public GameObject statusBar;
+    public GameObject spawn;
     void Awake()
     {
         // Marca este objeto para não ser destruído ao carregar uma nova cena
@@ -22,11 +23,15 @@ public class SceneChecker : MonoBehaviour{
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    public void teleportSpawn(){
+        var player = GameObject.FindGameObjectWithTag("Player");
+        spawn = GameObject.FindGameObjectWithTag("Spawn");
+        player.transform.position = spawn.transform.position;
+    }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Verifica se a cena carregada é "SceneMenu"
-        if (scene.name == "SceneMenu")
-        {
+        if (scene.name == "SceneMenu"){
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -36,6 +41,7 @@ public class SceneChecker : MonoBehaviour{
         }
         else
         {
+            teleportSpawn();
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;

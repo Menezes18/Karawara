@@ -7,6 +7,7 @@ namespace RPGKarawara
     public class AIBossCharacterNetworkManager : AICharacterNetworkManager
     {
         AIBossCharacterManager aiBossCharacter;
+        private bool hasShifted = false;
 
         protected override void Awake()
         {
@@ -26,9 +27,10 @@ namespace RPGKarawara
 
                 float healthNeededForShift = maxHealth.Value * (aiBossCharacter.minimumHealthPercentageToShift / 100);
 
-                if (currentHealth.Value <= healthNeededForShift)
+                if (currentHealth.Value <= healthNeededForShift && !hasShifted)
                 {
                     aiBossCharacter.PhaseShift();
+                    hasShifted = true;
                 }
             }
         }
