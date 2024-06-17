@@ -233,15 +233,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""reviver"",
-                    ""type"": ""Button"",
-                    ""id"": ""977eb49e-29c0-4e35-bfa0-513a674af89f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -409,17 +400,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""70756e8c-92ec-44a1-8af6-e779a133983d"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""reviver"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -566,7 +546,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_SwitchRightWeapon = m_PlayerActions.FindAction("Switch Right Weapon", throwIfNotFound: true);
         m_PlayerActions_SwitchLeftWeapon = m_PlayerActions.FindAction("Switch Left Weapon", throwIfNotFound: true);
         m_PlayerActions_Teleport = m_PlayerActions.FindAction("Teleport", throwIfNotFound: true);
-        m_PlayerActions_reviver = m_PlayerActions.FindAction("reviver", throwIfNotFound: true);
         // Player Camera
         m_PlayerCamera = asset.FindActionMap("Player Camera", throwIfNotFound: true);
         m_PlayerCamera_Movement = m_PlayerCamera.FindAction("Movement", throwIfNotFound: true);
@@ -696,7 +675,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_SwitchRightWeapon;
     private readonly InputAction m_PlayerActions_SwitchLeftWeapon;
     private readonly InputAction m_PlayerActions_Teleport;
-    private readonly InputAction m_PlayerActions_reviver;
     public struct PlayerActionsActions
     {
         private @PlayerControls m_Wrapper;
@@ -716,7 +694,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @SwitchRightWeapon => m_Wrapper.m_PlayerActions_SwitchRightWeapon;
         public InputAction @SwitchLeftWeapon => m_Wrapper.m_PlayerActions_SwitchLeftWeapon;
         public InputAction @Teleport => m_Wrapper.m_PlayerActions_Teleport;
-        public InputAction @reviver => m_Wrapper.m_PlayerActions_reviver;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -771,9 +748,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Teleport.started += instance.OnTeleport;
             @Teleport.performed += instance.OnTeleport;
             @Teleport.canceled += instance.OnTeleport;
-            @reviver.started += instance.OnReviver;
-            @reviver.performed += instance.OnReviver;
-            @reviver.canceled += instance.OnReviver;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -823,9 +797,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Teleport.started -= instance.OnTeleport;
             @Teleport.performed -= instance.OnTeleport;
             @Teleport.canceled -= instance.OnTeleport;
-            @reviver.started -= instance.OnReviver;
-            @reviver.performed -= instance.OnReviver;
-            @reviver.canceled -= instance.OnReviver;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -964,7 +935,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnSwitchRightWeapon(InputAction.CallbackContext context);
         void OnSwitchLeftWeapon(InputAction.CallbackContext context);
         void OnTeleport(InputAction.CallbackContext context);
-        void OnReviver(InputAction.CallbackContext context);
     }
     public interface IPlayerCameraActions
     {

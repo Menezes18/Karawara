@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -42,8 +41,6 @@ namespace RPGKarawara
         [SerializeField] bool switch_Left_Weapon_Input = false;
         [SerializeField] bool interaction_Input = false;
         [SerializeField] bool esc_Input = false;
-        [SerializeField] bool reviver_input = false;
-
         [Header("Bumper Inputs")]
         [SerializeField] bool RB_Input = false;
 
@@ -127,7 +124,6 @@ namespace RPGKarawara
                 playerControls.PlayerActions.SwitchLeftWeapon.performed += i => switch_Left_Weapon_Input = true;
                 playerControls.PlayerActions.Interact.performed += i => interaction_Input = true;
                 playerControls.UI.PauseBack.performed += i => esc_Input = true;
-                playerControls.PlayerActions.reviver.performed += i => reviver_input = true;
                 //  BUMPERS
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
 
@@ -472,15 +468,6 @@ namespace RPGKarawara
                 Debug.Log("EntrouAq");
                 esc_Input = false;
                 PlayerUIManager.instance.playerUIHudManager.activatePause();
-            }
-        }
-        public void HandleReviver()
-        {
-            if(reviver_input)
-            {
-                Debug.Log("EntrouAq");
-                reviver_input = false;
-                PlayerManager.instance.ReviveCharacter();
             }
         }
         private void ProcessQuedInput()
