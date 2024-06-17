@@ -1,3 +1,4 @@
+using RPGKarawara;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,7 @@ public class SceneChecker : MonoBehaviour{
     public GameObject spawn;
     void Awake()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
         // Marca este objeto para não ser destruído ao carregar uma nova cena
         DontDestroyOnLoad(gameObject);
     }
@@ -32,6 +34,8 @@ public class SceneChecker : MonoBehaviour{
     {
         // Verifica se a cena carregada é "SceneMenu"
         if (scene.name == "SceneMenu"){
+            var player = GameObject.FindGameObjectWithTag("Player");
+            player.transform.position = new Vector3(0,30,0);
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -41,6 +45,7 @@ public class SceneChecker : MonoBehaviour{
         }
         else
         {
+            PlayerCamera.instance.canFollow = true;
             teleportSpawn();
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
