@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
 namespace RPGKarawara
 {
     public class PlayerManager : CharacterManager
@@ -42,7 +43,10 @@ namespace RPGKarawara
 
             //  HANDLE MOVEMENT
             playerLocomotionManager.HandleAllMovement();
-
+            if (Keyboard.current.pKey.wasPressedThisFrame){
+                var save = FindObjectOfType<SavePositionOnTrigger>();
+                save.Reviver();
+            }
             //  REGEN STAMINA
             //playerStatsManager.RegenerateStamina();
         }

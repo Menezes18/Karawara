@@ -66,6 +66,7 @@ namespace RPGKarawara
                 }
             }
         }
+       
         [ServerRpc]
         public void AddHealthServerRpc(int amount)
         {

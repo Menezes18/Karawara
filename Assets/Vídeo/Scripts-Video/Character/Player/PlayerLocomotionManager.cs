@@ -119,7 +119,7 @@ namespace RPGKarawara
             }
             else
             {
-                MudarAvatar.instancia.TrocarPlayer();
+                if(!MudarAvatar.instancia.change)MudarAvatar.instancia.TrocarPlayer();
                 if (PlayerInputManager.instance.moveAmount > 0.5f)
                 {
                     player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
@@ -262,12 +262,12 @@ namespace RPGKarawara
                 rollDirection.Normalize();
 
                 // Multiplicando a direção pelo fator de distância desejado
-                float dodgeDistance = 8f; // Defina a distância desejada do dodge
+                float dodgeDistance = 118f; // Defina a distância desejada do dodge
                 rollDirection *= dodgeDistance;
 
                 Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
                 player.transform.rotation = playerRotation;
-
+                MudarAvatar.instancia.TrocarJabuti();
                 player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, true);
                 player.playerLocomotionManager.isRolling = true;
             }
@@ -277,6 +277,7 @@ namespace RPGKarawara
             else
             {
                 player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
+                MudarAvatar.instancia.TrocarPlayer();
             }
 
            // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;

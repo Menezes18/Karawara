@@ -97,15 +97,15 @@ namespace RPGKarawara
             }
             //  OTHERWISE WE MUST BE AT THE MAIN MENU, DISABLE OUR PLAYERS CONTROLS
             //  THIS IS SO OUR PLAYER CANT MOVE AROUND IF WE ENTER THINGS LIKE A CHARACTER CREATION MENU ECT
-            else
-            {
-                instance.enabled = false;
-
-                if (playerControls != null)
-                {
-                    playerControls.Disable();
-                }
-            }
+            // else
+            // {
+            //     instance.enabled = false;
+            //
+            //     if (playerControls != null)
+            //     {
+            //         playerControls.Disable();
+            //     }
+            // }
         }
 
         private void OnEnable()
@@ -342,7 +342,6 @@ namespace RPGKarawara
                 dodge_Input = false;
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-
                 player.playerLocomotionManager.AttemptToPerformDodge();
             }
         }

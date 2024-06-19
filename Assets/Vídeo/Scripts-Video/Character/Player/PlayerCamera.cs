@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPGKarawara 
@@ -42,6 +43,7 @@ namespace RPGKarawara
         public CharacterManager nearestLockOnTarget;
         public CharacterManager leftLockOnTarget;
         public CharacterManager rightLockOnTarget;
+        public bool canFollow = false;
 
         private void Awake()
         {
@@ -73,8 +75,10 @@ namespace RPGKarawara
 
         private void HandleFollowTarget()
         {
-            Vector3 targetCameraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothSpeed * Time.deltaTime);
-            transform.position = targetCameraPosition;
+            if(canFollow){
+                Vector3 targetCameraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothSpeed * Time.deltaTime);
+                transform.position = targetCameraPosition;
+            }
         }
 
         private void HandleRotations()
