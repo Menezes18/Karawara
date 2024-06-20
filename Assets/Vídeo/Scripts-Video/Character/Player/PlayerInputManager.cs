@@ -343,7 +343,7 @@ namespace RPGKarawara
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
                 MudarAvatar.instancia.TrocarJabuti();
-                Invoke("dodge", 0.1f);
+                Invoke("dodge", 0.05f);
             }
         }
 
