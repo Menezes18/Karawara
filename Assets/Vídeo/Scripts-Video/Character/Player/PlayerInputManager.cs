@@ -342,8 +342,13 @@ namespace RPGKarawara
                 dodge_Input = false;
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-                player.playerLocomotionManager.AttemptToPerformDodge();
+                MudarAvatar.instancia.TrocarJabuti();
+                Invoke("dodge", 0.1f);
             }
+        }
+
+        void dodge(){
+            player.playerLocomotionManager.AttemptToPerformDodge();
         }
 
         private void HandleSprintInput()

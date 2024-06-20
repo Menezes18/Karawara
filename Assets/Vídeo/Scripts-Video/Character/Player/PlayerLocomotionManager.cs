@@ -267,9 +267,10 @@ namespace RPGKarawara
 
                 Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
                 player.transform.rotation = playerRotation;
-                MudarAvatar.instancia.TrocarJabuti();
+                
                 player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, true);
                 player.playerLocomotionManager.isRolling = true;
+                Invoke("TrocarPlayer", 1.2f);
             }
 
 
@@ -281,6 +282,10 @@ namespace RPGKarawara
             }
 
            // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+        }
+
+        public void TrocarPlayer(){
+            MudarAvatar.instancia.TrocarPlayer();
         }
 
         public void AttemptToPerformJump()
