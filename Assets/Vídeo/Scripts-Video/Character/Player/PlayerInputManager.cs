@@ -342,6 +342,8 @@ namespace RPGKarawara
                 dodge_Input = false;
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
+                if (player.isPerformingAction)
+                    return;
                 player.playerLocomotionManager.AttemptToPerformDodge();
             }
         }
