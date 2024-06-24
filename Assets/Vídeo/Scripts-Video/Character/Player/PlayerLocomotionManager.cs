@@ -119,7 +119,7 @@ namespace RPGKarawara
             }
             else
             {
-                if(!MudarAvatar.instancia.change && !MudarAvatar.instancia.eroding)MudarAvatar.instancia.TrocarPlayer();
+                // if(!MudarAvatar.instancia.change && !MudarAvatar.instancia.eroding)MudarAvatar.instancia.TrocarPlayer();
                 if (PlayerInputManager.instance.moveAmount > 0.5f)
                 {
                     player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
@@ -219,7 +219,7 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
             }
 
-            MudarAvatar.instancia.TrocarBear();
+            // MudarAvatar.instancia.TrocarBear();
             // if (player.playerNetworkManager.currentStamina.Value <= 0)
             // {
             //     player.playerNetworkManager.isSprinting.Value = false;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace RPGKarawara
@@ -194,6 +195,7 @@ namespace RPGKarawara
             HandleQuedInputs();
             HandleInteractionInput();
             HandlePauseUi();
+            handleChanges();
         }
 
         //  LOCK ON
@@ -502,6 +504,17 @@ namespace RPGKarawara
                     input_Que_Is_Active = false;
                     que_Input_Timer = 0;
                 }
+            }
+        }
+
+        void handleChanges(){
+            if(Keyboard.current.shiftKey.wasPressedThisFrame){
+                MudarAvatar.instancia.TrocarBear();
+                MudarAvatar.instancia.TrocarPlayer();
+            }
+            if(Keyboard.current.shiftKey.wasReleasedThisFrame){
+                MudarAvatar.instancia.TrocarBear();
+                MudarAvatar.instancia.TrocarPlayer();
             }
         }
     }

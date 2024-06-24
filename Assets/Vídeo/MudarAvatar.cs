@@ -41,8 +41,6 @@ namespace RPGKarawara
         public void TrocarBear(){
             animatorMudar.runtimeAnimatorController = animator2;
             animatorMudar.avatar = avatar2;
-            // persona.SetActive(false);
-            getSkinnedK(persona);
             getSkinned(animal);
         }
 
@@ -52,20 +50,15 @@ namespace RPGKarawara
           
             animatorMudar.avatar = avatar1;
             getSkinnedK(persona);
-            getSkinned(jabutiGameobject);
             
         }
 
         public void TrocarJabuti(){
             change = true;
-            getSkinnedK(persona);
             getSkinned(jabutiGameobject);
             animatorMudar.runtimeAnimatorController = jabutiAnimator;
           
             animatorMudar.avatar = jabutiAvatar;
-            
-            // persona.SetActive(false);
-            // animal.SetActive(false);
         } 
         void Update()
         {
@@ -78,7 +71,7 @@ namespace RPGKarawara
         }
 
         public void getSkinnedK(GameObject obj){
-            if(!eroding && !change){
+            
                 int childcount = obj.transform.childCount;
 
                 GameObject[] childObjects = new GameObject[childcount];
@@ -92,7 +85,7 @@ namespace RPGKarawara
                     if(skinned != null)
                         StartCoroutine(ErodeObject(skinned));
                 }
-            }
+            
         }
 
         public void getSkinned(GameObject obj){
