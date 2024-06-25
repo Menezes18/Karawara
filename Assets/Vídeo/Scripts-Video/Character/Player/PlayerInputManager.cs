@@ -344,6 +344,7 @@ namespace RPGKarawara
                 dodge_Input = false;
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
+                MudarAvatar.instancia.TrocarPlayer();
                 MudarAvatar.instancia.TrocarJabuti();
                 Invoke("dodge", 0.05f);
             }
@@ -512,8 +513,8 @@ namespace RPGKarawara
 
         void handleChanges(){
             if(Keyboard.current.shiftKey.wasPressedThisFrame){
-                MudarAvatar.instancia.TrocarBear();
                 MudarAvatar.instancia.TrocarPlayer();
+                MudarAvatar.instancia.TrocarBear();
             }
             if(Keyboard.current.shiftKey.wasReleasedThisFrame){
                 MudarAvatar.instancia.TrocarBear();

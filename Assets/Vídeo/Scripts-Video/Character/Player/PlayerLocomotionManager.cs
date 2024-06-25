@@ -278,13 +278,13 @@ namespace RPGKarawara
             else
             {
                 player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
-                MudarAvatar.instancia.TrocarPlayer();
             }
 
            // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
 
         public void TrocarPlayer(){
+            MudarAvatar.instancia.TrocarJabuti();
             MudarAvatar.instancia.TrocarPlayer();
         }
 
