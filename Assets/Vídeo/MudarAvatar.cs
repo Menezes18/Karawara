@@ -39,18 +39,22 @@ namespace RPGKarawara
 
         
         public void TrocarBear(){
+            change = true;
             animatorMudar.runtimeAnimatorController = animator2;
             animatorMudar.avatar = avatar2;
             getSkinned(animal);
+            Invoke("canRun", 1f);
+        }
+
+        public void canRun(){
+            change = false;
         }
 
         public void TrocarPlayer(){
-            change = false;
             animatorMudar.runtimeAnimatorController = animator1;
           
             animatorMudar.avatar = avatar1;
             getSkinnedK(persona);
-            
         }
 
         public void TrocarJabuti(){

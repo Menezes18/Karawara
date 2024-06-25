@@ -18,10 +18,10 @@ namespace RPGKarawara
         //    
         //}
 
-        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-           MudarAvatar.instancia.TrocarPlayer();
-        }
+        // override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        // {
+           
+        // }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
         //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

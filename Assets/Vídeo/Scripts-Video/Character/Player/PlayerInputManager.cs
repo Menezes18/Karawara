@@ -180,6 +180,7 @@ namespace RPGKarawara
 
         private void HandleAllInputs()
         {
+            handleChanges();
             HandleLockOnInput();
             HandleLockOnSwitchTargetInput();
             HandlePlayerMovementInput();
@@ -195,7 +196,6 @@ namespace RPGKarawara
             HandleQuedInputs();
             HandleInteractionInput();
             HandlePauseUi();
-            handleChanges();
         }
 
         //  LOCK ON
@@ -344,15 +344,18 @@ namespace RPGKarawara
                 dodge_Input = false;
 
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-                if (player.isPerformingAction)
-                    return;
-                player.playerLocomotionManager.AttemptToPerformDodge();
+                MudarAvatar.instancia.TrocarJabuti();
+                Invoke("dodge", 0.05f);
             }
+        }
+
+        void dodge(){
+            player.playerLocomotionManager.AttemptToPerformDodge();
         }
 
         private void HandleSprintInput()
         {
-            if (sprint_Input)
+            if (sprint_Input && !MudarAvatar.instancia.change)
             {
                 player.playerLocomotionManager.HandleSprinting();
             }
