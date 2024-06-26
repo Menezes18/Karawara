@@ -31,6 +31,9 @@ namespace RPGKarawara
         [Header("Dodge")]
         private Vector3 rollDirection;
         [SerializeField] float dodgeStaminaCost = 25;
+        public bool dodging = false;
+
+
 
         protected override void Awake()
         {
@@ -284,8 +287,8 @@ namespace RPGKarawara
         }
 
         public void TrocarPlayer(){
-            MudarAvatar.instancia.TrocarJabuti();
-            MudarAvatar.instancia.TrocarPlayer();
+            MudarAvatar.instancia.Ativar(0);
+            dodging = false;
         }
 
         public void AttemptToPerformJump()

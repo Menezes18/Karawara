@@ -42,6 +42,7 @@ namespace RPGKarawara
         [SerializeField] bool switch_Left_Weapon_Input = false;
         [SerializeField] bool interaction_Input = false;
         [SerializeField] bool esc_Input = false;
+        [SerializeField] bool clicou = false;
         [Header("Bumper Inputs")]
         [SerializeField] bool RB_Input = false;
 
@@ -342,10 +343,10 @@ namespace RPGKarawara
             if (dodge_Input)
             {
                 dodge_Input = false;
-
+                if(player.playerLocomotionManager.dodging)return;
+                player.playerLocomotionManager.dodging = true;
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-                MudarAvatar.instancia.TrocarPlayer();
-                MudarAvatar.instancia.TrocarJabuti();
+                MudarAvatar.instancia.Ativar(2);
                 Invoke("dodge", 0.05f);
             }
         }
@@ -512,13 +513,13 @@ namespace RPGKarawara
         }
 
         void handleChanges(){
-            if(Keyboard.current.shiftKey.wasPressedThisFrame){
-                MudarAvatar.instancia.TrocarPlayer();
-                MudarAvatar.instancia.TrocarBear();
+            if(Keyboard.current.shiftKey.wasPressedThisFrame && !player.playerLocomotionManager.dodging){
+                clicou = true;
+                MudarAvatar.instancia.Ativar(1);
             }
-            if(Keyboard.current.shiftKey.wasReleasedThisFrame){
-                MudarAvatar.instancia.TrocarBear();
-                MudarAvatar.instancia.TrocarPlayer();
+            if(Keyboard.current.shiftKey.wasReleasedThisFrame && clicou){
+                MudarAvatar.instancia.Ativar(0);
+                clicou = false;
             }
         }
     }
