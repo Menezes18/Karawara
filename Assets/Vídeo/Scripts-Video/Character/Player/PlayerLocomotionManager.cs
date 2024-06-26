@@ -32,7 +32,7 @@ namespace RPGKarawara
         private Vector3 rollDirection;
         [SerializeField] float dodgeStaminaCost = 25;
         public bool dodging = false;
-
+        public bool humanAction = false;
 
 
         protected override void Awake()

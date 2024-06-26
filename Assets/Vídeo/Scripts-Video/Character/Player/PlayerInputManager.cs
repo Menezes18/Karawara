@@ -517,7 +517,7 @@ namespace RPGKarawara
                 clicou = true;
                 MudarAvatar.instancia.Ativar(1);
             }
-            if(Keyboard.current.shiftKey.wasReleasedThisFrame && clicou){
+            if(Keyboard.current.shiftKey.wasReleasedThisFrame && clicou && !MudarAvatar.instancia.tainara.ativo && !player.playerLocomotionManager.dodging){
                 MudarAvatar.instancia.Ativar(0);
                 clicou = false;
             }
