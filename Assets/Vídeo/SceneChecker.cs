@@ -1,3 +1,4 @@
+using System;
 using RPGKarawara;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,6 +24,12 @@ public class SceneChecker : MonoBehaviour{
     {
         // Remove o callback quando o objeto for desativado ou destruído
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    Scene sceneStart;
+    private void Start(){ 
+        if (sceneStart.name == "SceneMenu")
+            statusBar.SetActive(false);
     }
 
     public void teleportSpawn(){

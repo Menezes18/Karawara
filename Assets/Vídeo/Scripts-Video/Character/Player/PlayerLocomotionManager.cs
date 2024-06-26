@@ -29,16 +29,21 @@ namespace RPGKarawara
         private Vector3 jumpDirection;
 
         [Header("Dodge")]
-        private Vector3 rollDirection;
+        private Vector3 dodgeDirection;
+        [SerializeField] float dodgeDistance = 8f;   // Distância do dodge
+        [SerializeField] float dodgeDuration = 11f; // Duração do dodge
         [SerializeField] float dodgeStaminaCost = 25;
+<<<<<<< Updated upstream
         public bool dodging = false;
         public bool humanAction = false;
 
+=======
+        private bool isDodging = false;
+>>>>>>> Stashed changes
 
         protected override void Awake()
         {
             base.Awake();
-
             player = GetComponent<PlayerManager>();
         }
 
@@ -58,37 +63,37 @@ namespace RPGKarawara
                 horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
                 moveAmount = player.characterNetworkManager.moveAmount.Value;
 
-                //  IF NOT LOCKED ON, PASS MOVE AMOUNT
                 if (!player.playerNetworkManager.isLockedOn.Value || player.playerNetworkManager.isSprinting.Value)
                 {
                     player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
                 }
-                //  IF LOCKED ON, PASS HORZ AND VERT
                 else
                 {
                     player.playerAnimatorManager.UpdateAnimatorMovementParameters(horizontalMovement, verticalMovement, player.playerNetworkManager.isSprinting.Value);
                 }
             }
-            if (moveAmount > 0){
+
+            if (moveAmount > 0)
+            {
                 character.animator.SetBool("isMoving", true);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
-                
             }
             else
             {
                 character.animator.SetBool("isMoving", false);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
-
-                
             }
         }
 
         public void HandleAllMovement()
         {
-            HandleGroundedMovement();
-            HandleRotation();
-            HandleJumpingMovement();
-            HandleFreeFallMovement();
+            if (!isDodging)
+            {
+                HandleGroundedMovement();
+                HandleRotation();
+                HandleJumpingMovement();
+                HandleFreeFallMovement();
+            }
         }
 
         private void GetMovementValues()
@@ -96,7 +101,6 @@ namespace RPGKarawara
             verticalMovement = PlayerInputManager.instance.vertical_Input;
             horizontalMovement = PlayerInputManager.instance.horizontal_Input;
             moveAmount = PlayerInputManager.instance.moveAmount;
-            //  CLAMP THE MOVEMENTS
         }
 
         private void HandleGroundedMovement()
@@ -109,7 +113,6 @@ namespace RPGKarawara
             if (!player.characterLocomotionManager.canMove)
                 return;
 
-            //  OUR MOVE DIRECTION IS BASED ON OUR CAMERAS FACING PERSPECTIVE & OUR MOVEMENT INPUTS
             moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
             moveDirection = moveDirection + PlayerCamera.instance.transform.right * horizontalMovement;
             moveDirection.Normalize();
@@ -117,12 +120,15 @@ namespace RPGKarawara
 
             if (player.playerNetworkManager.isSprinting.Value)
             {
-                
                 player.characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
             }
             else
             {
+<<<<<<< Updated upstream
                 // if(!MudarAvatar.instancia.change && !MudarAvatar.instancia.eroding)MudarAvatar.instancia.TrocarPlayer();
+=======
+                if (!MudarAvatar.instancia.change) MudarAvatar.instancia.TrocarPlayer();
+>>>>>>> Stashed changes
                 if (PlayerInputManager.instance.moveAmount > 0.5f)
                 {
                     player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
@@ -222,99 +228,117 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
             }
 
+<<<<<<< Updated upstream
             // MudarAvatar.instancia.TrocarBear();
             // if (player.playerNetworkManager.currentStamina.Value <= 0)
             // {
             //     player.playerNetworkManager.isSprinting.Value = false;
             //     return;
             // }
+=======
+            MudarAvatar.instancia.TrocarBear();
+>>>>>>> Stashed changes
 
-            //  IF WE ARE MOVING, SPRINTING IS TRUE
             if (moveAmount >= 0.5)
             {
                 player.playerNetworkManager.isSprinting.Value = true;
             }
-            //  IF WE ARE STATIONARY/MOVING SLOWLY SPRINTING IS FALSE
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
             }
-
-            // if (player.playerNetworkManager.isSprinting.Value)
-            // {
-            //     player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
-            // }
         }
 
         public void AttemptToPerformDodge()
         {
-            if (player.isPerformingAction)
+            if (player.isPerformingAction || isDodging)
                 return;
 
-            // if (player.playerNetworkManager.currentStamina.Value <= 0)
-            //     return;
-
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
             if (PlayerInputManager.instance.moveAmount > 0)
             {
-                rollDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
-                rollDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
-                rollDirection.y = 0;
-                rollDirection.Normalize();
-
-                // Multiplicando a direção pelo fator de distância desejado
-                float dodgeDistance = 118f; // Defina a distância desejada do dodge
-                rollDirection *= dodgeDistance;
-
-                Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
-                player.transform.rotation = playerRotation;
-                
-                player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, true);
-                player.playerLocomotionManager.isRolling = true;
-                Invoke("TrocarPlayer", 1.2f);
+                dodgeDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
+                dodgeDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
+                dodgeDirection.y = 0;
+                dodgeDirection.Normalize();
+                player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, false);
+                StartCoroutine(PerformDodge(dodgeDirection));
             }
-
-
-            //  IF WE ARE STATIONARY, WE PERFORM A BACKSTEP
             else
             {
+<<<<<<< Updated upstream
                 player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
+=======
+                StartCoroutine(PerformDodge(-transform.forward));
+>>>>>>> Stashed changes
             }
 
-           // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+            // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
 
+<<<<<<< Updated upstream
         public void TrocarPlayer(){
             MudarAvatar.instancia.Ativar(0);
             dodging = false;
+=======
+        private IEnumerator PerformDodge(Vector3 direction)
+        {
+            isDodging = true;
+
+            float elapsedTime = 0f;
+            Vector3 startPosition = transform.position;
+            Vector3 endPosition = startPosition + direction * dodgeDistance;
+
+            while (elapsedTime < dodgeDuration)
+            {
+                // Calculate the target position for this frame
+                Vector3 targetPosition = Vector3.Lerp(startPosition, endPosition, elapsedTime / dodgeDuration);
+
+                // Perform the movement using CharacterController.Move
+                
+                player.characterController.Move(targetPosition - transform.position);
+
+                // Check for collision flags to handle collisions
+                if ((player.characterController.collisionFlags & CollisionFlags.Sides) != 0)
+                {
+                    // Collision detected, break the loop
+                    break;
+                }
+               
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // Ensure the final position is set correctly
+            player.characterController.Move(endPosition - transform.position);
+
+            isDodging = false;
+            TrocarPlayer();
         }
+
+
+        public void TrocarPlayer()
+        {
+            MudarAvatar.instancia.TrocarPlayer();
+>>>>>>> Stashed changes
+        }
+
 
         public void AttemptToPerformJump()
         {
-            //  IF WE ARE PERFORMING A GENERAL ACTION, WE DO NOT WANT TO ALLOW A JUMP (WILL CHANGE WHEN COMBAT IS ADDED)
             if (player.isPerformingAction)
                 return;
 
-            //  IF WE ARE OUT OF STAMINA, WE DO NOT WISH TO ALLOW A JUMP
-            // if (player.playerNetworkManager.currentStamina.Value <= 0)
-            //     return;
-
-            //  IF WE ARE ALREADY IN A JUMP, WE DO NOT WANT TO ALLOW A JUMP AGAIN UNTIL THE CURRENT JUMP HAS FINISHED
             if (player.playerNetworkManager.isJumping.Value)
                 return;
 
-            //  IF WE ARE NOT GROUNDED, WE DO NOT WANT TO ALLOW A JUMP
             if (!player.characterLocomotionManager.isGrounded)
                 return;
 
-            //  IF WE ARE TWO HANDING OUR WEAPON, PLAY THE TWO HANDED JUMP ANIMATION, OTHERWISE PLAY THE ONE HANDED ANIMATION ( TO DO )
             player.playerAnimatorManager.PlayTargetActionAnimation("Main_Jump_01", false);
 
             player.playerNetworkManager.isJumping.Value = true;
 
-           // player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
+            // player.playerNetworkManager.currentStamina.Value -= jumpStaminaCost;
 
             jumpDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
             jumpDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
@@ -322,17 +346,14 @@ namespace RPGKarawara
 
             if (jumpDirection != Vector3.zero)
             {
-                //  IF WE ARE SPRINTING, JUMP DIRECTION IS AT FULL DISTANCE
                 if (player.playerNetworkManager.isSprinting.Value)
                 {
                     jumpDirection *= 1.5f;
                 }
-                //  IF WE ARE RUNNING, JUMP DIRECTION IS AT HALF DISTANCE
                 else if (PlayerInputManager.instance.moveAmount > 0.5)
                 {
                     jumpDirection *= 1f;
                 }
-                //  IF WE ARE WALKING, JUMP DIRECTION IS AT QUARTER DISTANCE
                 else if (PlayerInputManager.instance.moveAmount <= 0.5)
                 {
                     jumpDirection *= 1f;
@@ -344,6 +365,7 @@ namespace RPGKarawara
         {
             yVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravityForce);
         }
+
         public void IncreaseSprintingSpeed(float amount)
         {
             sprintingSpeed += amount;
