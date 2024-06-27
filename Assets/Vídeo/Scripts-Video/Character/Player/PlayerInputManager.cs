@@ -513,7 +513,7 @@ namespace RPGKarawara
         }
 
         void handleChanges(){
-            if(Keyboard.current.shiftKey.wasPressedThisFrame && !player.playerLocomotionManager.dodging){
+            if(Keyboard.current.shiftKey.wasPressedThisFrame && !player.playerLocomotionManager.dodging && !MudarAvatar.instancia.tainara.eroding && !MudarAvatar.instancia.pantera.eroding){
                 clicou = true;
                 MudarAvatar.instancia.Ativar(1);
             }
