@@ -20,7 +20,7 @@ namespace RPGKarawara
         [SerializeField] float sprintingSpeed = 6.5f;
         [SerializeField] float rotationSpeed = 15;
         [SerializeField] int sprintingStaminaCost = 2;
-
+        
         [Header("Jump")]
         [SerializeField] float jumpStaminaCost = 25;
         [SerializeField] float jumpHeight = 4;
@@ -30,16 +30,12 @@ namespace RPGKarawara
 
         [Header("Dodge")]
         private Vector3 dodgeDirection;
+        public bool dodging = false;
+        public bool humanAction = false;
         [SerializeField] float dodgeDistance = 8f;   // Distância do dodge
         [SerializeField] float dodgeDuration = 11f; // Duração do dodge
         [SerializeField] float dodgeStaminaCost = 25;
-<<<<<<< Updated upstream
-        public bool dodging = false;
-        public bool humanAction = false;
-
-=======
         private bool isDodging = false;
->>>>>>> Stashed changes
 
         protected override void Awake()
         {
@@ -113,6 +109,7 @@ namespace RPGKarawara
             if (!player.characterLocomotionManager.canMove)
                 return;
 
+            //  OUR MOVE DIRECTION IS BASED ON OUR CAMERAS FACING PERSPECTIVE & OUR MOVEMENT INPUTS
             moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
             moveDirection = moveDirection + PlayerCamera.instance.transform.right * horizontalMovement;
             moveDirection.Normalize();
@@ -120,15 +117,12 @@ namespace RPGKarawara
 
             if (player.playerNetworkManager.isSprinting.Value)
             {
+                
                 player.characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
             }
             else
             {
-<<<<<<< Updated upstream
                 // if(!MudarAvatar.instancia.change && !MudarAvatar.instancia.eroding)MudarAvatar.instancia.TrocarPlayer();
-=======
-                if (!MudarAvatar.instancia.change) MudarAvatar.instancia.TrocarPlayer();
->>>>>>> Stashed changes
                 if (PlayerInputManager.instance.moveAmount > 0.5f)
                 {
                     player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
@@ -228,25 +222,28 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
             }
 
-<<<<<<< Updated upstream
             // MudarAvatar.instancia.TrocarBear();
             // if (player.playerNetworkManager.currentStamina.Value <= 0)
             // {
             //     player.playerNetworkManager.isSprinting.Value = false;
             //     return;
             // }
-=======
-            MudarAvatar.instancia.TrocarBear();
->>>>>>> Stashed changes
 
+            //  IF WE ARE MOVING, SPRINTING IS TRUE
             if (moveAmount >= 0.5)
             {
                 player.playerNetworkManager.isSprinting.Value = true;
             }
+            //  IF WE ARE STATIONARY/MOVING SLOWLY SPRINTING IS FALSE
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
             }
+
+            // if (player.playerNetworkManager.isSprinting.Value)
+            // {
+            //     player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+            // }
         }
 
         public void AttemptToPerformDodge()
@@ -265,21 +262,12 @@ namespace RPGKarawara
             }
             else
             {
-<<<<<<< Updated upstream
-                player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
-=======
                 StartCoroutine(PerformDodge(-transform.forward));
->>>>>>> Stashed changes
             }
 
             // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
         }
 
-<<<<<<< Updated upstream
-        public void TrocarPlayer(){
-            MudarAvatar.instancia.Ativar(0);
-            dodging = false;
-=======
         private IEnumerator PerformDodge(Vector3 direction)
         {
             isDodging = true;
@@ -318,8 +306,8 @@ namespace RPGKarawara
 
         public void TrocarPlayer()
         {
-            MudarAvatar.instancia.TrocarPlayer();
->>>>>>> Stashed changes
+            MudarAvatar.instancia.Ativar(0);
+            dodging = false;
         }
 
 
