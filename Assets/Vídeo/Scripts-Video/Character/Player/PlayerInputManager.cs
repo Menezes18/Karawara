@@ -181,7 +181,6 @@ namespace RPGKarawara
 
         private void HandleAllInputs()
         {
-            handleChanges();
             HandleLockOnInput();
             HandleLockOnSwitchTargetInput();
             HandlePlayerMovementInput();
@@ -357,13 +356,18 @@ namespace RPGKarawara
 
         private void HandleSprintInput()
         {
-            if (sprint_Input && !MudarAvatar.instancia.change)
+            if (sprint_Input && !MudarAvatar.instancia.change )
             {
                 player.playerLocomotionManager.HandleSprinting();
+                if(clicou) return;
+                clicou = true;
+                MudarAvatar.instancia.Ativar(1);
             }
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
+                clicou = false;
+                if(MudarAvatar.instancia.pantera.ativo)MudarAvatar.instancia.Ativar(0);
             }
         }
 
@@ -509,17 +513,6 @@ namespace RPGKarawara
                     input_Que_Is_Active = false;
                     que_Input_Timer = 0;
                 }
-            }
-        }
-
-        void handleChanges(){
-            if(Keyboard.current.shiftKey.wasPressedThisFrame && !player.playerLocomotionManager.dodging && !MudarAvatar.instancia.tainara.eroding && !MudarAvatar.instancia.pantera.eroding){
-                clicou = true;
-                MudarAvatar.instancia.Ativar(1);
-            }
-            if(Keyboard.current.shiftKey.wasReleasedThisFrame && clicou && !MudarAvatar.instancia.tainara.ativo && !player.playerLocomotionManager.dodging){
-                MudarAvatar.instancia.Ativar(0);
-                clicou = false;
             }
         }
     }
