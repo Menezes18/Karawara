@@ -339,13 +339,12 @@ namespace RPGKarawara
 
         private void HandleDodgeInput()
         {
-            if (dodge_Input)
+            if (dodge_Input && player.playerLocomotionManager.canDodge)
             {
                 dodge_Input = false;
-                if(player.playerLocomotionManager.dodging)return;
-                player.playerLocomotionManager.dodging = true;
+                player.playerLocomotionManager.canDodge = false;
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-                MudarAvatar.instancia.Ativar(2);
+                if(!MudarAvatar.instancia.jabuti.ativo)MudarAvatar.instancia.Ativar(2);
                 Invoke("dodge", 0.05f);
             }
         }

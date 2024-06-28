@@ -16,13 +16,14 @@ namespace RPGKarawara
         public float erodeDelay = 1.25f;
         public bool eroding = false;
 
-        public void Start(){
+        public void Start()
+        {
 
             eroding = false;
         }
 
 
-        public void getSkinnedK(GameObject obj)
+        public void getSkinnedK(GameObject obj, int tipo)
         {
             int childcount = obj.transform.childCount;
 
@@ -36,44 +37,58 @@ namespace RPGKarawara
             foreach (GameObject child in childObjects)
             {
                 var skinned = child.GetComponent<SkinnedMeshRenderer>();
-                if (skinned != null)
-                    StartCoroutine(ErodeObject(skinned));
+                if (skinned != null){
+                    switch (tipo)
+                    {
+                        case 0:
+                            StartCoroutine(ErodeObjectDecreasing(skinned));
+                            break;
+                        case 1:
+                            StartCoroutine(ErodeObjectIncreasing(skinned));
+                            break;
+                    }
+                }
             }
 
         }
 
-        public void getSkinned(GameObject obj)
+        public void getSkinned(GameObject obj, int tipo)
         {
             var skinned = obj.GetComponentInChildren<SkinnedMeshRenderer>();
-            StartCoroutine(ErodeObject(skinned));
+            switch (tipo)
+            {
+                case 0:
+                    StartCoroutine(ErodeObjectDecreasing(skinned));
+                    break;
+                case 1:
+                    StartCoroutine(ErodeObjectIncreasing(skinned));
+                    break;
+            }
         }
 
-        public IEnumerator ErodeObject(SkinnedMeshRenderer obj)
+        public IEnumerator ErodeObjectDecreasing(SkinnedMeshRenderer obj)
         {
-            // yield return new WaitForSeconds(erodeDelay);
-            if (obj.material.GetFloat("_Erode") >= 1f)
+            float t = 1;
+            while (t > 0)
             {
-                float t = 1;
-                while (t > 0)
-                {
-                    t -= erodeRate;
-                    for (int i = 0; i < obj.materials.Length; i++)
-                        obj.materials[i].SetFloat("_Erode", t);
-                    yield return new WaitForSeconds(erodeRefreshRate);
-                }
+                t -= erodeRate;
+                for (int i = 0; i < obj.materials.Length; i++)
+                    obj.materials[i].SetFloat("_Erode", t);
+                yield return new WaitForSeconds(erodeRefreshRate);
             }
-            else
+            eroding = false;
+        }
+
+        public IEnumerator ErodeObjectIncreasing(SkinnedMeshRenderer obj)
+        {
+            float t = 0;
+            while (t < 1)
             {
-                float t = 0;
-                while (t < 1)
-                {
-                    t += erodeRate;
-                    for (int i = 0; i < obj.materials.Length; i++)
-                        obj.materials[i].SetFloat("_Erode", t);
-                    yield return new WaitForSeconds(erodeRefreshRate);
-                }
+                t += erodeRate;
+                for (int i = 0; i < obj.materials.Length; i++)
+                    obj.materials[i].SetFloat("_Erode", t);
+                yield return new WaitForSeconds(erodeRefreshRate);
             }
-            yield return new WaitForSeconds(0.3f);
             eroding = false;
         }
     }

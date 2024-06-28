@@ -36,6 +36,7 @@ namespace RPGKarawara
         [SerializeField] float dodgeDuration = 11f; // Duração do dodge
         [SerializeField] float dodgeStaminaCost = 25;
         private bool isDodging = false;
+        public bool canDodge = true;
 
         protected override void Awake()
         {
@@ -306,8 +307,13 @@ namespace RPGKarawara
 
         public void TrocarPlayer()
         {
-            MudarAvatar.instancia.Ativar(0);
             dodging = false;
+            if(!MudarAvatar.instancia.tainara.ativo)MudarAvatar.instancia.Ativar(0);
+            Invoke("canDodgeA", 0.05f);
+        }
+        public void canDodgeA()
+        {
+            canDodge = true;
         }
 
 
