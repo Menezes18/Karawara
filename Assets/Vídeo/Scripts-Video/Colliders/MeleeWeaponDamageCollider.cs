@@ -148,7 +148,7 @@ namespace RPGKarawara
                         case Element.Fire:
                             if (aiDamageTarget.characterElement == Element.Fire)
                             {
-                                damage.physicalDamage *= 1.5f; // Aumenta o dano se ambos forem fogo
+                                damage.physicalDamage *= 3.5f; // Aumenta o dano se ambos forem fogo
                             }
                             else if (aiDamageTarget.characterElement == Element.Water)
                             {
@@ -158,11 +158,11 @@ namespace RPGKarawara
                         case Element.Water:
                             if (aiDamageTarget.characterElement == Element.Water)
                             {
-                                damage.physicalDamage *= 1.5f; // Aumenta o dano se ambos forem água
+                                damage.physicalDamage *= 3.5f;
                             }
                             else if (aiDamageTarget.characterElement == Element.Fire)
                             {
-                                damage.physicalDamage *= 0.5f; // Reduz o dano se o alvo for fogo
+                                damage.physicalDamage *= 0.5f; 
                             }
                             break;
                         default:

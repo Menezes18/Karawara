@@ -17,7 +17,7 @@ namespace RPGKarawara
         [Header("Interaction Text")]
         [SerializeField] string unactivatedInteractionText = "Restore Site Of Grace";
         [SerializeField] string activatedInteractionText = "Rest";
-
+        [SerializeField] private GameObject painel;
         protected override void Start()
         {
             base.Start();
@@ -43,7 +43,7 @@ namespace RPGKarawara
                 interactableText = unactivatedInteractionText;
             }
         }
-
+        
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
