@@ -7,7 +7,7 @@ namespace RPGKarawara
     public class MeleeWeaponDamageCollider : DamageCollider
     {
         [Header("Attacking Character")]
-        public CharacterManager characterCausingDamage; //  (When calculating damage this is used to check for attackers damage modifiers, effects ect)
+        public CharacterManager characterCausingDamage; // (When calculating damage this is used to check for attackers damage modifiers, effects etc)
 
         [Header("Weapon Attack Modifiers")]
         public float light_Attack_01_Modifier;
@@ -20,6 +20,8 @@ namespace RPGKarawara
         public float rolling_Attack_01_Modifier;
         public float backstep_Attack_01_Modifier;
 
+        private ElementManager elementManager;
+
         protected override void Awake()
         {
             base.Awake();
@@ -29,7 +31,14 @@ namespace RPGKarawara
                 damageCollider = GetComponent<Collider>();
             }
 
-            damageCollider.enabled = false; //  MELEE WEAPON COLLIDERS SHOULD BE DISABLED AT START, ONLY ENABLED WHEN ANIMATIONS ALLOW
+            damageCollider.enabled = false; // MELEE WEAPON COLLIDERS SHOULD BE DISABLED AT START, ONLY ENABLED WHEN ANIMATIONS ALLOW
+
+            // Encontrar o ElementManager na cena
+            elementManager = FindObjectOfType<ElementManager>();
+            if (elementManager == null)
+            {
+                Debug.LogError("ElementManager not found in the scene!");
+            }
         }
 
         protected override void OnTriggerEnter(Collider other)
@@ -38,16 +47,15 @@ namespace RPGKarawara
 
             if (damageTarget != null)
             {
-                //  WE DO NOT WANT TO DAMAGE OURSELVES
+                // WE DO NOT WANT TO DAMAGE OURSELVES
                 if (damageTarget == characterCausingDamage)
                     return;
 
                 contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
 
-                //  CHECK IF WE CAN DAMAGE THIS TARGET BASED ON FRIENDLY FIRE
+                // CHECK IF WE CAN DAMAGE THIS TARGET BASED ON FRIENDLY FIRE
 
-                //  CHECK IF TARGET IS BLOCKING
-
+                // CHECK IF TARGET IS BLOCKING
 
                 DamageTarget(damageTarget);
             }
@@ -55,8 +63,8 @@ namespace RPGKarawara
 
         protected override void DamageTarget(CharacterManager damageTarget)
         {
-            //  WE DON'T WANT TO DAMAGE THE SAME TARGET MORE THAN ONCE IN A SINGLE ATTACK
-            //  SO WE ADD THEM TO A LIST THAT CHECKS BEFORE APPLYING DAMAGE
+            // WE DON'T WANT TO DAMAGE THE SAME TARGET MORE THAN ONCE IN A SINGLE ATTACK
+            // SO WE ADD THEM TO A LIST THAT CHECKS BEFORE APPLYING DAMAGE
             if (charactersDamaged.Contains(damageTarget))
                 return;
 
@@ -73,31 +81,31 @@ namespace RPGKarawara
             switch (characterCausingDamage.characterCombatManager.currentAttackType)
             {
                 case AttackType.LightAttack01:
-                    ApplyAttackDamageModifiers(light_Attack_01_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(light_Attack_01_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.LightAttack02:
-                    ApplyAttackDamageModifiers(light_Attack_02_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(light_Attack_02_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.HeavyAttack01:
-                    ApplyAttackDamageModifiers(heavy_Attack_01_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(heavy_Attack_01_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.HeavyAttack02:
-                    ApplyAttackDamageModifiers(heavy_Attack_02_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(heavy_Attack_02_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.ChargedAttack01:
-                    ApplyAttackDamageModifiers(charge_Attack_01_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(charge_Attack_01_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.ChargedAttack02:
-                    ApplyAttackDamageModifiers(charge_Attack_02_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(charge_Attack_02_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.RunningAttack01:
-                    ApplyAttackDamageModifiers(running_Attack_01_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(running_Attack_01_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.RollingAttack01:
-                    ApplyAttackDamageModifiers(rolling_Attack_01_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(rolling_Attack_01_Modifier, damageEffect, damageTarget);
                     break;
                 case AttackType.BackstepAttack01:
-                    ApplyAttackDamageModifiers(backstep_Attack_01_Modifier, damageEffect);
+                    ApplyAttackDamageModifiers(backstep_Attack_01_Modifier, damageEffect, damageTarget);
                     break;
                 default:
                     break;
@@ -120,7 +128,7 @@ namespace RPGKarawara
             }
         }
 
-        private void ApplyAttackDamageModifiers(float modifier, TakeDamageEffect damage)
+        private void ApplyAttackDamageModifiers(float modifier, TakeDamageEffect damage, CharacterManager damageTarget)
         {
             damage.physicalDamage *= modifier;
             damage.magicDamage *= modifier;
@@ -128,7 +136,43 @@ namespace RPGKarawara
             damage.holyDamage *= modifier;
             damage.poiseDamage *= modifier;
 
-            //  IF ATTACK IS A FULLY CHARGED HEAVY, MULTIPLY BY FULL CHARGE MODIFIER AFTER NORMAL MODIFIER HAVE BEEN CALCULATED
+            // Aplicar modificadores de dano baseados no elemento atual
+            if (elementManager != null)
+            {
+                AICharacterManager aiDamageTarget = damageTarget as AICharacterManager;
+                if (aiDamageTarget != null)
+                {
+                    Debug.Log("entrou no dano");
+                    switch (elementManager.currentElement)
+                    {
+                        case Element.Fire:
+                            if (aiDamageTarget.characterElement == Element.Fire)
+                            {
+                                damage.physicalDamage *= 1.5f; // Aumenta o dano se ambos forem fogo
+                            }
+                            else if (aiDamageTarget.characterElement == Element.Water)
+                            {
+                                damage.physicalDamage *= 0.5f; // Reduz o dano se o alvo for água
+                            }
+                            break;
+                        case Element.Water:
+                            if (aiDamageTarget.characterElement == Element.Water)
+                            {
+                                damage.physicalDamage *= 1.5f; // Aumenta o dano se ambos forem água
+                            }
+                            else if (aiDamageTarget.characterElement == Element.Fire)
+                            {
+                                damage.physicalDamage *= 0.5f; // Reduz o dano se o alvo for fogo
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else{
+                    Debug.Log("nnn no dano");
+                }
+            }
         }
     }
 }

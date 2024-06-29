@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 2867793869143155619}
   - component: {fileID: 1983101499933469384}
   - component: {fileID: 1128375074947840352}
+  - component: {fileID: 6828197241171857415}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -75,6 +76,7 @@ MonoBehaviour:
   tainara: {fileID: 2702954720604396947}
   pantera: {fileID: 8709823302614105628}
   jabuti: {fileID: 9154155685700702928}
+  t: 0
   change: 0
 --- !u!95 &8876352194872645062
 Animator:
@@ -277,6 +279,7 @@ MonoBehaviour:
   isDead:
     m_InternalValue: 0
   characterController: {fileID: 8464527521044100486}
+  characterElement: 0
   animator: {fileID: 0}
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
@@ -622,6 +625,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentInteractableActions: []
+--- !u!114 &6828197241171857415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0373f36fa774a8941bbd77925214ba4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentElement: 2
 --- !u!1 &1192176898164503204
 GameObject:
   m_ObjectHideFlags: 0

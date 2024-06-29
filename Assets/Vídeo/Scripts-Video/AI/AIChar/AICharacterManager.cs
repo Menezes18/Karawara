@@ -10,7 +10,9 @@ namespace RPGKarawara
     {
         [Header("Character Name")]
         public string characterName = "";
-
+        [Header("Elementos")]
+        public Element characterElement = Element.None;
+        [Header("Elementos")]
         [HideInInspector] public AICharacterNetworkManager aiCharacterNetworkManager;
         [HideInInspector] public AICharacterCombatManager aiCharacterCombatManager;
         [HideInInspector] public AICharacterLocomotionManager aiCharacterLocomotionManager;
@@ -26,7 +28,7 @@ namespace RPGKarawara
         public PursueTargetState pursueTarget;
         public CombatStanceState combatStance;
         public AttackState attack;
-
+        public SkinnedMeshRenderer skinnedMeshRenderer;
         protected override void Awake()
         {
             base.Awake();
@@ -37,17 +39,19 @@ namespace RPGKarawara
 
             navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         }
-
-        protected override void Start(){
+       
+        protected override void Start()
+        {
             base.Start();
             navMeshAgent.enabled = false;
             Invoke("inimigo", 1f);
         }
 
-        void inimigo(){
+        void inimigo()
+        {
             navMeshAgent.enabled = true;
-            
         }
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -71,6 +75,16 @@ namespace RPGKarawara
             aiCharacterNetworkManager.currentHealth.OnValueChanged -= aiCharacterNetworkManager.CheckHP;
         }
 
+        public void ChangeMaterial(Material agua, Material fogo, Element element){
+
+            if (element == Element.Fire){
+                skinnedMeshRenderer.material = fogo;
+            }
+            else if (element == Element.Water){
+                skinnedMeshRenderer.material = agua;
+            }
+            
+        }
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -102,7 +116,6 @@ namespace RPGKarawara
                 ProcessStateMachine();
         }
 
-        //  OPTION 01
         private void ProcessStateMachine()
         {
             AIState nextState = currentState?.Tick(this);
@@ -112,7 +125,6 @@ namespace RPGKarawara
                 currentState = nextState;
             }
 
-            //  THE POSITION/ROTATION SHOULD BE RESET ONLY AFTER THE STATE MACHINE HAS PROCESSED IT'S TICK
             navMeshAgent.transform.localPosition = Vector3.zero;
             navMeshAgent.transform.localRotation = Quaternion.identity;
 
@@ -142,5 +154,17 @@ namespace RPGKarawara
                 aiCharacterNetworkManager.isMoving.Value = false;
             }
         }
+
+        // Novo método para verificar o elemento do inimigo
+        public void VerificarElementoDoInimigo(AICharacterManager inimigo)
+        {
+            if (inimigo != null)
+            {
+                Element elementoDoInimigo = inimigo.characterElement;
+                // Realize ações com base no elemento do inimigo
+                Debug.Log($"Elemento do inimigo: {elementoDoInimigo}");
+            }
+        }
     }
 }
+

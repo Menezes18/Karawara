@@ -12,8 +12,8 @@ namespace RPGKarawara
         public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [HideInInspector] public CharacterController characterController;
-        
-         public Animator animator;
+
+        public Animator animator;
 
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
         [HideInInspector] public CharacterEffectsManager characterEffectsManager;
