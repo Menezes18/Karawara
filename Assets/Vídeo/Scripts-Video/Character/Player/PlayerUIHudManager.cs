@@ -24,6 +24,7 @@ namespace RPGKarawara
         [SerializeField] GameObject pauseMenu;
 
         bool active = false;
+        [NonSerialized] public bool paneldesativar = false; 
 
         public void RefreshHUD()
         {
@@ -121,23 +122,29 @@ namespace RPGKarawara
             leftWeaponQuickSlotIcon.enabled = true;
         }
 
-        public void activatePause()
-        {
-           
-            pauseMenu.SetActive(!pauseMenu.activeSelf);
-            active = !active;
-            if (active)
+        public void activatePause(){
+            if (paneldesativar) 
             {
-                Time.timeScale = 0f;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                paneldesativar = true;
             }
-            else
-            {
-                Time.timeScale = 1f;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+            else{
+               pauseMenu.SetActive(!pauseMenu.activeSelf);
+               active = !active;
+               if (active)
+               {
+                   Time.timeScale = 0f;
+                   Cursor.lockState = CursorLockMode.None;
+                   Cursor.visible = true;
+               }
+               else
+               {
+                   Time.timeScale = 1f;
+                   Cursor.lockState = CursorLockMode.Locked;
+                   Cursor.visible = false;
+               }
+                
             }
+               
         }
         public void ChangeScene()
         {

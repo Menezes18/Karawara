@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,7 +66,6 @@ namespace RPGKarawara
                     }
                     break;
                 case InteractionType.SiteOfGraceInteractable:
-                     
                     break;
                 case InteractionType.SceneTeleport:
                     ChangeScene(sceneName);
@@ -73,16 +73,21 @@ namespace RPGKarawara
             }
     
             // Re-enable the collider after 1 second
-            Invoke("EnableCollider", 1f);
+            Invoke("EnableCollider", 0.5f);
         }
-        
+
+        public void EnableCollider(){
+            interactableCollider.enabled = true;
+        }
         private void ChangeScene(string sceneName){
             SceneManager.LoadScene(sceneName);
         }
+        
+
         public virtual void OnTriggerEnter(Collider other)
         {
             PlayerManager player = other.GetComponent<PlayerManager>();
-
+            
             if (player != null)
             {
                 if (!player.playerNetworkManager.IsHost && hostOnlyInteractable)
@@ -96,8 +101,7 @@ namespace RPGKarawara
             }
         }
 
-        public virtual void OnTriggerExit(Collider other)
-        {
+        public virtual void OnTriggerExit(Collider other){
             PlayerManager player = other.GetComponent<PlayerManager>();
 
             if (player != null)

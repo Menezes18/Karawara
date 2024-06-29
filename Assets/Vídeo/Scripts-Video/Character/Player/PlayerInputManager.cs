@@ -476,7 +476,7 @@ namespace RPGKarawara
         {
             if(esc_Input)
             {
-                Debug.Log("EntrouAq");
+                
                 esc_Input = false;
                 PlayerUIManager.instance.playerUIHudManager.activatePause();
             }

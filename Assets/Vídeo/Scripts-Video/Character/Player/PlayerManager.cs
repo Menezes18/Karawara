@@ -43,7 +43,7 @@ namespace RPGKarawara
 
             //  HANDLE MOVEMENT
             playerLocomotionManager.HandleAllMovement();
-            if (Keyboard.current.pKey.wasPressedThisFrame){
+            if (Keyboard.current.rKey.wasPressedThisFrame){
                 var save = FindObjectOfType<SavePositionOnTrigger>();
                 save.Reviver();
             }
