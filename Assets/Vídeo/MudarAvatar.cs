@@ -43,6 +43,7 @@ namespace RPGKarawara
                         jabuti.getSkinned(jabuti.transformacao,1);
                         jabuti.ativo = false;
                         t = 0;
+                        PlayerInputManager.instance.player.playerLocomotionManager.canDodge = true;
                     }
                     animatorMudar.runtimeAnimatorController = tainara.controller;
                     animatorMudar.avatar = tainara.avatar;
@@ -110,8 +111,9 @@ namespace RPGKarawara
 
             if(jabuti.ativo){
                 t+=Time.deltaTime;
-                if(t >= 2){
+                if(t >= 1.3f){
                     Ativar(0);
+                    PlayerInputManager.instance.player.playerLocomotionManager.canDodge = true;
                 }
             }
 

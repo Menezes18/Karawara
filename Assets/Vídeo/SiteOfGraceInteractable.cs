@@ -87,8 +87,8 @@ namespace RPGKarawara
 
             //  TEMPORARY CODE SECTION
             interactableCollider.enabled = true; // TEMPORARILY RE-ENABLING THE COLLIDER HERE UNTIL WE ADD THE MENU SO YOU CAN RESPAWN MONSTERS INDEFINITELY
-            //player.playerNetworkManager.currentHealth.Value = player.playerNetworkManager.maxHealth.Value;
-          
+                                                 //player.playerNetworkManager.currentHealth.Value = player.playerNetworkManager.maxHealth.Value;
+
 
 
             //  REFILL FLASKS (TO DO)
@@ -119,10 +119,8 @@ namespace RPGKarawara
         public override void Interact(PlayerManager player)
         {
             base.Interact(player);
-
-           
-                RestoreSiteOfGrace(player);
-            
+            RestoreSiteOfGrace(player);
+            player.playerNetworkManager.currentHealth.Value = player.playerNetworkManager.maxHealth.Value;
         }
     }
 }
