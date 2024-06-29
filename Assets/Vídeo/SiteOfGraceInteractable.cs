@@ -1,7 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+
+using UnityEngine.InputSystem;
+
+
 
 namespace RPGKarawara
 {
@@ -17,7 +22,8 @@ namespace RPGKarawara
         [Header("Interaction Text")]
         [SerializeField] string unactivatedInteractionText = "Restore Site Of Grace";
         [SerializeField] string activatedInteractionText = "Rest";
-
+        [SerializeField] private GameObject painel;
+        private PlayerManager _playerManager;
         protected override void Start()
         {
             base.Start();
@@ -43,7 +49,7 @@ namespace RPGKarawara
                 interactableText = unactivatedInteractionText;
             }
         }
-
+        
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -55,6 +61,17 @@ namespace RPGKarawara
             isActivated.OnValueChanged += OnIsActivatedChanged;
         }
 
+        public void Update(){
+            if (Keyboard.current.escapeKey.wasReleasedThisFrame){
+                
+               
+                painel.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked; // Libera o cursor
+                Cursor.visible = false; // Torna o cursor visível (opcional)
+                Time.timeScale = 1f;
+            }
+        }
+
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
@@ -62,8 +79,51 @@ namespace RPGKarawara
             isActivated.OnValueChanged -= OnIsActivatedChanged;
         }
 
-        private void RestoreSiteOfGrace(PlayerManager player)
-        {
+        private void RestoreSiteOfGrace(PlayerManager player){
+            var painelUI = FindObjectOfType<PlayerUIHudManager>();
+            painelUI.paneldesativar = true;
+            bool panelActive = !painel.activeSelf;
+            painel.SetActive(panelActive);
+            _playerManager = player;
+
+            // Travar/Desativar o Cursor e a Câmera
+            if (panelActive){
+
+                Cursor.lockState = CursorLockMode.None; // Trava o cursor
+                Cursor.visible = true; // Torna o cursor visível (opcional)
+            }
+            else{
+
+                Cursor.lockState = CursorLockMode.Locked; // Libera o cursor
+                Cursor.visible = false; // Torna o cursor visível (opcional)
+
+            }
+
+            // Pausar/Despausar o jogo (opcional)
+            Time.timeScale = panelActive ? 0 : 1;
+        }
+
+
+        public void ChangeElement(string element){
+            
+            var elemento = FindObjectOfType<ElementManager>();
+
+            switch (element.ToLower())
+            {
+                case "fogo":
+                    elemento.SetElement(Element.Fire);
+                    break;
+                case "agua":
+                    elemento.SetElement(Element.Water);
+                    break;
+                default:
+                    Debug.LogWarning("Elemento não reconhecido.");
+                    break;
+            }
+           
+
+        }
+        public void ResetSite(){
             isActivated.Value = true;
 
             //  IF OUR SAVE FILE CONTAINS INFO ON THIS SITE OF GRACE, REMOVE IT
@@ -77,7 +137,7 @@ namespace RPGKarawara
             //  HIDE WEAPON MODELS WHILST PLAYING ANIMATION IF YOU DESIRE
 
             PlayerUIManager.instance.playerUIPopUpManager.SendGraceRestoredPopUp("Restore enemy to Totem");
-            RestAtSiteOfGrace(player);
+            RestAtSiteOfGrace(_playerManager);
             StartCoroutine(WaitForAnimationAndPopUpThenRestoreCollider());
         }
 

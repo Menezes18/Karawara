@@ -1675,10 +1675,6 @@ MonoBehaviour:
     m_InternalValue: 400
   maxHealth:
     m_InternalValue: 400
-  currentStamina:
-    m_InternalValue: 0
-  maxStamina:
-    m_InternalValue: 0
   vitality:
     m_InternalValue: 1
   endurance:
@@ -1695,6 +1691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12763c93f7e8635448da079e42364e71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBoss: 0
   isDead:
     m_InternalValue: 0
   characterController: {fileID: 0}
@@ -1709,6 +1706,7 @@ MonoBehaviour:
   characterGroup: 1
   isPerformingAction: 0
   characterName: 
+  characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
   aiCharacterCombatManager: {fileID: 0}
   aiCharacterLocomotionManager: {fileID: 0}
@@ -1718,6 +1716,7 @@ MonoBehaviour:
   pursueTarget: {fileID: 11400000, guid: 46a124bca52793446bcb4e19208a673a, type: 2}
   combatStance: {fileID: 11400000, guid: aadb5ca115e8fa6429821cbb0d2325d3, type: 2}
   attack: {fileID: 11400000, guid: eaef9a4de849bae449b7ac53c5dc24c2, type: 2}
+  skinnedMeshRenderer: {fileID: 3603879612579134743}
 --- !u!114 &2386473894482796835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1730,6 +1729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c9811791123c914da0149e20f23733f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
   gravityForce: -5.55
   groundLayer:
     serializedVersion: 2
@@ -1769,6 +1769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3bf28f8099a094eb294b4ec5ae6f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
   applyRootMotion: 0
   lastDamageAnimationPlayed: 
   hit_Forward_Medium_01: Hit_Forward_Medium_01

@@ -10,11 +10,11 @@ namespace RPGKarawara
         [Header("Character")]
         [SerializeField] GameObject characterGameObject;
         [SerializeField] GameObject instantiatedGameObject;
-
-        private void Awake()
-        {
-
-        }
+        [SerializeField] private SkinnedMeshRenderer skin;
+        public AICharacterManager characterManager;
+        public Element characterElement = Element.None;
+        public Material agua;
+        public Material fogo;
 
         private void Start()
         {
@@ -22,15 +22,31 @@ namespace RPGKarawara
             gameObject.SetActive(false);
         }
 
+        public void ChangeElement(GameObject character)
+        {
+            Debug.Log(characterElement);
+            
+            characterManager = character.GetComponent<AICharacterManager>();
+            characterManager.characterElement = characterElement;
+            characterManager.ChangeMaterial(agua, fogo, characterElement);
+            
+            
+        }
+
+        
+
+
         public void AttemptToSpawnCharacter()
         {
             if (characterGameObject != null)
             {
-                instantiatedGameObject = Instantiate(characterGameObject);
-                instantiatedGameObject.transform.position = transform.position;
-                instantiatedGameObject.transform.rotation = transform.rotation;
+                instantiatedGameObject = Instantiate(characterGameObject, transform.position, transform.rotation);
                 instantiatedGameObject.GetComponent<NetworkObject>().Spawn();
+                
                 WorldAIManager.instance.AddCharacterToSpawnedCharactersList(instantiatedGameObject.GetComponent<AICharacterManager>());
+                
+                ChangeElement(instantiatedGameObject);
+              
             }
         }
     }
