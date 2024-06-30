@@ -328,7 +328,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Tree1
@@ -2230,7 +2230,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Grass 2
@@ -7378,7 +7378,7 @@ MonoBehaviour:
     levelsInWhite: 255
     levelsOutBlack: 0
     levelsOutWhite: 255
-  activeTab: 1
+  activeTab: 0
   paintOnSelected: 1
   paintLayers:
     serializedVersion: 2
@@ -7395,7 +7395,7 @@ MonoBehaviour:
   pinSnapScale: 0
   placeAngleStep: 15
   placeScaleStep: 0.1
-  eraseBrushRadius: 10.81
+  eraseBrushRadius: 20
   eraseByLayer: 0
   eraseLayers:
     serializedVersion: 2
