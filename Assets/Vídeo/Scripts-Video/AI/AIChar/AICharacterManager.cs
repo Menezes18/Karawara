@@ -8,6 +8,7 @@ namespace RPGKarawara
 {
     public class AICharacterManager : CharacterManager
     {
+        
         [Header("Character Name")]
         public string characterName = "";
         [Header("Elementos")]
@@ -74,7 +75,6 @@ namespace RPGKarawara
 
             aiCharacterNetworkManager.currentHealth.OnValueChanged -= aiCharacterNetworkManager.CheckHP;
         }
-
         public void ChangeMaterial(Material agua, Material fogo, Element element){
 
             if (element == Element.Fire){
@@ -103,6 +103,7 @@ namespace RPGKarawara
 
         protected override void Update()
         {
+
             base.Update();
 
             aiCharacterCombatManager.HandleActionRecovery(this);
