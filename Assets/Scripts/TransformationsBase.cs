@@ -9,6 +9,7 @@ namespace RPGKarawara
     {
         public Avatar avatar;
         public RuntimeAnimatorController controller;
+        public Animator suporte;
         public GameObject transformacao;
         public bool ativo = false;
         public float erodeRate = 0.03f;
@@ -18,7 +19,7 @@ namespace RPGKarawara
 
         public void Start()
         {
-
+            suporte.enabled = false;
             eroding = false;
         }
 

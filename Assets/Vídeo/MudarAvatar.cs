@@ -45,17 +45,19 @@ namespace RPGKarawara
                         t = 0;
                         PlayerInputManager.instance.player.playerLocomotionManager.canDodge = true;
                     }
+                    tainara.suporte.enabled = false;
                     animatorMudar.runtimeAnimatorController = tainara.controller;
                     animatorMudar.avatar = tainara.avatar;
                     tainara.eroding = true;
-                    tainara.getSkinnedK(tainara.transformacao,0);
+                    tainara.getSkinned(tainara.transformacao,0);
                     tainara.ativo = true;
                     break;
                 case 1:
                     if (tainara.ativo)
                     {
                         tainara.eroding = true;
-                        tainara.getSkinnedK(tainara.transformacao,1);
+                        tainara.suporte.enabled = true;
+                        tainara.getSkinned(tainara.transformacao,1);
                         tainara.ativo = false;
                     }
                     else if (jabuti.ativo)
@@ -66,10 +68,10 @@ namespace RPGKarawara
                         t = 0;
                     }
                     change = true;
-                    animatorMudar.runtimeAnimatorController = pantera.controller;
-                    animatorMudar.avatar = pantera.avatar;
                     pantera.eroding = true;
                     pantera.getSkinned(pantera.transformacao,0);
+                    animatorMudar.runtimeAnimatorController = pantera.controller;
+                    animatorMudar.avatar = pantera.avatar;
                     Invoke("canRun", 0.05f);
                     pantera.ativo = true;
                     break;
@@ -77,7 +79,8 @@ namespace RPGKarawara
                     if (tainara.ativo)
                     {
                         tainara.eroding = true;
-                        tainara.getSkinnedK(tainara.transformacao,1);
+                        tainara.suporte.enabled = true;
+                        tainara.getSkinned(tainara.transformacao,1);
                         tainara.ativo = false;
                     }
                     else if (pantera.ativo)
