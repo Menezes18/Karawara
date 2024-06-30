@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Grass_tp 1
   m_Shader: {fileID: 4800000, guid: a0c63141c06716f458dfb5607e4020f4, type: 3}
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 2100000, guid: 567bba92e3d91494fb83b8a3d9164b24, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,34 +23,15 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BladeTexture:
-        m_Texture: {fileID: 2800000, guid: b14777e658cb5ca4391e845a9f61e658, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _GrassMap:
         m_Texture: {fileID: 2800000, guid: cf0acac66a5f6f04291005a08a80dc6a, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _WindMap:
-        m_Texture: {fileID: 2800000, guid: f0b061bf34937124a96304cf5e9f3cfc, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 1, y: 1.01}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BendDelta: 0.15
-    - _BladeBendCurve: 4
-    - _BladeBendDistance: 0.39
-    - _BladeHeightMax: 1.25
-    - _BladeHeightMin: 0.75
-    - _BladeSegments: 3
-    - _BladeWidthMax: 0.05
-    - _BladeWidthMin: 0.02
-    - _GrassFalloff: 0.075
-    - _GrassThreshold: 0.963
-    - _TessellationGrassDistance: 0.16
-    - _WindFrequency: 0.0125
+    - _GrassThreshold: -0.038
+    - _TessellationGrassDistance: 0.39
     m_Colors:
-    - _BaseColor: {r: 0.07491677, g: 0.254717, b: 0, a: 1}
-    - _TipColor: {r: 0.032786846, g: 1, b: 0, a: 1}
-    - _WindVelocity: {r: 0.2, g: 0, b: 0.15, a: 0}
+    - _BaseColor: {r: 0.11857772, g: 0.4056604, b: 0, a: 1}
+    - _TipColor: {r: 1, g: 0.18196449, b: 0, a: 1}
   m_BuildTextureStacks: []
