@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -35,9 +36,15 @@ namespace RPGKarawara
         public bool unlocked = false;
         public TextMeshProUGUI textName;
         public Image image;
+        public SystemXP systemXp;
+
+        public void Start(){
+            systemXp = FindObjectOfType<SystemXP>();
+        }
 
         private void Awake()
         {
+            
             if (node != null && node.skillData != null)
             {
                 if (textName != null)
@@ -52,32 +59,37 @@ namespace RPGKarawara
             }
         }
 
+        public void Limpar(){
+            systemXp.text.text = " ";
+        }
         public void UnlockSkill()
         {
             if (SystemXP.Instance.currentLevel < node.skillData.xp)
             {
-                Debug.Log("Você não tem level suficiente");
+                systemXp.text.text = "Você não tem level suficiente";
+                Invoke("Limpar", 1f);
                 return;
             }
 
             // Verifica se a habilidade já está desbloqueada
-            if (node.isUnlocked)
-            {
-                Debug.Log("Habilidade já desbloqueada");
+            if (node.isUnlocked){
+                systemXp.text.text = "Habilidade já desbloqueada";
+                Invoke("Limpar", 1f);
                 return;
             }
 
             // Verifica se a habilidade pode ser comprada
-            if (!CanBuySkill())
-            {
-                Debug.Log("Os pré-requisitos para esta habilidade não são atendidos");
+            if (!CanBuySkill()){
+                systemXp.text.text = "Os pré-requisitos para esta habilidade não são atendidos";
+                Invoke("Limpar", 1f);
                 return;
             }
 
             // Desbloqueia a habilidade e compra com XP
             node.isUnlocked = true;
             node.skillData.BuyXp();
-            Debug.Log($"Skill {node.skillData.skillName} desbloqueado");
+            systemXp.text.text = $"Skill {node.skillData.skillName} desbloqueado";
+            Invoke("Limpar", 1f);
 
             // Habilita as habilidades filhas
             if (node.children[0] != null){

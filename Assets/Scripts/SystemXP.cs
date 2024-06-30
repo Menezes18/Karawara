@@ -17,6 +17,7 @@ namespace RPGKarawara
         public GameObject xpBarUI; // Referência para o GameObject da barra de XP UI
         private Coroutine hideXPBarCoroutine;
         public GameObject panel;
+        public TextMeshProUGUI text;
         
         [Header("UI Menu")]
         [SerializeField] private TextMeshProUGUI xpText;
