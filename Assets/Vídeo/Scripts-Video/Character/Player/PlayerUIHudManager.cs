@@ -125,7 +125,7 @@ namespace RPGKarawara
         public void activatePause(){
             if (paneldesativar) 
             {
-                paneldesativar = true;
+                paneldesativar = false;
             }
             else{
                pauseMenu.SetActive(!pauseMenu.activeSelf);
