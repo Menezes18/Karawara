@@ -1246,8 +1246,7 @@ MonoBehaviour:
           type: 3}
       - gameObject: {fileID: 767696715803136242, guid: 18e356607736bb14984d0f35f0e2513f,
           type: 3}
-      - gameObject: {fileID: 919132149155446097, guid: 7b008212aa597db4d8b6c9aebc41e54c,
-          type: 3}
+      - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
@@ -2230,7 +2229,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Grass 2
@@ -2862,7 +2861,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     levelsGamma: 1
@@ -7395,7 +7394,7 @@ MonoBehaviour:
   pinSnapScale: 0
   placeAngleStep: 15
   placeScaleStep: 0.1
-  eraseBrushRadius: 20
+  eraseBrushRadius: 2.78
   eraseByLayer: 0
   eraseLayers:
     serializedVersion: 2
