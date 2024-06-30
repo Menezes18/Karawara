@@ -15,6 +15,7 @@ namespace RPGKarawara
         public TransformationsBase tainara;
         public TransformationsBase pantera;
         public TransformationsBase jabuti;
+        public GameObject lança;
         
         public float t;
 
@@ -50,6 +51,7 @@ namespace RPGKarawara
                     animatorMudar.avatar = tainara.avatar;
                     tainara.eroding = true;
                     tainara.getSkinned(tainara.transformacao,0);
+                    lança.SetActive(true);
                     tainara.ativo = true;
                     break;
                 case 1:
@@ -58,6 +60,7 @@ namespace RPGKarawara
                         tainara.eroding = true;
                         tainara.suporte.enabled = true;
                         tainara.getSkinned(tainara.transformacao,1);
+                        lança.SetActive(false);
                         tainara.ativo = false;
                     }
                     else if (jabuti.ativo)
@@ -81,6 +84,7 @@ namespace RPGKarawara
                         tainara.eroding = true;
                         tainara.suporte.enabled = true;
                         tainara.getSkinned(tainara.transformacao,1);
+                        lança.SetActive(false);
                         tainara.ativo = false;
                     }
                     else if (pantera.ativo)
