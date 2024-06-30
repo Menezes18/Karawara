@@ -10,6 +10,9 @@ namespace RPGKarawara
         public GameObject gate; // Reference to the gate GameObject
         public bool PortaoAtivo = false;
         public bool trueorfalse;
+        public GameObject cameraAtivar;
+
+        public CutScenePortao cutScenePortao;
         private void Start()
         {
             foreach (Lever lever in levers)
@@ -36,10 +39,27 @@ namespace RPGKarawara
         {
             if (gate != null)
             {
-                gate.SetActive(trueorfalse); 
+                gate.SetActive(trueorfalse);
+                
                 PortaoAtivo = true;
                 Debug.Log("Gate activated!");
             }
+        }
+        
+        void StartCutscene()
+        {
+            Time.timeScale = 0; // Pausa o tempo
+
+            cameraAtivar.SetActive(true);
+            
+        }
+
+        void EndCutscene()
+        {
+            Time.timeScale = 1; 
+            cameraAtivar.SetActive(false);
+
+            
         }
     }
 }
