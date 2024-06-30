@@ -355,7 +355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 449579485897982329}
   - component: {fileID: 8950870070958167939}
-  - component: {fileID: 5699280759369868497}
+  - component: {fileID: 625585063155448581}
   m_Layer: 3
   m_Name: Tree5Burned
   m_TagString: Untagged
@@ -414,8 +414,8 @@ LODGroup:
     - renderer: {fileID: 0}
     - renderer: {fileID: 7561782189690045810}
   m_Enabled: 1
---- !u!64 &5699280759369868497
-MeshCollider:
+--- !u!65 &625585063155448581
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -432,7 +432,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3660001294064371760, guid: 6e59958d19606f04fb2e8e6723d90011, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.8054833, y: 5.606798, z: 2.0315833}
+  m_Center: {x: 0.06359087, y: 2.7838628, z: 0.07772195}
