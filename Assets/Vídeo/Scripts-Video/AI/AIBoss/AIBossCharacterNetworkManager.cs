@@ -14,6 +14,8 @@ namespace RPGKarawara
             base.Awake();
 
             aiBossCharacter = GetComponent<AIBossCharacterManager>();
+            currentHealth.Value = 3000;
+            maxHealth.Value = 3000;
         }
 
         public override void CheckHP(int oldValue, int newValue)

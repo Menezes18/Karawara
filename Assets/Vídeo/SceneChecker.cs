@@ -27,11 +27,22 @@ public class SceneChecker : MonoBehaviour{
     }
 
     Scene sceneStart;
-    private void Start(){ 
+    private void Start()
+    {
+        // Inicializa a variável com a cena atual
+        Scene sceneStart = SceneManager.GetActiveScene();
+        
         if (sceneStart.name == "SceneMenu")
-            statusBar.SetActive(false);
+        {
+            Debug.Log("SCENE");
+            Invoke("Tirar", 0.1f);
+        }
     }
 
+    public void Tirar(){
+        
+            statusBar.SetActive(false);
+    }
     public void teleportSpawn(){
         var player = GameObject.FindGameObjectWithTag("Player");
         spawn = GameObject.FindGameObjectWithTag("Spawn");
@@ -39,6 +50,7 @@ public class SceneChecker : MonoBehaviour{
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("A");
         // Verifica se a cena carregada é "SceneMenu"
         if (scene.name == "SceneMenu"){
             var player = GameObject.FindGameObjectWithTag("Player");

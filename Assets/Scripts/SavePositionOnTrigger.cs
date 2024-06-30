@@ -7,20 +7,17 @@ using UnityEngine.InputSystem;
 namespace RPGKarawara
 {
     public class SavePositionOnTrigger : MonoBehaviour{
-        public Transform savedPostion;
+        public Transform[] savedPostion;
+        public int numberSave;
 
-        private void OnTriggerEnter(Collider other){
-            if (other.CompareTag("Player")){
-                savedPostion = this.transform;
-            }
-        }
+        
 
         
         public void Reviver()
         {
            
                 var player = FindObjectOfType<PlayerManager>();
-                player.transform.position = savedPostion.position;
+                player.transform.position = savedPostion[numberSave].position;
                 player.ReviveCharacter();
             
         }

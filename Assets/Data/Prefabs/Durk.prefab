@@ -106,6 +106,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7391793005832585501}
     m_Modifications:
+    - target: {fileID: 470095351831958096, guid: 427e5e628081fc441901f23ad66777d5,
+        type: 3}
+      propertyPath: m_Name
+      value: Character HP Bar aa
+      objectReference: {fileID: 0}
     - target: {fileID: 2653937181456101705, guid: 427e5e628081fc441901f23ad66777d5,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1537,7 +1542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 95866527
+  GlobalObjectIdHash: 218241860
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1599,6 +1604,7 @@ MonoBehaviour:
   characterGroup: 1
   isPerformingAction: 0
   characterName: "Mapinguari, Guardi\xE3o dos Mist\xE9rios Amaz\xF4nicos"
+  characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
   aiCharacterCombatManager: {fileID: 0}
   aiCharacterLocomotionManager: {fileID: 0}
@@ -1608,6 +1614,7 @@ MonoBehaviour:
   pursueTarget: {fileID: 11400000, guid: 67edd200b4aa40b4ba654f1c014590cf, type: 2}
   combatStance: {fileID: 11400000, guid: 0a55554c1bdad73408cf47130d29015f, type: 2}
   attack: {fileID: 11400000, guid: 5b25504b331b09b4ba409cef89427d56, type: 2}
+  skinnedMeshRenderer: {fileID: 0}
   bossID: 0
   bossIntroClip: {fileID: 0}
   bossBattleLoopClip: {fileID: 0}
