@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BladeTexture:
-        m_Texture: {fileID: 2800000, guid: b14777e658cb5ca4391e845a9f61e658, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GrassMap:
@@ -37,18 +37,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BendDelta: 0.976
+    - _BendDelta: 0.811
     - _BladeBendCurve: 4
     - _BladeBendDistance: 0.39
-    - _BladeHeightMax: 2
-    - _BladeHeightMin: 0.75
+    - _BladeHeightMax: 0.47
+    - _BladeHeightMin: 2
     - _BladeSegments: 3
     - _BladeWidthMax: 0.05
     - _BladeWidthMin: 0.0622
     - _GrassFalloff: 0.075
     - _GrassThreshold: 0.144
-    - _TessellationGrassDistance: 0.01
-    - _WindFrequency: 0.0125
+    - _TessellationGrassDistance: 0.39
+    - _WindFrequency: 0.028
     m_Colors:
     - _BaseColor: {r: 0.07491677, g: 0.254717, b: 0, a: 1}
     - _TipColor: {r: 0.032786846, g: 1, b: 0, a: 1}
