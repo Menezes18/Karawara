@@ -110,20 +110,11 @@ Shader "Custom/BotWGrass"
 				float3 worldPos : TEXCOORD1;
 			};
 
-			// Following functions from Roystan's code:
-			// (https://github.com/IronWarrior/UnityGrassGeometryShader)
-
-			// Simple noise function, sourced from http://answers.unity.com/answers/624136/view.html
-			// Extended discussion on this function can be found at the following link:
-			// https://forum.unity.com/threads/am-i-over-complicating-this-random-function.454887/#post-2949326
-			// Returns a number in the 0...1 range.
 			float rand(float3 co)
 			{
 				return frac(sin(dot(co.xyz, float3(12.9898, 78.233, 53.539))) * 43758.5453);
 			}
 
-			// Construct a rotation matrix that rotates around the provided axis, sourced from:
-			// https://gist.github.com/keijiro/ee439d5e7388f3aafc5296005c8c3f33
 			float3x3 angleAxis3x3(float angle, float3 axis)
 			{
 				float c, s;
@@ -142,7 +133,6 @@ Shader "Custom/BotWGrass"
 				);
 			}
 
-			// Regular vertex shader used by typical shaders.
 			VertexOutput vert(VertexInput v)
 			{
 				VertexOutput o;
@@ -153,7 +143,6 @@ Shader "Custom/BotWGrass"
 				return o;
 			}
 
-			// Vertex shader which just passes data to tessellation stage.
 			VertexOutput tessVert(VertexInput v)
 			{
 				VertexOutput o;
@@ -164,7 +153,6 @@ Shader "Custom/BotWGrass"
 				return o;
 			}
 
-			// Vertex shader which translates from object to world space.
 			VertexOutput geomVert (VertexInput v)
             {
 				VertexOutput o; 
@@ -175,8 +163,6 @@ Shader "Custom/BotWGrass"
                 return o;
             }
 
-			// This function lets us derive the tessellation factor for an edge
-			// from the vertices.
 			float tessellationEdgeFactor(VertexInput vert0, VertexInput vert1)
 			{
 				float3 v0 = vert0.vertex.xyz;
@@ -185,8 +171,6 @@ Shader "Custom/BotWGrass"
 				return edgeLength / _TessellationGrassDistance;
 			}
 
-			// This is a test version of the tessellation that takes distance from the viewer
-			// into account. It works fine, but I think it could do with refinement.
 			float tessellationEdgeFactor_distanceTest(VertexInput vert0, VertexInput vert1)
 			{
 				float3 v0 = vert0.vertex.xyz;
@@ -199,13 +183,6 @@ Shader "Custom/BotWGrass"
 				return edgeLength * _ScreenParams.y / (_TessellationGrassDistance * viewDist);
 			}
 
-			// Tessellation hull and domain shaders derived from Catlike Coding's tutorial:
-			// https://catlikecoding.com/unity/tutorials/advanced-rendering/tessellation/
-
-			// The patch constant function is where we create new control
-			// points on the patch. For the edges, increasing the tessellation
-			// factors adds new vertices on the edge. Increasing the inside
-			// will add more 'layers' inside the new triangle.
 			TessellationFactors patchConstantFunc(InputPatch<VertexInput, 3> patch)
 			{
 				TessellationFactors f;
@@ -218,12 +195,6 @@ Shader "Custom/BotWGrass"
 				return f;
 			}
 
-			// The hull function is the first half of the tessellation shader.
-			// It operates on each patch (in our case, a patch is a triangle),
-			// and outputs new control points for the other tessellation stages.
-			//
-			// The patch constant function is where we create new control points
-			// (which are kind of like new vertices).
 			[domain("tri")]
 			[outputcontrolpoints(3)]
 			[outputtopology("triangle_cw")]
@@ -234,13 +205,6 @@ Shader "Custom/BotWGrass"
 				return patch[id];
 			}
 
-			// In between the hull shader stage and the domain shader stage, the
-			// tessellation stage takes place. This is where, under the hood,
-			// the graphics pipeline actually generates the new vertices.
-
-			// The domain function is the second half of the tessellation shader.
-			// It interpolates the properties of the vertices (position, normal, etc.)
-			// to create new vertices.
 			[domain("tri")]
 			VertexOutput domain(TessellationFactors factors, OutputPatch<VertexInput, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
 			{
@@ -259,11 +223,6 @@ Shader "Custom/BotWGrass"
 				return tessVert(i);
 			}
 
-			// Geometry functions derived from Roystan's tutorial:
-			// https://roystan.net/articles/grass-shader.html
-
-			// This function applies a transformation (during the geometry shader),
-			// converting to clip space in the process.
 			GeomData TransformGeomToClip(float3 pos, float3 offset, float3x3 transformationMatrix, float2 uv)
 			{
 				GeomData o;
@@ -275,8 +234,6 @@ Shader "Custom/BotWGrass"
 				return o;
 			}
 
-			// This is the geometry shader. For each vertex on the mesh, a leaf
-			// blade is created by generating additional vertices.
 			[maxvertexcount(BLADE_SEGMENTS * 2 + 1)]
 			void geom(point VertexOutput input[1], inout TriangleStream<GeomData> triStream)
 			{
@@ -297,10 +254,8 @@ Shader "Custom/BotWGrass"
 						tangent.z, bitangent.z, normal.z
 					);
 
-					// Rotate around the y-axis a random amount.
 					float3x3 randRotMatrix = angleAxis3x3(rand(pos) * UNITY_TWO_PI, float3(0, 0, 1.0f));
 
-					// Rotate around the bottom of the blade a random amount.
 					float3x3 randBendMatrix = angleAxis3x3(rand(pos.zzx) * _BendDelta * UNITY_PI * 0.5f, float3(-1.0f, 0, 0));
 
 					float2 windUV = pos.xz * _WindMap_ST.xy + _WindMap_ST.zw + normalize(_WindVelocity.xzy) * _WindFrequency * _Time.y;
@@ -309,7 +264,6 @@ Shader "Custom/BotWGrass"
 					float3 windAxis = normalize(float3(windSample.x, windSample.y, 0));
 					float3x3 windMatrix = angleAxis3x3(UNITY_PI * windSample, windAxis);
 
-					// Transform the grass blades to the correct tangent space.
 					float3x3 baseTransformationMatrix = mul(tangentToLocal, randRotMatrix);
 					float3x3 tipTransformationMatrix = mul(mul(mul(tangentToLocal, windMatrix), randBendMatrix), randRotMatrix);
 
@@ -319,7 +273,6 @@ Shader "Custom/BotWGrass"
 					float height = lerp(_BladeHeightMin, _BladeHeightMax, rand(pos.zyx) * falloff);
 					float forward = rand(pos.yyz) * _BladeBendDistance;
 
-					// Create blade segments by adding two vertices at once.
 					for (int i = 0; i < BLADE_SEGMENTS; ++i)
 					{
 						float t = i / (float)BLADE_SEGMENTS;
@@ -331,7 +284,6 @@ Shader "Custom/BotWGrass"
 						triStream.Append(TransformGeomToClip(pos, float3(-offset.x, offset.y, offset.z), transformationMatrix, float2(1, t)));
 					}
 
-					// Add the final vertex at the tip of the grass blade.
 					triStream.Append(TransformGeomToClip(pos, float3(0, forward, height), tipTransformationMatrix, float2(0.5, 1)));
 
 					triStream.RestartStrip();
@@ -339,7 +291,6 @@ Shader "Custom/BotWGrass"
 			}
 		ENDHLSL
 
-		// This pass draws the grass blades generated by the geometry shader.
         Pass
         {
 			Name "GrassPass"
@@ -349,15 +300,12 @@ Shader "Custom/BotWGrass"
 			#pragma require geometry
 			#pragma require tessellation tessHW
 
-			//#pragma vertex vert
 			#pragma vertex tessVert
 			#pragma hull hull
 			#pragma domain domain
 			#pragma geometry geom
             #pragma fragment frag
 
-			// The lighting sections of the frag shader taken from this helpful post by Ben Golus:
-			// https://forum.unity.com/threads/water-shader-graph-transparency-and-shadows-universal-render-pipeline-order.748142/#post-5518747
             float4 frag (GeomData i) : SV_Target
             {
 				float4 color = tex2D(_BladeTexture, i.uv);
