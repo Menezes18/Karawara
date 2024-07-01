@@ -30,13 +30,13 @@ public class SceneChecker : MonoBehaviour{
     private void Start()
     {
         // Inicializa a variável com a cena atual
-        Scene sceneStart = SceneManager.GetActiveScene();
-        
-        if (sceneStart.name == "SceneMenu")
-        {
-            Debug.Log("SCENE");
-            Invoke("Tirar", 0.1f);
-        }
+        // Scene sceneStart = SceneManager.GetActiveScene();
+        //
+        // if (sceneStart.name == "SceneMenu")
+        // {
+        //     Debug.Log("SCENE");
+        //     Invoke("Tirar", 0.1f);
+        // }
     }
 
     public void Tirar(){

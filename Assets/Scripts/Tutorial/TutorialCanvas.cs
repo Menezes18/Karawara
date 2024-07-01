@@ -22,7 +22,8 @@ namespace RPGKarawara
         public GameObject emeny;
         public Image enemyImage;
 
-
+        public GameObject totem;
+        public Image totemimage;
 
 
 

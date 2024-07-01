@@ -15,7 +15,7 @@ namespace RPGKarawara
         public Element characterElement = Element.None;
         public Material agua;
         public Material fogo;
-
+        public bool boss = false;
         private void Start()
         {
             WorldAIManager.instance.SpawnCharacter(this);
@@ -29,6 +29,10 @@ namespace RPGKarawara
             characterManager = character.GetComponent<AICharacterManager>();
             characterManager.characterElement = characterElement;
             characterManager.ChangeMaterial(agua, fogo, characterElement);
+            if (boss){
+                var AIBossCharacterManager = character.GetComponent<AIBossCharacterNetworkManager>();
+                AIBossCharacterManager.fogoBoss = true;
+            }
             
             
         }

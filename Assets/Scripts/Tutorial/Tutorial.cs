@@ -57,6 +57,7 @@ namespace RPGKarawara
                     break;
                 case ActionState.Totem:
                     TotemCheck();
+                    SwitchImage(6);
                     break;
                 case ActionState.EnemyDead:
                     Enemy();
@@ -76,26 +77,38 @@ namespace RPGKarawara
                     tutorialCanvas.botao1.SetActive(false);
                     tutorialCanvas.shift.SetActive(false);
                     tutorialCanvas.emeny.SetActive(false);
+                    tutorialCanvas.totem.SetActive(false);
                     break;
                 case 2:
                     tutorialCanvas.wasd.SetActive(false);
                     tutorialCanvas.botao1.SetActive(true);
                     tutorialCanvas.shift.SetActive(false);
                     tutorialCanvas.emeny.SetActive(false);
+                    tutorialCanvas.totem.SetActive(false);
                     break;
                 case 3:
                     tutorialCanvas.wasd.SetActive(false);
                     tutorialCanvas.botao1.SetActive(false);
                     tutorialCanvas.shift.SetActive(true);
                     tutorialCanvas.emeny.SetActive(false);
+                    tutorialCanvas.totem.SetActive(false);
                     break;
                 case 4:
                     tutorialCanvas.wasd.SetActive(false);
                     tutorialCanvas.botao1.SetActive(false);
                     tutorialCanvas.shift.SetActive(false);
                     tutorialCanvas.emeny.SetActive(true);
+                    tutorialCanvas.totem.SetActive(false);
+                    break;
+                case 6:
+                    tutorialCanvas.wasd.SetActive(false);
+                    tutorialCanvas.botao1.SetActive(false);
+                    tutorialCanvas.shift.SetActive(false);
+                    tutorialCanvas.emeny.SetActive(false);
+                    tutorialCanvas.totem.SetActive(true);
                     break;
                 case 5:
+                    tutorialCanvas.totem.SetActive(false);
                     tutorialCanvas.wasd.SetActive(false);
                     tutorialCanvas.botao1.SetActive(false);
                     tutorialCanvas.shift.SetActive(false);
