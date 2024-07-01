@@ -44,7 +44,6 @@ namespace RPGKarawara
                         jabuti.getSkinned(jabuti.transformacao,1);
                         jabuti.ativo = false;
                         t = 0;
-                        PlayerInputManager.instance.player.playerLocomotionManager.canDodge = true;
                     }
                     tainara.suporte.enabled = false;
                     animatorMudar.runtimeAnimatorController = tainara.controller;
@@ -53,6 +52,7 @@ namespace RPGKarawara
                     tainara.getSkinned(tainara.transformacao,0);
                     lança.SetActive(true);
                     tainara.ativo = true;
+                    PlayerInputManager.instance.player.playerLocomotionManager.canDodge = true;
                     break;
                 case 1:
                     if (tainara.ativo)

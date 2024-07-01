@@ -35,6 +35,7 @@ namespace RPGKarawara
             {
                 ShowNextDialogueLine();
             }
+
         }
         void OnTriggerExit(Collider col)
         {
@@ -52,6 +53,7 @@ namespace RPGKarawara
                 if (currentLineIndex >= dialogueLines.Length)
                 {
                     TelaDialogo.SetActive(false);
+                    currentLineIndex = 0;
                 }
                 dialogueText.text = dialogueLines[currentLineIndex];
             }
