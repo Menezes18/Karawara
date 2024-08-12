@@ -85,9 +85,8 @@ namespace RPGKarawara
                     //  DESERIALIZE THE DATA FROM JSON BACK TO UNITY
                     characterData = JsonUtility.FromJson<CharacterSaveData>(dataToLoad);
                 }
-                catch (Exception ex)
-                {
-
+                catch (Exception ex){
+                    // ignored
                 }
             }
 

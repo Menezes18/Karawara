@@ -344,7 +344,7 @@ namespace RPGKarawara
                 dodge_Input = false;
                 player.playerLocomotionManager.canDodge = false;
                 //  FUTURE NOTE: RETURN (DO NOTHING) IF MENU OR UI WINDOW IS OPEN
-                if(!MudarAvatar.instancia.jabuti.ativo)MudarAvatar.instancia.Ativar(2);
+                
                 Invoke("dodge", 0.05f);
             }
         }
@@ -355,18 +355,18 @@ namespace RPGKarawara
 
         private void HandleSprintInput()
         {
-            if (sprint_Input && !MudarAvatar.instancia.change )
+            if (sprint_Input)
             {
                 player.playerLocomotionManager.HandleSprinting();
                 if(clicou) return;
                 clicou = true;
-                MudarAvatar.instancia.Ativar(1);
+                
             }
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
                 clicou = false;
-                if(MudarAvatar.instancia.pantera.ativo)MudarAvatar.instancia.Ativar(0);
+               
             }
         }
 

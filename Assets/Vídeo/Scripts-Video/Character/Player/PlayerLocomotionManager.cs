@@ -34,7 +34,6 @@ namespace RPGKarawara
         public bool humanAction = false;
         [SerializeField] float dodgeDistance = 8f;   // Distância do dodge
         [SerializeField] float dodgeDuration = 11f; // Duração do dodge
-        [SerializeField] float dodgeStaminaCost = 25;
         private bool isDodging = false;
         public bool canDodge = true;
 
@@ -222,14 +221,6 @@ namespace RPGKarawara
             {
                 player.playerNetworkManager.isSprinting.Value = false;
             }
-
-            // MudarAvatar.instancia.TrocarBear();
-            // if (player.playerNetworkManager.currentStamina.Value <= 0)
-            // {
-            //     player.playerNetworkManager.isSprinting.Value = false;
-            //     return;
-            // }
-
             //  IF WE ARE MOVING, SPRINTING IS TRUE
             if (moveAmount >= 0.5)
             {
@@ -240,11 +231,7 @@ namespace RPGKarawara
             {
                 player.playerNetworkManager.isSprinting.Value = false;
             }
-
-            // if (player.playerNetworkManager.isSprinting.Value)
-            // {
-            //     player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
-            // }
+            
         }
 
         public void AttemptToPerformDodge()
@@ -301,19 +288,7 @@ namespace RPGKarawara
             player.characterController.Move(endPosition - transform.position);
 
             isDodging = false;
-            TrocarPlayer();
-        }
-
-
-        public void TrocarPlayer()
-        {
-            dodging = false;
-            if(!MudarAvatar.instancia.tainara.ativo)MudarAvatar.instancia.Ativar(0);
-            Invoke("canDodgeA", 0.05f);
-        }
-        public void canDodgeA()
-        {
-            canDodge = true;
+            
         }
 
 
