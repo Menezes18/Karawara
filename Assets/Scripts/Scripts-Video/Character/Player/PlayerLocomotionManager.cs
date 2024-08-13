@@ -29,9 +29,9 @@ namespace RPGKarawara
         private Vector3 jumpDirection;
 
         [Header("Dodge")]
-        private Vector3 dodgeDirection;
+        private Vector3 rollDirection;
+        [SerializeField] float dodgeStaminaCost = 25;
         public bool dodging = false;
-        public bool humanAction = false;
         [SerializeField] float dodgeDistance = 8f;   // Distância do dodge
         [SerializeField] float dodgeDuration = 11f; // Duração do dodge
         private bool isDodging = false;
@@ -234,61 +234,67 @@ namespace RPGKarawara
             
         }
 
+        // public void AttemptToPerformDodge()
+        // {
+        //     if (player.isPerformingAction || isDodging)
+        //         return;
+        //
+        //     if (PlayerInputManager.instance.moveAmount > 0)
+        //     {
+        //         dodgeDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
+        //         dodgeDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
+        //         dodgeDirection.y = 0;
+        //         dodgeDirection.Normalize();
+        //         player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, false);
+        //         StartCoroutine(PerformDodge(dodgeDirection));
+        //     }
+        //     else
+        //     {
+        //         StartCoroutine(PerformDodge(-transform.forward));
+        //     }
+        //
+        //     // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
+        // }
         public void AttemptToPerformDodge()
         {
-            if (player.isPerformingAction || isDodging)
+            if (player.isPerformingAction)
                 return;
 
+            // if (player.playerNetworkManager.currentStamina.Value <= 0)
+            //     return;
+
+            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
+            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
+            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
             if (PlayerInputManager.instance.moveAmount > 0)
             {
-                dodgeDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
-                dodgeDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
-                dodgeDirection.y = 0;
-                dodgeDirection.Normalize();
-                player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, false);
-                StartCoroutine(PerformDodge(dodgeDirection));
+                rollDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
+                rollDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontal_Input;
+                rollDirection.y = 0;
+                rollDirection.Normalize();
+
+                // Multiplicando a direção pelo fator de distância desejado
+                float dodgeDistance = 118f; // Defina a distância desejada do dodge
+                rollDirection *= dodgeDistance;
+
+                Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
+                player.transform.rotation = playerRotation;
+                
+                player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01", true, true);
+                player.playerLocomotionManager.isRolling = true;
+                
+                //Invoke("TrocarPlayer", 1.2f);
             }
+
+
+            //  IF WE ARE STATIONARY, WE PERFORM A BACKSTEP
             else
             {
-                StartCoroutine(PerformDodge(-transform.forward));
-            }
-
-            // player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
-        }
-
-        private IEnumerator PerformDodge(Vector3 direction)
-        {
-            isDodging = true;
-
-            float elapsedTime = 0f;
-            Vector3 startPosition = transform.position;
-            Vector3 endPosition = startPosition + direction * dodgeDistance;
-
-            while (elapsedTime < dodgeDuration)
-            {
-                // Calculate the target position for this frame
-                Vector3 targetPosition = Vector3.Lerp(startPosition, endPosition, elapsedTime / dodgeDuration);
-
-                // Perform the movement using CharacterController.Move
+                player.playerAnimatorManager.PlayTargetActionAnimation("Back_Step_01", true, true);
                 
-                player.characterController.Move(targetPosition - transform.position);
-
-                // Check for collision flags to handle collisions
-                if ((player.characterController.collisionFlags & CollisionFlags.Sides) != 0)
-                {
-                    // Collision detected, break the loop
-                    break;
-                }
-               
-                elapsedTime += Time.deltaTime;
-                yield return null;
             }
 
-            // Ensure the final position is set correctly
-            player.characterController.Move(endPosition - transform.position);
-
-            isDodging = false;
-            
+            player.playerLocomotionManager.canDodge = true;
         }
 
 

@@ -351,6 +351,7 @@ namespace RPGKarawara
 
         void dodge(){
             player.playerLocomotionManager.AttemptToPerformDodge();
+            player.playerLocomotionManager.canDodge = true;
         }
 
         private void HandleSprintInput()
