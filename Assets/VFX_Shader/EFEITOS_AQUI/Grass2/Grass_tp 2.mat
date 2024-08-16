@@ -29,9 +29,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BladeHeightMax: 1
+    - _BladeHeightMax: 1.08
+    - _BladeHeightMin: 0.772
+    - _BladeWidthMax: 0.0502
+    - _BladeWidthMin: 0.0362
     - _GrassThreshold: -0.038
-    - _TessellationGrassDistance: 0.39
+    - _TessellationGrassDistance: 1
     - _WindFrequency: 0
     m_Colors:
     - _BaseColor: {r: 0.16470589, g: 0.12941177, b: 0.13333334, a: 1}
