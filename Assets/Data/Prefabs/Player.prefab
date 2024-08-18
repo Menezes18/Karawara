@@ -312,8 +312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42693348f3883c4c947623dbfb865b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationAmount: 2
-  staminaRegenerationDelay: 2
 --- !u!114 &1937844861543524253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,11 +350,10 @@ MonoBehaviour:
   jumpHeight: 2
   jumpForwardSpeed: 5
   freeFallSpeed: 2
+  dodgeStaminaCost: 5
   dodging: 0
-  humanAction: 0
   dodgeDistance: 5
   dodgeDuration: 0.8
-  dodgeStaminaCost: 5
   canDodge: 1
 --- !u!114 &1582088740868026449
 MonoBehaviour:

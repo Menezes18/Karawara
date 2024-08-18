@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using JetBrains.Annotations;
 
 namespace RPGKarawara
 {
@@ -13,27 +13,71 @@ namespace RPGKarawara
 
         [Header("Flags")]
         public bool canComboWithMainHandWeapon = false;
-        //public bool canComboWithOffHandWeapon = false;
+        private bool isWeaponActive = false;
+        private Coroutine weaponDeactivateCoroutine;
 
         protected override void Awake()
         {
             base.Awake();
-
             player = GetComponent<PlayerManager>();
         }
 
-        public void PerformWeaponBasedAction(WeaponItemAction weaponAction, WeaponItem weaponPerformingAction)
+        public void PerformWeaponBasedAction([CanBeNull] WeaponItemAction weaponAction, [CanBeNull] WeaponItem weaponPerformingAction)
         {
+            // Se a arma não estiver ativa, ativa ela
+            if (!isWeaponActive)
+            {
+                player.playerEquipmentManager.SwitchRightWeapon();
+                isWeaponActive = true;
+            }
+
+            // Cancela a desativação anterior, se existir
+            if (weaponDeactivateCoroutine != null)
+            {
+                StopCoroutine(weaponDeactivateCoroutine);
+            }
+
             if (player.IsOwner)
             {
-                //  PERFORM THE ACTION
-                weaponAction.AttemptToPerformAction(player, weaponPerformingAction);
+                weaponAction?.AttemptToPerformAction(player, weaponPerformingAction);
+                player?.playerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
+            }
 
-                //  NOTIFY THE SERVER WE HAVE PERFORMED THE ACTION, SO WE PERFORM IT FROM THERE PERSPECTIVE ALSO
-                player.playerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
+            // Inicia a rotina para desativar a arma após 2 segundos se nenhum ataque for realizado
+            weaponDeactivateCoroutine = StartCoroutine(DeactivateWeaponAfterDelay());
+        }
+
+        private IEnumerator DeactivateWeaponAfterDelay()
+        {
+            yield return new WaitForSeconds(2f);
+
+            // Desativa a arma chamando SwitchRightWeapon novamente
+            player.playerEquipmentManager.SwitchRightWeapon();
+            isWeaponActive = false;
+        }
+
+        public override void SetTarget(CharacterManager newTarget)
+        {
+            base.SetTarget(newTarget);
+
+            if (player.IsOwner)
+            {
+                PlayerCamera.instance.SetLockCameraHeight();
             }
         }
 
+        // ANIMATION EVENT CALLS
+        public override void EnableCanDoCombo()
+        {
+            if (player.playerNetworkManager.isUsingRightHand.Value)
+            {
+                player.playerCombatManager.canComboWithMainHandWeapon = true;
+            }
+            else
+            {
+                // ENABLE OFF HAND COMBO
+            }
+        }
         public virtual void DrainStaminaBasedOnAttack()
         {
             if (!player.IsOwner)
@@ -79,34 +123,11 @@ namespace RPGKarawara
 
             //player.playerNetworkManager.currentStamina.Value -= Mathf.RoundToInt(staminaDeducted);
         }
-
-        public override void SetTarget(CharacterManager newTarget)
-        {
-            base.SetTarget(newTarget);
-
-            if (player.IsOwner)
-            {
-                PlayerCamera.instance.SetLockCameraHeight();
-            }
-        }
-
-        //  ANIMATION EVENT CALLS
-        public override void EnableCanDoCombo()
-        {
-            if (player.playerNetworkManager.isUsingRightHand.Value)
-            {
-                player.playerCombatManager.canComboWithMainHandWeapon = true;
-            }
-            else
-            {
-                //  ENABLE OFF HAND COMBO
-            }
-        }
-
         public override void DisableCanDoCombo()
         {
             player.playerCombatManager.canComboWithMainHandWeapon = false;
             //player.playerCombatManager.canComboWithOffHandWeapon = false;
         }
     }
+    
 }
