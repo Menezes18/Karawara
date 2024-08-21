@@ -61,7 +61,7 @@ namespace RPGKarawara
 
         public void SwitchRightWeapon()
         {
-            Debug.Log("1");
+           
             if (!player.IsOwner)
                 return;
 

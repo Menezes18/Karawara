@@ -133,7 +133,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 1817665517201925217}
   - component: {fileID: 3075266756786200353}
   - component: {fileID: 3966517426724844345}
+  - component: {fileID: -3508417679261690988}
   - component: {fileID: 4749399969440758544}
   m_Layer: 0
   m_Name: Passaro
@@ -168,7 +169,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1985735649435268247}
@@ -241,7 +242,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -259,9 +260,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   centerObject: {fileID: 0}
   orbitSpeed: 2
-  orbitRadius: 5
+  orbitRadius: 3
   yAmplitude: 0.5
   ySpeed: 2
+--- !u!114 &-3508417679261690988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5787228707076762005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 438769eb7e7640f1873e148bc4e06703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4749399969440758544
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -27,7 +27,7 @@ namespace RPGKarawara.SkillTree{
                 }
             }
 
-            if (Keyboard.current.qKey.wasReleasedThisFrame){
+            if (Keyboard.current.digit3Key.wasReleasedThisFrame){
                 if (supportSkill != null && !supportSkill.IsOnCooldown){
                     supportSkill.Activate(gameObject);
                     Debug.Log("Support skill activated");

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,18 +8,18 @@ namespace RPGKarawara
 {
     public class CharacterNetworkManager : NetworkBehaviour
     {
+        
         CharacterManager character;
 
         [Header("Active")]
         public NetworkVariable<bool> isActive = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
+    
         [Header("Position")]
         public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>(Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public Vector3 networkPositionVelocity;
         public float networkPositionSmoothTime = 0.1f;
         public float networkRotationSmoothTime = 0.1f;
-
         [Header("Animator")]
         public NetworkVariable<bool> isMoving = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<float> horizontalMovement = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -235,6 +236,7 @@ namespace RPGKarawara
             float contactPointY,
             float contactPointZ)
         {
+            
             ProcessCharacterDamageFromServer(damagedCharacterID, characterCausingDamageID, physicalDamage, magicDamage, fireDamage, holyDamage, poiseDamage, angleHitFrom, contactPointX, contactPointY, contactPointZ);
         }
 
@@ -254,6 +256,14 @@ namespace RPGKarawara
             CharacterManager damagedCharacter = NetworkManager.Singleton.SpawnManager.SpawnedObjects[damagedCharacterID].gameObject.GetComponent<CharacterManager>();
             CharacterManager characterCausingDamage = NetworkManager.Singleton.SpawnManager.SpawnedObjects[characterCausingDamageID].gameObject.GetComponent<CharacterManager>();
 
+            // Verifique se o personagem está invulnerável (com escudo ativo)
+            if (damagedCharacter.characterNetworkManager.isInvulnerable.Value)
+            {
+                // Se o escudo está ativo, não aplicar dano
+                return;
+            }
+
+            // Se o escudo não está ativo, continuar com o processamento do dano
             TakeDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
             damageEffect.physicalDamage = physicalDamage;
             damageEffect.magicDamage = magicDamage;
@@ -266,6 +276,7 @@ namespace RPGKarawara
 
             damagedCharacter.characterEffectsManager.ProcessInstantEffect(damageEffect);
         }
+
     
 
     }

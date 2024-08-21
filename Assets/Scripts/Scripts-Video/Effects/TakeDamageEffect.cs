@@ -82,9 +82,12 @@ namespace RPGKarawara
                 finalDamageDealt = 1;
             }
 
-            Debug.Log("FINAL DAMAGE GIVEN: " + finalDamageDealt);
+            //Debug.Log("FINAL DAMAGE GIVEN: " + finalDamageDealt);
             character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
-
+            if (character.CompareTag("Player"))
+            {
+                Debug.Log("O jogador recebeu dano: " + finalDamageDealt);
+            }
             //  CALCULATE POISE DAMAGE TO DETERMINE IF THE CHARACTER WILL BE STUNNED
         }
 
