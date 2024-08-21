@@ -43,10 +43,11 @@ Transform:
   m_GameObject: {fileID: 219663029150363108}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3562108986645824828}
   - {fileID: 7133364694424150449}
   - {fileID: 3656808351589336196}
   - {fileID: 4643055181787610536}
@@ -632,8 +633,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackSkill: {fileID: 11400000, guid: 45dcf345ae11dc944b6a20a612138954, type: 2}
-  defenseSkill: {fileID: 0}
+  defenseSkill: {fileID: 11400000, guid: 643061ed79da0a0449540dc57e20e62f, type: 2}
   supportSkill: {fileID: 11400000, guid: 8d4b34343bd10d14892f1489941101fd, type: 2}
+  Escudo: 0
+--- !u!1 &918940640264833240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3562108986645824828}
+  m_Layer: 3
+  m_Name: Escudo
+  m_TagString: Escudo
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3562108986645824828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918940640264833240}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.688, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6742121361150417134}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1025081234239944548
 GameObject:
   m_ObjectHideFlags: 0

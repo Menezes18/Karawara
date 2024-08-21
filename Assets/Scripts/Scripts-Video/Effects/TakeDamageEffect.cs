@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using RPGKarawara.SkillTree;
 using UnityEngine;
 
 namespace RPGKarawara
@@ -83,10 +84,14 @@ namespace RPGKarawara
             }
 
             //Debug.Log("FINAL DAMAGE GIVEN: " + finalDamageDealt);
-            character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
-            if (character.CompareTag("Player"))
+            if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
             {
-                Debug.Log("O jogador recebeu dano: " + finalDamageDealt);
+                
+                Debug.Log("escudo ativo");
+            }
+            else{
+                character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
+                
             }
             //  CALCULATE POISE DAMAGE TO DETERMINE IF THE CHARACTER WILL BE STUNNED
         }
@@ -95,8 +100,15 @@ namespace RPGKarawara
         {
             //  IF WE HAVE FIRE DAMAGE, PLAY FIRE PARTICLES
             //  LIGHTNING DAMAGE, LIGHTNING PARTICLES ECT
-
-            character.characterEffectsManager.PlayBloodSplatterVFX(contactPoint);
+            if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
+            {
+                
+                Debug.Log("escudo ativo");
+            }
+            else{
+                character.characterEffectsManager.PlayBloodSplatterVFX(contactPoint);
+                
+            }
         }
 
         private void PlayDamageSFX(CharacterManager character)
@@ -119,7 +131,11 @@ namespace RPGKarawara
 
             //  TODO CALCULATE IF POISE IS BROKEN
             poiseIsBroken = true;
-
+            if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
+            {
+                Debug.Log("escudo ativo");
+                return;
+            }
             if (angleHitFrom >= 145 && angleHitFrom <= 180)
             {
                 damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.forward_Medium_Damage);

@@ -4,17 +4,25 @@ using UnityEngine.InputSystem;
 
 namespace RPGKarawara.SkillTree{
     public class PlayerSkillManager : MonoBehaviour{
+        public static PlayerSkillManager instance;
         public Skill attackSkill;
         public Skill defenseSkill;
         public Skill supportSkill;
 
+        public bool Escudo = true;
         private void Awake(){
+            instance = this;
             InitializeCooldown(attackSkill);
             InitializeCooldown(defenseSkill);
             InitializeCooldown(supportSkill);
         }
 
         private void Update(){
+            if (Keyboard.current.vKey.wasReleasedThisFrame){
+                Debug.LogWarning("Escudo");
+                    Escudo = !Escudo;
+            }
+
             if (Keyboard.current.digit1Key.wasReleasedThisFrame){
                 if (attackSkill != null && !attackSkill.IsOnCooldown){
                     attackSkill.Activate(gameObject);
