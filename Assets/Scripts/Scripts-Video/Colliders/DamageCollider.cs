@@ -10,7 +10,7 @@ namespace RPGKarawara {
         [SerializeField] protected Collider damageCollider;
 
         [Header("Damage")]
-        public float physicalDamage = 0;            // (TO DO, SPLIT INTO "Standard", "Strike", "Slash" and "Pierce")
+        public float physicalDamage = 0;
         public float magicDamage = 0;
         public float fireDamage = 0;
         public float lightningDamage = 0;
@@ -40,7 +40,7 @@ namespace RPGKarawara {
 
                 //  CHECK IF TARGET IS BLOCKING
 
-
+                //damageTarget.IsOwner
                 DamageTarget(damageTarget);
             }
         }

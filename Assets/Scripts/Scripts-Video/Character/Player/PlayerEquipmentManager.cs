@@ -6,6 +6,7 @@ namespace RPGKarawara
 {
     public class PlayerEquipmentManager : CharacterEquipmentManager
     {
+        
         PlayerManager player;
 
         public WeaponModelInstantiationSlot rightHandSlot;
@@ -60,6 +61,7 @@ namespace RPGKarawara
 
         public void SwitchRightWeapon()
         {
+           
             if (!player.IsOwner)
                 return;
 

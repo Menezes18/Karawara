@@ -122,8 +122,8 @@ namespace RPGKarawara
                 //  ACTIONS
                 playerControls.PlayerActions.Dodge.performed += i => dodge_Input = true;
                 playerControls.PlayerActions.Jump.performed += i => jump_Input = true;
-                playerControls.PlayerActions.SwitchRightWeapon.performed += i => switch_Right_Weapon_Input = true;
-                playerControls.PlayerActions.SwitchLeftWeapon.performed += i => switch_Left_Weapon_Input = true;
+              //  playerControls.PlayerActions.skill1.performed += i => switch_Right_Weapon_Input = true;
+               // playerControls.PlayerActions.SwitchLeftWeapon.performed += i => switch_Left_Weapon_Input = true;
                 playerControls.PlayerActions.Interact.performed += i => interaction_Input = true;
                 playerControls.UI.PauseBack.performed += i => esc_Input = true;
                 //  BUMPERS
@@ -351,6 +351,7 @@ namespace RPGKarawara
 
         void dodge(){
             player.playerLocomotionManager.AttemptToPerformDodge();
+            player.playerLocomotionManager.canDodge = true;
         }
 
         private void HandleSprintInput()

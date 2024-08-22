@@ -79,7 +79,7 @@ namespace RPGKarawara
 
             //  THIS IS WHERE YOU WOULD CHECK TO SEE IF YOU MEET THE ITEMS REQUIREMENTS IF YOU WANT TO CREATE THE WARNING FOR NOT BEING ABLE TO WIELD IT IN THE UI
 
-            rightWeaponQuickSlotIcon.sprite = weapon.itemIcon;
+            
             rightWeaponQuickSlotIcon.enabled = true;
         }
 
