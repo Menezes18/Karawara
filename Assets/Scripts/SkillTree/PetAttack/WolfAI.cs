@@ -1,21 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class WolfAI : MonoBehaviour
 {
     public Transform player; // Referência ao transform do player
-    public float followDistance = 2f; // Distância mínima para seguir o player
+    public float followDistance = 6.87f; // Distância mínima para seguir o player
     public float enemyDetectionRange = 10f; // Distância para detectar inimigos
     public float attackRange = 2f; // Distância para começar a atacar
     public int damage = 10; // Dano causado por ataque
     public float attackCooldown = 1f; // Tempo de espera entre ataques
-    public float speed = 5f; // Velocidade de movimento do lobo
     private Transform target; // Alvo atual do lobo (inimigo ou player)
     private float lastAttackTime; // Tempo do último ataque realizado
     private Animator animator; // Referência ao componente Animator
+    public NavMeshAgent agent; // Referência ao NavMeshAgent
+    public Collider colliderAttack;
 
     void Start()
     {
+        GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        player = playerGameObject.transform;
         animator = GetComponent<Animator>(); // Inicializa o Animator
+        agent = GetComponent<NavMeshAgent>(); // Inicializa o NavMeshAgent
         target = player; // Define o player como alvo inicial
     }
 
@@ -69,7 +74,7 @@ public class WolfAI : MonoBehaviour
             }
             else
             {
-                // Se não houver inimigos, o lobo fica parado
+                colliderAttack.enabled = false;
                 animator.SetBool("isMoving", false);
                 animator.SetTrigger("Idle");
             }
@@ -78,10 +83,8 @@ public class WolfAI : MonoBehaviour
 
     void MoveTowards(Transform target)
     {
-        animator.SetBool("isMoving", true); // Ativa a animação de movimento
-    
-        // Move-se na direção do alvo
-        transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * speed);
+        animator.SetBool("isMoving", true); 
+        agent.SetDestination(target.position); // Define o destino do NavMeshAgent para o alvo
     
         LookAtTarget(target); // Faz o lobo olhar para o alvo enquanto se move
     }
@@ -98,24 +101,24 @@ public class WolfAI : MonoBehaviour
     void AttackTarget()
     {
         // Verifica se o tempo de cooldown já passou desde o último ataque
-        if (Time.time - lastAttackTime >= attackCooldown)
-        {
-            animator.SetTrigger("Attack"); // Aciona a animação de ataque
-            Debug.Log("Atacando " + target.name + " e causando " + damage + " de dano."); // Log do ataque para depuração
-            lastAttackTime = Time.time; // Atualiza o tempo do último ataque
+        if (Time.time - lastAttackTime >= attackCooldown){
+            colliderAttack.enabled = true;
+            animator.SetTrigger("Attack"); 
+            Debug.Log("Atacando " + target.name + " e causando " + damage + " de dano."); 
+            lastAttackTime = Time.time; 
         }
     }
 
     // Função para desenhar gizmos no editor, ajudando a visualizar os ranges
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.magenta; // Define a cor do gizmo para a distância de seguir
-        Gizmos.DrawWireSphere(transform.position, followDistance); // Desenha o gizmo da distância de seguir
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, followDistance); 
 
-        Gizmos.color = Color.red; // Define a cor do gizmo para o alcance de ataque
-        Gizmos.DrawWireSphere(transform.position, attackRange); // Desenha o gizmo do alcance de ataque
+        Gizmos.color = Color.red; 
+        Gizmos.DrawWireSphere(transform.position, attackRange); 
 
-        Gizmos.color = Color.yellow; // Define a cor do gizmo para o alcance de detecção de inimigos
-        Gizmos.DrawWireSphere(transform.position, enemyDetectionRange); // Desenha o gizmo do alcance de detecção de inimigos
+        Gizmos.color = Color.yellow; 
+        Gizmos.DrawWireSphere(transform.position, enemyDetectionRange); 
     }
 }
