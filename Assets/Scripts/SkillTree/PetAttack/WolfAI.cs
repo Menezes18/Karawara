@@ -35,7 +35,7 @@ public class WolfAI : MonoBehaviour
         }
         else
         {
-            // Detecta inimigos dentro do alcance de detecção
+            
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemyDetectionRange);
             Transform closestEnemy = null;
             float closestDistanceToPlayer = float.MaxValue; // Inicializa com o maior valor possível
