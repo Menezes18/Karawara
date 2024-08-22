@@ -8,7 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Trail_mat 1
-  m_Shader: {fileID: -6465566751694194690, guid: 13afdeeb3e4af944eaf889b54e9cb5dc, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 13afdeeb3e4af944eaf889b54e9cb5dc,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -45,10 +46,10 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.85882354, g: 0.68821764, b: 0, a: 1}
-    - _Color_1: {r: 1.3756608, g: 0, b: 0.97232556, a: 0}
+    - _Color: {r: 6.292316, g: 0, b: 1.8320984, a: 1}
+    - _Color_1: {r: 0, g: 0, b: 0, a: 0}
     - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
-    - _MainTexSpeed: {r: -1.5, g: 0, b: 0, a: 0}
+    - _MainTexSpeed: {r: -0.5, g: 0.1, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8097194292101778421
 MonoBehaviour:
