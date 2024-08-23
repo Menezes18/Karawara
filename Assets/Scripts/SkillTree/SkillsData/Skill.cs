@@ -8,6 +8,7 @@ namespace RPGKarawara.SkillTree {
         public Sprite sprite;
         public string name;
         public string description;
+        public GameObject prefab;
         
         private float lastActivationTime;
 
