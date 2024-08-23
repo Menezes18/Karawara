@@ -45,25 +45,25 @@ Material:
     - _CastShadows: 1
     - _Cull: 2
     - _DstBlend: 10
-    - _FoamAmount: 1
-    - _FoamCutOff: 0.95
+    - _FoamAmount: 3.93
+    - _FoamCutOff: 2.22
     - _FoamScale: 121.5
-    - _FoamSpeed: 1
+    - _FoamSpeed: 1.34
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RefractionScale: 22.33
-    - _RefractionSpeed: 0.09
+    - _RefractionSpeed: 11.38
     - _RefreactionStrength: 3.4
     - _SrcBlend: 5
     - _Surface: 1
-    - _WaterDepth: 10
+    - _WaterDepth: 31.6
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _DeepWater: {r: 0, g: 0.033247605, b: 0.6037736, a: 0.8235294}
+    - _DeepWater: {r: 0.9150943, g: 0.90615845, b: 0.66042185, a: 0.7921569}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 0.7607843}
-    - _ShallowWater: {r: 0.051886797, g: 1, b: 0.900312, a: 0.24705882}
+    - _ShallowWater: {r: 0, g: 0.6886792, b: 0.4628602, a: 0.46666667}
   m_BuildTextureStacks: []
 --- !u!114 &1413659320007585799
 MonoBehaviour:
