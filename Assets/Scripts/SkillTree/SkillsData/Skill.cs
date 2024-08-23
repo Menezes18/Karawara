@@ -5,6 +5,10 @@ using UnityEngine;
 namespace RPGKarawara.SkillTree {
     public abstract class Skill : ScriptableObject {
         public float cooldownDuration;
+        public Sprite sprite;
+        public string name;
+        public string description;
+        
         private float lastActivationTime;
 
         public bool IsOnCooldown {

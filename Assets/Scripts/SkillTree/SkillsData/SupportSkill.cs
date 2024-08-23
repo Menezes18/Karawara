@@ -12,6 +12,8 @@ namespace RPGKarawara.SkillTree {
             if (healCirclePrefab != null) {
                 GameObject healCircle = Instantiate(healCirclePrefab, user.transform.position, user.transform.rotation);
                 HealCircle healCircleScript = healCircle.GetComponent<HealCircle>();
+                DurationSkill durationSkillScript = healCircle.GetComponent<DurationSkill>();
+                durationSkillScript.Init(cooldownDuration);
                 healCircleScript.Initialize(_healingRate, _healingAmount);
 
             }
