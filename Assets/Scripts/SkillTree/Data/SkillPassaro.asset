@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77cdf24cc9a047c292e1c2bd5ac6a42a, type: 3}
   m_Name: SkillPassaro
   m_EditorClassIdentifier: 
+  skillType: 0
   cooldownDuration: 10
-  sprite: {fileID: 21300000, guid: ee06e3663896ed44bbc946119515b364, type: 3}
-  name: 
+  sprite: {fileID: 21300000, guid: ac95fd503ab1c244aab77f09c96de589, type: 3}
+  name: Skill Passaro
   description: 
   prefab: {fileID: 5787228707076762005, guid: 2befd428d448fd543bc44e8a6e246b6b, type: 3}
+  isUnlocked: 1
+  active: 0

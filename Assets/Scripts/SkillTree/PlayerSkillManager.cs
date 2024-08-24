@@ -45,7 +45,7 @@ namespace RPGKarawara.SkillTree{
                 }
             }
         }
-
+        
         private void InitializeCooldown(Skill skill){
             if (skill != null){
                 // Garantir que o cooldown comece como false

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -24,8 +25,7 @@ namespace RPGKarawara
         [SerializeField] GameObject pauseMenu;
 
         bool active = false;
-        [NonSerialized] public bool paneldesativar = false; 
-
+        [NonSerialized] public bool paneldesativar = false;
         public void RefreshHUD()
         {
             healthBar.gameObject.SetActive(false);
@@ -42,7 +42,41 @@ namespace RPGKarawara
             healthBar.SetMaxStat(maxhealth);
         }
 
-       
+
+
+        public GameObject menu;
+
+        void Update(){
+            if (Keyboard.current.tabKey.wasReleasedThisFrame){
+                {
+                    ToggleMenu();
+                }
+            }
+        }
+
+        void ToggleMenu()
+        {
+            bool isMenuActive = menu.activeSelf;
+        
+            // Alterna o estado ativo do GameObject
+            menu.SetActive(!isMenuActive);
+        
+            // Controla o estado do cursor
+            if (!isMenuActive)
+            {
+                Cursor.lockState = CursorLockMode.None; // Destrava o cursor
+                Cursor.visible = true; // Torna o cursor visível
+                Time.timeScale = 0f; // Pausa o jogo
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked; // Trava o cursor
+                Cursor.visible = false; // Torna o cursor invisível
+                Time.timeScale = 1f; // Retoma o jogo
+            }
+        }
+
+        
 
         public void SetRightWeaponQuickSlotIcon(int weaponID)
         {

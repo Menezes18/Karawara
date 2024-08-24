@@ -58,7 +58,7 @@ public class SceneChecker : MonoBehaviour{
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            statusBar.SetActive(false);
+            //statusBar.SetActive(false);
             // Exibe uma mensagem no console
             Debug.Log("Estamos na SceneMenu. O cursor está ativado.");
         }
@@ -69,7 +69,7 @@ public class SceneChecker : MonoBehaviour{
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            statusBar.SetActive(true);
+            //statusBar.SetActive(true);
             // Exibe uma mensagem no console
             Debug.Log("Não estamos na SceneMenu. O cursor está desativado e travado.");
         }
