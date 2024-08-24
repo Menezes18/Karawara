@@ -42,14 +42,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alph: 0.4
-    - _FresnelPower: 2
+    - _Alph: 0
+    - _FresnelPower: 0.79
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ScrollSpeed: 1
+    - _VectorFrequency: 3
     m_Colors:
-    - _BackColor: {r: 0.9221513, g: 0.9221513, b: 0.9221513, a: 1}
-    - _FresnelColor: {r: 0.28382537, g: 0.28382537, b: 0.28382537, a: 0}
-    - _FrontColor: {r: 0, g: 1.2654079, b: 1.9766746, a: 1}
+    - _BackColor: {r: 1.4142135, g: 1.4142135, b: 1.4142135, a: 1}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FrontColor: {r: 0, g: 5.0616317, b: 7.906698, a: 1}
+    - _VertexAmount: {r: 0.1, g: 0, b: 0.1, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &4925600352580474891
 MonoBehaviour:
