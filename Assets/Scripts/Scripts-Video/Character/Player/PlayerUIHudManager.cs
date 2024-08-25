@@ -23,7 +23,7 @@ namespace RPGKarawara
 
         [Header("PAUSE MENU")]
         [SerializeField] GameObject pauseMenu;
-
+        [SerializeField] GameObject SkillSlot;
         bool active = false;
         [NonSerialized] public bool paneldesativar = false;
         public void RefreshHUD()
@@ -42,25 +42,71 @@ namespace RPGKarawara
             healthBar.SetMaxStat(maxhealth);
         }
 
-
-
         public GameObject menu;
 
-        void Update(){
-            if (Keyboard.current.tabKey.wasReleasedThisFrame){
-                {
-                    ToggleMenu();
-                }
+        void Start()
+        {
+            // Registrar o evento para quando uma nova cena for carregada
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
+            ConfigureUIBasedOnScene();
+        }
+
+        private void ConfigureUIBasedOnScene()
+        {
+            // Verifica se a cena ativa NÃO é "SceneMenu"
+            if (SceneManager.GetActiveScene().name == "SceneMenu")
+            {
+                // Ativa os elementos da UI que não devem estar ativos na cena "SceneMenu"
+                healthBar.gameObject.SetActive(false);
+                rightWeaponQuickSlotIcon.gameObject.SetActive(false);
+                leftWeaponQuickSlotIcon.gameObject.SetActive(false);
+                bossHealthBarParent.gameObject.SetActive(false);
+                bossHealthBarObject.SetActive(false);
+                pauseMenu.SetActive(false); // Mantém o menu de pausa desativado até ser chamado
+                menu.SetActive(false); // Mantém o menu desativado até ser chamado
+                SkillSlot.SetActive(false); // Mantém o slot de habilidade desativado
+            }
+            else
+            {
+                Debug.Log("true");
+                // Desativa elementos específicos apenas se estiver na "SceneMenu"
+                healthBar.gameObject.SetActive(true);
+                rightWeaponQuickSlotIcon.gameObject.SetActive(true);
+                leftWeaponQuickSlotIcon.gameObject.SetActive(true);
+                bossHealthBarParent.gameObject.SetActive(true);
+                bossHealthBarObject.SetActive(true);
+                SkillSlot.SetActive(true); // Ativa o slot de habilidades no menu
+            }
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // Chama o método para configurar a UI baseada na nova cena carregada
+            ConfigureUIBasedOnScene();
+        }
+
+        void OnDestroy()
+        {
+            // Cancelar o registro do evento para evitar referências órfãs
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        void Update()
+        {
+            if (Keyboard.current.tabKey.wasReleasedThisFrame)
+            {
+                ToggleMenu();
             }
         }
 
         void ToggleMenu()
         {
             bool isMenuActive = menu.activeSelf;
-        
+
             // Alterna o estado ativo do GameObject
             menu.SetActive(!isMenuActive);
-        
+
             // Controla o estado do cursor
             if (!isMenuActive)
             {
@@ -76,23 +122,8 @@ namespace RPGKarawara
             }
         }
 
-        
-
         public void SetRightWeaponQuickSlotIcon(int weaponID)
         {
-            //1. Method one, DIRECTLY reference the right weapon in the hand of the player
-            //Pros: It's super straight forward
-            //Cons: If you forget to call this function AFTER you've loaded your weapons first, it will give you an error
-            //Example: You load a previously saved game, you go to reference the weapons upon loading UI but they arent instantiated yet
-            //Final Notes: This method is perfectly fine if you remember your order of operations
-
-            //2. Method two, REQUIRE an item ID of the weapon, fetch the weapon from our database and use it to get the weapon items icon
-            //Pros: Since you always save the current weapons ID, we dont need to wait to get it from the player we could get it before hand if required
-            //Cons: It's not as direct
-            //Final Notes: This method is great if you don't want to remember another oder of operations
-
-            //  IF THE DATABASE DOES NOT CONTAIN A WEAPON MATCHING THE GIVEN I.D, RETURN
-
             WeaponItem weapon = WorldItemDatabase.Instance.GetWeaponByID(weaponID);
 
             if (weapon == null)
@@ -111,27 +142,11 @@ namespace RPGKarawara
                 return;
             }
 
-            //  THIS IS WHERE YOU WOULD CHECK TO SEE IF YOU MEET THE ITEMS REQUIREMENTS IF YOU WANT TO CREATE THE WARNING FOR NOT BEING ABLE TO WIELD IT IN THE UI
-
-            
             rightWeaponQuickSlotIcon.enabled = true;
         }
 
         public void SetLeftWeaponQuickSlotIcon(int weaponID)
         {
-            //1. Method one, DIRECTLY reference the right weapon in the hand of the player
-            //Pros: It's super straight forward
-            //Cons: If you forget to call this function AFTER you've loaded your weapons first, it will give you an error
-            //Example: You load a previously saved game, you go to reference the weapons upon loading UI but they arent instantiated yet
-            //Final Notes: This method is perfectly fine if you remember your order of operations
-
-            //2. Method two, REQUIRE an item ID of the weapon, fetch the weapon from our database and use it to get the weapon items icon
-            //Pros: Since you always save the current weapons ID, we dont need to wait to get it from the player we could get it before hand if required
-            //Cons: It's not as direct
-            //Final Notes: This method is great if you don't want to remember another oder of operations
-
-            //  IF THE DATABASE DOES NOT CONTAIN A WEAPON MATCHING THE GIVEN I.D, RETURN
-
             WeaponItem weapon = WorldItemDatabase.Instance.GetWeaponByID(weaponID);
 
             if (weapon == null)
@@ -150,40 +165,40 @@ namespace RPGKarawara
                 return;
             }
 
-            //  THIS IS WHERE YOU WOULD CHECK TO SEE IF YOU MEET THE ITEMS REQUIREMENTS IF YOU WANT TO CREATE THE WARNING FOR NOT BEING ABLE TO WIELD IT IN THE UI
-
             leftWeaponQuickSlotIcon.sprite = weapon.itemIcon;
             leftWeaponQuickSlotIcon.enabled = true;
         }
 
-        public void activatePause(){
-            if (paneldesativar) 
+        public void activatePause()
+        {
+            if (paneldesativar)
             {
                 paneldesativar = false;
             }
-            else{
-               pauseMenu.SetActive(!pauseMenu.activeSelf);
-               active = !active;
-               if (active)
-               {
-                   Time.timeScale = 0f;
-                   Cursor.lockState = CursorLockMode.None;
-                   Cursor.visible = true;
-               }
-               else
-               {
-                   Time.timeScale = 1f;
-                   Cursor.lockState = CursorLockMode.Locked;
-                   Cursor.visible = false;
-               }
-                
+            else
+            {
+                pauseMenu.SetActive(!pauseMenu.activeSelf);
+                active = !active;
+                if (active)
+                {
+                    Time.timeScale = 0f;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+                else
+                {
+                    Time.timeScale = 1f;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
             }
-               
         }
+
         public void ChangeScene()
         {
             WorldAIManager.instance.DespawnAllCharacters();
             SceneManager.LoadScene("SceneMenu");
+            ConfigureUIBasedOnScene();
             SceneManager.UnloadSceneAsync(SceneManager.sceneCount);
         }
     }

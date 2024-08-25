@@ -18,10 +18,6 @@ namespace RPGKarawara.SkillTree{
         }
 
         private void Update(){
-            if (Keyboard.current.vKey.wasReleasedThisFrame){
-                Debug.LogWarning("Escudo");
-                    Escudo = !Escudo;
-            }
 
             if (Keyboard.current.digit1Key.wasReleasedThisFrame){
                 if (attackSkill != null && !attackSkill.IsOnCooldown){

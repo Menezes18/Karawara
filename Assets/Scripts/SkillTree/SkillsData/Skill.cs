@@ -73,7 +73,15 @@ namespace RPGKarawara
                     break;
             }
         }
-
+        public float GetCooldownProgress()
+        {
+            // Retorna a porcentagem de cooldown concluída (0 = completo, 1 = ainda em cooldown)
+            if (IsOnCooldown)
+            {
+                return 1f - (Time.time - lastActivationTime) / cooldownDuration;
+            }
+            return 0f;
+        }
         protected abstract void Execute(GameObject user);
     }
 }
