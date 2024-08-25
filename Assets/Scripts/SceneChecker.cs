@@ -50,7 +50,6 @@ public class SceneChecker : MonoBehaviour{
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("A");
         // Verifica se a cena carregada é "SceneMenu"
         if (scene.name == "SceneMenu"){
             var player = GameObject.FindGameObjectWithTag("Player");
@@ -60,7 +59,7 @@ public class SceneChecker : MonoBehaviour{
             Cursor.lockState = CursorLockMode.None;
             //statusBar.SetActive(false);
             // Exibe uma mensagem no console
-            Debug.Log("Estamos na SceneMenu. O cursor está ativado.");
+           
         }
         else
         {
@@ -71,7 +70,7 @@ public class SceneChecker : MonoBehaviour{
             Cursor.lockState = CursorLockMode.Locked;
             //statusBar.SetActive(true);
             // Exibe uma mensagem no console
-            Debug.Log("Não estamos na SceneMenu. O cursor está desativado e travado.");
+           
         }
     }
 }

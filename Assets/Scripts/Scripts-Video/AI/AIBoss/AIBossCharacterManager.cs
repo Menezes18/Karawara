@@ -121,7 +121,7 @@ namespace RPGKarawara
 
         public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
         {
-            PlayerUIManager.instance.playerUIPopUpManager.SendBossDefeatedPopUp("GREAT FOE FELLED");
+            PlayerUIManager.instance.playerUIPopUpManager.SendBossDefeatedPopUp("BOSS DERROTADO");
 
             if (IsOwner)
             {
