@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c87585bf00c40188d03f1ebe82380ce, type: 3}
   m_Name: Escudo
   m_EditorClassIdentifier: 
+  skillType: 1
   cooldownDuration: 10
   sprite: {fileID: 21300000, guid: ee06e3663896ed44bbc946119515b364, type: 3}
   name: 
   description: 
+  prefab: {fileID: 0}
+  isUnlocked: 1
+  active: 1
   vfxPrefab: {fileID: 7482588000550929421, guid: ef4e8388a60c91b4fa8bdeaae049e782,
     type: 3}
-  childName: Player

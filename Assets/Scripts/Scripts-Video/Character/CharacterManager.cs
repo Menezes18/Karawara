@@ -131,7 +131,7 @@ namespace RPGKarawara
                 if (!manuallySelectDeathAnimation)
                 {
                     characterAnimatorManager.PlayTargetActionAnimation("Dead_01", true);
-                    SystemXP.Instance.GainXP(10);
+                    
                 }
             }
 

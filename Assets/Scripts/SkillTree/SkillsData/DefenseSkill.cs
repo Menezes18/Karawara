@@ -4,7 +4,6 @@ namespace RPGKarawara.SkillTree {
     public class DefenseSkill : Skill {
         
         public GameObject vfxPrefab;
-        public string childName = "Escudo"; // Nome do filho onde o VFX será instanciado
 
         protected override void Execute(GameObject user)
         {

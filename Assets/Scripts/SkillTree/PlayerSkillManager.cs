@@ -18,10 +18,6 @@ namespace RPGKarawara.SkillTree{
         }
 
         private void Update(){
-            if (Keyboard.current.vKey.wasReleasedThisFrame){
-                Debug.LogWarning("Escudo");
-                    Escudo = !Escudo;
-            }
 
             if (Keyboard.current.digit1Key.wasReleasedThisFrame){
                 if (attackSkill != null && !attackSkill.IsOnCooldown){
@@ -45,7 +41,7 @@ namespace RPGKarawara.SkillTree{
                 }
             }
         }
-
+        
         private void InitializeCooldown(Skill skill){
             if (skill != null){
                 // Garantir que o cooldown comece como false

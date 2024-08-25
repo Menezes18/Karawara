@@ -37,10 +37,11 @@ namespace RPGKarawara
                 StopCoroutine(weaponDeactivateCoroutine);
             }
 
-            if (player.IsOwner)
-            {
-                weaponAction?.AttemptToPerformAction(player, weaponPerformingAction);
-                player?.playerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
+            if (player.IsOwner){
+                
+                
+               weaponAction?.AttemptToPerformAction(player, weaponPerformingAction);
+               // player?.playerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
             }
 
             // Inicia a rotina para desativar a arma após 2 segundos se nenhum ataque for realizado
@@ -49,7 +50,7 @@ namespace RPGKarawara
 
         private IEnumerator DeactivateWeaponAfterDelay()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(7f);
 
             // Desativa a arma chamando SwitchRightWeapon novamente
             player.playerEquipmentManager.SwitchRightWeapon();
