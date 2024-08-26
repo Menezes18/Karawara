@@ -17,7 +17,7 @@ MonoBehaviour:
     brushes:
     - name: Bush1
       settings:
-        brushRadius: 16.74
+        brushRadius: 3.55
         brushSpacing: 2.84
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
@@ -2229,7 +2229,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Grass 2
@@ -2550,7 +2550,7 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Grass 2
       settings:
-        brushRadius: 20
+        brushRadius: 7.21
         brushSpacing: 0.01
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
@@ -2861,7 +2861,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     levelsGamma: 1
@@ -7386,7 +7386,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   placeUnder: 0
-  overwritePrefabLayer: 1
+  overwritePrefabLayer: 0
   prefabPlaceLayer: 0
   pinSnapRotationValue: 15
   pinSnapScaleValue: 0.1
