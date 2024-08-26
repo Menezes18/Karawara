@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.AI;
 
 public class WolfAI : MonoBehaviour
@@ -14,6 +16,11 @@ public class WolfAI : MonoBehaviour
     private Animator animator; // Referência ao componente Animator
     public NavMeshAgent agent; // Referência ao NavMeshAgent
     public Collider colliderAttack;
+    public float erodeRate = 0.03f;
+    public float erodeRefreshRate = 0.01f;
+    public float erodeDelay = 1.25f;
+    public SkinnedMeshRenderer erodeObject;
+    public List<GameObject> _objectsToDetach = new List<GameObject>();
 
     void Start()
     {
@@ -22,8 +29,31 @@ public class WolfAI : MonoBehaviour
         animator = GetComponent<Animator>(); // Inicializa o Animator
         agent = GetComponent<NavMeshAgent>(); // Inicializa o NavMeshAgent
         target = player; // Define o player como alvo inicial
+        //erodeObject = GetComponent<SkinnedMeshRenderer>(); // Inicializa o MeshRenderer
+        StartCoroutine("Eroding");
+        StartCoroutine("Detach");
     }
+    IEnumerator Eroding()
+    {
+        float t = erodeObject.material.GetFloat("_Erode");
+        while (t > 0)
+        {
+            t -= erodeRate;
+            erodeObject.material.SetFloat("_Erode", t);
+            yield return new WaitForSeconds(erodeRefreshRate);
+        }
+    }
+    IEnumerator Detach()
+        {
+            yield return new WaitForSeconds(1f);
 
+            for (int i=0; i < _objectsToDetach.Count; i++)
+            {   
+                _objectsToDetach[i].transform.parent = null;
+                Destroy(_objectsToDetach[i], 1f);
+            }
+        
+        }
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position); // Calcula a distância até o player

@@ -131,8 +131,10 @@ namespace RPGKarawara
 
             //  TODO CALCULATE IF POISE IS BROKEN
             poiseIsBroken = true;
+           
             if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
             {
+                
                 Debug.Log("escudo ativo");
                 return;
             }
