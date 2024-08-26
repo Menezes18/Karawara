@@ -11,10 +11,15 @@ namespace RPGKarawara.SkillTree{
             Invoke(nameof(DestroyCircle), duration);
         }
         private void DestroyCircle() {
-            StartCoroutine(ErodeObject());
-            
+            if (erodeObject != null){
+                StartCoroutine(ErodeObject());
+            }
+            else{
+                Destroy(gameObject);
+            }
         }
         IEnumerator ErodeObject(){
+            
             //erodeObject = gameObject.GetComponent<SkinnedMeshRenderer>();
             float t = erodeObject.material.GetFloat("_Erode");
             while (t < 1.2)

@@ -8,7 +8,7 @@ namespace RPGKarawara
 {
     public class DialogueSystem : MonoBehaviour
     {
-        public TextMeshPro dialogueText; // Arraste e solte o componente de texto da UI aqui no Inspector
+        public TextMeshProUGUI dialogueText; // Arraste e solte o componente de texto da UI aqui no Inspector
         public string[] dialogueLines; 
         private int currentLineIndex = 0;
 
@@ -26,11 +26,16 @@ namespace RPGKarawara
             {
                 
                 currentLineIndex++;
-                if (currentLineIndex >= dialogueLines.Length)
-                {
-                    currentLineIndex = 0; // Volta ao início se passar do final
+                if (currentLineIndex >= dialogueLines.Length){
+                    dialogueText.text =  "";
                 }
-                dialogueText.text = dialogueLines[currentLineIndex];
+                else{
+                    dialogueText.text = dialogueLines[currentLineIndex];
+                    
+                }
+            }
+            else{
+                Debug.Log("AAA");
             }
         }
     }
