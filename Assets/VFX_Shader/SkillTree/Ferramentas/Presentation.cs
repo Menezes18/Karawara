@@ -28,7 +28,7 @@ namespace RPGKarawara
         // Update is called once per frame
         void Update()
         {
-            if(Keyboard.current.digit1Key.wasReleasedThisFrame)
+            if(Keyboard.current.digit1Key.wasReleasedThisFrame) //Pantera
             {
                 if(_skills[0] != null)
                 {
@@ -36,6 +36,41 @@ namespace RPGKarawara
                     //_spirit_Summon.Summon();
                     StartCoroutine("Detach");
                 }
+            }
+            if(Keyboard.current.digit2Key.wasReleasedThisFrame) //Folhas
+            {
+               if(_skills[1] != null)
+                { 
+                    _skills[1].SetActive(true);
+                }
+            }
+            if(Keyboard.current.digit3Key.wasReleasedThisFrame) //Fury
+            {
+               if(_skills[2] != null)
+                { 
+                    _skills[2].SetActive(true);
+                }
+            }
+            if(_skills[2] != null)
+            {
+                
+                CreepActions();
+            }
+        }
+        void CreepActions()
+        {
+            
+            if(Keyboard.current.aKey.wasReleasedThisFrame)
+            {
+                _skills[2].GetComponentInChildren<Animator>().SetFloat("Action",0.9f);
+            }
+            if(Keyboard.current.rKey.wasReleasedThisFrame)
+            {
+                _skills[2].GetComponentInChildren<Animator>().SetFloat("Action",2.1f);
+            }
+            if(!Keyboard.current.rKey.wasReleasedThisFrame && !Keyboard.current.aKey.wasReleasedThisFrame)
+            {
+                _skills[2].GetComponentInChildren<Animator>().SetFloat("Action",1.5f);
             }
         }
     }
