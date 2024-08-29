@@ -22,7 +22,7 @@ using System.Collections;
         animator = GetComponent<Animator>(); // Inicializa o Animator
         player = GameObject.FindWithTag("Inimigo").transform;
         target = player; // Define o player como alvo inicial
-        Summon();
+        
     }
 
     void Update()
