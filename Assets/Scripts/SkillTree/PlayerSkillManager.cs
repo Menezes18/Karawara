@@ -8,8 +8,7 @@ namespace RPGKarawara.SkillTree{
         public Skill attackSkill;
         public Skill defenseSkill;
         public Skill supportSkill;
-
-        public bool Escudo = true;
+        
         private void Awake(){
             instance = this;
             InitializeCooldown(attackSkill);
