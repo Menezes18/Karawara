@@ -1115,7 +1115,6 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
   bossCharacter: {fileID: 0}
 --- !u!4 &4198791171104201986 stripped
@@ -1371,7 +1370,6 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
   durkCharacterManager: {fileID: 0}
 --- !u!1 &7001325615843262258 stripped
@@ -1597,6 +1595,7 @@ MonoBehaviour:
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
+  characterStatsManager: {fileID: 0}
   characterCombatManager: {fileID: 0}
   characterSoundFXManager: {fileID: 0}
   characterLocomotionManager: {fileID: 0}
@@ -1685,6 +1684,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaRegenerationAmount: 2
   staminaRegenerationDelay: 2
+  blockingPhysicalAbsorption: 100
+  blockingFireAbsorption: 100
+  blockingMagicAbsorption: 100
+  blockingLightningAbsorption: 100
+  blockingHolyAbsorption: 100
 --- !u!114 &7142323541899154398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1736,7 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d3b91f173a45d4badebe8987694537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodSplatterVFX: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d,
+  bloodSplatterVFX: {fileID: 6970770661046263200, guid: e5a2c0e91245cd84b9a98cdad9ff83a2,
     type: 3}
 --- !u!114 &1570984207221588373
 MonoBehaviour:
@@ -1769,6 +1773,8 @@ MonoBehaviour:
     m_InternalValue: 0
   currentTargetNetworkObjectID:
     m_InternalValue: 0
+  isBlocking:
+    m_InternalValue: 0
   isInvulnerable:
     m_InternalValue: 0
   isLockedOn:
@@ -1787,6 +1793,7 @@ MonoBehaviour:
     m_InternalValue: 1
   endurance:
     m_InternalValue: 1
+  fogoBoss: 0
 --- !u!114 &2248076081298176643
 MonoBehaviour:
   m_ObjectHideFlags: 0

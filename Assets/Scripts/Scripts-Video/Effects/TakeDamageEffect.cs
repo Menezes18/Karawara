@@ -82,7 +82,7 @@ namespace RPGKarawara
             {
                 finalDamageDealt = 1;
             }
-
+            character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
             //Debug.Log("FINAL DAMAGE GIVEN: " + finalDamageDealt);
             //  CALCULATE POISE DAMAGE TO DETERMINE IF THE CHARACTER WILL BE STUNNED
         }
@@ -91,6 +91,7 @@ namespace RPGKarawara
         {
             //  IF WE HAVE FIRE DAMAGE, PLAY FIRE PARTICLES
             //  LIGHTNING DAMAGE, LIGHTNING PARTICLES ECT
+            character.characterEffectsManager.PlayBloodSplatterVFX(contactPoint);
            
         }
 

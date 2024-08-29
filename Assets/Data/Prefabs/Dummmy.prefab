@@ -766,7 +766,6 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
   undeadCharacter: {fileID: 0}
 --- !u!1 &2539030892581361228
@@ -1621,7 +1620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2375048294
+  GlobalObjectIdHash: 3526625479
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1661,6 +1660,8 @@ MonoBehaviour:
     m_InternalValue: 0
   currentTargetNetworkObjectID:
     m_InternalValue: 0
+  isBlocking:
+    m_InternalValue: 0
   isInvulnerable:
     m_InternalValue: 0
   isLockedOn:
@@ -1699,6 +1700,7 @@ MonoBehaviour:
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
+  characterStatsManager: {fileID: 0}
   characterCombatManager: {fileID: 0}
   characterSoundFXManager: {fileID: 0}
   characterLocomotionManager: {fileID: 0}
@@ -1755,6 +1757,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b292bce86e399843b424c7b2e932d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  staminaRegenerationAmount: 2
+  staminaRegenerationDelay: 2
+  blockingPhysicalAbsorption: 100
+  blockingFireAbsorption: 100
+  blockingMagicAbsorption: 100
+  blockingLightningAbsorption: 100
+  blockingHolyAbsorption: 100
 --- !u!114 &2943203769042457543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,7 +1815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d3b91f173a45d4badebe8987694537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodSplatterVFX: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d,
+  bloodSplatterVFX: {fileID: 6970770661046263200, guid: e5a2c0e91245cd84b9a98cdad9ff83a2,
     type: 3}
 --- !u!114 &7310389180656767062
 MonoBehaviour:
@@ -2168,7 +2177,6 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
   undeadCharacter: {fileID: 0}
 --- !u!135 &8889196138366345252
