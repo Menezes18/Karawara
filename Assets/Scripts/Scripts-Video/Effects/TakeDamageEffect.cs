@@ -84,15 +84,6 @@ namespace RPGKarawara
             }
 
             //Debug.Log("FINAL DAMAGE GIVEN: " + finalDamageDealt);
-            if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
-            {
-                
-                Debug.Log("escudo ativo");
-            }
-            else{
-                character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
-                
-            }
             //  CALCULATE POISE DAMAGE TO DETERMINE IF THE CHARACTER WILL BE STUNNED
         }
 
@@ -100,15 +91,7 @@ namespace RPGKarawara
         {
             //  IF WE HAVE FIRE DAMAGE, PLAY FIRE PARTICLES
             //  LIGHTNING DAMAGE, LIGHTNING PARTICLES ECT
-            if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
-            {
-                
-                Debug.Log("escudo ativo");
-            }
-            else{
-                character.characterEffectsManager.PlayBloodSplatterVFX(contactPoint);
-                
-            }
+           
         }
 
         private void PlayDamageSFX(CharacterManager character)
@@ -132,12 +115,7 @@ namespace RPGKarawara
             //  TODO CALCULATE IF POISE IS BROKEN
             poiseIsBroken = true;
            
-            if (character.CompareTag("Player") && PlayerSkillManager.instance.Escudo) //FAZER PARA ESCUDO TODO:
-            {
-                
-                Debug.Log("escudo ativo");
-                return;
-            }
+           
             if (angleHitFrom >= 145 && angleHitFrom <= 180)
             {
                 damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.forward_Medium_Damage);

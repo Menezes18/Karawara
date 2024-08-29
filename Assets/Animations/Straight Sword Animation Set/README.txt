@@ -1,18 +1,3 @@
- This asset was shared by https://unityassetcollection.com
-
- Contact us:
- - Email: unityassetcollection@gmail.com
- - Telegram: @assetcollection or https://t.me/assetcollection
-								
- If you find this package helpful and want to support us. 	
- Please go to https://tinyurl.com/d0nat10n			
- We really appreciate your help.				
- Thank you.	
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
 
 *************************************
 Package Animation Summary
@@ -58,12 +43,27 @@ Locomotion Sets include...
 > Jumping
 
 *************************************
+Bonus Animations...
+*************************************
+
+> Attacks from guard Stance
+> Alternative Guard Animations (Can be paired with shield pack)
+
+*************************************
 Package Includes
 *************************************
 
-217 Unique Animations
+232 Unique Animations
 Low Poly Man Model
-Sword Model
+Spear Model
+Shield Model
+
+*************************************
+IF YOU OWN THE SHIELD PACK
+*************************************
+
+Included in this package are animations for guarding with a spear (Guard Idle, Guard Walking Forward, Guard Running Forward)
+You may replace the off hand Shield Guard animations with the ones listed above if you desire ^
 
 *************************************
 CONTACT

@@ -518,7 +518,7 @@ PrefabInstance:
     - target: {fileID: 7962199819078159310, guid: f5b41ba4c79702547a89de7544b80656,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -571,6 +571,11 @@ MonoBehaviour:
   attackCooldown: 1
   agent: {fileID: 0}
   colliderAttack: {fileID: 0}
+  erodeRate: 0.03
+  erodeRefreshRate: 0.01
+  erodeDelay: 1.25
+  erodeObject: {fileID: 0}
+  _objectsToDetach: []
 --- !u!114 &3786704287258763613
 MonoBehaviour:
   m_ObjectHideFlags: 0

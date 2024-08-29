@@ -71,5 +71,18 @@ namespace RPGKarawara
 
             return viewableAngle;
         }
+        public DamageIntensity GetDamageIntensityBasedOnPoiseDamage(float poiseDamage)
+        {
+            DamageIntensity damageIntensity = DamageIntensity.Block;
+
+            if (poiseDamage >= 0.1){
+                damageIntensity = DamageIntensity.Block;
+            }
+            if (poiseDamage >= 1000)
+                damageIntensity = DamageIntensity.Colossal;
+
+            return damageIntensity;
+        }
+
     }
 }

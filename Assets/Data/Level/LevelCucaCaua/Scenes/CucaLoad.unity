@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1345442009}
-  m_IndirectSpecularColor: {r: 0.0078735305, g: 0.029314285, b: 0.15393376, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -12814,8 +12814,8 @@ MonoBehaviour:
   physicalDamage: 100000
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 100000
 --- !u!64 &307418098
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -13814,8 +13814,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &330860070
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15214,8 +15214,8 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &358533254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39855,8 +39855,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!65 &819505457
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -40425,8 +40425,8 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!4 &836589508
 Transform:
   m_ObjectHideFlags: 0
@@ -42795,8 +42795,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &902076621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44415,8 +44415,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!4 &927009753
 Transform:
   m_ObjectHideFlags: 0
@@ -52250,8 +52250,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &992072725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67608,8 +67608,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!65 &1260564277
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76173,8 +76173,8 @@ MonoBehaviour:
   physicalDamage: 30
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &1336245920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -88092,8 +88092,8 @@ MonoBehaviour:
   physicalDamage: 60
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &1493595272
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98777,8 +98777,8 @@ MonoBehaviour:
   physicalDamage: 30
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
+  DamageKill: 0
 --- !u!1001 &1632850775
 PrefabInstance:
   m_ObjectHideFlags: 0

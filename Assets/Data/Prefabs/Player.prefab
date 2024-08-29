@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 788076987
+  GlobalObjectIdHash: 3406588913
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -136,6 +136,8 @@ MonoBehaviour:
   moveAmount:
     m_InternalValue: 0
   currentTargetNetworkObjectID:
+    m_InternalValue: 0
+  isBlocking:
     m_InternalValue: 0
   isInvulnerable:
     m_InternalValue: 0
@@ -269,6 +271,7 @@ MonoBehaviour:
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
+  characterStatsManager: {fileID: 0}
   characterCombatManager: {fileID: 0}
   characterSoundFXManager: {fileID: 0}
   characterLocomotionManager: {fileID: 0}
@@ -315,6 +318,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42693348f3883c4c947623dbfb865b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  staminaRegenerationAmount: 2
+  staminaRegenerationDelay: 2
+  blockingPhysicalAbsorption: 100
+  blockingFireAbsorption: 100
+  blockingMagicAbsorption: 100
+  blockingLightningAbsorption: 100
+  blockingHolyAbsorption: 100
 --- !u!114 &1937844861543524253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,7 +645,6 @@ MonoBehaviour:
   attackSkill: {fileID: 0}
   defenseSkill: {fileID: 0}
   supportSkill: {fileID: 0}
-  Escudo: 0
 --- !u!1 &918940640264833240
 GameObject:
   m_ObjectHideFlags: 0

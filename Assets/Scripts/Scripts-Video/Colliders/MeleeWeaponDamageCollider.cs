@@ -40,7 +40,7 @@ namespace RPGKarawara
                 Debug.LogError("ElementManager not found in the scene!");
             }
         }
-
+        
         protected override void OnTriggerEnter(Collider other)
         {
             CharacterManager damageTarget = other.GetComponentInParent<CharacterManager>();
@@ -58,6 +58,21 @@ namespace RPGKarawara
                 // CHECK IF TARGET IS BLOCKING
 
                 DamageTarget(damageTarget);
+            }
+        }
+
+        protected override void CheckForBlock(CharacterManager damageTarget){
+            
+            if (damageTarget.characterNetworkManager.isBlocking.Value){
+                charactersDamaged.Add(damageTarget);
+                TakeBlockedDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.TakeBlockedDamageEffect);
+                damageEffect.physicalDamage = physicalDamage;
+                damageEffect.magicDamage = magicDamage;
+                damageEffect.fireDamage = fireDamage;
+                damageEffect.holyDamage = holyDamage;
+
+                damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+                
             }
         }
 
@@ -142,7 +157,7 @@ namespace RPGKarawara
                 AICharacterManager aiDamageTarget = damageTarget as AICharacterManager;
                 if (aiDamageTarget != null)
                 {
-                    Debug.Log("entrou no dano");
+                    
                     switch (elementManager.currentElement)
                     {
                         case Element.Fire:
@@ -170,7 +185,7 @@ namespace RPGKarawara
                     }
                 }
                 else{
-                    Debug.Log("nnn no dano");
+                    
                 }
             }
         }
