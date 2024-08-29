@@ -44,6 +44,7 @@ namespace RPGKarawara
                     DesactivateAll(_skills[0]);
                     Instantiate(_skills[0]);
                     //_spirit_Summon.Summon();
+                    _skills[0].GetComponent<Spirit_Summon>().Summon();
                     StartCoroutine("Detach");
                 }
             }
@@ -65,6 +66,7 @@ namespace RPGKarawara
                 }
             }
             
+            CreepActions();            
         }
         void DesactivateAll(GameObject skilAtual)
         {
@@ -78,7 +80,8 @@ namespace RPGKarawara
         }
         void PercorrerLista()
         {
-            Instantiate(_camera);
+            if(!_camera.activeInHierarchy)Instantiate(_camera);
+            
         }
         void CreepActions()
         {
