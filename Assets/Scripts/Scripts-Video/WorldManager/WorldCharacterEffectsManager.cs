@@ -13,6 +13,7 @@ namespace RPGKarawara
 
         [Header("Damage")]
         public TakeDamageEffect takeDamageEffect;
+        public TakeBlockedDamageEffect TakeBlockedDamageEffect;
 
         [SerializeField] List<InstantCharacterEffect> instantEffects;
 

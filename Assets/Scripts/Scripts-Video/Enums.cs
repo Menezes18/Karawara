@@ -52,3 +52,8 @@ public enum AttackType
     RangedAttack_01,
     RangedAttack_02
 }
+public enum DamageIntensity
+{
+    Block,
+    Colossal
+}

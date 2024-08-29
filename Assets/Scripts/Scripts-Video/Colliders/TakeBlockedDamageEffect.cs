@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using RPGKarawara.SkillTree;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace RPGKarawara
-{
-    [CreateAssetMenu(menuName = "Character Effects/Instant Effects/Take Damage")]
-    public class TakeDamageEffect : InstantCharacterEffect
+namespace RPGKarawara{
+    [CreateAssetMenu(menuName = "Character Effects/Instant Effects/Take Blocked Damage")]
+    public class TakeBlockedDamageEffect : InstantCharacterEffect
     {
         [Header("Character Causing Damage")]
         public CharacterManager characterCausingDamage; // IF A CHARACTER IS CAUSING THIS DAMAGE, THAT CHARACTER IS STORED HERE
@@ -27,19 +23,9 @@ namespace RPGKarawara
 
         //  (TO DO) BUILD UPS
         //  build up effect amounts
-
-        [Header("Animation")]
-        public bool playDamageAnimation = true;
-        public bool manuallySelectDamageAnimation = false;
-        public string damageAnimation;
-
         [Header("Sound FX")]
         public bool willPlayDamageSFX = true;
         public AudioClip elementalDamageSoundFX;    //  USED ON TOP OF REGULAR SFX IF THERE IS ELEMENTAL DAMAGE PRESENT (Magic/Fire/Lightning/Holy)
-
-        [Header("Direction Damage Taken From")]
-        public float angleHitFrom;                  //  USED TO DETERMINE WHAT DAMAGE ANIMATION TO PLAY (Move backwards, to the left, to the right ect)
-        public Vector3 contactPoint;                //  USED TO DETERMINE WHERE THE BLOOD FX INSTANTIATE
 
         public override void ProcessEffect(CharacterManager character)
         {
@@ -48,12 +34,14 @@ namespace RPGKarawara
 
             base.ProcessEffect(character);
 
+            Debug.Log("HIT WAS BLOCKED!");
+
             //  IF THE CHARACTER IS DEAD, NO ADDITIONAL DAMAGE EFFECTS SHOULD BE PROCESSED
             if (character.isDead.Value)
                 return;
 
             CalculateDamage(character);
-            PlayDirectionalBasedDamageAnimation(character);
+            PlayDirectionalBasedBlockingAnimation(character);
             //  CHECK FOR BUILD UPS (POISON, BLEED ECT)
             PlayDamageSFX(character);
             PlayDamageVFX(character);
@@ -76,6 +64,15 @@ namespace RPGKarawara
             //  CHECK CHARACTER FOR ARMOR ABSORPTIONS, AND SUBTRACT THE PERCENTAGE FROM THE DAMAGE
 
             //  ADD ALL DAMAGE TYPES TOGETHER, AND APPLY FINAL DAMAGE
+
+
+            physicalDamage -= physicalDamage; // blockingPhysicalAbsorption = 100
+            magicDamage = magicDamage;
+            fireDamage -= fireDamage; // blockingFireAbsorption = 100
+            lightningDamage -= lightningDamage; // blockingLightningAbsorption = 100
+            
+
+
             finalDamageDealt = Mathf.RoundToInt(physicalDamage + magicDamage + fireDamage + lightningDamage + holyDamage);
 
             if (finalDamageDealt <= 0)
@@ -83,7 +80,11 @@ namespace RPGKarawara
                 finalDamageDealt = 1;
             }
 
-            //Debug.Log("FINAL DAMAGE GIVEN: " + finalDamageDealt);
+            Debug.Log("FINAL PHYSICAL DAMAGE: " + physicalDamage);
+            Debug.Log("ORIGINAL PHYSICAL DAMAGE: " + finalDamageDealt);
+
+            character.characterNetworkManager.currentHealth.Value -= finalDamageDealt;
+
             //  CALCULATE POISE DAMAGE TO DETERMINE IF THE CHARACTER WILL BE STUNNED
         }
 
@@ -91,20 +92,19 @@ namespace RPGKarawara
         {
             //  IF WE HAVE FIRE DAMAGE, PLAY FIRE PARTICLES
             //  LIGHTNING DAMAGE, LIGHTNING PARTICLES ECT
-           
+
+            // 1. GET VFX BASED ON BLOCKING WEAPON
         }
 
         private void PlayDamageSFX(CharacterManager character)
         {
-            AudioClip physicalDamageSFX = WorldSoundFXManager.instance.ChooseRandomSFXFromArray(WorldSoundFXManager.instance.physicalDamageSFX);
-
-            character.characterSoundFXManager.PlaySoundFX(physicalDamageSFX);
-            character.characterSoundFXManager.PlayDamageGrunt();
             //  IF FIRE DAMAGE IS GREATER THAN 0, PLAY BURN SFX
             //  IF LIGHTNING DAMAGE IS GREATER THAN 0, PLAY ZAP SFX
+
+            // 1. GET SFX BASED ON BLOCKING WEAPON
         }
 
-        private void PlayDirectionalBasedDamageAnimation(CharacterManager character)
+        private void PlayDirectionalBasedBlockingAnimation(CharacterManager character)
         {
             if (!character.IsOwner)
                 return;
@@ -112,37 +112,22 @@ namespace RPGKarawara
             if (character.isDead.Value)
                 return;
 
-            //  TODO CALCULATE IF POISE IS BROKEN
-            poiseIsBroken = true;
-           
-           
-            if (angleHitFrom >= 145 && angleHitFrom <= 180)
-            {
-                damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.forward_Medium_Damage);
-            }
-            else if (angleHitFrom <= -145 && angleHitFrom >= -180)
-            {
-                damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.forward_Medium_Damage);
-            }
-            else if (angleHitFrom >= -45 && angleHitFrom <= 45)
-            {
-                damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.backward_Medium_Damage);
-            }
-            else if (angleHitFrom >= -144 && angleHitFrom <= -45)
-            {
-                damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.left_Medium_Damage);
-            }
-            else if (angleHitFrom >= 45 && angleHitFrom <= 144)
-            {
-                damageAnimation = character.characterAnimatorManager.GetRandomAnimationFromList(character.characterAnimatorManager.right_Medium_Damage);
-            }
+            DamageIntensity damageIntensity = WorldUtilityManager.Instance.GetDamageIntensityBasedOnPoiseDamage(poiseDamage);
+            // 2. PLAY A PROPER ANIMATION TO MATCH THE "INTENSITY" OF THE BLOW
 
-            //  IF POISE IS BROKEN, PLAY A STAGGERING DAMAGE ANIMATION
-            if (poiseIsBroken)
+            //  TODO: CHECK FOR TWO HAND STATUS, IF TWO HANDING USE TWO HAND VERSION OF BLOCK ANIM INSTEAD
+            switch (damageIntensity)
             {
-                character.characterAnimatorManager.lastDamageAnimationPlayed = damageAnimation;
-                character.characterAnimatorManager.PlayTargetActionAnimation(damageAnimation, true);
+                case DamageIntensity.Block:
+                    //VFX OU ANIMATION
+                    break;
+                case DamageIntensity.Colossal:
+                    
+                    break;
+                default:
+                    break;
             }
         }
     }
 }
+
