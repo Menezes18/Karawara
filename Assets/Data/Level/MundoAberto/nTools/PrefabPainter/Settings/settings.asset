@@ -966,9 +966,9 @@ MonoBehaviour:
     - name: Tree3&4
       settings:
         brushRadius: 5.4
-        brushSpacing: 0.3
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
+        brushSpacing: 3.62
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 6.51
         brushOverlapCheckObjects: 1
         brushOverlapCheckLayers:
           serializedVersion: 2
@@ -7091,7 +7091,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: grass
@@ -7700,16 +7700,16 @@ MonoBehaviour:
     levelsInWhite: 255
     levelsOutBlack: 0
     levelsOutWhite: 255
-  activeTab: 5
-  paintOnSelected: 1
+  activeTab: 0
+  paintOnSelected: 0
   paintLayers:
     serializedVersion: 2
     m_Bits: 64
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 32
-  placeUnder: 0
-  overwritePrefabLayer: 0
+  placeUnder: 1
+  overwritePrefabLayer: 1
   prefabPlaceLayer: 0
   pinSnapRotationValue: 15
   pinSnapScaleValue: 0.1
