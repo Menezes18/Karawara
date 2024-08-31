@@ -11,29 +11,21 @@ namespace RPGKarawara
         public GameObject _camera;
         public List<GameObject> _objectsToDetach = new List<GameObject>();
         public Spirit_Summon _spirit_Summon;
+        private int _numeroDeSkills;
         void Start()
         {
-            
-        }
-        IEnumerator Detach()
-        {
-            yield return new WaitForSeconds(1f);
-
-            for (int i=0; i < _objectsToDetach.Count; i++)
-            {   
-                _objectsToDetach[i].transform.parent = null;
-                Destroy(_objectsToDetach[i], 1f);
-            }
-        
+            _numeroDeSkills = 0;
         }
         // Update is called once per frame
         void Update()
         {
-            ApresentacaoInicial();
+            //ApresentacaoInicial();
             if(Keyboard.current.rightArrowKey.wasReleasedThisFrame)
             {
                 PercorrerLista();
+                Debug.Log(_numeroDeSkills);
             }
+            
         }
         void ApresentacaoInicial()
         {
@@ -44,8 +36,7 @@ namespace RPGKarawara
                     DesactivateAll(_skills[0]);
                     Instantiate(_skills[0]);
                     //_spirit_Summon.Summon();
-                    _skills[0].GetComponent<Spirit_Summon>().Summon();
-                    StartCoroutine("Detach");
+
                 }
             }
             if(Keyboard.current.digit2Key.wasReleasedThisFrame) //Folhas
@@ -65,8 +56,10 @@ namespace RPGKarawara
                     CreepActions();
                 }
             }
-            
-            CreepActions();            
+            if(_skills[2] != null)
+            { 
+                CreepActions();
+            }           
         }
         void DesactivateAll(GameObject skilAtual)
         {
@@ -78,10 +71,38 @@ namespace RPGKarawara
                 }
             }
         }
+        void DestroyAll(GameObject skilAtual)
+        {
+           for(int i = 0; i < _skills.Length; i++)
+            {
+                if(_skills[i] != skilAtual && _skills[i].activeInHierarchy)
+                {
+                    Destroy(_skills[i]);
+                }
+            } 
+        }
+        void DestroyCameras()
+        {
+            Camera[] cameras = Camera.allCameras;
+
+            foreach (Camera cam in cameras)
+            {
+                if (cam.gameObject.activeInHierarchy && cam.enabled)
+                {
+                    Destroy(cam);
+                }
+            }
+        }
         void PercorrerLista()
         {
             if(!_camera.activeInHierarchy)Instantiate(_camera);
-            
+            DestroyAll(_skills[_numeroDeSkills]);
+            Instantiate(_skills[_numeroDeSkills]);
+            _numeroDeSkills++;
+            if(_numeroDeSkills > _skills.Length)
+            {
+                _numeroDeSkills = 0;
+            }            
         }
         void CreepActions()
         {
