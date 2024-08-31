@@ -150,7 +150,16 @@ namespace RPGKarawara
             damage.fireDamage *= modifier;
             damage.holyDamage *= modifier;
             damage.poiseDamage *= modifier;
-
+            // bool PET = true;
+            // if (PET){
+            //     damage.physicalDamage *= 5;
+            //     damage.magicDamage *= 5;
+            //     damage.fireDamage *= 5;
+            //     damage.holyDamage *= 5;
+            //     damage.poiseDamage *= 5;
+            //     return;
+            // }
+            
             // Aplicar modificadores de dano baseados no elemento atual
             if (elementManager != null)
             {
