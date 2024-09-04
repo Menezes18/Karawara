@@ -52,7 +52,7 @@ namespace RPGKarawara
 
         [Header("QUED INPUTS")]
         [SerializeField] private bool input_Que_Is_Active = false;
-        [SerializeField] float default_Que_Input_Time = 0.35f;
+        [SerializeField] float default_Que_Input_Time = 35f;
         [SerializeField] float que_Input_Timer = 0;
         [SerializeField] bool que_RB_Input = false;
         [SerializeField] bool que_RT_Input = false;
@@ -416,6 +416,9 @@ namespace RPGKarawara
 
                 // Realiza o ataque baseado na arma que está equipada na mão direita
                 player.playerCombatManager.PerformWeaponBasedAction(player.playerInventoryManager.currentRightHandWeapon.oh_RT_Action, player.playerInventoryManager.currentRightHandWeapon);
+            }
+            if(playerControls.PlayerActions.RT.WasReleasedThisFrame()){
+                player.animator.SetBool("Released", true);
             }
         }
 

@@ -133,6 +133,9 @@ namespace RPGKarawara
         public void OnIsChargingAttackChanged(bool oldStatus, bool newStatus)
         {
             character.animator.SetBool("isChargingAttack", isChargingAttack.Value);
+            if(!newStatus) {
+                character.animator.SetBool("Released", true);
+            }
         }
 
         public void OnIsMovingChanged(bool oldStatus, bool newStatus)
