@@ -402,30 +402,35 @@ namespace RPGKarawara
 
         private void HandleRTInput()
         {
-            if (RT_Input)
-            {
+            // Verifica se o botão de ataque forte foi pressionado
+            if (RT_Input){
+                
+                // Reseta a entrada para evitar múltiplos disparos no mesmo pressionamento
                 RT_Input = false;
 
-                //  TODO: IF WE HAVE A UI WINDOW OPEN, RETURN AND DO NOTHING
+                // Aqui você pode verificar se há alguma janela de UI aberta e retornar para evitar ataques indesejados
+                // TODO: IF WE HAVE A UI WINDOW OPEN, RETURN AND DO NOTHING
 
+                // Define a ação para a mão correta
                 player.playerNetworkManager.SetCharacterActionHand(true);
 
-                //  TODO: IF WE ARE TWO HANDING THE WEAPON, USE THE TWO HANDED ACTION
-
+                // Realiza o ataque baseado na arma que está equipada na mão direita
                 player.playerCombatManager.PerformWeaponBasedAction(player.playerInventoryManager.currentRightHandWeapon.oh_RT_Action, player.playerInventoryManager.currentRightHandWeapon);
             }
         }
 
+
         private void HandleChargeRTInput()
         {
-            //  WE ONLY WANT TO CHECK FOR A CHARGE IF WE ARE IN AN ACTION THAT REQUIRES IT (Attacking)
-            if (player.isPerformingAction)
-            {
-                if (player.playerNetworkManager.isUsingRightHand.Value)
-                {
-                    player.playerNetworkManager.isChargingAttack.Value = Hold_RT_Input;
-                }
-            }
+            // //  WE ONLY WANT TO CHECK FOR A CHARGE IF WE ARE IN AN ACTION THAT REQUIRES IT (Attacking)
+            // if (player.isPerformingAction)
+            // {
+            //     if (player.playerNetworkManager.isUsingRightHand.Value)
+            //     {
+            //         Debug.Log("ATAQUE");
+            //         player.playerNetworkManager.isChargingAttack.Value = Hold_RT_Input;
+            //     }
+            // }
         }
 
         private void HandleSwitchRightWeaponInput()

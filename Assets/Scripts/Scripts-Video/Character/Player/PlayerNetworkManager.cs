@@ -29,7 +29,7 @@ namespace RPGKarawara
             if (rightHandedAction)
             {
                 isUsingLeftHand.Value = false;
-                isUsingRightHand.Value = true;
+                isUsingRightHand.Value = true;//
             }
             else
             {

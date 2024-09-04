@@ -44,7 +44,7 @@ namespace RPGKarawara
                // player?.playerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
             }
 
-            // Inicia a rotina para desativar a arma após 2 segundos se nenhum ataque for realizado
+            // Inicia a rotina para desativar a arma após x tempo segundos se nenhum ataque for realizado
             weaponDeactivateCoroutine = StartCoroutine(DeactivateWeaponAfterDelay());
         }
 

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using RPGKarawara.SkillTree;
 namespace RPGKarawara
 {
     public class MeleeWeaponDamageCollider : DamageCollider
@@ -143,6 +143,7 @@ namespace RPGKarawara
             }
         }
 
+        private PlayerNetworkManager _playerNetworkManager;
         private void ApplyAttackDamageModifiers(float modifier, TakeDamageEffect damage, CharacterManager damageTarget)
         {
             damage.physicalDamage *= modifier;
@@ -150,15 +151,17 @@ namespace RPGKarawara
             damage.fireDamage *= modifier;
             damage.holyDamage *= modifier;
             damage.poiseDamage *= modifier;
-            // bool PET = true;
-            // if (PET){
-            //     damage.physicalDamage *= 5;
-            //     damage.magicDamage *= 5;
-            //     damage.fireDamage *= 5;
-            //     damage.holyDamage *= 5;
-            //     damage.poiseDamage *= 5;
-            //     return;
-            // }
+            _playerNetworkManager = FindObjectOfType<PlayerNetworkManager>();
+            
+            if (_playerNetworkManager.isPowerPet.Value){
+                
+                damage.physicalDamage *=  PlayerSkillManager.instance.damageSpirit;
+                damage.magicDamage *=  PlayerSkillManager.instance.damageSpirit;
+                damage.fireDamage *= PlayerSkillManager.instance.damageSpirit;;
+                damage.holyDamage *= PlayerSkillManager.instance.damageSpirit;;
+                damage.poiseDamage *= PlayerSkillManager.instance.damageSpirit;;
+                return;
+            }
             
             // Aplicar modificadores de dano baseados no elemento atual
             if (elementManager != null)

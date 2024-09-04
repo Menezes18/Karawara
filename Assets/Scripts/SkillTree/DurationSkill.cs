@@ -1,26 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace RPGKarawara.SkillTree{
-    public class DurationSkill : MonoBehaviour{
+namespace RPGKarawara.SkillTree
+{
+    public class DurationSkill : MonoBehaviour
+    {
+        public bool showFields = true; 
         public float erodeRate = 0.03f;
         public float erodeRefreshRate = 0.01f;
         public float erodeDelay = 1.25f;
         public SkinnedMeshRenderer erodeObject;
-        public void Init(float duration){
+
+        public void Init(float duration)
+        {
             Invoke(nameof(DestroyCircle), duration);
         }
-        private void DestroyCircle() {
-            if (erodeObject != null){
+
+        private void DestroyCircle()
+        {
+            if (erodeObject != null && showFields)
+            {
                 StartCoroutine(ErodeObject());
             }
-            else{
+            else
+            {
                 Destroy(gameObject);
             }
         }
-        IEnumerator ErodeObject(){
-            
-            //erodeObject = gameObject.GetComponent<SkinnedMeshRenderer>();
+
+        IEnumerator ErodeObject()
+        {
             float t = erodeObject.material.GetFloat("_Erode");
             while (t < 1.2)
             {
