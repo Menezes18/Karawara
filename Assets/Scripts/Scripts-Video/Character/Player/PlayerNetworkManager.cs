@@ -108,6 +108,7 @@ namespace RPGKarawara
             if (weaponAction != null)
             {
                 weaponAction.AttemptToPerformAction(player, WorldItemDatabase.Instance.GetWeaponByID(weaponID));
+                player.animator.SetBool("Released", false);
             }
             else
             {

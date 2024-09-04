@@ -52,7 +52,7 @@ namespace RPGKarawara
 
         [Header("QUED INPUTS")]
         [SerializeField] private bool input_Que_Is_Active = false;
-        [SerializeField] float default_Que_Input_Time = 0.35f;
+        [SerializeField] float default_Que_Input_Time = 35f;
         [SerializeField] float que_Input_Timer = 0;
         [SerializeField] bool que_RB_Input = false;
         [SerializeField] bool que_RT_Input = false;
@@ -413,6 +413,9 @@ namespace RPGKarawara
                 //  TODO: IF WE ARE TWO HANDING THE WEAPON, USE THE TWO HANDED ACTION
 
                 player.playerCombatManager.PerformWeaponBasedAction(player.playerInventoryManager.currentRightHandWeapon.oh_RT_Action, player.playerInventoryManager.currentRightHandWeapon);
+            }
+            if(playerControls.PlayerActions.RT.WasReleasedThisFrame()){
+                player.animator.SetBool("Released", true);
             }
         }
 
