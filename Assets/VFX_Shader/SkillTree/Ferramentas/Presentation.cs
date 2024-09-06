@@ -95,11 +95,11 @@ namespace RPGKarawara
         }
         void PercorrerLista()
         {
-            if(!_camera.activeInHierarchy)Instantiate(_camera);
-            DestroyAll(_skills[_numeroDeSkills]);
-            Instantiate(_skills[_numeroDeSkills]);
+            //if(!_camera.activeInHierarchy)Instantiate(_camera);
+            DesactivateAll(_skills[_numeroDeSkills]);
+            _skills[_numeroDeSkills].SetActive(true);
             _numeroDeSkills++;
-            if(_numeroDeSkills > _skills.Length)
+            if(_numeroDeSkills >= _skills.Length)
             {
                 _numeroDeSkills = 0;
             }            
