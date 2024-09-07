@@ -44,6 +44,10 @@ namespace RPGKarawara
 
         public GameObject menu;
 
+        private void Awake(){
+            SkillTreeUiManager.instance.DeactivateAllSkillsAndResetCooldown();
+        }
+
         void Start()
         {
             // Registrar o evento para quando uma nova cena for carregada

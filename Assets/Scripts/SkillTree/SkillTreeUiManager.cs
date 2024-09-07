@@ -17,13 +17,14 @@ namespace RPGKarawara{
         public Skill[] attackSkills; // Habilidades de ataque
         public Skill[] defenseSkills; // Habilidades de defesa
         public Skill[] supportSkills; // Habilidades de suporte
-
+        public Skill[] allSkills;
         [Header("Dados Skill Direita")]
         public TextMeshProUGUI textCabecalho;
         public Sprite spriteCabecalho;
         public TextMeshProUGUI descriptionCabecalho;
         private void Awake(){
             instance = this;
+            DeactivateAllSkillsAndResetCooldown();
         }
 
         private void Start(){
@@ -31,6 +32,21 @@ namespace RPGKarawara{
             SetupSkillSlots(attackSkills, attackSkillSlots);
             SetupSkillSlots(defenseSkills, defenseSkillSlots);
             SetupSkillSlots(supportSkills, supportSkillSlots);
+        }
+        public void DeactivateAllSkillsAndResetCooldown()
+        {
+            // Encontra todas as instâncias de Skill no jogo
+            allSkills = Resources.FindObjectsOfTypeAll<Skill>();
+
+            // Desativa e reseta o cooldown de todas as habilidades
+            foreach (Skill skill in allSkills)
+            {
+                if (skill != null)
+                {
+                    skill.active = false; // Desativa a habilidade
+                    skill.ResetCooldown(); // Reseta o cooldown
+                }
+            }
         }
 
         // Método para configurar os slots de habilidade
