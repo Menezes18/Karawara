@@ -181,21 +181,23 @@ namespace RPGKarawara
 
         private void HandleAllInputs()
         {
-            HandleLockOnInput();
-            HandleLockOnSwitchTargetInput();
-            HandlePlayerMovementInput();
-            HandleCameraMovementInput();
-            HandleDodgeInput();
-            HandleSprintInput();
-            HandleJumpInput();
-            HandleRBInput();
-            HandleRTInput();
-            HandleChargeRTInput();
-            HandleSwitchRightWeaponInput();
-            HandleSwitchLeftWeaponInput();
-            HandleQuedInputs();
-            HandleInteractionInput();
-            HandlePauseUi();
+            if(player.isDead.Value == false){
+                HandleLockOnInput();
+                HandleLockOnSwitchTargetInput();
+                HandlePlayerMovementInput();
+                HandleCameraMovementInput();
+                HandleDodgeInput();
+                HandleSprintInput();
+                HandleJumpInput();
+                HandleRBInput();
+                HandleRTInput();
+                HandleChargeRTInput();
+                HandleSwitchRightWeaponInput();
+                HandleSwitchLeftWeaponInput();
+                HandleQuedInputs();
+                HandleInteractionInput();
+                HandlePauseUi();
+            }
         }
 
         //  LOCK ON
