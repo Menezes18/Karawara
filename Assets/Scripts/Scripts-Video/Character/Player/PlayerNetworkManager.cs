@@ -29,7 +29,7 @@ namespace RPGKarawara
             if (rightHandedAction)
             {
                 isUsingLeftHand.Value = false;
-                isUsingRightHand.Value = true;
+                isUsingRightHand.Value = true;//
             }
             else
             {
@@ -108,6 +108,7 @@ namespace RPGKarawara
             if (weaponAction != null)
             {
                 weaponAction.AttemptToPerformAction(player, WorldItemDatabase.Instance.GetWeaponByID(weaponID));
+                player.animator.SetBool("Released", false);
             }
             else
             {

@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Metralhadora : MonoBehaviour
 {
-    /* Temos dois objetivos com esse script:
-        1) Queremos encontrar o alvo mais proximo da torre e mirar nele
-        2) Queremos movimentar a Head da torre para seguir o movimento do alvo */
-
     // Guarda a posicao do alvo atual
     [SerializeField] private Transform target;
 
