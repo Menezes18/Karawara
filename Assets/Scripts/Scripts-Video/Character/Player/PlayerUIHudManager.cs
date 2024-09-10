@@ -44,7 +44,8 @@ namespace RPGKarawara
 
         public GameObject menu;
 
-        private void Awake(){
+        private void Awake()
+        {
             SkillTreeUiManager.instance.DeactivateAllSkillsAndResetCooldown();
         }
 
@@ -106,23 +107,30 @@ namespace RPGKarawara
 
         void ToggleMenu()
         {
-            bool isMenuActive = menu.activeSelf;
-
-            // Alterna o estado ativo do GameObject
-            menu.SetActive(!isMenuActive);
-
-            // Controla o estado do cursor
-            if (!isMenuActive)
+            if (SceneManager.GetActiveScene().buildIndex != 0)
             {
-                Cursor.lockState = CursorLockMode.None; // Destrava o cursor
-                Cursor.visible = true; // Torna o cursor visível
-                Time.timeScale = 0f; // Pausa o jogo
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked; // Trava o cursor
-                Cursor.visible = false; // Torna o cursor invisível
-                Time.timeScale = 1f; // Retoma o jogo
+                bool isMenuActive = menu.activeSelf;
+
+                // Alterna o estado ativo do GameObject
+                menu.SetActive(!isMenuActive);
+
+                if(pauseMenu.activeSelf == true){
+                    pauseMenu.SetActive(false);
+                }
+
+                // Controla o estado do cursor
+                if (!isMenuActive)
+                {
+                    Cursor.lockState = CursorLockMode.None; // Destrava o cursor
+                    Cursor.visible = true; // Torna o cursor visível
+                    Time.timeScale = 0f; // Pausa o jogo
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.Locked; // Trava o cursor
+                    Cursor.visible = false; // Torna o cursor invisível
+                    Time.timeScale = 1f; // Retoma o jogo
+                }
             }
         }
 
@@ -175,25 +183,32 @@ namespace RPGKarawara
 
         public void activatePause()
         {
-            if (paneldesativar)
+            if (SceneManager.GetActiveScene().buildIndex != 0)
             {
-                paneldesativar = false;
-            }
-            else
-            {
-                pauseMenu.SetActive(!pauseMenu.activeSelf);
-                active = !active;
-                if (active)
+                if (paneldesativar)
                 {
-                    Time.timeScale = 0f;
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
+                    paneldesativar = false;
                 }
                 else
                 {
-                    Time.timeScale = 1f;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
+                    pauseMenu.SetActive(!pauseMenu.activeSelf);
+                    if (menu.activeSelf == true)
+                    {
+                        menu.SetActive(false);
+                    }
+                    active = !active;
+                    if (active)
+                    {
+                        Time.timeScale = 0f;
+                        Cursor.lockState = CursorLockMode.None;
+                        Cursor.visible = true;
+                    }
+                    else
+                    {
+                        Time.timeScale = 1f;
+                        Cursor.lockState = CursorLockMode.Locked;
+                        Cursor.visible = false;
+                    }
                 }
             }
         }
