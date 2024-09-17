@@ -10923,6 +10923,79 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 253555403}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &254113034
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -55.840275
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -20.81423
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.91057
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487615623806680822, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_Name
+      value: Cogumelo
+      objectReference: {fileID: 0}
+    - target: {fileID: 6654542135872659273, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: LightsModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fa32a3b971291d84d98fc9124be047a8, type: 3}
 --- !u!1001 &255187782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -127356,3 +127429,4 @@ SceneRoots:
   - {fileID: 1675246537}
   - {fileID: 2098371062}
   - {fileID: 952498495}
+  - {fileID: 254113034}
