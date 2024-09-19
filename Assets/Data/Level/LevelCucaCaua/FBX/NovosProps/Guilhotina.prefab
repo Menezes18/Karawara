@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8921665566093520139
+--- !u!1 &8744140709028930134
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5116613113392140792}
-  - component: {fileID: 9191761543521625699}
-  - component: {fileID: 3755985241950154759}
-  - component: {fileID: 6788404242476637346}
+  - component: {fileID: 5820485612245968818}
+  - component: {fileID: 4831592527127226597}
+  - component: {fileID: 6762755879667906875}
   m_Layer: 0
   m_Name: Guilhotina
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!4 &5116613113392140792
+--- !u!4 &5820485612245968818
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8921665566093520139}
+  m_GameObject: {fileID: 8744140709028930134}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 5116613113392140792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &9191761543521625699
+--- !u!33 &4831592527127226597
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8921665566093520139}
-  m_Mesh: {fileID: -8464061593746680844, guid: a62f290350036164c924f5ca19ba1560, type: 3}
---- !u!23 &3755985241950154759
+  m_GameObject: {fileID: 8744140709028930134}
+  m_Mesh: {fileID: -8464061593746680844, guid: 6be92b1f3cd5a2945b6cd8eead683fb5, type: 3}
+--- !u!23 &6762755879667906875
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8921665566093520139}
+  m_GameObject: {fileID: 8744140709028930134}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -62,7 +61,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: af8fb46b745e78749bc1a50f294b3daa, type: 2}
+  - {fileID: 2100000, guid: b1d9d268cd81a6a4cb379c86861e1f85, type: 2}
+  - {fileID: 2100000, guid: 7d4ec64df81e1714a9fb1c8fee616902, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,6 +84,39 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8921665566093520139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5116613113392140792}
+  - component: {fileID: 6788404242476637346}
+  m_Layer: 0
+  m_Name: Guilhotina
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &5116613113392140792
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8921665566093520139}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5820485612245968818}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6788404242476637346
 BoxCollider:
   m_ObjectHideFlags: 0
