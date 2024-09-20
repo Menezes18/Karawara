@@ -18,15 +18,16 @@ namespace RPGKarawara
         
         private void Awake()
         {
+            Debug.Log(this.gameObject.name + " is Awake");
             skillManager = PlayerSkillManager.instance;
             UpdateUI();
         }
 
         public void UpdateUI()
         {
-            skill1.sprite = skillManager.attackSkill.sprite;
-            skill2.sprite = skillManager.defenseSkill.sprite;
-            skill3.sprite = skillManager.supportSkill.sprite;
+            // skill1.sprite = skillManager.attackSkill.sprite;
+            // skill2.sprite = skillManager.defenseSkill.sprite;
+            // skill3.sprite = skillManager.supportSkill.sprite;
         }
     }
 }

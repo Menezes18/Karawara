@@ -1,123 +1,88 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
-using System.Collections;
-using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace RPGKarawara.SkillTree
 {
+    [System.Serializable]
+    public class SkillSlot
+    {
+        public Skill skillSlot;
+        public float slotCooldownDuration = 5f; // Cooldown específico do slot
+        public bool canUse = true; // Indica se o slot pode ser usado (não está em cooldown)
+    }
+
     public class PlayerSkillManager : MonoBehaviour
     {
         public static PlayerSkillManager instance;
-        public Skill attackSkill;
-        public Skill defenseSkill;
-        public Skill supportSkill;
-        public float skilldelay = 5f;
-        public Dictionary<string, bool> cooldowns = new Dictionary<string, bool>();
-
-        [HideInInspector] public float damageSpirit;
-        public Image skillIcon;
+        public SkillSlot[] slot;
+        [Header("DAMAGE SPIRIT EXTRA")]
+        public float damageSpirit;
         private void Awake()
         {
             instance = this;
-            // Inicializa os cooldowns para todas as habilidades
-            cooldowns["attack"] = false;
-            cooldowns["defense"] = false;
-            cooldowns["support"] = false;
-            InitializeCooldown(attackSkill);
-            InitializeCooldown(defenseSkill);
-            InitializeCooldown(supportSkill);
         }
 
         private void Update()
         {
-            //ARRUAR ESSE LOGICA 
-            // Verifica se a tecla 1 foi liberada
-            if (Keyboard.current.digit1Key.wasReleasedThisFrame)
+          
+            if (Keyboard.current.digit1Key.wasReleasedThisFrame && slot[0].canUse)
             {
-                if (IsCooldownActive("attack") && !attackSkill.IsOnCooldown)
-                {
-                    Debug.Log("Attack Skill cooldown");
-                    
-                    StartCoroutine(PrintMessageAfterDelay("attack"));
-                }
-                if (attackSkill != null && !attackSkill.IsOnCooldown && !IsCooldownActive("attack"))
-                {
-                    cooldowns["attack"] = true;
-                    attackSkill.Activate(gameObject);
-                }
-                else
-                {
-                    Debug.Log("Cooldown is active attack");
-                }
-            }
-
-            // Verifica se a tecla 2 foi liberada
-            if (Keyboard.current.digit2Key.wasReleasedThisFrame)
-            {
-                if (IsCooldownActive("defense") && !defenseSkill.IsOnCooldown)
-                {
-                    StartCoroutine(PrintMessageAfterDelay("defense"));
-                }
-                else if (defenseSkill != null && !defenseSkill.IsOnCooldown && !IsCooldownActive("defense"))
-                {
-                    defenseSkill.Activate(gameObject);
-                    cooldowns["defense"] = true;
-                }
-                else
-                {
-                    Debug.Log("Cooldown is active defense");
-                }
-            }
-
-            // Verifica se a tecla 3 foi liberada
-            if (Keyboard.current.digit3Key.wasReleasedThisFrame)
-            {
-                if (IsCooldownActive("support") && !supportSkill.IsOnCooldown)
-                {
-                    StartCoroutine(PrintMessageAfterDelay("support"));
-                }
-                else if (supportSkill != null && !supportSkill.IsOnCooldown && !IsCooldownActive("support"))
-                {
-                    supportSkill.Activate(gameObject);
-                    cooldowns["support"] = true;
-                    Debug.Log("Support skill activated");
-                }
-                else
-                {
-                    Debug.Log("Support skill is on cooldown or is null");
-                }
+                ActivateSkill(0); // Ativa a habilidade no slot 0
             }
         }
 
-
-        IEnumerator PrintMessageAfterDelay(string skill)
+        private void ActivateSkill(int slotIndex)
         {
-            yield return new WaitForSeconds(skilldelay);
-            cooldowns[skill] = false;
-        }
+            // Verifica se a habilidade está desbloqueada e se não está em cooldown interno
+            if (slot[slotIndex].skillSlot.isUnlocked && !slot[slotIndex].skillSlot.IsOnCooldown)
+            {
+                slot[slotIndex].skillSlot.Activate(gameObject); // Ativa a habilidade
+                slot[slotIndex].canUse = false; // Inicia o cooldown do slot
 
-        public bool IsCooldownActive(string type)
-        {
-            if (cooldowns.ContainsKey(type))
-            {
-                return cooldowns[type];
-            }
-            else
-            {
-                Debug.LogWarning($"Tipo de cooldown desconhecido: {type}");
-                return false;
+                // Inicia o cooldown do slot APÓS a duração da habilidade
+                StartCoroutine(SkillDurationTimer(slotIndex));
             }
         }
 
-        private void InitializeCooldown(Skill skill)
+        // Coroutine que gerencia o tempo de duração da habilidade
+        private IEnumerator SkillDurationTimer(int slotIndex)
         {
-            if (skill != null)
-            {
-                // Garantir que o cooldown comece como false
-                skill.ResetCooldown();
-            }
+            // Espera pela duração da habilidade
+            Debug.Log("Habilidade ativada. Aguardando duração da habilidade...");
+            yield return new WaitForSeconds(slot[slotIndex].skillSlot.cooldownDuration);
+
+            // Quando a duração da habilidade terminar, inicia o cooldown do slot
+            Debug.Log("Duração da habilidade terminou. Iniciando cooldown do slot.");
+            StartCoroutine(SlotCooldownTimer(slotIndex)); // Inicia o cooldown do slot
         }
+
+        // Coroutine que gerencia o cooldown do slot de habilidade
+        private IEnumerator SlotCooldownTimer(int slotIndex)
+        {
+            SkillCooldownUI.instance.skillCooldownImage[slotIndex].enabled = true;
+            float cooldownTime = slot[slotIndex].slotCooldownDuration;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < cooldownTime)
+            {
+                elapsedTime += Time.deltaTime; // Acumula o tempo decorrido
+                float remainingTime = cooldownTime - elapsedTime;
+        
+                // Atualiza o fillAmount baseado no tempo restante
+                SkillCooldownUI.instance.skillCooldownImage[slotIndex].fillAmount = remainingTime / cooldownTime;
+
+                Debug.Log($"Cooldown do slot: {remainingTime} segundos restantes.");
+                yield return null; // Espera até o próximo frame
+            }
+
+            // Após o cooldown do slot, a habilidade pode ser usada novamente
+            slot[slotIndex].canUse = true;
+            Debug.Log("Cooldown do slot terminou. Habilidade pronta para uso novamente.");
+            SkillCooldownUI.instance.skillCooldownImage[slotIndex].enabled = false; // Desativa a imagem do cooldown ao final
+        }
+
     }
 }

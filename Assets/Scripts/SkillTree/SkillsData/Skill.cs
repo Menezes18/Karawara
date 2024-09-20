@@ -59,18 +59,18 @@ namespace RPGKarawara
         {
             switch (skillType)
             {
-                case SkillType.Attack:
-                    PlayerSkillManager.instance.attackSkill = this;
-                    break;
-                case SkillType.Defense:
-                    PlayerSkillManager.instance.defenseSkill = this;
-                    break;
-                case SkillType.Support:
-                    PlayerSkillManager.instance.supportSkill = this;
-                    break;
-                default:
+                 case SkillType.Attack:
+                     PlayerSkillManager.instance.slot[0].skillSlot = this;
+                     break;
+                 case SkillType.Defense:
+                     PlayerSkillManager.instance.slot[1].skillSlot  = this;
+                     break;
+                 case SkillType.Support:
+                     PlayerSkillManager.instance.slot[2].skillSlot  = this;
+                     break;
+                 default:
                     Debug.LogWarning("Tipo de habilidade desconhecido: " + skillType);
-                    break;
+                     break;
             }
         }
         public float GetCooldownProgress()
