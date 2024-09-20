@@ -8,7 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Cave2
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e008fd8dc2496394181aeee5f2180bc7,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -17,8 +18,7 @@ Material:
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -82,6 +82,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Vector1_242C9891: 0.7
+    - Vector1_81088C75: 4.39
+    - Vector1_99B978: 0.1
+    - _AdditionalLightsSmoothness: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -96,6 +100,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
+    - _Erode: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -103,6 +108,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0
@@ -115,6 +121,11 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_70EBBDEE: {r: 0.254717, g: 0.1846942, b: 0.0012014981, a: 0}
+    - Color_CFC87909: {r: 8, g: 8, b: 8, a: 0}
+    - Color_DEE0E45B: {r: 1, g: 1, b: 1, a: 0}
+    - Color_F57A70D0: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0}
+    - _AdditionalLightColor: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 0.4811321, g: 0.4404104, b: 0.1429779, a: 1}
     - _Color: {r: 0.4811321, g: 0.44041038, b: 0.14297786, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

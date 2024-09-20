@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3825751601
+  GlobalObjectIdHash: 788076987
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -138,6 +138,8 @@ MonoBehaviour:
   currentTargetNetworkObjectID:
     m_InternalValue: 0
   isBlocking:
+    m_InternalValue: 0
+  isPowerPet:
     m_InternalValue: 0
   isInvulnerable:
     m_InternalValue: 0
@@ -642,9 +644,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641d1cfc4f548b39b0f014125311ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSkill: {fileID: 0}
-  defenseSkill: {fileID: 0}
-  supportSkill: {fileID: 0}
+  slot:
+  - skillSlot: {fileID: 0}
+    slotCooldownDuration: 16
+    canUse: 1
+  - skillSlot: {fileID: 0}
+    slotCooldownDuration: 16
+    canUse: 1
+  - skillSlot: {fileID: 0}
+    slotCooldownDuration: 16
+    canUse: 1
+  damageSpirit: 10
 --- !u!1 &918940640264833240
 GameObject:
   m_ObjectHideFlags: 0
