@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DialogueSystem;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class SampleTriggerDialogue : MonoBehaviour
 {
     public DialogueTheme alternativeTheme;
     public DialogueGraph graph;
     public SampleUIHandler UiHandler;
-
+    public float distanciaPlayer = 10f; // Distância para detectar o player
     private string testDict = "First initial value";
     private DialogueSystem.Dialogue dialogueManager;
     private SampleFlags flags;
@@ -57,8 +58,8 @@ public class SampleTriggerDialogue : MonoBehaviour
         dialogueManager.RegisterEventHandler(TestEventHandler);
     }
     
-    private void Update()
-    {
+    private void Update(){
+        CheckPlayer();
         if (isPlayerNearby && Keyboard.current.enterKey.wasPressedThisFrame)  // Verifica se o jogador pressionou Enter
         {
             
@@ -79,7 +80,7 @@ public class SampleTriggerDialogue : MonoBehaviour
                 }
             }
         }
-
+    
         // Avança o diálogo se ele já estiver ativo
         if (dialogueActive && Keyboard.current.mKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
         {
@@ -99,30 +100,40 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void CheckPlayer()
     {
-        
-        if (other.CompareTag("Player"))
-        {
-            isPlayerNearby = true;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, distanciaPlayer);
+        bool playerFound = false; // Variável para verificar se o player foi encontrado
 
-           // Verifica se o diálogo atual não é o mesmo e troca
-            if (dialogueManager.dialogueGraph != graph)
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Player"))
             {
-                
-                DialogueSystem.Dialogue.instance._handler.EndDialogue();
-                dialogueManager.dialogueGraph = graph;
-                DialogueSystem.Dialogue.instance.Create();
+                playerFound = true; // Define que o jogador foi encontrado
+                isPlayerNearby = true;
+
+                // Verifica se o diálogo atual não é o mesmo e troca
+                if (dialogueManager.dialogueGraph != graph)
+                {
+                    DialogueSystem.Dialogue.instance._handler.EndDialogue();
+                    dialogueManager.dialogueGraph = graph;
+                    DialogueSystem.Dialogue.instance.Create();
+                }
+                break; // Sai do loop, pois o jogador foi encontrado
             }
+        }
+
+        // Se o jogador não foi encontrado em nenhum collider, define isPlayerNearby como false
+        if (!playerFound)
+        {
+            isPlayerNearby = false;
         }
     }
 
+    
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerNearby = false;  // Define que o jogador saiu da área
-        }
+        
     }
 
     public void OnNodeLeave(BaseNode node) { /* Custom logic for when a node is left */ }
@@ -224,6 +235,10 @@ public class SampleTriggerDialogue : MonoBehaviour
         Debug.Log($"Parabens! Você apertou a tecla {key.ToUpper()}.");
         inputCheck = false;
     }
-
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow; 
+        Gizmos.DrawWireSphere(transform.position, distanciaPlayer); 
+    }
 }
 
