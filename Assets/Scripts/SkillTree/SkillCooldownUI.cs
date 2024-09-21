@@ -47,6 +47,16 @@ namespace RPGKarawara.SkillTree
                 attackBackgroundImage.sprite = PlayerSkillManager.instance.slot[0].skillSlot.sprite;
                 attackCooldownImage.fillAmount = PlayerSkillManager.instance.slot[0].skillSlot.GetCooldownProgress();
             }
+            if (PlayerSkillManager.instance.slot[1].skillSlot != null){
+                defenseCooldownImage.sprite = PlayerSkillManager.instance.slot[1].skillSlot.sprite;
+                defenseBackgroundImage.sprite = PlayerSkillManager.instance.slot[1].skillSlot.sprite;
+                defenseCooldownImage.fillAmount = PlayerSkillManager.instance.slot[1].skillSlot.GetCooldownProgress();
+            }
+            if (PlayerSkillManager.instance.slot[2].skillSlot != null){
+                supportCooldownImage.sprite = PlayerSkillManager.instance.slot[2].skillSlot.sprite;
+                supportBackgroundImage.sprite = PlayerSkillManager.instance.slot[2].skillSlot.sprite;
+                supportCooldownImage.fillAmount = PlayerSkillManager.instance.slot[2].skillSlot.GetCooldownProgress();
+            }
             
         }
         

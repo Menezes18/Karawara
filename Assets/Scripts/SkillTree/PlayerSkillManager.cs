@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -30,13 +31,22 @@ namespace RPGKarawara.SkillTree
           
             if (Keyboard.current.digit1Key.wasReleasedThisFrame && slot[0].canUse)
             {
-                ActivateSkill(0); // Ativa a habilidade no slot 0
+                ActivateSkill(0); 
+            }
+            if (Keyboard.current.digit2Key.wasReleasedThisFrame && slot[1].canUse)
+            {
+                ActivateSkill(1); 
+            }
+            if (Keyboard.current.digit3Key.wasReleasedThisFrame && slot[2].canUse)
+            {
+                ActivateSkill(2); 
             }
         }
 
         private void ActivateSkill(int slotIndex)
         {
             // Verifica se a habilidade está desbloqueada e se não está em cooldown interno
+            if(slot[slotIndex] == null) return; 
             if (slot[slotIndex].skillSlot.isUnlocked && !slot[slotIndex].skillSlot.IsOnCooldown)
             {
                 slot[slotIndex].skillSlot.Activate(gameObject); // Ativa a habilidade
