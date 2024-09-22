@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3745328696713533364}
   - component: {fileID: 4049962503366326951}
   - component: {fileID: 968455518974300484}
-  - component: {fileID: -7999660657261364709}
+  - component: {fileID: 7940504090554691338}
   m_Layer: 0
   m_Name: SRock3exp
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-7999660657261364709
-MeshCollider:
+--- !u!65 &7940504090554691338
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2548650880113009445, guid: d6dc4474825e1fb4abc30f59bd0168b2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 0.5, z: 0.3}
+  m_Center: {x: -0.016154379, y: 0.27959517, z: -0.0075733215}

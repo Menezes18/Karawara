@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7689236730044278950}
   - component: {fileID: 1180423114251971938}
   - component: {fileID: 4509501152039686603}
-  - component: {fileID: 6792250342544687442}
+  - component: {fileID: 9103061153181256574}
   m_Layer: 0
   m_Name: BRock2exp
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6792250342544687442
-MeshCollider:
+--- !u!65 &9103061153181256574
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8721152772551041459, guid: d6dc4474825e1fb4abc30f59bd0168b2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: -0.033602268, y: 1.0544713, z: 0.13327295}
