@@ -82,16 +82,20 @@ namespace RPGKarawara
 
         void FireProjectile()
         {
-            // Instanciar o projétil
-            GameObject projectile = Instantiate(_projectile.projectilePrefab, _projectile.firePoint.position, _projectile.firePoint.rotation);
 
-            // Calcular a direção do projétil em direção ao jogador
+            GameObject projectile = Instantiate(_projectile.projectilePrefab, _projectile.firePoint.position, _projectile.firePoint.rotation);
+    
+
             Vector3 direction = (player.transform.position - _projectile.firePoint.position).normalized;
 
-            // Aplicar movimento ao projétil
+
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
             rb.velocity = direction * _projectile.projectileSpeed;
+            
+            rb.useGravity = false; 
+            
         }
+
 
         void PlayShootAnimation()
         {
