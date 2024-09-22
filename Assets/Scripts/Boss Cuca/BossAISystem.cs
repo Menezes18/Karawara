@@ -30,6 +30,8 @@ namespace RPGKarawara
         [SerializeField]
         private float dashDuration = 0.5f; // Duração do dash
         private bool isDashing = false;
+        [SerializeField]
+        private DamageBoss _damageBossCollider;
 
         void Start()
         {
@@ -40,6 +42,17 @@ namespace RPGKarawara
 
         void Update()
         {
+            // Faz o boss olhar para o jogador
+            if (player != null)
+            {
+                Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+                if (directionToPlayer != Vector3.zero) // Previne divisão por zero
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Ajuste a suavidade
+                }
+            }
+
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadiusPlayer);
             foreach (var hitCollider in hitColliders)
             {
@@ -54,6 +67,7 @@ namespace RPGKarawara
                 }
             }
         }
+
 
         IEnumerator WaitForLaughToEnd()
         {
@@ -101,39 +115,52 @@ namespace RPGKarawara
             }
         }
 
+        private bool hasDamagedPlayer = false; // Adicione esta variável
+
         IEnumerator DashCoroutine(Vector3 targetPosition)
         {
+            _damageBossCollider.AtivarCollider();
             isDashing = true;
 
             // Manter a posição y da Cuca constante (ficando no chão)
             float fixedY = transform.position.y;
             Vector3 targetPositionFlat = new Vector3(targetPosition.x, fixedY, targetPosition.z); // Alvo no mesmo nível
-            Vector3 direction = (targetPositionFlat - transform.position).normalized;
 
-            float elapsedTime = 0f;
+            // Calcular a posição alvo com um offset
+            Vector3 offset = (targetPositionFlat - transform.position).normalized * 4f; // Ajuste o valor para a distância que deseja passar
+            Vector3 finalTargetPosition = targetPositionFlat + offset;
 
-            while (elapsedTime < dashDuration)
+            while (Vector3.Distance(transform.position, finalTargetPosition) > 0.1f) // Tolerância de 0.1 unidades
             {
-                // Move apenas no plano x e z
-                transform.position += direction * dashSpeed * Time.deltaTime;
+                // Move o boss na direção do alvo final
+                Vector3 direction = (finalTargetPosition - transform.position).normalized;
+                transform.position += direction * (dashSpeed * Time.deltaTime);
 
-                elapsedTime += Time.deltaTime;
-
-                // Verifica se passou pelo jogador para aplicar dano
-                if (Vector3.Distance(transform.position, player.transform.position) < 1f)
+                // Aplique dano apenas uma vez durante o dash
+                if (_damageBossCollider.canDamage && !hasDamagedPlayer)
                 {
                     ApplyDamageToPlayer();
+                    hasDamagedPlayer = true; // Marca que o dano já foi aplicado
                 }
 
                 yield return null;
             }
 
+            // Garantir que o boss pare exatamente na posição alvo
+            transform.position = finalTargetPosition;
+
+            // Resetar a variável para permitir dano em futuros dashes
+            hasDamagedPlayer = false;
+
             isDashing = false;
         }
 
+
+
+
         void ApplyDamageToPlayer()
         {
-            // Lógica de aplicação de dano ao jogador
+            
             Debug.Log("Player sofreu dano!");
             // Exemplo:
             // player.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
