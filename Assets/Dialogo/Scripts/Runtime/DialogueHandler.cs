@@ -181,7 +181,7 @@ namespace DialogueSystem
             }
 
             if (nodeType == "TextNode"){
-                Debug.LogError("TEXT");
+//                Debug.LogError("TEXT");
                 HandleTextNode();
             }
 
