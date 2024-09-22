@@ -136,7 +136,7 @@ namespace RPGKarawara
                 {
                     dialogueText.text = "";
                 }
-                else if(currentLineIndex > 0)
+                else if(currentLineIndex > -1)
                 {
                     dialogueText.text = dialogueLines[currentLineIndex];
 

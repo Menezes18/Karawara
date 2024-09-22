@@ -226,13 +226,14 @@ public class SampleTriggerDialogue : MonoBehaviour
     }
     
     private Keyboard keyboard;
+    private Mouse mouse;
 
     IEnumerator CheckInputCoroutine(string key)
     {
         Debug.Log($"Esperando o jogador apertar a tecla {key.ToUpper()}...");
 
         
-        if (!Enum.TryParse(key.ToUpper(), out Key keyEnum))
+        if (!Enum.TryParse(key, out Key keyEnum))
         {
             Debug.LogError($"Tecla {key} inválida.");
             inputCheck = false;
@@ -247,6 +248,7 @@ public class SampleTriggerDialogue : MonoBehaviour
 
         Debug.Log($"Parabens! Você apertou a tecla {key.ToUpper()}.");
         inputCheck = false;
+        dialogueManager.AdvanceDialogue();
     }
     void OnDrawGizmosSelected()
     {
