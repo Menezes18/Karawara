@@ -8,7 +8,9 @@ using UnityEngine;
         MoveNPCToNextWaypoint,
         CheckInput,
         MoveNPCToPlayer,
-        CheckPlayerPosition
+        CheckPlayerPosition,
+        EnableUI,
+        DisableUI
     }
 
 
