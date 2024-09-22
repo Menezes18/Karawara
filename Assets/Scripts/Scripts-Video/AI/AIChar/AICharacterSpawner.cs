@@ -49,7 +49,7 @@ namespace RPGKarawara
                 
                 WorldAIManager.instance.AddCharacterToSpawnedCharactersList(instantiatedGameObject.GetComponent<AICharacterManager>());
                 
-                ChangeElement(instantiatedGameObject);
+//                ChangeElement(instantiatedGameObject);
               
             }
         }
