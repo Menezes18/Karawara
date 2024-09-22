@@ -4,14 +4,26 @@ using UnityEngine;
 
 namespace RPGKarawara
 {
+
     public class BossAISystem : MonoBehaviour{
-        private GameObject player;
         
+        public AudioClip Risada;
+        
+        
+        
+        
+        
+        
+        private GameObject player;
+        private AudioSource audio;
         Animator animator;
         float detectionRadiusPlayer;
         void Start()
         {
             animator = GetComponent<Animator>();
+            audio = GetComponent<AudioSource>();
+            
+            
             player = GameObject.FindGameObjectWithTag("Player");
         }
 
@@ -23,7 +35,9 @@ namespace RPGKarawara
             {
                 if (hitCollider.CompareTag("Player"))
                 {
-                
+                    
+                    audio.PlayOneShot(Risada);
+                    
                     
                 }
             }
