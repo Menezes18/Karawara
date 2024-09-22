@@ -136,10 +136,13 @@ namespace RPGKarawara
                 {
                     dialogueText.text = "";
                 }
-                else
+                else if(currentLineIndex > 0)
                 {
                     dialogueText.text = dialogueLines[currentLineIndex];
 
+                }
+                else {
+                    Debug.Log("-2");
                 }
             }
             else
