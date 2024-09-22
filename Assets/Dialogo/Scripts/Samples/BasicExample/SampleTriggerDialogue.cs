@@ -5,6 +5,7 @@ using UnityEngine;
 using DialogueSystem;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using System.ComponentModel.Design;
 
 public class SampleTriggerDialogue : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class SampleTriggerDialogue : MonoBehaviour
     public Transform targetPosition;
     public float playerPositionThreshold = 1.5f;
     public string test1, test2;
+    public GameObject hint;
 
     private void Awake()
     {
@@ -82,7 +84,7 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
     
         // Avança o diálogo se ele já estiver ativo
-        if (dialogueActive && Keyboard.current.mKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
+        if (dialogueActive && Keyboard.current.enterKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
         {
             if (dialogueManager.IsRunning)
             {
@@ -174,6 +176,13 @@ public class SampleTriggerDialogue : MonoBehaviour
                 case EventTypeDialogue.CheckPlayerPosition:
                     CheckPlayerPosition();
                     break;
+
+                case EventTypeDialogue.EnableUI:
+                    AtivarHint();
+                    break;
+                case EventTypeDialogue.DisableUI:
+                    AtivarHint();
+                    break;
             }
         }
     }
@@ -210,6 +219,10 @@ public class SampleTriggerDialogue : MonoBehaviour
         {
             Debug.LogWarning("NPCMovement script is not assigned!");
         }
+    }
+
+    private void AtivarHint(){
+        hint.SetActive(!hint.activeSelf);
     }
     
     private Keyboard keyboard;

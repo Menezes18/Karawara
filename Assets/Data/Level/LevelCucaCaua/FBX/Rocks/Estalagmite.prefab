@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2817289504267632905}
   - component: {fileID: 2360253678905960546}
   - component: {fileID: 5847533068138219580}
-  - component: {fileID: 4304403679445714360}
+  - component: {fileID: 2522059397006451115}
   m_Layer: 0
   m_Name: Estalagmite
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4304403679445714360
-MeshCollider:
+--- !u!65 &2522059397006451115
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8733193741755107635, guid: 59b505a4e90ee044d83cadc7d62fd647, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.4, y: 0.8, z: 0.4}
+  m_Center: {x: 0.002112627, y: 0.47094974, z: -0.0013808459}
