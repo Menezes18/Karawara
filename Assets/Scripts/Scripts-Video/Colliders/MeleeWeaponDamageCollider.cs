@@ -59,8 +59,14 @@ namespace RPGKarawara
 
                 DamageTarget(damageTarget);
             }
+
+            if (other.CompareTag("TriggerBoss")){
+                Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAA");
+                CucaBossHealth.instancia.TakeDamage(physicalDamage);
+            }
         }
 
+        public CucaBossHealth a;
         protected override void CheckForBlock(CharacterManager damageTarget){
             
             if (damageTarget.characterNetworkManager.isBlocking.Value){
