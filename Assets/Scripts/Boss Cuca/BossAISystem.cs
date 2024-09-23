@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace RPGKarawara
 {
@@ -39,8 +40,14 @@ namespace RPGKarawara
         private Vector3 directionToPlayer;
         [SerializeField]
         private bool canDash = false;
-        void Start()
-        {
+
+        private NavMeshAgent agent;
+        private EnemyAI _EnemyAI;
+
+        public int AttackIndex = 3;
+        void Start(){
+            _EnemyAI = GetComponent<EnemyAI>();
+            agent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             audio = GetComponent<AudioSource>();
             player = GameObject.FindGameObjectWithTag("Player");
@@ -81,15 +88,21 @@ namespace RPGKarawara
             }
         }
 
-
+        private bool ridada = false;
         IEnumerator WaitForLaughToEnd()
         {
             // Espera até o fim da risada
-            yield return new WaitForSeconds(Risada.length);
+            if (!ridada){
+                yield return new WaitForSeconds(Risada.length);
+                ridada = true;
+            }
+            else{
+                yield return new WaitForSeconds(4f);
+            }
             FireProjectile();
             //PlayShootAnimation();
             
-            yield return new WaitForSeconds(2.5f); // Pequeno atraso antes de iniciar o dash
+            yield return new WaitForSeconds(3f); // Pequeno atraso antes de iniciar o dash
             DashTowardsPlayer();
         }
 
@@ -113,18 +126,47 @@ namespace RPGKarawara
         void PlayShootAnimation()
         {
             // Chamar a animação de disparo
-            //animator.SetTrigger("Shoot");
+           // animator.SetTrigger("Shoot");
         }
+
+        public IEnumerator attackLoop(){
+            yield return new WaitForSeconds(5);
+            AttackMelee = true;
+            _EnemyAI.isAttacking = false;
+            _EnemyAI.index = 0;
+            AttackIndex++;
+        }
+        public void MoveToRandomPositionIfClear(){
+            float radius = 10f;
+            
+            Vector3 randowmDirection = Random.insideUnitSphere * radius;
+            
+            randowmDirection += transform.position;
+            if (NavMesh.SamplePosition(randowmDirection, out NavMeshHit hit, radius, NavMesh.AllAreas)){
+                transform.position = hit.position;
+
+                
+
+                StartCoroutine(attackLoop());
+
+            }
+            else{
+                Debug.Log("Nehuma posição válida!");
+            }
+        }
+
 
         void DashTowardsPlayer()
         {
-            if (player != null && !isDashing)
-            {
-               
-                    if (canDash)
-                    {
-                        StartCoroutine(DashCoroutine(hit.point));
-                    }
+            Debug.Log("147");
+            if (player != null && !isDashing){
+                Debug.Log("Entrou 149");
+                if (canDash)
+                {
+                    Debug.Log("Entrou 152");
+                    animator.SetTrigger("DashCharge");
+                    StartCoroutine(DashCoroutine(hit.point));
+                }
                 
             }
         }
@@ -154,6 +196,7 @@ namespace RPGKarawara
             // Aplique dano apenas uma vez durante o dash
             if (_damageBossCollider.canDamage && !hasDamagedPlayer)
             {
+                Debug.Log("185");
                 ApplyDamageToPlayer();
                 hasDamagedPlayer = true; // Marca que o dano já foi aplicado
             }
@@ -175,34 +218,14 @@ namespace RPGKarawara
     }
 
     IEnumerator TimeAttack(){
-        yield return new WaitForSeconds(1000f);
+        yield return new WaitForSeconds(dashTimer);
         AttackMelee = true;
     }
+    
     void CallMethodBasedOnChance(){
         StartCoroutine(TimeAttack());
-        float chance = Random.value; // Gera um número entre 0.0 e 1.0
-        if (chance <= 0.3f) // 30% de chance
-        {
-            MethodA();
-        }
-        else // 70% de chance
-        {
-            MethodB();
-        }
     }
-
-    void MethodA()
-    {
-        Debug.Log("Método A chamado!"); // Método que será chamado 30% das vezes
-        // Adicione aqui a lógica que você deseja para o Método A
-    }
-
-    void MethodB()
-    {
-        Debug.Log("Método B chamado!"); // Método que será chamado 70% das vezes
-        // Adicione aqui a lógica que você deseja para o Método B
-    }
-
+    
 
 
 

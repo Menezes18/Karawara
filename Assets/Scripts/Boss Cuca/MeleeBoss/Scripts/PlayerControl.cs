@@ -24,7 +24,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private string PlayerTag = "PlayerLock";
 
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private Coroutine attackCoroutine;
 
     [Space]
@@ -50,8 +50,12 @@ public class EnemyAI : MonoBehaviour
 
         if (distanceToPlayer <= detectionRange && !isAttacking && _bossAISystem.AttackMelee)
         {
-            FaceThis(player.position);
-            StartAttacking(); // Inicia o loop de ataque
+            
+                FaceThis(player.position);
+                StartAttacking(); // Inicia o loop de ataque
+                
+            
+            
         }
         // else if (distanceToPlayer > detectionRange && isAttacking)
         // {
@@ -100,6 +104,13 @@ public class EnemyAI : MonoBehaviour
         {
             Attack(Random.Range(0, 2)); // Ataca de forma aleatória (0 ou 1)
             yield return new WaitForSeconds(1f); // Espera um segundo entre os ataques
+            if (index >= _bossAISystem.AttackIndex)
+            {
+                Debug.Log("Parando ataque.");
+                StopAttacking(); // Para os ataques
+                _bossAISystem.MoveToRandomPositionIfClear();
+                break; // Sai do loop
+            }
         }
     }
 
@@ -125,12 +136,14 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    public int index = 0;
     void QuickAttack()
     {
         int attackIndex = Random.Range(1, 4);
         MoveTowardsTarget(player.position, quickAttackDeltaDistance, "punch"); // Mova antes da animação
         switch (attackIndex)
         {
+            
             case 1: // punch
                 anim.SetBool("punch", true);
                 break;
@@ -140,9 +153,14 @@ public class EnemyAI : MonoBehaviour
             case 3: // mmakick
                 anim.SetBool("mmakick", true);
                 break;
+                
         }
     }
 
+    public void countAttack(){
+        index++;
+        Debug.Log("Attack");
+    }
     void HeavyAttack()
     {
         int attackIndex = Random.Range(1, 3);
