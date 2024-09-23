@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6056588822789298540}
   m_Layer: 14
   m_Name: Lanca
-  m_TagString: Untagged
+  m_TagString: Lanca
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,7 +122,6 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   fireDamage: 0
-  lightningDamage: 0
   holyDamage: 0
   characterCausingDamage: {fileID: 0}
   light_Attack_01_Modifier: 0
@@ -134,6 +133,7 @@ MonoBehaviour:
   running_Attack_01_Modifier: 0
   rolling_Attack_01_Modifier: 0
   backstep_Attack_01_Modifier: 0
+  a: {fileID: 0}
 --- !u!1 &7003736831794437496
 GameObject:
   m_ObjectHideFlags: 0

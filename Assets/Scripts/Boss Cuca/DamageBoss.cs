@@ -7,7 +7,7 @@ namespace RPGKarawara{
         public Collider damageCollider;
         public bool canDamage;
         public void Start(){
-            damageCollider = GetComponent<Collider>();
+            
             damageCollider.isTrigger = true;
             damageCollider.enabled = false;
         }

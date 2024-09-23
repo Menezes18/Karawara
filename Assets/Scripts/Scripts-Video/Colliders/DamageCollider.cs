@@ -9,7 +9,7 @@ namespace RPGKarawara {
     {
         [Header("Collider")]
         [SerializeField] protected Collider damageCollider;
-
+        
         [Header("Damage")]
         public float physicalDamage = 0;
         [Header("Para lugares que o escudo não ira proteger")] public float magicDamage = 0;
