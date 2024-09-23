@@ -18,7 +18,11 @@ namespace DialogueSystem
 
         protected override void Init()
         {
+#if UNITY_EDITOR
             id = UnityEditor.GUID.Generate().ToString();
+#else
+            id = System.Guid.NewGuid().ToString(); // Alternativa fora do Editor
+#endif
             processed = false;
             entered = false;
             base.Init();
@@ -37,6 +41,5 @@ namespace DialogueSystem
         public virtual void SetText(string[] text)
         {
         }
-
     }
 }

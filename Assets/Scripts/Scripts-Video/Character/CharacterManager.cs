@@ -14,7 +14,7 @@ namespace RPGKarawara
         [HideInInspector] public CharacterController characterController;
 
         public Animator animator;
-
+        public GameObject portal;
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
         [HideInInspector] public CharacterEffectsManager characterEffectsManager;
         [HideInInspector] public CharacterAnimatorManager characterAnimatorManager;
@@ -54,6 +54,9 @@ namespace RPGKarawara
 
         protected virtual void Update()
         {
+            if (isBoss && isDead.Value){
+                portal.SetActive(true);
+            }
             animator.SetBool("isGrounded", characterLocomotionManager.isGrounded);
 
             //  IF THIS CHARACTER IS BEING CONTROLLED FROM OUR SIDE, THEN ASSIGN ITS NETWORK POSITION TO THE POSITION OF OUR TRANSFORM

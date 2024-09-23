@@ -4,10 +4,10 @@ using UnityEditor;
 using UnityEngine;
 using DialogueSystem;
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(DialogueEvent))]
 public class DialogueEventPropertyDrawer : PropertyDrawer
 {
-    private DialogueEvent node;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         Rect foldoutRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
@@ -58,20 +58,13 @@ public class DialogueEventPropertyDrawer : PropertyDrawer
             EditorGUI.LabelField(inputKeyLabelRect, new GUIContent("InputKey"));
             EditorGUI.PropertyField(inputKeyRect, inputKey, GUIContent.none);
             
-            
-
             EditorGUI.EndProperty();
         }
-
-
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        int numprops = property.CountInProperty();
-        return (6 * (EditorGUIUtility.singleLineHeight + 12));
+        return property.isExpanded ? (6 * (EditorGUIUtility.singleLineHeight + 12)) : EditorGUIUtility.singleLineHeight;
     }
-
-
 }
-
+#endif

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
 using DialogueSystem;
@@ -6,7 +7,6 @@ using DialogueSystem;
 [CustomNodeEditor(typeof(TextNode))]
 public class TextNodeEditor : NodeEditor
 {
-
     public override int GetWidth()
     {
         return 650;
@@ -14,27 +14,19 @@ public class TextNodeEditor : NodeEditor
 
     //public override void OnBodyGUI()
     //{
-
     //    base.OnBodyGUI();
     //    serializedObject.Update();
-
-
-
-
     //    serializedObject.ApplyModifiedProperties();
     //}
-
-
 }
 
 [CustomPropertyDrawer(typeof(TextNode.MetaData))]
-public class MetaDataPropertyDrawer: PropertyDrawer
+public class MetaDataPropertyDrawer : PropertyDrawer
 {
-
     public float offset = 20;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-
         EditorGUI.BeginProperty(position, label, property);
 
         EditorGUILayout.BeginHorizontal();
@@ -46,6 +38,7 @@ public class MetaDataPropertyDrawer: PropertyDrawer
         Rect valueRect = new Rect(position.x + keyRect.width + 5, position.y + offset, 250, EditorGUIUtility.singleLineHeight);
         EditorGUI.LabelField(new Rect(valueRect.x, valueRect.y - 20, valueRect.width, valueRect.height), new GUIContent("Value"));
         EditorGUI.PropertyField(valueRect, property.FindPropertyRelative("value"), GUIContent.none);
+        
         EditorGUILayout.EndHorizontal();
 
         EditorGUI.EndProperty();
@@ -56,3 +49,4 @@ public class MetaDataPropertyDrawer: PropertyDrawer
         return base.GetPropertyHeight(property, label) + 20;
     }
 }
+#endif
