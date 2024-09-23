@@ -11,10 +11,10 @@ public class FireballShooter : MonoBehaviour
     public LayerMask enemyLayer; 
     public string enemyTag = "Inimigo"; 
     public float fireballCooldown = 2f; // Tempo de espera entre disparos
-
+    public Animator _loboAnim;
     private Transform targetEnemy;
     private float nextFireTime = 0f; // Controla quando pode disparar novamente
-
+    
     void Update()
     {
         DetectEnemies();
@@ -28,7 +28,7 @@ public class FireballShooter : MonoBehaviour
 
     void DetectEnemies()
     {
-        Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRadius, enemyLayer);
+        Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRadius);
         float closestDistance = Mathf.Infinity;
         targetEnemy = null;
 
@@ -49,7 +49,7 @@ public class FireballShooter : MonoBehaviour
 
     void ShootFireball(Transform target)
     {
-       
+        
         GameObject fireball = Instantiate(fireballPrefab, fireballSpawnPoint.position, Quaternion.identity);
 
         // Calcula a direção do alvo e começa a trajetória parabólica
@@ -61,7 +61,8 @@ public class FireballShooter : MonoBehaviour
         Vector3 startPos = fireball.transform.position;
         Vector3 targetPos = target.position;
         float time = 0;
-
+        _loboAnim.SetTrigger("Fire");
+        
         // A velocidade de lançamento é inversamente proporcional à duração
         float duration = Vector3.Distance(startPos, targetPos) / launchForce; // Ajuste da duração baseado na distância e força
 
