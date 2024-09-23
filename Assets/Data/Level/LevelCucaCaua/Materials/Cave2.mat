@@ -8,24 +8,25 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Cave2
-  m_Shader: {fileID: -6465566751694194690, guid: e008fd8dc2496394181aeee5f2180bc7,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _EMISSION
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_LightmapFlags: 1
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 480d2306f71383a4eb37a09c3bd6a1e4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -45,11 +46,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 480d2306f71383a4eb37a09c3bd6a1e4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 480d2306f71383a4eb37a09c3bd6a1e4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -121,14 +122,14 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_70EBBDEE: {r: 0.254717, g: 0.1846942, b: 0.0012014981, a: 0}
+    - Color_70EBBDEE: {r: 0.3301887, g: 0.23875181, b: 0, a: 0}
     - Color_CFC87909: {r: 8, g: 8, b: 8, a: 0}
     - Color_DEE0E45B: {r: 1, g: 1, b: 1, a: 0}
     - Color_F57A70D0: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0}
     - _AdditionalLightColor: {r: 0, g: 0, b: 0, a: 0}
-    - _BaseColor: {r: 0.4811321, g: 0.4404104, b: 0.1429779, a: 1}
-    - _Color: {r: 0.4811321, g: 0.44041038, b: 0.14297786, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0.10980392, g: 0.8784314, b: 0.58175904, a: 1}
+    - _Color: {r: 0.10980389, g: 0.8784314, b: 0.58175904, a: 1}
+    - _EmissionColor: {r: 0.08387913, g: 5.3403144, b: 0.34458894, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4595428399402867414
