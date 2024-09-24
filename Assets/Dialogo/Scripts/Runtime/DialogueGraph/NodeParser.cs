@@ -44,13 +44,12 @@ namespace DialogueSystem {
             return graph;
         }
     }
-
+/*
     public class TestWindow : EditorWindow
     {
         public NodeParser parser = new NodeParser();
 
-
-        [MenuItem("Window/Test Window")]
+        
         public static void ShowWindow()
         {
             GetWindow(typeof(TestWindow));
@@ -81,7 +80,7 @@ namespace DialogueSystem {
         }
 
 
-    }
+    }*/
 
     [Serializable]
     public class DialogueScript

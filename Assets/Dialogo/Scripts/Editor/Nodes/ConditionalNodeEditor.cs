@@ -1,4 +1,5 @@
-﻿using DialogueSystem;
+﻿#if UNITY_EDITOR
+using DialogueSystem;
 using XNodeEditor;
 
 [CustomNodeEditor(typeof(ConditionalNode))]
@@ -34,3 +35,4 @@ public class ConditionalNodeEditor : NodeEditor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

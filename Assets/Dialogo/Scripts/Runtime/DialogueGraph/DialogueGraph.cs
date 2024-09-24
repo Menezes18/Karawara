@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace DialogueSystem
 {
@@ -11,20 +13,21 @@ namespace DialogueSystem
     [Serializable]
     public class DialogueGraph : NodeGraph
     {
-
         [SerializeField]
         public List<BaseNode> dialogueNodes = new List<BaseNode>();
 
         public List<BranchNode> _branchNodes = new List<BranchNode>();
-
 
         public override Node AddNode(Type type)
         {
             Node originalNode = base.AddNode(type);
             dialogueNodes.Add(originalNode as BaseNode);
             if (type == typeof(BranchNode)) _branchNodes.Add(originalNode as BranchNode);
+
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
+#endif
             return originalNode;
         }
 
@@ -33,11 +36,13 @@ namespace DialogueSystem
             BaseNode baseNode = node as BaseNode;
             if (baseNode.NodeType == "BranchNode") _branchNodes.Remove(node as BranchNode);
             dialogueNodes.Remove(baseNode);
+
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
+#endif
             base.RemoveNode(node);
         }
-
 
         public List<BranchNode> GetAllBranchNodes()
         {
@@ -46,8 +51,6 @@ namespace DialogueSystem
             {
                 return dialogueNodes.Select(x => x.NodeType == "BranchNode").Cast<BranchNode>().ToList();
             }
-
         }
-
     }
 }

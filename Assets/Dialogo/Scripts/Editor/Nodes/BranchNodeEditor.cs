@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using XNodeEditor;
 
 [CustomNodeEditor(typeof(BranchNode))]
@@ -13,7 +14,6 @@ public class BranchNodeEditor : NodeEditor
     {
         return 500;
     }
-
 
     public override void OnBodyGUI()
     {
@@ -35,3 +35,4 @@ public class BranchNodeEditor : NodeEditor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

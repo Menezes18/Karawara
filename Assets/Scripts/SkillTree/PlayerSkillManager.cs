@@ -47,6 +47,7 @@ namespace RPGKarawara.SkillTree
         {
             // Verifica se a habilidade está desbloqueada e se não está em cooldown interno
             if(slot[slotIndex] == null) return; 
+             if (slot[slotIndex] == null || slot[slotIndex].skillSlot == null) return;
             if (slot[slotIndex].skillSlot.isUnlocked && !slot[slotIndex].skillSlot.IsOnCooldown && slot[slotIndex].skillSlot != null)
             {
                 slot[slotIndex].skillSlot.Activate(gameObject); // Ativa a habilidade

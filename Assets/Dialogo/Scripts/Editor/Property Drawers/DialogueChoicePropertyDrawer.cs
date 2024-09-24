@@ -1,4 +1,5 @@
-﻿using DialogueSystem;
+﻿#if UNITY_EDITOR
+using DialogueSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -30,3 +31,4 @@ public class DialogueChoicePropertyDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
+#endif
