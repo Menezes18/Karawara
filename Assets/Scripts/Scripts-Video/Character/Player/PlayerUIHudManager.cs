@@ -21,6 +21,9 @@ namespace RPGKarawara
         public Transform bossHealthBarParent;
         public GameObject bossHealthBarObject;
 
+        [Header("Marcador")]
+        public GameObject marcardor;
+
         [Header("PAUSE MENU")]
         [SerializeField] GameObject pauseMenu;
         [SerializeField] GameObject SkillSlot;
@@ -211,6 +214,11 @@ namespace RPGKarawara
                     }
                 }
             }
+        }
+
+        public void activateMarcador(Transform pos){
+            marcardor.GetComponent<IndicadorObjetivoScript>().objetivo = pos;
+            marcardor.SetActive(true);
         }
 
         public void ChangeScene()

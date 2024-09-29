@@ -6,6 +6,7 @@ using DialogueSystem;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using System.ComponentModel.Design;
+using RPGKarawara;
 
 public class SampleTriggerDialogue : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class SampleTriggerDialogue : MonoBehaviour
     // Variável para o script de movimentação do NPC
     public NPCMovement npcMovement;
     private bool inputCheck = false;
-
     public Transform targetPosition;
     public float playerPositionThreshold = 1.5f;
     public string test1, test2;
@@ -34,6 +34,7 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     private void Awake()
     {
+        PlayerUIManager.instance.playerUIHudManager.activateMarcador(gameObject.transform);
         keyboard = Keyboard.current; 
 
         // Esconder o cursor ao iniciar
@@ -44,14 +45,17 @@ public class SampleTriggerDialogue : MonoBehaviour
     private void Start()
     {
         dialogueManager = DialogueSystem.Dialogue.instance;
+        gameStateVariables.Add(new DialogueGameState(false, "Clicou"));
+        Debug.Log(gameStateVariables[0].name);
+        dialogueManager.SetDialogGameState(gameStateVariables);
+        Debug.Log(dialogueManager.gameStateVariables[0].name);
+        Debug.Log(dialogueManager._handler.gameStateVariables[0].name);
         flags = GetComponent<SampleFlags>();
 
         dialogueManager.flags = flags.gameEventFlags;
         dialogueManager.dialogueCallbackActions.OnNodeLeave += OnNodeLeave;
         dialogueManager.dialogueCallbackActions.OnNodeEnter += OnNodeEnter;
 
-        gameStateVariables.Add(new DialogueGameState(10f, "floatExample"));
-        dialogueManager.SetDialogGameState(gameStateVariables);
         dialogueManager.OnChoiceDraw += OnChoiceDraw;
 
         dialogueManager.dictionary.AddEntry(test1, GetDictionaryValue);
@@ -67,9 +71,10 @@ public class SampleTriggerDialogue : MonoBehaviour
             
             if (!dialogueManager.IsRunning)
             {
-                
+                dialogueManager.SetDialogGameState(gameStateVariables);
                 dialogueManager.StartDialogue();  // Inicia o diálogo
                 dialogueActive = true;
+                gameStateVariables[0].ChangeValue(true);
 
                 // Mostrar o cursor e destravar
                 Cursor.visible = true;
@@ -81,6 +86,15 @@ public class SampleTriggerDialogue : MonoBehaviour
                     cameraController.enabled = false;  // Desativa a movimentação da câmera
                 }
             }
+        }
+
+        if(!isPlayerNearby){
+            if (dialogueManager.IsRunning)
+            {
+                dialogueManager.StopDialogue();
+                dialogueManager._handler.EndDialogue();
+            }
+            return;
         }
     
         // Avança o diálogo se ele já estiver ativo
