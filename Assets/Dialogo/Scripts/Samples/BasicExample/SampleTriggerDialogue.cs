@@ -51,10 +51,8 @@ public class SampleTriggerDialogue : MonoBehaviour
 
         dialogueManager = DialogueSystem.Dialogue.instance;
         gameStateVariables.Add(new DialogueGameState(false, "Clicou"));
-        Debug.Log(gameStateVariables[0].name);
+        gameStateVariables.Add(new DialogueGameState(false, "Completo"));
         dialogueManager.SetDialogGameState(gameStateVariables);
-        Debug.Log(dialogueManager.gameStateVariables[0].name);
-        Debug.Log(dialogueManager._handler.gameStateVariables[0].name);
         flags = GetComponent<SampleFlags>();
 
         dialogueManager.flags = flags.gameEventFlags;
@@ -263,6 +261,7 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     void PassarObjetivo()
     {
+        gameStateVariables[1].ChangeValue(true);
         PontosManager.instance.condicaoPontos[PontosManager.instance.index].podeAvançar = true;
     }
 
