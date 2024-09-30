@@ -11,7 +11,8 @@ using UnityEngine;
         CheckPlayerPosition,
         EnableUI,
         DisableUI,
-        TutorialCompleto
+        TutorialCompleto,
+        CheckMouseInput
     }
 
 
@@ -21,7 +22,6 @@ namespace DialogueSystem
     public class DialogueEvent
     {
         public EventTypeDialogue eventName;
-
         public int intParameter;
         public float floatParameter;
         public string stringParameter;
