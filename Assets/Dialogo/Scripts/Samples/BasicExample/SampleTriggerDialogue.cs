@@ -197,6 +197,9 @@ public class SampleTriggerDialogue : MonoBehaviour
                 case EventTypeDialogue.DisableUI:
                     AtivarHint();
                     break;
+                case EventTypeDialogue.TutorialCompleto:
+                    PassarObjetivo();
+                    break;
             }
         }
     }
@@ -237,6 +240,10 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     private void AtivarHint(){
         hint.SetActive(!hint.activeSelf);
+    }
+
+    void PassarObjetivo(){
+        PontosManager.instance.condicaoPontos[PontosManager.instance.index].podeAvançar = true;
     }
     
     private Keyboard keyboard;

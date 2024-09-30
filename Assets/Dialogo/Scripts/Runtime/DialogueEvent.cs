@@ -10,7 +10,8 @@ using UnityEngine;
         MoveNPCToPlayer,
         CheckPlayerPosition,
         EnableUI,
-        DisableUI
+        DisableUI,
+        TutorialCompleto
     }
 
 

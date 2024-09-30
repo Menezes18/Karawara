@@ -4,15 +4,16 @@ using UnityEngine.UI;
 
 public class IndicadorObjetivoScript : MonoBehaviour
 {
+    public static IndicadorObjetivoScript indicador;
     public Transform jogador;
     public Transform objetivo;
     public RectTransform canvasRect;
     public TMP_Text textoDistancia;
-
     private RectTransform indicadorRect;
 
     void Start()
     {
+        indicador = this;
         if (jogador == null)
         {
             jogador = GameObject.FindGameObjectWithTag("Player").transform;

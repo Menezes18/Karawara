@@ -43,7 +43,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 8739a4cf8593444489e5ad74c3329d30
+  id: fd86e7eb7ff4c584ca0766252b6bc299
   nodeName: Event node
   processed: 0
   entered: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 89de84b3d46f2dd42bec166ba576841d
+  id: 52d67aa8f0cf4b846bab834fe3b46553
   nodeName: Condition
   processed: 0
   entered: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: fe918d1f21581374f8731b6e0eac88a9
+  id: 706324c3b2451fe43924839931801e36
   nodeName: Text node
   processed: 0
   entered: 0
@@ -232,7 +232,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 4c9ca49bd723eb74fabf92536728b3b0
+  id: 04bfa4b85797db94781e4c1b9fe47241
   nodeName: Wait 8s
   processed: 0
   entered: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 9f004048a3d522142809b629e207e1f2
+  id: 92a04a8d258ddaf4ea96dc9bebf4008e
   nodeName: Event node
   processed: 0
   entered: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 009da9d2996a0cd4db18bd6cacaf38b1
+  id: a36e1f078a3ee1744acc31c30afc13e4
   nodeName: Event node
   processed: 0
   entered: 0
@@ -397,7 +397,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 0d065c3b118b97b469628f6ca1da2a9d
+  id: 10a38c1e6630dee47b6853a0a165c591
   nodeName: Event node
   processed: 0
   entered: 0
@@ -446,12 +446,15 @@ MonoBehaviour:
       _node: {fileID: -2861625975809339672}
       _typeQualifiedName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
-      connections: []
+      connections:
+      - fieldName: input
+        node: {fileID: 8449398700239759677}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 504c856bd99d33543a8f9252325253a8
+  id: cf16a116d5ae1a64fac218f5c035a356
   nodeName: Text node
   processed: 0
   entered: 0
@@ -510,7 +513,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 7211a29dffa2e9d4694776e28e58f2e5
+  id: efc0f51b44c851d468a05ef0358fffd2
   nodeName: Event node
   processed: 0
   entered: 0
@@ -554,7 +557,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 09d333b3e783a964f9c2f57b886da354
+  id: cb1b2047ba7b5e94580fb6c083b83f8a
   nodeName: Branch
   processed: 0
   entered: 0
@@ -603,7 +606,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 1b0282a5da7890a46a305a27e9f6728a
+  id: 5865362f605c67d429857cb8aed36349
   nodeName: Text node
   processed: 0
   entered: 0
@@ -661,7 +664,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: cb7d3cce4401817449de686e3372e766
+  id: c7929fc9eb609e54790380e8bff07d54
   nodeName: Event node
   processed: 0
   entered: 0
@@ -718,7 +721,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: a9451fd35dda3e142889d2ebb0c838e6
+  id: 7e2877d379cceb84a89c3c34b1013f0b
   nodeName: Event node
   processed: 0
   entered: 0
@@ -775,7 +778,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: fb5edcecbe08a0e4f895ebce70ad2901
+  id: c8dd9c87be2735845a6d12789581f71c
   nodeName: Event node
   processed: 0
   entered: 0
@@ -832,7 +835,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: e390b2ccd54790f45b3e9b060937f420
+  id: 45b86b7e31f8b8e479051080e988b214
   nodeName: Event node
   processed: 0
   entered: 0
@@ -892,7 +895,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: fea38ce736536b343ae096c1310b6aec
+  id: c13b7b28672a60744a38c0d397b602e1
   nodeName: Text node
   processed: 0
   entered: 0
@@ -960,6 +963,7 @@ MonoBehaviour:
   - {fileID: 2752770401418893945}
   - {fileID: -1694081709046975892}
   - {fileID: -6191495968864327051}
+  - {fileID: 8449398700239759677}
   dialogueNodes:
   - {fileID: -2327789701753364524}
   - {fileID: -2211163664711025602}
@@ -996,6 +1000,7 @@ MonoBehaviour:
   - {fileID: 2752770401418893945}
   - {fileID: -1694081709046975892}
   - {fileID: -6191495968864327051}
+  - {fileID: 8449398700239759677}
   _branchNodes:
   - {fileID: -2327789701753364524}
 --- !u!114 &110811838721701585
@@ -1041,7 +1046,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 62bfe0899d09a604798e7faa40bcae29
+  id: 3ae8b8b1598ce6e4c8264dc5dd6eeb52
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1098,7 +1103,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 989b84018c3f771439b2ad1e1a5ac7a7
+  id: 23fa7178803d252408968a078c07bdb6
   nodeName: Text node
   processed: 0
   entered: 0
@@ -1157,7 +1162,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 856cb029ebaa9f04f86c64a98674f636
+  id: f71d85a5b74eea54799050bdd1cd7d4e
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1214,7 +1219,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 394ac703f1c4f4541b5081a297cffb2c
+  id: 1bf7c7851f3151d4b9dff3a142e775ae
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1271,7 +1276,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 91dacfe70c17f1043bcd80561b5068a1
+  id: ae3f9362962bdd04d92d17b10219f650
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1328,7 +1333,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 1f5d318ba42c9c944aa37365e1ba9398
+  id: 3b7e6dd3939afff4c8ba23f8ad0cee61
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1385,7 +1390,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 2173f476fe077f34cb6a2b6bc79cda96
+  id: fe077ed995c01384faf717c449fa5022
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1442,7 +1447,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: e37b6176d0aeee741b56541d7e878da2
+  id: 7b285abf62655be4d8678defd4b802ae
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1511,7 +1516,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 0e9e4023644053041b134636de6f25d8
+  id: b4da27da85b5cfa4cbf2d5c99ff7c5cf
   nodeName: Wait 4s
   processed: 0
   entered: 0
@@ -1562,7 +1567,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: b4acb6f5d930c0f438350f2ed6cc72ac
+  id: d834be151f84be64689b4a92d59fd580
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1619,7 +1624,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: da1f37be019f44d4d8de4d9983837e00
+  id: 46142aa0158045943b7234d2d4d8c44d
   nodeName: Wait 3s
   processed: 0
   entered: 0
@@ -1670,7 +1675,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: bde4a9209e4fd52459de65484c171b64
+  id: fa589d52c0d5b8f4eb62fcea45e33095
   nodeName: Text node
   processed: 0
   entered: 0
@@ -1729,7 +1734,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 0445194efcd579f48beec2de5163a270
+  id: b98ebc4a21e06424891a05d64be180b9
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1786,7 +1791,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: f80a1b0d450f8b14ba081bb73194063e
+  id: 041a5ed4d5a4c05409b41352a423e3d6
   nodeName: Event node
   processed: 0
   entered: 0
@@ -1843,7 +1848,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: c7d201e588f113047ac4318158f664ed
+  id: f6358d3dc4550114baccba9d4a4aac0e
   nodeName: Text node
   processed: 0
   entered: 0
@@ -1902,7 +1907,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: d89b26b5783ba884cb3fd7d5f549bee0
+  id: d0c16d452db734a42b7cee59c3322d6e
   nodeName: Text node
   processed: 0
   entered: 0
@@ -1961,7 +1966,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: d69d3215a6c6dfb479778e852baa40d9
+  id: b31a7b8dc96bbbe4892e6c3537fdba42
   nodeName: Event node
   processed: 0
   entered: 0
@@ -2018,7 +2023,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 9c6e4be87dcb8b342831b83525ffe42a
+  id: 70e80f6e4e54e4240a05aaf8596656e9
   nodeName: Wait 8s
   processed: 0
   entered: 0
@@ -2069,7 +2074,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 7c427f500be6ae741a9f476d6e91659a
+  id: c76cc9774bf2de349a56ad6b9d18fd32
   nodeName: Text node
   processed: 0
   entered: 0
@@ -2128,7 +2133,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 5f365ca4e873e39439994418f1fd1a36
+  id: b545d0c9f2e4ad743925c8bd4867dd26
   nodeName: Event node
   processed: 0
   entered: 0
@@ -2185,7 +2190,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 1d94c8a53d902584fa48cc6aa6ca1ed0
+  id: 5cf8e696936109c4cb91e73a0345c53d
   nodeName: Text node
   processed: 0
   entered: 0
@@ -2244,7 +2249,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 71cea175df120254fa4178c94c2642b2
+  id: e1c24c034b767374cb03c17a1a55dee8
   nodeName: Event node
   processed: 0
   entered: 0
@@ -2301,7 +2306,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: c6c3b7b623e1522419ba740f27190fe0
+  id: c49b4fd00880a81419ded439861bb737
   nodeName: Event node
   processed: 0
   entered: 0
@@ -2309,6 +2314,60 @@ MonoBehaviour:
   output: 0
   events:
   - eventName: 4
+    intParameter: 0
+    floatParameter: 0
+    stringParameter: 
+    boolParameter: 0
+    inputKey: 
+  GoToNextNodeAutomatically: 1
+--- !u!114 &8449398700239759677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d109d159ef73fa1408f6a4a9eefef82c, type: 3}
+  m_Name: Event
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 7400, y: 424}
+  ports:
+    keys:
+    - input
+    - output
+    values:
+    - _fieldName: input
+      _node: {fileID: 8449398700239759677}
+      _typeQualifiedName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: output
+        node: {fileID: -2861625975809339672}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: output
+      _node: {fileID: 8449398700239759677}
+      _typeQualifiedName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  id: 56329c3cdfbde714fa9957f5b3bb733d
+  nodeName: Event node
+  processed: 0
+  entered: 0
+  input: 0
+  output: 0
+  events:
+  - eventName: 6
     intParameter: 0
     floatParameter: 0
     stringParameter: 
@@ -2358,7 +2417,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  id: 93d7f7c517caadc4f9d897d1f9523549
+  id: ef0a99496ac90644d903421c43ea98fb
   nodeName: Event node
   processed: 0
   entered: 0
