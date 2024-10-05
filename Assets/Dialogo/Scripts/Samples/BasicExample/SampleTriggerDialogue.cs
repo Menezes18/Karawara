@@ -6,6 +6,8 @@ using DialogueSystem;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using System.ComponentModel.Design;
+using RPGKarawara;
+using UnityEngine.InputSystem.Controls;
 
 public class SampleTriggerDialogue : MonoBehaviour
 {
@@ -26,15 +28,18 @@ public class SampleTriggerDialogue : MonoBehaviour
     // Variável para o script de movimentação do NPC
     public NPCMovement npcMovement;
     private bool inputCheck = false;
-
     public Transform targetPosition;
     public float playerPositionThreshold = 1.5f;
     public string test1, test2;
     public GameObject hint;
+    private Keyboard keyboard;
+    private Mouse mouse;
 
     private void Awake()
     {
-        keyboard = Keyboard.current; 
+        PlayerUIManager.instance.playerUIHudManager.activateMarcador(gameObject.transform);
+        keyboard = Keyboard.current;
+        mouse = Mouse.current;
 
         // Esconder o cursor ao iniciar
         Cursor.visible = false;
@@ -43,15 +48,17 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     private void Start()
     {
+
         dialogueManager = DialogueSystem.Dialogue.instance;
+        gameStateVariables.Add(new DialogueGameState(false, "Clicou"));
+        gameStateVariables.Add(new DialogueGameState(false, "Completo"));
+        dialogueManager.SetDialogGameState(gameStateVariables);
         flags = GetComponent<SampleFlags>();
 
         dialogueManager.flags = flags.gameEventFlags;
         dialogueManager.dialogueCallbackActions.OnNodeLeave += OnNodeLeave;
         dialogueManager.dialogueCallbackActions.OnNodeEnter += OnNodeEnter;
 
-        gameStateVariables.Add(new DialogueGameState(10f, "floatExample"));
-        dialogueManager.SetDialogGameState(gameStateVariables);
         dialogueManager.OnChoiceDraw += OnChoiceDraw;
 
         dialogueManager.dictionary.AddEntry(test1, GetDictionaryValue);
@@ -59,17 +66,19 @@ public class SampleTriggerDialogue : MonoBehaviour
 
         dialogueManager.RegisterEventHandler(TestEventHandler);
     }
-    
-    private void Update(){
+
+    private void Update()
+    {
         CheckPlayer();
         if (isPlayerNearby && Keyboard.current.enterKey.wasPressedThisFrame)  // Verifica se o jogador pressionou Enter
         {
-            
+
             if (!dialogueManager.IsRunning)
             {
-                
+                dialogueManager.SetDialogGameState(gameStateVariables);
                 dialogueManager.StartDialogue();  // Inicia o diálogo
                 dialogueActive = true;
+                gameStateVariables[0].ChangeValue(true);
 
                 // Mostrar o cursor e destravar
                 Cursor.visible = true;
@@ -80,9 +89,21 @@ public class SampleTriggerDialogue : MonoBehaviour
                 {
                     cameraController.enabled = false;  // Desativa a movimentação da câmera
                 }
+                AtivarHint(DialogueHint.instance.currentLineIndex);
             }
         }
-    
+
+        if (!isPlayerNearby)
+        {
+            if (dialogueManager.IsRunning)
+            {
+                DesativarHint();
+                dialogueManager.StopDialogue();
+                dialogueManager._handler.EndDialogue();
+            }
+            return;
+        }
+
         // Avança o diálogo se ele já estiver ativo
         if (dialogueActive && Keyboard.current.enterKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
         {
@@ -96,7 +117,7 @@ public class SampleTriggerDialogue : MonoBehaviour
                 {
                     if (dialogueManager.CurrentState != DialogueState.AwaitingEventResponse)
                         dialogueManager.AdvanceDialogue();
-                    
+
                 }
             }
         }
@@ -132,10 +153,10 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
     }
 
-    
+
     private void OnTriggerExit(Collider other)
     {
-        
+
     }
 
     public void OnNodeLeave(BaseNode node) { /* Custom logic for when a node is left */ }
@@ -178,10 +199,16 @@ public class SampleTriggerDialogue : MonoBehaviour
                     break;
 
                 case EventTypeDialogue.EnableUI:
-                    AtivarHint();
+                    AtivarHint(myEvent.intParameter);
                     break;
                 case EventTypeDialogue.DisableUI:
-                    AtivarHint();
+                    DesativarHint();
+                    break;
+                case EventTypeDialogue.TutorialCompleto:
+                    PassarObjetivo();
+                    break;
+                case EventTypeDialogue.CheckMouseInput:
+                    StartCoroutine(CheckMouseInputCoroutine(myEvent.inputKey));
                     break;
             }
         }
@@ -221,18 +248,28 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
     }
 
-    private void AtivarHint(){
-        hint.SetActive(!hint.activeSelf);
+    private void AtivarHint(int fala)
+    {
+        hint.SetActive(true);
+        DialogueHint.instance.currentLineIndex = fala;
+        DialogueHint.instance.ShowNextDialogueLine(fala);
     }
-    
-    private Keyboard keyboard;
-    private Mouse mouse;
+    private void DesativarHint()
+    {
+        hint.SetActive(false);
+    }
+
+    void PassarObjetivo()
+    {
+        gameStateVariables[1].ChangeValue(true);
+        PontosManager.instance.condicaoPontos[PontosManager.instance.index].podeAvançar = true;
+    }
 
     IEnumerator CheckInputCoroutine(string key)
     {
         Debug.Log($"Esperando o jogador apertar a tecla {key.ToUpper()}...");
 
-        
+
         if (!Enum.TryParse(key, out Key keyEnum))
         {
             Debug.LogError($"Tecla {key} inválida.");
@@ -240,7 +277,7 @@ public class SampleTriggerDialogue : MonoBehaviour
             yield break;
         }
 
-        
+
         while (!keyboard[keyEnum].isPressed)
         {
             yield return null;
@@ -250,10 +287,52 @@ public class SampleTriggerDialogue : MonoBehaviour
         inputCheck = false;
         dialogueManager.AdvanceDialogue();
     }
+
+    IEnumerator CheckMouseInputCoroutine(string button)
+    {
+        Debug.Log($"Esperando o jogador apertar o botão do mouse {button}...");
+
+        ButtonControl mouseButton;
+
+        switch (button.ToLower())
+        {
+            case "left":
+            case "leftbutton":
+            case "esquerdo":
+                mouseButton = mouse.leftButton;
+                break;
+            case "right":
+            case "rightbutton":
+            case "direito":
+                mouseButton = mouse.rightButton;
+                break;
+            case "middle":
+            case "middlebutton":
+            case "meio":
+                mouseButton = mouse.middleButton;
+                break;
+            default:
+                Debug.LogError($"Botão do mouse '{button}' inválido.");
+                inputCheck = false;
+                yield break;
+        }
+
+        while (!mouseButton.isPressed)
+        {
+            yield return null;
+        }
+
+        Debug.Log($"Parabéns! Você apertou o botão do mouse {button}.");
+        inputCheck = false;
+        dialogueManager.AdvanceDialogue();
+    }
+
+
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow; 
-        Gizmos.DrawWireSphere(transform.position, distanciaPlayer); 
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, distanciaPlayer);
     }
+
 }
 

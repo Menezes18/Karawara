@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using RPGKarawara;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -60,6 +61,8 @@ public class NPCMovement : MonoBehaviour
 
         currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;  // Pega o próximo waypoint na lista
         navAgent.SetDestination(waypoints[currentWaypointIndex].position);   // Define o destino do NPC para o próximo waypoint
+        PlayerUIManager.instance.playerUIHudManager.activateMarcador(waypoints[currentWaypointIndex]);
+
         isMoving = true;                                                     // Seta que o NPC está se movendo
         Debug.Log("NPC está indo para o próximo waypoint.");
     }
