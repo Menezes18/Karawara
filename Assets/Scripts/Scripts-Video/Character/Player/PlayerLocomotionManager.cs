@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
@@ -36,7 +37,7 @@ namespace RPGKarawara
         [SerializeField] float dodgeDuration = 11f; // Duração do dodge
         private bool isDodging = false;
         public bool canDodge = true;
-
+        public bool arco = false;
         protected override void Awake()
         {
             base.Awake();
@@ -46,7 +47,9 @@ namespace RPGKarawara
         protected override void Update()
         {
             base.Update();
-
+            if (Keyboard.current.oKey.wasReleasedThisFrame){
+                arco = !arco;
+            }
             if (player.IsOwner)
             {
                 player.characterNetworkManager.verticalMovement.Value = verticalMovement;
@@ -156,18 +159,15 @@ namespace RPGKarawara
             }
         }
 
-        private void HandleRotation()
-        {
+        private void HandleRotation(){
             if (player.isDead.Value)
                 return;
 
             if (!player.characterLocomotionManager.canRotate)
                 return;
 
-            if (player.playerNetworkManager.isLockedOn.Value)
-            {
-                if (player.playerNetworkManager.isSprinting.Value || player.playerLocomotionManager.isRolling)
-                {
+            if (player.playerNetworkManager.isLockedOn.Value){
+                if (player.playerNetworkManager.isSprinting.Value || player.playerLocomotionManager.isRolling){
                     Vector3 targetDirection = Vector3.zero;
                     targetDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
                     targetDirection += PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
@@ -178,11 +178,11 @@ namespace RPGKarawara
                         targetDirection = transform.forward;
 
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-                    Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                    Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation,
+                        rotationSpeed * Time.deltaTime);
                     transform.rotation = finalRotation;
                 }
-                else
-                {
+                else{
                     if (player.playerCombatManager.currentTarget == null)
                         return;
 
@@ -192,12 +192,29 @@ namespace RPGKarawara
                     targetDirection.Normalize();
 
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-                    Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                    Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation,
+                        rotationSpeed * Time.deltaTime);
                     transform.rotation = finalRotation;
                 }
             }
-            else
+            else if(arco)
             {
+             
+                targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward;
+                targetRotationDirection.y = 0;  // Manter o eixo Y fixo para evitar inclinação vertical
+                targetRotationDirection.Normalize();
+
+                if (targetRotationDirection == Vector3.zero)
+                {
+                    targetRotationDirection = transform.forward;
+                }
+
+                // Gira o personagem suavemente na direção da câmera enquanto está com o arco
+                Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
+                Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+                transform.rotation = targetRotation;
+                
+            }else{
                 targetRotationDirection = Vector3.zero;
                 targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
                 targetRotationDirection = targetRotationDirection + PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;

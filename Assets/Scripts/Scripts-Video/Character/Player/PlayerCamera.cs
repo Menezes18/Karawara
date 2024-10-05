@@ -22,6 +22,14 @@ namespace RPGKarawara
         [SerializeField] float cameraCollisionRadius = 0.2f;
         [SerializeField] LayerMask collideWithLayers;
 
+        [Header("Camera Offset")]
+        [SerializeField] private Vector3 cameraOffset = new Vector3(-0.5f, 0, 0); // Move camera slightly to the left
+
+        [Header("Aim Mode Settings")]
+        [SerializeField] private bool isAiming = false; 
+        [SerializeField] private Vector3 aimCameraOffset = new Vector3(0, 0, -2); // Adjust offset for aiming mode
+        [SerializeField] private float aimFOV = 40f;  // Field of View when aiming
+        private float originalFOV;  // Store the original FOV
         [Header("Camera Values")]
         private Vector3 cameraVelocity;
         private Vector3 cameraObjectPosition;   //USED FOR CAMERA COLLISIONS (MOVES THE CAMERA OBJECT TO THIS POSITION UPON COLLIDING)
@@ -44,7 +52,7 @@ namespace RPGKarawara
         public CharacterManager leftLockOnTarget;
         public CharacterManager rightLockOnTarget;
         public bool canFollow = false;
-
+        public GameObject tee;
         private void Awake()
         {
             if (instance == null)
@@ -61,6 +69,7 @@ namespace RPGKarawara
         {
             DontDestroyOnLoad(gameObject);
             cameraZPosition = cameraObject.transform.localPosition.z;
+            originalFOV = cameraObject.fieldOfView;
         }
 
         public void HandleAllCameraActions()
@@ -70,6 +79,7 @@ namespace RPGKarawara
                 HandleFollowTarget();
                 HandleRotations();
                 HandleCollisions();
+                HandleAimMode();
             }
         }
 
@@ -84,6 +94,24 @@ namespace RPGKarawara
         private void HandleRotations()
         {
             //  IF LOCKED ON, FORCE ROTATION TOWARDS TARGET
+            if (!isAiming)  // Regular rotation if not aiming
+            {
+                leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
+                upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
+                upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
+
+                Vector3 cameraRotation = Vector3.zero;
+                Quaternion targetRotation;
+
+                cameraRotation.y = leftAndRightLookAngle;
+                targetRotation = Quaternion.Euler(cameraRotation);
+                transform.rotation = targetRotation;
+
+                cameraRotation = Vector3.zero;
+                cameraRotation.x = upAndDownLookAngle;
+                targetRotation = Quaternion.Euler(cameraRotation);
+                cameraPivotTransform.localRotation = targetRotation;
+            }
             if (player.playerNetworkManager.isLockedOn.Value)
             {
                 //  THIS ROTATES THIS GAMEOBJECT
@@ -130,7 +158,35 @@ namespace RPGKarawara
                 cameraPivotTransform.localRotation = targetRotation;
             }
         }
-
+        public void ToggleAimMode(bool isAiming)
+        {
+            
+            if (isAiming)
+            {
+                // Ajustar a câmera para o modo de mira
+                cameraObject.fieldOfView = 40f;
+                // Você também pode adicionar transições de posição ou ângulo da câmera aqui
+            }
+            else
+            {
+                // Voltar à visão normal
+                cameraObject.fieldOfView = 60f;
+            }
+        }
+        private void HandleAimMode()
+        {
+            if (isAiming) // If aiming, adjust camera position and FOV
+            {
+                Debug.Log("AA J");
+                cameraObject.transform.localPosition = Vector3.Lerp(cameraObject.transform.localPosition, aimCameraOffset, cameraSmoothSpeed * Time.deltaTime);
+                cameraObject.fieldOfView = Mathf.Lerp(cameraObject.fieldOfView, aimFOV, Time.deltaTime);
+            }
+            else // Reset to normal view
+            {
+                cameraObject.transform.localPosition = Vector3.Lerp(cameraObject.transform.localPosition, cameraObjectPosition, cameraSmoothSpeed * Time.deltaTime);
+                cameraObject.fieldOfView = Mathf.Lerp(cameraObject.fieldOfView, originalFOV, Time.deltaTime);
+            }
+        }
         private void HandleCollisions()
         {
             targetCameraZPosition = cameraZPosition;
@@ -291,7 +347,6 @@ namespace RPGKarawara
 
             yield return null;
         }
-
         private IEnumerator SetCameraHeight()
         {
             float duration = 1;
