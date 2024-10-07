@@ -29,6 +29,9 @@ namespace RPGKarawara
 
     [SerializeField] string hit_Right_Medium_01 = "Hit_Right_Medium_01";
     [SerializeField] string hit_Right_Medium_02 = "Hit_Right_Medium_02";
+    
+    [SerializeField] string hit_and_fall = "Hit_And_Fall";
+    
     private List<string> allHitAnimations = new List<string>();
     public List<string> forward_Medium_Damage = new List<string>();
     public List<string> backward_Medium_Damage = new List<string>();

@@ -23,7 +23,7 @@ namespace RPGKarawara
         [SerializeField] LayerMask collideWithLayers;
 
         [Header("Camera Offset")]
-        [SerializeField] private Vector3 cameraOffset = new Vector3(-0.5f, 0, 0); // Move camera slightly to the left
+        [SerializeField] private Vector3 cameraOffset = new Vector3(-0.5f, 0, 0); 
 
         [Header("Aim Mode Settings")]
         [SerializeField] private bool isAiming = false; 
@@ -52,7 +52,6 @@ namespace RPGKarawara
         public CharacterManager leftLockOnTarget;
         public CharacterManager rightLockOnTarget;
         public bool canFollow = false;
-        public GameObject tee;
         private void Awake()
         {
             if (instance == null)
@@ -177,7 +176,6 @@ namespace RPGKarawara
         {
             if (isAiming) // If aiming, adjust camera position and FOV
             {
-                Debug.Log("AA J");
                 cameraObject.transform.localPosition = Vector3.Lerp(cameraObject.transform.localPosition, aimCameraOffset, cameraSmoothSpeed * Time.deltaTime);
                 cameraObject.fieldOfView = Mathf.Lerp(cameraObject.fieldOfView, aimFOV, Time.deltaTime);
             }
