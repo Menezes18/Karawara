@@ -85,6 +85,7 @@ namespace RPGKarawara
         private void HandleFollowTarget()
         {
             if(canFollow){
+                
                 Vector3 targetCameraPosition = Vector3.SmoothDamp(transform.position, player.transform.position, ref cameraVelocity, cameraSmoothSpeed * Time.deltaTime);
                 transform.position = targetCameraPosition;
             }
