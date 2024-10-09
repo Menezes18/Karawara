@@ -40,7 +40,7 @@ public class BossAISystem : MonoBehaviour{
     // Força aplicada no player
     public float playerPushForce = 10f;
 
-
+    
     private void Update(){
         // Verifica se o cooldown permite o próximo tiro
         if (cooldownTimer > 0){
@@ -223,62 +223,87 @@ public class BossAISystem : MonoBehaviour{
         Explode(circlePosition);
     }
 
-    void Explode(Vector3 explosionPosition){
+    void Explode(Vector3 explosionPosition)
+    {
         // Encontrar todos os objetos com física no raio da explosão
         Collider[] colliders = Physics.OverlapSphere(explosionPosition, explosionRadius);
 
-        foreach (Collider hit in colliders){
+        foreach (Collider hit in colliders)
+        {
             // Verificar se é o player (com Character Controller)
-                if (hit.gameObject.CompareTag("Player"))
-    {
-        // Calcular a direção para empurrar o player
-        Vector3 direction = hit.transform.position - explosionPosition;
-        direction.y = 0; // Evitar empurrar para cima ou para baixo
+            if (hit.gameObject.CompareTag("Player"))
+            {
+                // Calcular a direção para empurrar o player
+                Vector3 direction = hit.transform.position - explosionPosition;
+                direction.y = 0; // Evitar empurrar para cima ou para baixo
 
-        // Aplicar o movimento manualmente ao Character Controller
-        playerController.Move(direction.normalized * playerPushForce * Time.deltaTime);
+                // Empurrar o player com uma força suave
+                StartCoroutine(PushPlayerSmoothly(hit.transform, direction.normalized));
 
-        // Garantir que o player fique no chão
-        RaycastHit groundHit;
-        if (Physics.Raycast(hit.transform.position, Vector3.down, out groundHit, Mathf.Infinity))
-        {
-            // Alinhar a posição Y do player com o chão
-            hit.transform.position = new Vector3(hit.transform.position.x, groundHit.point.y, hit.transform.position.z);
-        }
+                // Garantir que o player fique no chão
+                RaycastHit groundHit;
+                if (Physics.Raycast(hit.transform.position, Vector3.down, out groundHit, Mathf.Infinity))
+                {
+                    // Alinhar a posição Y do player com o chão
+                    hit.transform.position = new Vector3(hit.transform.position.x, groundHit.point.y, hit.transform.position.z);
+                }
 
-        // Chamar a animação de hit no estilo Rennala Queen
-        CharacterAnimatorManager animatorManager = hit.GetComponent<CharacterAnimatorManager>();
-        if (animatorManager != null)
-        {
-            // Ajustar a posição do player para a base do Character Controller
-            Vector3 colliderCenter = playerController.center; // Centro do Character Controller
-            float colliderHeight = playerController.height;   // Altura do Character Controller
-            
-            // Ajustar a posição Y para a base do collider
-            hit.transform.position = new Vector3(hit.transform.position.x, groundHit.point.y + (colliderHeight / 2), hit.transform.position.z);
+                // Chamar a animação de hit no estilo Rennala Queen
+                CharacterAnimatorManager animatorManager = hit.GetComponent<CharacterAnimatorManager>();
+                if (animatorManager != null)
+                {
+                    // Ajustar a posição do player para a base do Character Controller
+                    Vector3 colliderCenter = playerController.center; // Centro do Character Controller
+                    float colliderHeight = playerController.height;   // Altura do Character Controller
 
-            // Configurações estilo Rennala
-            string targetAnimation = "Hit_And_Fall";  // A animação que você quer que o player execute
-            bool isPerformingAction = true;           // Indica que o player está realizando uma ação (tomando o hit)
-            bool applyRootMotion = true;              // O movimento deve ser influenciado pela animação
-            bool canRotate = false;                   // O player não pode girar durante o hit
-            bool canMove = false;                     // O player não pode se mover durante o hit
+                    // Ajustar a posição Y para a base do collider
+                    hit.transform.position = new Vector3(hit.transform.position.x, groundHit.point.y + (colliderHeight / 2), hit.transform.position.z);
 
-            // Chama a animação com os parâmetros estilo Rennala Queen
-            animatorManager.PlayTargetActionAnimation(targetAnimation, isPerformingAction, applyRootMotion, canRotate, canMove);
-        }
-    }   
-            else{
+                    // Configurações estilo Rennala
+                    string targetAnimation = "Hit_And_Fall";  // A animação que você quer que o player execute
+                    bool isPerformingAction = true;           // Indica que o player está realizando uma ação (tomando o hit)
+                    bool applyRootMotion = true;              // O movimento deve ser influenciado pela animação
+                    bool canRotate = false;                   // O player não pode girar durante o hit
+                    bool canMove = false;                     // O player não pode se mover durante o hit
+
+                    // Chama a animação com os parâmetros estilo Rennala Queen
+                    animatorManager.PlayTargetActionAnimation(targetAnimation, isPerformingAction, applyRootMotion, canRotate, canMove);
+                }
+            }
+            else
+            {
                 // Verificar se o objeto tem um Rigidbody
                 Rigidbody rb = hit.GetComponent<Rigidbody>();
 
-                if (rb != null){
+                if (rb != null)
+                {
                     // Aplicar força para empurrar o objeto para longe
                     rb.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
                 }
             }
         }
     }
+
+    IEnumerator PushPlayerSmoothly(Transform playerTransform, Vector3 direction)
+    {
+        float pushSpeed = 5f; // Velocidade de empurrão
+        float pushDistance = 2f; // Distância máxima que o player deve ser empurrado
+        float elapsedTime = 0f;
+
+        Vector3 startPosition = playerTransform.position;
+
+        while (elapsedTime < pushDistance / pushSpeed)
+        {
+            playerTransform.position = Vector3.Lerp(startPosition, startPosition + direction * pushDistance, elapsedTime * pushSpeed);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Garantir que o player tenha alcançado a posição final após o tempo
+        playerTransform.position = startPosition + direction * pushDistance;
+    }
+
+
 
 
     void OnDrawGizmosSelected()

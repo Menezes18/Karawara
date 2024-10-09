@@ -19,6 +19,7 @@ namespace RPGKarawara
 
         private void Awake()
         {
+            Debug.Log("WorldAIManager Awake: " + gameObject.name); // Adicione este log
             if (instance == null)
             {
                 instance = this;
@@ -28,6 +29,7 @@ namespace RPGKarawara
                 Destroy(gameObject);
             }
         }
+
 
         public void SpawnCharacter(AICharacterSpawner aiCharacterSpawner)
         {
@@ -49,8 +51,8 @@ namespace RPGKarawara
 
             if (bossCharacter != null)
             {
-                if (spawnedInBosses.Contains(bossCharacter))
-                    return;
+                //if (spawnedInBosses.Contains(bossCharacter))
+                  //  return;
 
                 spawnedInBosses.Add(bossCharacter);
             }
