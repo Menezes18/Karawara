@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16a3829c5b6babb478b3e4074ff52935, type: 3}
   m_Name: SaciTest
   m_EditorClassIdentifier: 
-  attackAnimation: Attack_01
+  attackAnimation: Ranged_01
   comboAction: {fileID: 0}
-  attackType: 0
+  attackType: 9
   attackWeight: 50
   actionRecoveryTime: 1.5
   minimumAttackAngle: -35
   maximumAttackAngle: 35
-  minimumAttackDistance: 20
-  maximumAttackDistance: 50
-  isRanged: 0
+  minimumAttackDistance: 10
+  maximumAttackDistance: 20
+  isRanged: 1

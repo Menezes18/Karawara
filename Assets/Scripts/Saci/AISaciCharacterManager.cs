@@ -43,34 +43,6 @@ namespace RPGKarawara
                 Debug.Log("Player está perto. Atacando corpo a corpo.");
                 //saciCombatManager.ActivateMeleeAttack(); // Chama a animação de ataque corpo a corpo
             }
-            // Se o player estiver em uma distância intermediária e maior que a distância mínima de ataque de longo alcance
-            else if (distanceToPlayer > minRangeAttackDistance && distanceToPlayer <= rangeAttackDistance)
-            {
-                // Ajusta a stopDistance para o ataque de longo alcance
-                navMeshAgent.stoppingDistance = longRangeStopDistance;
-                Debug.Log("Player em distância intermediária. Atacando com o ataque de longo alcance.");
-                //saciCombatManager.ActivateSaciWhirlwind(); // Ataque de longo alcance
-            }
-            else
-            {
-                // Ajusta a stopDistance para uma distância intermediária (se necessário)
-                navMeshAgent.stoppingDistance = meleeRange;
-            }
-
-            // Verifica se o Saci está perto o suficiente para atacar (não está se movendo mais)
-            if (distanceToPlayer <= rangeAttackDistance && !navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-            {
-                // Agora que o Saci chegou perto o suficiente, ele pode atacar
-                if (distanceToPlayer <= meleeRange){
-                    Debug.Log("Atacar corpo a corpo");
-                    //saciCombatManager.ActivateMeleeAttack();
-                }
-                else
-                {
-                    Debug.Log("Atacar de longo alcance");
-                    //saciCombatManager.ActivateSaciWhirlwind();
-                }
-            }
         }
 
         // Método para obter a posição do player
