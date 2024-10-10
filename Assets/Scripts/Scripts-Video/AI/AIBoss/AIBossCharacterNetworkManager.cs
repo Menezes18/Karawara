@@ -14,8 +14,8 @@ namespace RPGKarawara
             base.Awake();
 
             aiBossCharacter = GetComponent<AIBossCharacterManager>();
-            currentHealth.Value = 9999;
-            maxHealth.Value = 9999;
+            currentHealth.Value = 3000;
+            maxHealth.Value = 3000;
             // if (fogoBoss){
             //     currentHealth.Value = 1500;
             //     maxHealth.Value = 1500;
