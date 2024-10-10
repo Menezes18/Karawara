@@ -91,6 +91,8 @@ namespace DialogueSystem
             this.callbackActions = callbackActions ?? new DialogueCallbackActions();
             this.dictionary = dictionary ?? new DialogueDictionary();
             this.AttachedMonoBehaviour = monoBehaviour;
+
+             Debug.Log(gameStateVariables == null ? "gameStateVariables is NULL in DialogueHandler" : "gameStateVariables initialized in DialogueHandler");
         }
         public async Task StartDialogueWithNPC(DialogueGraph newGraph)
         {
@@ -563,6 +565,9 @@ namespace DialogueSystem
 
         private bool TestCondition(DialogueConditional condition)
         {
+            if(gameStateVariables == null){
+                Debug.Log("AAAAAAAAAAAAAA");
+            }
             DialogueGameState gameStateVariable = gameStateVariables.Find(x => x.name.ToLower() == condition.variable.ToLower());
             if (gameStateVariable == null)
             {

@@ -14,15 +14,17 @@ namespace RPGKarawara
             base.Awake();
 
             aiBossCharacter = GetComponent<AIBossCharacterManager>();
-            if (fogoBoss){
-                currentHealth.Value = 1500;
-                maxHealth.Value = 1500;
-            }
-            else{
-                currentHealth.Value = 3000;
-                maxHealth.Value = 3000;
-                
-            }
+            currentHealth.Value = 3000;
+            maxHealth.Value = 3000;
+            // if (fogoBoss){
+            //     currentHealth.Value = 1500;
+            //     maxHealth.Value = 1500;
+            // }
+            // else{
+            //     currentHealth.Value = 3000;
+            //     maxHealth.Value = 3000;
+            //     
+            // }
         }
 
         public override void CheckHP(int oldValue, int newValue)

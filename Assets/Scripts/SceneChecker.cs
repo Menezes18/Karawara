@@ -53,7 +53,7 @@ public class SceneChecker : MonoBehaviour{
         // Verifica se a cena carregada é "SceneMenu"
         if (scene.name == "SceneMenu"){
             var player = GameObject.FindGameObjectWithTag("Player");
-            player.transform.position = new Vector3(0,30,0);
+          //  player.transform.position = new Vector3(0,30,0);
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
