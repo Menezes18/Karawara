@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: RangedCombat Stance
   m_EditorClassIdentifier: 
   aiCharacterAttacks:
-  - {fileID: 11400000, guid: 055ac2acdf96ba24086484a0793908b2, type: 2}
   - {fileID: 11400000, guid: 9c3146b9296307942ad7e089a8747a2b, type: 2}
+  - {fileID: 11400000, guid: 055ac2acdf96ba24086484a0793908b2, type: 2}
   potentialAttacks: []
-  choosenAttack: {fileID: 0}
-  previousAttack: {fileID: 0}
+  choosenAttack: {fileID: 11400000, guid: 055ac2acdf96ba24086484a0793908b2, type: 2}
+  previousAttack: {fileID: 11400000, guid: 055ac2acdf96ba24086484a0793908b2, type: 2}
   canPerformCombo: 0
   chanceToPerformCombo: 25
   maximumEngagementDistance: 20

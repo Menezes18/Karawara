@@ -41,7 +41,7 @@ namespace RPGKarawara
                 // Ajusta a stopDistance para o ataque corpo a corpo
                 navMeshAgent.stoppingDistance = meleeStopDistance;
                 Debug.Log("Player está perto. Atacando corpo a corpo.");
-                //saciCombatManager.ActivateMeleeAttack(); // Chama a animação de ataque corpo a corpo
+                saciCombatManager.ActivateMeleeAttack(); // Chama a animação de ataque corpo a corpo
             }
         }
 

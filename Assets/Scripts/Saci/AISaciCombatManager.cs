@@ -51,7 +51,7 @@ namespace RPGKarawara
             whirlwindController.WhirlwindAttack(GetPlayer());
 
             // Instancia o efeito visual do redemoinho na posição do Saci
-            Instantiate(saciWhirlwindVFX, transform.position, Quaternion.identity); 
+            //Instantiate(saciWhirlwindVFX, transform.position, Quaternion.identity); 
         }
 
         // Método para obter a posição do player

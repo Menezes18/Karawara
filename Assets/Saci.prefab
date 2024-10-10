@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 967759923489035758}
   - component: {fileID: 5514720607478350234}
   m_Layer: 3
-  m_Name: GameObject
+  m_Name: SaciWhrilwindController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,7 +168,7 @@ Transform:
   m_GameObject: {fileID: 8991882799816384182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.465}
+  m_LocalPosition: {x: 0, y: 1.151, z: 2.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -186,12 +186,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0405776f7f78a74c9a4717adf093d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saciCharacterManager: {fileID: 8278477982802603958}
   tornadoPrefab: {fileID: 4683539708916999451, guid: 68fd13e7bb70b6240ba3ef5e3a50951b,
     type: 3}
-  numberOfTornadoes: 3
-  tornadoSpeed: 5
+  numberOfTornadoes: 2
+  tornadoSpeed: 20
   spawnRadius: 2
+  minDistanceFromCenter: 1
   tornadoLifetime: 5
 --- !u!1001 &1021134081830691634
 PrefabInstance:
@@ -695,6 +695,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f34bb93333b778e448b838fdb4da3ff5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 1176686548608896205, guid: f34bb93333b778e448b838fdb4da3ff5,
         type: 3}
@@ -1878,6 +1883,11 @@ MonoBehaviour:
     type: 2}
   sleepState: {fileID: 11400000, guid: cf10ac187dd1d4b4e860bb0cfdd3da3d, type: 2}
   saciCombatManager: {fileID: 0}
+  meleeRange: 2
+  rangeAttackDistance: 8
+  minRangeAttackDistance: 5
+  longRangeStopDistance: 6
+  meleeStopDistance: 1
 --- !u!114 &1648162795158120860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1892,7 +1902,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lastAttackAnimationPerformed: 
   currentTarget: {fileID: 0}
-  currentAttackType: 0
+  currentAttackType: 9
   lockOnTransform: {fileID: 3721858711671212652}
   canPerformRollingAttack: 0
   canPerformBackstepAttack: 0
