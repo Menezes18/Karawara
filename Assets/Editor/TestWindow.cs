@@ -10,7 +10,9 @@ public class SceneSelectorWindow : EditorWindow
     {
         "Assets/Scenes/SceneMenu.unity",    // Caminho da primeira cena
         "Assets/Scenes/Video1.unity",       // Caminho da segunda cena
-        "Assets/Scenes/t.unity"        // Caminho da terceira cena
+        "Assets/Scenes/t.unity",        // Caminho da terceira cena
+        "Assets/Scenes/Arte.unity" 
+
     };
 
     private void OnGUI()
