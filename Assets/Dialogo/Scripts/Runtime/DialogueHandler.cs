@@ -215,6 +215,7 @@ namespace DialogueSystem
 
             if (nodeType == "EventNode")
             {
+                ui.ShowDialoguePane(false);
                 HandleEventNode(CurrentNode as EventNode);
             }
 
@@ -358,6 +359,7 @@ namespace DialogueSystem
                     CurrentNode = nextNode;
                     CurrentState = DialogueState.Running;
                     InvokeCallbacks(DialogueEventType.OnEventNodeLeave);
+                    ui.ShowDialoguePane(true);
                     TraverseGraph();
 
                 }
@@ -390,10 +392,12 @@ namespace DialogueSystem
                     if (nextNode != null)
                     {
                         CurrentNode = nextNode;
+                        ui.ShowDialoguePane(true);
                         TraverseGraph();
                     }
                     else
                     {
+                        ui.ShowDialoguePane(false);
                         EndDialogue();
                     }
                 }
