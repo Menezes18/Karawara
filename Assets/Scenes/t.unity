@@ -1921,20 +1921,13 @@ MonoBehaviour:
   maxShots: 3
   shotCooldown: 0.1
   minDistanceBetweenShots: 1.5
-  currentShots: 0
+  minDistanceFromPlayer: 3
   moveDistance: 2
   agent: {fileID: 1883161524}
-  rayDistance: 1
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  flyHeight: 2
-  flySpeed: 2
-  circlePrefab: {fileID: 8926601937898388887, guid: 815b739fc2c026c47ac822fdee1c666f,
-    type: 3}
-  explosionRadius: 5
-  explosionForce: 700
-  playerPushForce: 10
+  rotationRadius: 5
+  rotationSpeed: 2
+  randomMoveInterval: 5
+  idleTime: 2
 --- !u!143 &1883161520
 CharacterController:
   m_ObjectHideFlags: 0
