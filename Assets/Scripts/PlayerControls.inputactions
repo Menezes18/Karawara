@@ -119,34 +119,7 @@
                     "id": "91239245-cc85-4e7a-a867-338e9302f772",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RT",
-                    "type": "Button",
-                    "id": "1200d899-abd7-4784-b003-bc393917b9a9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Que RT",
-                    "type": "Button",
-                    "id": "46eeac00-0b43-436f-9d46-d3a012305e21",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Hold RT",
-                    "type": "PassThrough",
-                    "id": "ba25bc3f-5619-4c46-ba77-05ffb946923e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold(pressPoint=0.1)",
+                    "interactions": "SlowTap(duration=0.2,pressPoint=0.2)",
                     "initialStateCheck": false
                 },
                 {
@@ -192,6 +165,33 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RT",
+                    "type": "Button",
+                    "id": "1200d899-abd7-4784-b003-bc393917b9a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Que RT",
+                    "type": "Button",
+                    "id": "46eeac00-0b43-436f-9d46-d3a012305e21",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Hold RT",
+                    "type": "PassThrough",
+                    "id": "ba25bc3f-5619-4c46-ba77-05ffb946923e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(pressPoint=0.1)",
                     "initialStateCheck": false
                 }
             ],
@@ -275,28 +275,6 @@
                 },
                 {
                     "name": "",
-                    "id": "df5981cf-f627-4872-a861-6c576631e42c",
-                    "path": "<Keyboard>/semicolon",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RT",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "87104f32-1ee1-41ab-982b-7621e6ecf1f9",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Hold RT",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "1b88adc5-d778-4f43-8627-6c6afdf4014e",
                     "path": "<Keyboard>/z",
                     "interactions": "",
@@ -319,6 +297,28 @@
                 },
                 {
                     "name": "",
+                    "id": "5f033709-8dea-4215-8c92-81de0ec30a7c",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df5981cf-f627-4872-a861-6c576631e42c",
+                    "path": "<Keyboard>/semicolon",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "80f6da5a-2b56-4aee-bd94-b55b22e024f6",
                     "path": "<Keyboard>/semicolon",
                     "interactions": "",
@@ -330,12 +330,12 @@
                 },
                 {
                     "name": "",
-                    "id": "5f033709-8dea-4215-8c92-81de0ec30a7c",
-                    "path": "<Keyboard>/e",
+                    "id": "87104f32-1ee1-41ab-982b-7621e6ecf1f9",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "Hold RT",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -434,6 +434,15 @@
                     "processors": "",
                     "interactions": "Tap",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SkillTree",
+                    "type": "Button",
+                    "id": "5c5a9444-ebb9-4633-a0ee-54cd24cc250c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -456,6 +465,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "PauseBack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3349caa5-2c2f-44b4-8876-1ca25cefe2e1",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkillTree",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

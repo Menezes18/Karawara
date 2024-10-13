@@ -41,7 +41,7 @@ namespace RPGKarawara
         [SerializeField] bool switch_Right_Weapon_Input = false;
         [SerializeField] bool switch_Left_Weapon_Input = false;
         [SerializeField] bool interaction_Input = false;
-        [SerializeField] bool esc_Input = false;
+        [SerializeField] bool esc_Input, skillUI_Input = false;
         [SerializeField] bool clicou = false;
         [Header("Bumper Inputs")]
         [SerializeField] bool RB_Input = false;
@@ -56,7 +56,10 @@ namespace RPGKarawara
         [SerializeField] float que_Input_Timer = 0;
         [SerializeField] bool que_RB_Input = false;
         [SerializeField] bool que_RT_Input = false;
-
+        
+        
+        
+        private PlayerUIHudManager _playerUIHudManager;
 
         private void Awake()
         {
@@ -68,6 +71,7 @@ namespace RPGKarawara
             {
                 Destroy(gameObject);
             }
+            _playerUIHudManager = FindObjectOfType<PlayerUIHudManager>();
         }
 
         private void Start()
@@ -83,6 +87,7 @@ namespace RPGKarawara
             {
                 playerControls.Disable();
             }
+            
         }
 
         private void OnSceneChange(Scene oldScene, Scene newScene)
@@ -126,6 +131,7 @@ namespace RPGKarawara
                // playerControls.PlayerActions.SwitchLeftWeapon.performed += i => switch_Left_Weapon_Input = true;
                 playerControls.PlayerActions.Interact.performed += i => interaction_Input = true;
                 playerControls.UI.PauseBack.performed += i => esc_Input = true;
+                playerControls.UI.SkillTree.performed += i => skillUI_Input = true;
                 //  BUMPERS
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
 
@@ -181,6 +187,7 @@ namespace RPGKarawara
 
         private void HandleAllInputs()
         {
+           // && _playerUIHudManager.paneldesativar
             if(player.isDead.Value == false){
                 HandleLockOnInput();
                 HandleLockOnSwitchTargetInput();
@@ -197,6 +204,7 @@ namespace RPGKarawara
                 HandleQuedInputs();
                 HandleInteractionInput();
                 HandlePauseUi();
+                HandleSkillTree();
             }
         }
 
@@ -372,7 +380,14 @@ namespace RPGKarawara
                
             }
         }
-
+        public void DisableInput()
+        {
+            playerControls.Disable();
+        }
+        public void EnableInput()
+        {
+            playerControls.Enable();
+        }
         private void HandleJumpInput()
         {
             if (jump_Input)
@@ -487,9 +502,16 @@ namespace RPGKarawara
         {
             if(esc_Input)
             {
-                
                 esc_Input = false;
-                PlayerUIManager.instance.playerUIHudManager.activatePause();
+                PlayerUIManager.instance.playerUIHudManager.ActivatePause(1);
+            }
+            
+        }
+
+        public void HandleSkillTree(){
+            if (skillUI_Input){
+                skillUI_Input = false;
+                PlayerUIManager.instance.playerUIHudManager.ActivatePause(2);
             }
         }
         private void ProcessQuedInput()
