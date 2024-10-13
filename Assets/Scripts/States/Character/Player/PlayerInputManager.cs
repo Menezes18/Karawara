@@ -382,11 +382,13 @@ namespace RPGKarawara
         }
         public void DisableInput()
         {
-            playerControls.Disable();
+            playerControls.PlayerMovement.Disable();
+            playerControls.PlayerActions.Disable();
         }
         public void EnableInput()
         {
-            playerControls.Enable();
+            playerControls.PlayerMovement.Enable();
+            playerControls.PlayerActions.Enable();
         }
         private void HandleJumpInput()
         {
@@ -503,7 +505,8 @@ namespace RPGKarawara
             if(esc_Input)
             {
                 esc_Input = false;
-                PlayerUIManager.instance.playerUIHudManager.ActivatePause(1);
+               PlayerUIManager.instance.playerUIHudManager.ActivatePause(1);
+               PlayerUIManager.instance.playerUIHudManager.CursorAtivar();
             }
             
         }
@@ -512,6 +515,7 @@ namespace RPGKarawara
             if (skillUI_Input){
                 skillUI_Input = false;
                 PlayerUIManager.instance.playerUIHudManager.ActivatePause(2);
+                PlayerUIManager.instance.playerUIHudManager.CursorAtivar();
             }
         }
         private void ProcessQuedInput()

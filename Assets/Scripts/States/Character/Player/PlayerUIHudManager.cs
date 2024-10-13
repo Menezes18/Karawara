@@ -29,8 +29,7 @@ namespace RPGKarawara
         [SerializeField] GameObject SkillSlot;
         public GameObject pauseSkillMenu;
         bool active = false;
-        public bool paneldesativar = false;
-
+        [NonSerialized] public bool cursorPause = false;
         public void RefreshHUD()
         {
             healthBar.gameObject.SetActive(false);
@@ -158,7 +157,6 @@ namespace RPGKarawara
         
                 if (pauseMenu.activeSelf)
                 {
-                    paneldesativar = false;
                     DisablePlayerInputs(); // Desativa os inputs do jogador
                 }
                 else
@@ -170,20 +168,31 @@ namespace RPGKarawara
                 if (pauseSkillMenu.activeSelf)
                 {
                     pauseSkillMenu.SetActive(false);
+                    
                 }
             }
             else if (index == 2)
             {
                 pauseSkillMenu.SetActive(!pauseSkillMenu.activeSelf);
-
+                if (pauseSkillMenu.activeSelf)
+                {
+                    DisablePlayerInputs(); // Desativa os inputs do jogador
+                }
+                else
+                {
+                    //Invoke("DeactivatePause", 0.5f);
+                    EnablePlayerInputs(); // Reativa os inputs do jogador
+                }
                 if (pauseMenu.activeSelf)
                 {
                     pauseMenu.SetActive(false);
                 }
             }
+            
+        }
 
-            active = !active;
-            CursorAtivar();
+        public void SetCursorPause(bool value){
+            cursorPause = value;
         }
         private void DisablePlayerInputs()
         {
@@ -200,10 +209,8 @@ namespace RPGKarawara
                 PlayerInputManager.instance.EnableInput(); // Você precisará implementar este método no seu PlayerController
             }
         }
-        public void DeactivatePause(){
-            paneldesativar = true;
-        }
-        private void CursorAtivar(){
+        public void CursorAtivar(){
+            active = !active;
             if (active)
             {
                 Time.timeScale = 0f;
