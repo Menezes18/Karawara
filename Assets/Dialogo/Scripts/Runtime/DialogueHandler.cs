@@ -92,7 +92,7 @@ namespace DialogueSystem
             this.dictionary = dictionary ?? new DialogueDictionary();
             this.AttachedMonoBehaviour = monoBehaviour;
 
-             Debug.Log(gameStateVariables == null ? "gameStateVariables is NULL in DialogueHandler" : "gameStateVariables initialized in DialogueHandler");
+             //Debug.Log(gameStateVariables == null ? "gameStateVariables is NULL in DialogueHandler" : "gameStateVariables initialized in DialogueHandler");
         }
         public async Task StartDialogueWithNPC(DialogueGraph newGraph)
         {

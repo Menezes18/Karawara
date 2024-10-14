@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 122753062909718822}
   - component: {fileID: 2661987912144734744}
   - component: {fileID: 6488051167550791759}
-  - component: {fileID: -5380933364631445324}
   - component: {fileID: -7005967089872361676}
+  - component: {fileID: 8601684964573792914}
   m_Layer: 0
   m_Name: BRock2
   m_TagString: Untagged
@@ -85,28 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-5380933364631445324
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6190929118611890706}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8721152772551041459, guid: 1cbaf6ebaba08af43a0d71982553c3bc, type: 3}
 --- !u!205 &-7005967089872361676
 LODGroup:
   m_ObjectHideFlags: 0
@@ -126,3 +104,24 @@ LODGroup:
     renderers:
     - renderer: {fileID: 6488051167550791759}
   m_Enabled: 1
+--- !u!65 &8601684964573792914
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6190929118611890706}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5693386, y: 2.1006737, z: 1.4693617}
+  m_Center: {x: -0.03360227, y: 1.0544713, z: 0.13327296}

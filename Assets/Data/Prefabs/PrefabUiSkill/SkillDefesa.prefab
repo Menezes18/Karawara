@@ -62,6 +62,7 @@ MonoBehaviour:
   skill: {fileID: 0}
   trianguloIcon: {fileID: 7961335352964702387}
   tooltipTrigger: {fileID: 0}
+  spriteIconStart: {fileID: 0}
 --- !u!114 &8880237118303300008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,19 +106,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2015107403564555086}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 145167200090952464}
-        m_TargetAssemblyTypeName: RPGKarawara.SkillUISlot, Assembly-CSharp
-        m_MethodName: OnSkillButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!222 &383794659557878874
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -256,6 +245,8 @@ GameObject:
   - component: {fileID: 5026034694583199557}
   - component: {fileID: 6922391886049425727}
   - component: {fileID: 3566682937758101465}
+  - component: {fileID: 1552518576941705851}
+  - component: {fileID: 7348297856888407785}
   m_Layer: 5
   m_Name: SkillIcon
   m_TagString: Untagged
@@ -320,6 +311,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1552518576941705851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555467014492611552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b8cc7b7d0183a498b2ece02011d8c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
+  startPosition: {fileID: 0}
+  parentTransform: {fileID: 0}
+  skillUISlot: {fileID: 0}
+  auxPoint: 0
+  isDragging: 0
+--- !u!225 &7348297856888407785
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555467014492611552}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6822174099109682843
 GameObject:
   m_ObjectHideFlags: 0

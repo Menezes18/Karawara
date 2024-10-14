@@ -28,7 +28,6 @@ namespace RPGKarawara.SkillTree
 
         private void Update()
         {
-          
             if (Keyboard.current.digit1Key.wasReleasedThisFrame && slot[0].canUse)
             {
                 ActivateSkill(0); 
@@ -85,13 +84,13 @@ namespace RPGKarawara.SkillTree
                 // Atualiza o fillAmount baseado no tempo restante
                 SkillCooldownUI.instance.skillCooldownImage[slotIndex].fillAmount = remainingTime / cooldownTime;
 
-                Debug.Log($"Cooldown do slot: {remainingTime} segundos restantes.");
+                
                 yield return null; // Espera até o próximo frame
             }
 
             // Após o cooldown do slot, a habilidade pode ser usada novamente
             slot[slotIndex].canUse = true;
-            Debug.Log("Cooldown do slot terminou. Habilidade pronta para uso novamente.");
+            
             SkillCooldownUI.instance.skillCooldownImage[slotIndex].enabled = false; // Desativa a imagem do cooldown ao final
         }
 
