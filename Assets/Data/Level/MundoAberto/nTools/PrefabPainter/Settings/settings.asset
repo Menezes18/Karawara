@@ -2107,8 +2107,12 @@ MonoBehaviour:
         gridNormal: {x: 0, y: 1, z: 0}
         gridAngle: 0
       prefabSlots:
-      - gameObject: {fileID: 152170, guid: 13209b503b9464a889e6cdcd72c36431, type: 3}
-      - gameObject: {fileID: 171914, guid: 84a4a2a0b8dfe40e289fd2d4812d4019, type: 3}
+      - gameObject: {fileID: 919132149155446097, guid: edd54d4a5fa656944bf657938fa509aa,
+          type: 3}
+      - gameObject: {fileID: 919132149155446097, guid: 774e1b238be3a32468fc0002b379bb24,
+          type: 3}
+      - gameObject: {fileID: 919132149155446097, guid: 6a5aab8f27b752a4899ecf32bb505c23,
+          type: 3}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
@@ -2116,8 +2120,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
-      - gameObject: {fileID: 0}
-      selectedSlot: 0
+      selectedSlot: 2
       selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
@@ -2695,7 +2698,7 @@ MonoBehaviour:
     levelsOutBlack: 0
     levelsOutWhite: 255
   activeTab: 3
-  paintOnSelected: 0
+  paintOnSelected: 1
   paintLayers:
     serializedVersion: 2
     m_Bits: 1
