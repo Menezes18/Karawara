@@ -129,8 +129,11 @@ namespace RPGKarawara
 
         public void ShowNextDialogueLine(int dialogue)
         {
-            dialogueText.text = dialogueLines[dialogue];
-            wait = false;
+            if (dialogue >= 0 && dialogue < dialogueLines.Length)
+            {
+                dialogueText.text = dialogueLines[dialogue];
+                wait = false;
+            }
         }
     }
 }

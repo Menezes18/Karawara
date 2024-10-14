@@ -29,11 +29,11 @@ namespace RPGKarawara
             rectTransform = GetComponent<RectTransform>();
             canvas = GameObject.Find("SkillMenu").GetComponent<Canvas>();
             canvasGroup = GetComponent<CanvasGroup>();
-            Debug.Log("Canvas");
+           
         }
 
         public void OnPointerDown(PointerEventData eventData){
-            Debug.Log("OnPointerDown");
+
             if (auxPoint){
                 transform.SetParent(parentTransform);
                 startPosition.position = storedPosition;
@@ -44,13 +44,13 @@ namespace RPGKarawara
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
-            Debug.Log("OnBeginDrag");
+
             canvasGroup.alpha = .6f;
             canvasGroup.blocksRaycasts = false;
         }
         
         public void OnEndDrag(PointerEventData eventData) {
-            Debug.Log("OnEndDrag");
+
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
             auxPoint = !auxPoint;
@@ -59,7 +59,6 @@ namespace RPGKarawara
             }
         }
         public void OnDrag(PointerEventData eventData){
-            Debug.Log("OnDrag");
             if (!isDragging){
                 rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
             }
