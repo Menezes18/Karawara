@@ -1876,6 +1876,7 @@ MonoBehaviour:
     m_InternalValue: 0
   characterController: {fileID: 0}
   animator: {fileID: 0}
+  portal: {fileID: 0}
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
@@ -1898,6 +1899,7 @@ MonoBehaviour:
   combatStance: {fileID: 11400000, guid: aadb5ca115e8fa6429821cbb0d2325d3, type: 2}
   attack: {fileID: 11400000, guid: eaef9a4de849bae449b7ac53c5dc24c2, type: 2}
   skinnedMeshRenderer: {fileID: 0}
+  vfxDead: {fileID: 7641545998159112202, guid: eb989f4bfb4159f4f832a5023e8c1c70, type: 3}
 --- !u!114 &2386473894482796835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1966,6 +1968,7 @@ MonoBehaviour:
   hit_Left_Medium_02: Hit_Left_Medium_02
   hit_Right_Medium_01: Hit_Right_Medium_01
   hit_Right_Medium_02: Hit_Right_Medium_02
+  hit_and_fall: Hit_And_Fall
   forward_Medium_Damage: []
   backward_Medium_Damage: []
   left_Medium_Damage: []

@@ -45,10 +45,10 @@ namespace RPGKarawara
         {
             base.Start();
             navMeshAgent.enabled = false;
-            Invoke("inimigo", 1f);
+            Invoke("Inimigo", 1f);
         }
 
-        void inimigo()
+        void Inimigo()
         {
             navMeshAgent.enabled = true;
         }
@@ -105,7 +105,6 @@ namespace RPGKarawara
         {
 
             base.Update();
-
             aiCharacterCombatManager.HandleActionRecovery(this);
         }
 

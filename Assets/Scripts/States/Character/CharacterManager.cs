@@ -29,7 +29,7 @@ namespace RPGKarawara
 
         [Header("Flags")]
         public bool isPerformingAction = false;
-
+        public GameObject vfxDead;
         protected virtual void Awake()
         {
             DontDestroyOnLoad(this);
@@ -142,11 +142,15 @@ namespace RPGKarawara
 
             //  PLAY SOME DEATH SFX
 
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(2);
 
             //  AWARD PLAYERS WITH RUNES
 
             //  DISABLE CHARACTER
+            GameObject vfx = Instantiate(vfxDead, transform.position, Quaternion.identity);
+            Destroy(vfx, 3f);
+            yield return new WaitForSeconds(0.2f);
+            this.gameObject.SetActive(false);
         }
 
         public virtual void ReviveCharacter()
