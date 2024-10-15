@@ -19,7 +19,6 @@ namespace RPGKarawara
 
         private void Awake()
         {
-            Debug.Log("WorldAIManager Awake: " + gameObject.name); // Adicione este log
             if (instance == null)
             {
                 instance = this;

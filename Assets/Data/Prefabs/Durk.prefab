@@ -1595,11 +1595,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5594886574074862540}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLocomotionManager: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
 --- !u!114 &12212547373508569
 MonoBehaviour:
@@ -1632,11 +1634,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7001325615843262258}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLocomotionManager: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
 --- !u!82 &1742791382382146930
 AudioSource:
@@ -1850,6 +1854,7 @@ MonoBehaviour:
   characterUIManager: {fileID: 0}
   characterGroup: 1
   isPerformingAction: 0
+  vfxDead: {fileID: 0}
   characterName: "Mapinguari, Guardi\xE3o dos Mist\xE9rios Amaz\xF4nicos"
   characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}

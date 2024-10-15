@@ -16,7 +16,7 @@ namespace RPGKarawara
         public SkillType skillType; // Tipo de habilidade: Ataque, Defesa ou Suporte
         public float cooldownDuration;
         public Sprite sprite;
-        public string name;
+        public new string name;
         [TextArea(5,10)]
         public string description;
         public GameObject prefab;

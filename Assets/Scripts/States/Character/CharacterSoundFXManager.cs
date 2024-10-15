@@ -24,14 +24,14 @@ namespace RPGKarawara
 
         public void PlaySoundFX(AudioClip soundFX, float volume = 1, bool randomizePitch = true, float pitchRandom = 0.1f)
         {
-            // //audioSource.PlayOneShot(soundFX, volume);
-            // //  RESETS PITCH
-            // audioSource.pitch = 1;
-            //
-            // if (randomizePitch)
-            // {
-            //     audioSource.pitch += Random.Range(-pitchRandom, pitchRandom);
-            // }
+            audioSource.PlayOneShot(soundFX, volume);
+            //  RESETS PITCH
+            audioSource.pitch = 1;
+            audioSource.volume = 0.2f;
+            if (randomizePitch)
+            {
+                audioSource.pitch += Random.Range(-pitchRandom, pitchRandom);
+            }
         }
 
         public void PlayDamageGrunt(){
@@ -59,8 +59,8 @@ namespace RPGKarawara
 
         public virtual void PlayFootStepSoundFX()
         {
-           // if (footSteps.Length > 0)
-             //   PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(footSteps));
+            if (footSteps.Length > 0)
+                PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(footSteps));
         }
     }
 }
