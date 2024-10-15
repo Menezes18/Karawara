@@ -461,8 +461,6 @@ namespace DialogueSystem
             InvokeCallbacks(DialogueEventType.OnBranchLeave);
             InvokeCallbacks(DialogueEventType.OnDialogueLeave);
             
-    
-            Debug.Log("Diálogo finalizado.");
         }
 
         private bool EvaluateConditionalNode(ConditionalNode node)

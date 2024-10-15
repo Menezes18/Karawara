@@ -44,8 +44,6 @@ namespace RPGKarawara
             // Realiza um Raycast em direção para baixo
             if (Physics.Raycast(transform.position, Vector3.down, out hits, distanceToGround))
             {
-                Debug.Log(hits.transform.name);
-                Debug.Log("FootStep Hit");
 
                 // Verifica se o tempo desde o último passo é maior que o delay
                 if (Time.time - lastFootstepTime >= footstepDelay)
@@ -59,7 +57,6 @@ namespace RPGKarawara
 
         private void PlayFootStepSoundFX()
         {
-            Debug.Log("PlayFootStepSoundFX");
             character.characterSoundFXManager.PlayFootStepSoundFX();
         }
 

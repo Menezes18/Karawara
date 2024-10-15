@@ -41221,7 +41221,8 @@ PrefabInstance:
       value: 0.37397885
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1323358100127190135, guid: 6f1f00c2535929247be6f0092a9d2a6b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f1f00c2535929247be6f0092a9d2a6b, type: 3}
@@ -90365,6 +90366,7 @@ Transform:
   - {fileID: 399667612}
   - {fileID: 892106232}
   - {fileID: 837398675}
+  - {fileID: 2050742644}
   - {fileID: 1834197479}
   - {fileID: 1701373592}
   - {fileID: 978830027}
@@ -108124,6 +108126,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 61041790}
     m_Modifications:
+    - target: {fileID: 935573163156523358, guid: fa32a3b971291d84d98fc9124be047a8,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1036793470991195302, guid: fa32a3b971291d84d98fc9124be047a8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -108390,21 +108397,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4c18846c8366c46b4501889f92e9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Risada: {fileID: 8300000, guid: 6df21ce49156ad9409e9947dd142436d, type: 3}
-  _projectile:
-    projectilePrefab: {fileID: 6928662357627111104, guid: 8f27cabf6552b75498f791857cabbc2a,
-      type: 3}
-    firePoint: {fileID: 483451920}
-    projectileSpeed: 50
-    fireCooldown: 2
-  detectionRadiusPlayer: 30
-  dashSpeed: 70
-  dashDuration: 0.5
-  _damageBossCollider: {fileID: 1883161518}
-  dashTimer: 6
-  AttackMelee: 0
-  canDash: 0
-  AttackIndex: 3
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  range: 10
+  heightOffset: 1
+  maxShots: 3
+  shotCooldown: 2
+  minDistanceBetweenShots: 1.5
+  minDistanceFromPlayer: 3
+  moveDistance: 2
+  agent: {fileID: 0}
+  rotationRadius: 5
+  rotationSpeed: 2
+  randomMoveInterval: 5
+  idleTime: 2
 --- !u!114 &1883161518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108463,7 +108469,6 @@ MonoBehaviour:
   quickAttackDeltaDistance: 5
   heavyAttackDeltaDistance: 5
   knockbackForce: 0.1
-  airknockbackForce: 0.1
   attackRange: 1
   reachTime: 0.34
   enemyLayer:
@@ -108472,8 +108477,8 @@ MonoBehaviour:
   PlayerTag: PlayerLock
   isAttacking: 0
   detectionRange: 5
-  _bossAISystem: {fileID: 1883161516}
-  index: 0
+  comboWindow: 1
+  pauseTime: 2
 --- !u!114 &1883161523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114365,6 +114370,90 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6910605812986162282, guid: 5d41c58d426b1ca45824ff0644273bb3,
     type: 3}
   m_PrefabInstance: {fileID: 2047914612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2050742643
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1617094603}
+    m_Modifications:
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.146612
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4.4342217
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 71.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.0039
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.5645
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6636585
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.74803567
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 96.841
+      objectReference: {fileID: 0}
+    - target: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4369169754892902464, guid: 26b6be8c71b981a4d92f976895933b51,
+        type: 3}
+      propertyPath: m_Name
+      value: BRock3exp (14)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 26b6be8c71b981a4d92f976895933b51, type: 3}
+--- !u!4 &2050742644 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2014923055170917757, guid: 26b6be8c71b981a4d92f976895933b51,
+    type: 3}
+  m_PrefabInstance: {fileID: 2050742643}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2055502618
 PrefabInstance:
