@@ -65,8 +65,14 @@ namespace RPGKarawara{
         }
 
         public void Cabecalho(Skill skill){
+            if(skill == null) return;
             textCabecalho.text = skill.name;
             descriptionCabecalho.text = skill.description;
+        }
+
+        public void ClearCabecalho(){
+            textCabecalho.text = "";
+            descriptionCabecalho.text = "";
         }
         public void DisableSkillsExcept(SkillType skillType, Skill skillToIgnore, SkillUISlot skillUISlot){
             SkillUISlot[] skillSlots = null;

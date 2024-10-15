@@ -5,30 +5,28 @@ using System.Collections.Generic;
 
 public class SceneSelectorWindow : EditorWindow
 {
-    // Lista de cenas disponíveis para selecionar
+
     private List<string> scenePaths = new List<string>
     {
-        "Assets/Scenes/SceneMenu.unity",    // Caminho da primeira cena
-        "Assets/Scenes/Video1.unity",       // Caminho da segunda cena
-        "Assets/Scenes/t.unity",        // Caminho da terceira cena
-        "Assets/Scenes/Arte.unity" 
+        "Assets/Scenes/SceneMenu.unity",    
+        "Assets/Scenes/Video1.unity",       
+        "Assets/Scenes/t.unity",        
+        "Assets/Scenes/Arte.unity",
+        "Assets/Scenes/CucaLoad.unity",
+        
 
     };
 
     private void OnGUI()
     {
         GUILayout.Label("Selecione uma cena e use os botões:", EditorStyles.boldLabel);
-
-        // Itera sobre as cenas disponíveis
         foreach (var scenePath in scenePaths)
         {
-            // Nome da cena (sem o caminho completo)
             string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
 
             GUILayout.BeginVertical("box"); // Cria uma caixa para cada cena
             GUILayout.Label(sceneName, EditorStyles.boldLabel); // Exibe o nome da cena
-
-            // Botões para Trocar e Play
+            
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Trocar", GUILayout.Width(100)))
             {
@@ -47,7 +45,7 @@ public class SceneSelectorWindow : EditorWindow
         }
     }
 
-    // Método para mudar a cena
+
     void ChangeScene(string scenePath)
     {
         // Carrega a cena
@@ -62,7 +60,7 @@ public class SceneSelectorWindow : EditorWindow
         }
     }
 
-    // Método para definir a cena de início do modo Play
+
     void SetPlayModeStartScene(string scenePath)
     {
         SceneAsset myWantedStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
@@ -70,7 +68,7 @@ public class SceneSelectorWindow : EditorWindow
         {
             // Define a cena para ser carregada no Play mode
             EditorSceneManager.playModeStartScene = myWantedStartScene;
-            Debug.Log("Cena de início configurada: " + scenePath);
+            //Debug.Log("Cena de início configurada: " + scenePath);
         }
         else
         {

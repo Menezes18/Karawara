@@ -81,7 +81,7 @@ namespace RPGKarawara
 
         private void RestoreSiteOfGrace(PlayerManager player){
             var painelUI = FindObjectOfType<PlayerUIHudManager>();
-            painelUI.paneldesativar = true;
+           
             bool panelActive = !painel.activeSelf;
             painel.SetActive(panelActive);
             _playerManager = player;

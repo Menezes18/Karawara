@@ -327,6 +327,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mapinguari_animation_Final
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -799,7 +804,7 @@ PrefabInstance:
     - target: {fileID: 4573718657531855810, guid: f34bb93333b778e448b838fdb4da3ff5,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5332809968238436118, guid: f34bb93333b778e448b838fdb4da3ff5,
         type: 3}
@@ -1590,11 +1595,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5594886574074862540}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLocomotionManager: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
 --- !u!114 &12212547373508569
 MonoBehaviour:
@@ -1627,11 +1634,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7001325615843262258}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLocomotionManager: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
 --- !u!82 &1742791382382146930
 AudioSource:
@@ -1845,6 +1854,7 @@ MonoBehaviour:
   characterUIManager: {fileID: 0}
   characterGroup: 1
   isPerformingAction: 0
+  vfxDead: {fileID: 0}
   characterName: "Mapinguari, Guardi\xE3o dos Mist\xE9rios Amaz\xF4nicos"
   characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
@@ -2167,7 +2177,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7917112914835544999}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: ceec48aff7a6bd4468283df02f354f16, type: 3}
+  m_Avatar: {fileID: 9000000, guid: f34bb93333b778e448b838fdb4da3ff5, type: 3}
   m_Controller: {fileID: 9100000, guid: 09c0cbad8d7151e4c808a130db6002d3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0

@@ -32,7 +32,7 @@ namespace RPGKarawara
                 character.characterNetworkManager.isInvulnerable.Value = false;
             }
             
-            character.animator.SetBool("Released", false);
+           // character.animator.SetBool("Released", false);
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

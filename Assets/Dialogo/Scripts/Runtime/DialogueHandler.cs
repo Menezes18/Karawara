@@ -92,7 +92,7 @@ namespace DialogueSystem
             this.dictionary = dictionary ?? new DialogueDictionary();
             this.AttachedMonoBehaviour = monoBehaviour;
 
-             Debug.Log(gameStateVariables == null ? "gameStateVariables is NULL in DialogueHandler" : "gameStateVariables initialized in DialogueHandler");
+             //Debug.Log(gameStateVariables == null ? "gameStateVariables is NULL in DialogueHandler" : "gameStateVariables initialized in DialogueHandler");
         }
         public async Task StartDialogueWithNPC(DialogueGraph newGraph)
         {
@@ -215,6 +215,7 @@ namespace DialogueSystem
 
             if (nodeType == "EventNode")
             {
+                ui.ShowDialoguePane(false);
                 HandleEventNode(CurrentNode as EventNode);
             }
 
@@ -358,6 +359,7 @@ namespace DialogueSystem
                     CurrentNode = nextNode;
                     CurrentState = DialogueState.Running;
                     InvokeCallbacks(DialogueEventType.OnEventNodeLeave);
+                    ui.ShowDialoguePane(true);
                     TraverseGraph();
 
                 }
@@ -390,10 +392,12 @@ namespace DialogueSystem
                     if (nextNode != null)
                     {
                         CurrentNode = nextNode;
+                        ui.ShowDialoguePane(true);
                         TraverseGraph();
                     }
                     else
                     {
+                        ui.ShowDialoguePane(false);
                         EndDialogue();
                     }
                 }
@@ -457,8 +461,6 @@ namespace DialogueSystem
             InvokeCallbacks(DialogueEventType.OnBranchLeave);
             InvokeCallbacks(DialogueEventType.OnDialogueLeave);
             
-    
-            Debug.Log("Diálogo finalizado.");
         }
 
         private bool EvaluateConditionalNode(ConditionalNode node)

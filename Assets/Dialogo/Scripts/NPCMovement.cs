@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using RPGKarawara;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,9 +14,10 @@ public class NPCMovement : MonoBehaviour
     private int currentWaypointIndex = -1;  // Índice do waypoint atual
     private bool isMoving = false;         // Verifica se o NPC está se movendo
     private NavMeshAgent navAgent;         // NavMeshAgent para controlar o movimento do NPC
-
+    private Animator animator;
     private void Start()
     {
+        animator = GetComponent<Animator>();
         navAgent = GetComponent<NavMeshAgent>();
 
         if (navAgent == null)
@@ -35,10 +37,12 @@ public class NPCMovement : MonoBehaviour
         //     MoveToNextWaypoint();
         // }
         // Verifica se o NPC está se movendo e se já chegou ao waypoint
+            
         if (isMoving && navAgent.remainingDistance <= waypointThreshold && !navAgent.pathPending)
         {
             isMoving = false;  // Para de se mover após alcançar o waypoint
             Debug.Log("NPC chegou ao waypoint.");
+            animator.SetBool("Walk", isMoving);
         }
     }
     GameObject player;
@@ -62,8 +66,8 @@ public class NPCMovement : MonoBehaviour
         currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;  // Pega o próximo waypoint na lista
         navAgent.SetDestination(waypoints[currentWaypointIndex].position);   // Define o destino do NPC para o próximo waypoint
         PlayerUIManager.instance.playerUIHudManager.activateMarcador(waypoints[currentWaypointIndex]);
-
         isMoving = true;                                                     // Seta que o NPC está se movendo
         Debug.Log("NPC está indo para o próximo waypoint.");
+        animator.SetBool("Walk", isMoving);
     }
 }

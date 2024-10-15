@@ -70,7 +70,7 @@ public class SampleTriggerDialogue : MonoBehaviour
     private void Update()
     {
         CheckPlayer();
-        if (isPlayerNearby && Keyboard.current.enterKey.wasPressedThisFrame)  // Verifica se o jogador pressionou Enter
+        if (isPlayerNearby && Keyboard.current.eKey.wasPressedThisFrame)  // Verifica se o jogador pressionou Enter
         {
 
             if (!dialogueManager.IsRunning)
@@ -81,8 +81,8 @@ public class SampleTriggerDialogue : MonoBehaviour
                 gameStateVariables[0].ChangeValue(true);
 
                 // Mostrar o cursor e destravar
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                // Cursor.visible = true;
+                // Cursor.lockState = CursorLockMode.None;
 
                 // Desativar o controle da câmera
                 if (cameraController != null)
@@ -105,7 +105,7 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
 
         // Avança o diálogo se ele já estiver ativo
-        if (dialogueActive && Keyboard.current.enterKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
+        if (dialogueActive && Keyboard.current.eKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
         {
             if (dialogueManager.IsRunning)
             {

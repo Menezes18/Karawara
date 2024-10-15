@@ -25,9 +25,11 @@ GameObject:
   - component: {fileID: 6828197241171857415}
   - component: {fileID: 8464527521044100486}
   - component: {fileID: 2867793869143155619}
-  - component: {fileID: 1983101499933469384}
   - component: {fileID: 4957197181952671510}
   - component: {fileID: 7702236541409379380}
+  - component: {fileID: 3710995816705410282}
+  - component: {fileID: 1983101499933469384}
+  - component: {fileID: 7646852591663545968}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -254,7 +256,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageGrunts: []
   attackGrunts: []
-  footSteps: []
+  footSteps:
+  - {fileID: 8300000, guid: ccd8170f4688b3f4cbfa3d372312af71, type: 3}
+  - {fileID: 8300000, guid: 467b898ed593c14449877a44f4f6da7e, type: 3}
+  - {fileID: 8300000, guid: 2fe4054c61dba994782f6771dc835140, type: 3}
+  - {fileID: 8300000, guid: 7676423c95366c54f889e4eb7b05b849, type: 3}
+  - {fileID: 8300000, guid: abbbc3d7b4aa78548adced7bba205dc5, type: 3}
+  - {fileID: 8300000, guid: 043ec7fb85ea44d479d547fc079315d5, type: 3}
 --- !u!114 &1148999998010285713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +291,7 @@ MonoBehaviour:
   characterUIManager: {fileID: 0}
   characterGroup: 0
   isPerformingAction: 0
+  vfxDead: {fileID: 0}
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   playerNetworkManager: {fileID: 0}
@@ -374,6 +383,7 @@ MonoBehaviour:
   dodgeDuration: 0.8
   canDodge: 1
   arco: 0
+  isMoving: 0
 --- !u!114 &1582088740868026449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,6 +551,69 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4957197181952671510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0641d1cfc4f548b39b0f014125311ec8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot:
+  - skillSlot: {fileID: 0}
+    slotCooldownDuration: 16
+    canUse: 1
+  - skillSlot: {fileID: 0}
+    slotCooldownDuration: 16
+    canUse: 1
+  - skillSlot: {fileID: 0}
+    slotCooldownDuration: 16
+    canUse: 1
+  damageSpirit: 10
+--- !u!114 &7702236541409379380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 672f0ae9cb7784447935873ca6f2048b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAiming: 0
+  arrowPrefab: {fileID: 991847605463277010, guid: bb1183d798c82e8449a4b1a556783400,
+    type: 3}
+  arrowSpawnPoint: {fileID: 105229590231401333}
+  minArrowForce: 10
+  maxArrowForce: 50
+  chargeTime: 2
+  playerLocomotionManager: {fileID: 0}
+  arrow: {fileID: 4903486419417711672}
+  currentTimerArrowOff: 0
+--- !u!114 &3710995816705410282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 1148999998010285713}
+  playerLocomotion: {fileID: 0}
+  audioSource: {fileID: 0}
+  distanceToGround: 0.9
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!82 &1983101499933469384
 AudioSource:
   m_ObjectHideFlags: 0
@@ -553,7 +626,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -637,51 +710,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4957197181952671510
-MonoBehaviour:
+--- !u!81 &7646852591663545968
+AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219663029150363108}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0641d1cfc4f548b39b0f014125311ec8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slot:
-  - skillSlot: {fileID: 0}
-    slotCooldownDuration: 16
-    canUse: 1
-  - skillSlot: {fileID: 0}
-    slotCooldownDuration: 16
-    canUse: 1
-  - skillSlot: {fileID: 0}
-    slotCooldownDuration: 16
-    canUse: 1
-  damageSpirit: 10
---- !u!114 &7702236541409379380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 219663029150363108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 672f0ae9cb7784447935873ca6f2048b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isAiming: 0
-  arrowPrefab: {fileID: 991847605463277010, guid: bb1183d798c82e8449a4b1a556783400,
-    type: 3}
-  arrowSpawnPoint: {fileID: 105229590231401333}
-  minArrowForce: 10
-  maxArrowForce: 50
-  chargeTime: 2
-  playerLocomotionManager: {fileID: 0}
-  arrow: {fileID: 4903486419417711672}
-  currentTimerArrowOff: 0
 --- !u!1 &630822590389966220
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,14 +899,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2520435877620105762}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.4682854, y: 0.49564692, z: 0.5345606, w: -0.49928743}
-  m_LocalPosition: {x: -0.0087, y: 0.3219, z: 0.0238}
+  m_LocalRotation: {x: -0.07602879, y: 0.85804003, z: 0.5011347, w: -0.082771234}
+  m_LocalPosition: {x: 0.004, y: 0.321, z: 0.015}
   m_LocalScale: {x: 5.555556, y: 6.1728387, z: 5.5555553}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4838165142088917044}
   m_Father: {fileID: 7876703383180163277}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -57.93, y: -155.73, z: -23.702}
 --- !u!114 &4278821375868443459
 MonoBehaviour:
   m_ObjectHideFlags: 0
