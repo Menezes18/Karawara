@@ -44,13 +44,11 @@ namespace RPGKarawara
             base.Awake();
             player = GetComponent<PlayerManager>();
         }
-
+        
         protected override void Update()
         {
+            
             base.Update();
-            if (Keyboard.current.oKey.wasReleasedThisFrame){
-                arco = !arco;
-            }
             if (player.IsOwner)
             {
                 player.characterNetworkManager.verticalMovement.Value = verticalMovement;
@@ -75,6 +73,7 @@ namespace RPGKarawara
 
             if (moveAmount > 0)
             {
+                
                 character.animator.SetBool("isMoving", true);
                 isMoving = true;
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
@@ -283,8 +282,6 @@ namespace RPGKarawara
             //     return;
 
             //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
             if (PlayerInputManager.instance.moveAmount > 0)
             {
                 rollDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
@@ -314,6 +311,41 @@ namespace RPGKarawara
             }
 
             player.playerLocomotionManager.canDodge = true;
+        }
+
+        public void StopPlayer()
+        {
+            Debug.Log("AAA");
+            // Zerando as variáveis de movimento
+            verticalMovement = 0;
+            horizontalMovement = 0;
+            moveAmount = 0;
+
+            // Forçando a velocidade a zero no PlayerLocomotionManager
+            if (character.characterController != null)
+            {
+                character.characterController.Move(Vector3.zero);
+            }
+
+            // Atualiza o Animator para garantir que o jogador pare completamente
+            character.animator.SetBool("isMoving", false);
+
+            // Força a animação de idle imediatamente
+            character.animator.Play("Idle", 0);
+
+            // Parar qualquer animação atual
+            character.animator.speed = 0; // Isso pausa todas as animações
+
+            // Opcional: Reinicie a velocidade da animação após um pequeno atraso
+            // Você pode usar um coroutine para reverter a velocidade de volta ao normal
+            StartCoroutine(ResetAnimatorSpeed());
+        }
+
+        private IEnumerator ResetAnimatorSpeed()
+        {
+            // Espera um pequeno tempo antes de reiniciar a velocidade da animação
+            yield return new WaitForSeconds(0.1f);
+            character.animator.speed = 1; // Reinicia a velocidade da animação
         }
 
 

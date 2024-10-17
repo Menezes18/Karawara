@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,8 +10,9 @@ namespace RPGKarawara
 {
     public class AtivarSkillPop : MonoBehaviour
     {
+        public static AtivarSkillPop instance;
         public GameObject skillPop;
-        public Skill novaSkillAdd;
+        //public Skill novaSkillAdd;
         public SkillTreeUiManager skillTreeUiManager;
 
         public Image skillPopImage;
@@ -20,6 +22,10 @@ namespace RPGKarawara
 
         public float tempoAtivacao = 2f; // Tempo em segundos para manter o skillPop ativo
 
+        private void Awake(){
+            instance = this;
+        }
+
         void Start()
         {
             skillPop.SetActive(false);
@@ -27,21 +33,26 @@ namespace RPGKarawara
 
         void Update()
         {
+            if (Keyboard.current.kKey.wasReleasedThisFrame){
+                //AtivarSkill();
+            }
+
+            
+        }
+
+        public void AtivarSkill(Skill novaSkillAdd){
+            skillPop.SetActive(true);
+            //PlayerInputManager.instance.DisableAll();
+            // Atualiza imagem e textos apenas quando a habilidade é ativada
             skillPopImage.sprite = novaSkillAdd.sprite;
             skillPopText.text = novaSkillAdd.name;
             skillPopTextSkill.text = novaSkillAdd.skillType.ToString();
 
-            if (Keyboard.current.kKey.wasReleasedThisFrame)
-            {
-                skillPop.SetActive(true);
-                skillPopImageFade.Reiniciar();
-                SkillTreeUiManager.instance.AddSkill(novaSkillAdd, novaSkillAdd.skillType);
+            skillPopImageFade.Reiniciar();
+            SkillTreeUiManager.instance.AddSkill(novaSkillAdd, novaSkillAdd.skillType);
                 
-                // Inicia a coroutine para desativar o skillPop após um tempo
-                StartCoroutine(DesativarSkillPop());
-            }
-
-            
+            // Inicia a coroutine para desativar o skillPop após um tempo
+            StartCoroutine(DesativarSkillPop());
         }
 
         private IEnumerator DesativarSkillPop()
@@ -49,6 +60,7 @@ namespace RPGKarawara
             // Aguarda o tempo definido antes de desativar o skillPop
             yield return new WaitForSeconds(tempoAtivacao);
             skillPop.SetActive(false);
+            //PlayerInputManager.instance.EnableAll();
         }
     }
 }

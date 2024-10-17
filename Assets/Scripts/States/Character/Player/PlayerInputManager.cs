@@ -185,9 +185,9 @@ namespace RPGKarawara
             HandleAllInputs();
         }
 
+        public PlayerLocomotionManager playerLocomotionManager;
         private void HandleAllInputs()
         {
-           // && _playerUIHudManager.paneldesativar
             if(player.isDead.Value == false){
                 HandleLockOnInput();
                 HandleLockOnSwitchTargetInput();
@@ -291,9 +291,15 @@ namespace RPGKarawara
         }
 
         //  MOVEMENT
-
+        public bool inputsEnabled = true; 
         private void HandlePlayerMovementInput()
         {
+            if (!inputsEnabled) // Verifica se os inputs estão habilitados
+            {
+                player.playerNetworkManager.isMoving.Value = false; // Para a movimentação
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, 0, false); // Atualiza o animator
+                return; // Retorna para parar a movimentação
+            }
             vertical_Input = movementInput.y;
             horizontal_Input = movementInput.x;
 
@@ -384,6 +390,24 @@ namespace RPGKarawara
         {
             playerControls.PlayerMovement.Disable();
             playerControls.PlayerActions.Disable();
+        }
+
+        public void DisableAll()
+        {
+            inputsEnabled = false;
+            // Desabilita todos os inputs
+            playerControls.Disable();
+
+            // Para o movimento do jogador imediatamente
+            player.playerNetworkManager.isMoving.Value = false;
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, 0, false);
+        }
+        public void EnableAll(){
+            playerControls.PlayerMovement.Enable();
+            playerControls.PlayerActions.Enable();
+            playerControls.PlayerCamera.Enable();
+            playerControls.Enable();
+            inputsEnabled = true;
         }
         public void EnableInput()
         {
