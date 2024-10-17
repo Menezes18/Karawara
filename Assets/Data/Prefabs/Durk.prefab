@@ -330,7 +330,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ceec48aff7a6bd4468283df02f354f16,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -461,12 +461,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 701fb9b4742b1654ead901af7dc3c595, type: 3}
---- !u!1 &2542485837176912908 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8910181772973076408, guid: 701fb9b4742b1654ead901af7dc3c595,
-    type: 3}
-  m_PrefabInstance: {fileID: 6408598598931207092}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6142062732373044040 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 996166313176922364, guid: 701fb9b4742b1654ead901af7dc3c595,
@@ -1600,9 +1594,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLocomotionManager: {fileID: 0}
+  character: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   audioSource: {fileID: 0}
   distanceToGround: 0.05
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!114 &12212547373508569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1639,9 +1636,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLocomotionManager: {fileID: 0}
+  character: {fileID: 0}
+  playerLocomotion: {fileID: 0}
   audioSource: {fileID: 0}
   distanceToGround: 0.05
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!82 &1742791382382146930
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1843,7 +1843,6 @@ MonoBehaviour:
     m_InternalValue: 0
   characterController: {fileID: 0}
   animator: {fileID: 0}
-  portal: {fileID: 2542485837176912908}
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
@@ -1935,8 +1934,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b292bce86e399843b424c7b2e932d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationAmount: 2
-  staminaRegenerationDelay: 2
   blockingPhysicalAbsorption: 100
   blockingFireAbsorption: 100
   blockingMagicAbsorption: 100
