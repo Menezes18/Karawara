@@ -1903,7 +1903,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  playerLocomotion: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!114 &12212547373508569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1940,7 +1945,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  playerLocomotion: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!82 &1742791382382146930
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2137,12 +2147,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ae40614d0deb034e94a3a8db335c8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBoss: 0
+  isBoss: 1
   isDead:
     m_InternalValue: 0
   characterController: {fileID: 0}
   animator: {fileID: 0}
-  portal: {fileID: 0}
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
@@ -2153,6 +2162,7 @@ MonoBehaviour:
   characterUIManager: {fileID: 0}
   characterGroup: 1
   isPerformingAction: 0
+  vfxDead: {fileID: 0}
   characterName: Saci
   characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
@@ -2236,8 +2246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b292bce86e399843b424c7b2e932d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationAmount: 2
-  staminaRegenerationDelay: 2
   blockingPhysicalAbsorption: 100
   blockingFireAbsorption: 100
   blockingMagicAbsorption: 100
@@ -3085,6 +3093,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948933247560734027, guid: c13849ec684154f4b9a39c1e234f4770,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3974016661214395164, guid: c13849ec684154f4b9a39c1e234f4770,
         type: 3}
