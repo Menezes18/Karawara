@@ -21,7 +21,10 @@ namespace RPGKarawara
         [SerializeField] float maximumPivot = 60;   //  THE HIGHEST POINT YOU ARE ABLE TO LOOK UP
         [SerializeField] float cameraCollisionRadius = 0.2f;
         [SerializeField] LayerMask collideWithLayers;
-
+        
+        [Header("Camera sensitivity ")]
+        [SerializeField] private float sensitivity = 1.0f;
+        
         [Header("Camera Offset")]
         [SerializeField] private Vector3 cameraOffset = new Vector3(-0.5f, 0, 0); 
 
@@ -158,9 +161,15 @@ namespace RPGKarawara
                 cameraPivotTransform.localRotation = targetRotation;
             }
         }
+        public void SetSensitivity(float newSensitivity)
+        {
+            sensitivity = newSensitivity;
+            leftAndRightRotationSpeed =+ sensitivity * 10;
+            upAndDownRotationSpeed =+ sensitivity * 10;
+        }
         public void ToggleAimMode(bool isAiming)
         {
-            
+            /*
             if (isAiming)
             {
                 // Ajustar a câmera para o modo de mira
@@ -171,7 +180,7 @@ namespace RPGKarawara
             {
                 // Voltar à visão normal
                 cameraObject.fieldOfView = 60f;
-            }
+            }*/
         }
         private void HandleAimMode()
         {
