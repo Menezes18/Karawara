@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1423696799177931888}
   - component: {fileID: 1038443996734565725}
   - component: {fileID: 3762863674385675672}
-  m_Layer: 13
+  m_Layer: 3
   m_Name: Md_Prop_Tree_Trunk_Club_Swords
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,11 +197,55 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageCollider: {fileID: 1038443996734565725}
-  physicalDamage: 0
+  physicalDamage: 25
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
   bossCharacter: {fileID: 0}
+--- !u!1 &7266873970274294850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1068736077408721704}
+  - component: {fileID: 6924431771895504655}
+  m_Layer: 3
+  m_Name: Lock On Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1068736077408721704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7266873970274294850}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.6797199, y: -0.73347175, z: 0.0000003217405, w: 0.00000033645}
+  m_LocalPosition: {x: 1.3964605, y: -0.17189941, z: 0}
+  m_LocalScale: {x: 100, y: 99.99998, z: 100.00004}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2508219120876386428}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6924431771895504655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7266873970274294850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3c34ac6c755145a637377dc0dbe4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8929764914956420485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,6 +1052,10 @@ PrefabInstance:
     - {fileID: 5866666021909216657, guid: ceec48aff7a6bd4468283df02f354f16, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 366175167995203695, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1068736077408721704}
     - targetCorrespondingSourceObject: {fileID: 1852576806548013000, guid: ceec48aff7a6bd4468283df02f354f16,
         type: 3}
       insertIndex: -1
@@ -1398,6 +1446,12 @@ CapsuleCollider:
 --- !u!4 &2328553547076784120 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ceec48aff7a6bd4468283df02f354f16,
+    type: 3}
+  m_PrefabInstance: {fileID: 2871632315505813523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2508219120876386428 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 366175167995203695, guid: ceec48aff7a6bd4468283df02f354f16,
     type: 3}
   m_PrefabInstance: {fileID: 2871632315505813523}
   m_PrefabAsset: {fileID: 0}
@@ -3459,7 +3513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 123187961
+  GlobalObjectIdHash: 218241860
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -3568,7 +3622,7 @@ MonoBehaviour:
   lastAttackAnimationPerformed: 
   currentTarget: {fileID: 0}
   currentAttackType: 0
-  lockOnTransform: {fileID: 3435671916682671609}
+  lockOnTransform: {fileID: 1068736077408721704}
   canPerformRollingAttack: 0
   canPerformBackstepAttack: 0
   actionRecoveryTimer: 0
@@ -3580,7 +3634,7 @@ MonoBehaviour:
   minimumFOV: 0
   maximumFOV: 360
   attackRotationSpeed: 25
-  clubDamageCollider: {fileID: 3445279623131875345}
+  clubDamageCollider: {fileID: 3762863674385675672}
   stompCollider: {fileID: 6142536544935677286}
   stompAttackAOERadius: 1.5
   baseDamage: 25
