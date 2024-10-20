@@ -16,10 +16,11 @@ namespace RPGKarawara
         public Transform parentTransform;
         
         public SkillUISlot skillUISlot;
-
+        public int skillIDSlot;
         
         public bool auxPoint;
         public bool isDragging;
+        public int auxID;
         private void Awake(){   
             parentTransform = transform.parent;
             startPosition = this.transform as RectTransform;
@@ -38,7 +39,7 @@ namespace RPGKarawara
                 transform.SetParent(parentTransform);
                 startPosition.position = storedPosition;
                 auxPoint = !auxPoint;
-                skillUISlot.OnUnlockButtonClicked();
+                skillUISlot.OnUnlockButtonClicked(auxID);
                 isDragging = false;
             }
         }
