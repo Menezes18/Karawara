@@ -660,6 +660,41 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2770666803903516498, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2592082994631462723, guid: ceec48aff7a6bd4468283df02f354f16,
         type: 3}
       propertyPath: m_Layer
@@ -964,7 +999,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: ceec48aff7a6bd4468283df02f354f16, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1852576806548013000, guid: ceec48aff7a6bd4468283df02f354f16,
@@ -984,6 +1020,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4653853171963339366}
+    - targetCorrespondingSourceObject: {fileID: 1339101018200438765, guid: ceec48aff7a6bd4468283df02f354f16,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6142536544935677286}
     - targetCorrespondingSourceObject: {fileID: -3086436065929644917, guid: ceec48aff7a6bd4468283df02f354f16,
         type: 3}
       insertIndex: -1
@@ -1443,6 +1483,30 @@ CapsuleCollider:
   m_Height: 0.89
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: -0.06}
+--- !u!1 &3841402427181031422 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1339101018200438765, guid: ceec48aff7a6bd4468283df02f354f16,
+    type: 3}
+  m_PrefabInstance: {fileID: 2871632315505813523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6142536544935677286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3841402427181031422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78748a6a9e7e6c140a7e34ae95d8c8d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 0}
+  physicalDamage: 0
+  magicDamage: 0
+  fireDamage: 0
+  holyDamage: 0
+  durkCharacterManager: {fileID: 0}
 --- !u!1 &4247020313090489930 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7121769801107515815, guid: ceec48aff7a6bd4468283df02f354f16,
@@ -3512,7 +3576,7 @@ MonoBehaviour:
   maximumFOV: 360
   attackRotationSpeed: 25
   clubDamageCollider: {fileID: 3445279623131875345}
-  stompCollider: {fileID: 12212547373508569}
+  stompCollider: {fileID: 6142536544935677286}
   stompAttackAOERadius: 1.5
   baseDamage: 25
   attack01DamageModifier: 1
@@ -3773,7 +3837,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7917112914835544999}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: f34bb93333b778e448b838fdb4da3ff5, type: 3}
+  m_Avatar: {fileID: 9000000, guid: ceec48aff7a6bd4468283df02f354f16, type: 3}
   m_Controller: {fileID: 9100000, guid: 09c0cbad8d7151e4c808a130db6002d3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
