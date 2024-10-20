@@ -1876,7 +1876,6 @@ MonoBehaviour:
     m_InternalValue: 0
   characterController: {fileID: 0}
   animator: {fileID: 0}
-  portal: {fileID: 0}
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
@@ -1887,6 +1886,7 @@ MonoBehaviour:
   characterUIManager: {fileID: 0}
   characterGroup: 1
   isPerformingAction: 0
+  vfxDead: {fileID: 7641545998159112202, guid: eb989f4bfb4159f4f832a5023e8c1c70, type: 3}
   characterName: 
   characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
@@ -1899,7 +1899,6 @@ MonoBehaviour:
   combatStance: {fileID: 11400000, guid: aadb5ca115e8fa6429821cbb0d2325d3, type: 2}
   attack: {fileID: 11400000, guid: eaef9a4de849bae449b7ac53c5dc24c2, type: 2}
   skinnedMeshRenderer: {fileID: 0}
-  vfxDead: {fileID: 7641545998159112202, guid: eb989f4bfb4159f4f832a5023e8c1c70, type: 3}
 --- !u!114 &2386473894482796835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1938,8 +1937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b292bce86e399843b424c7b2e932d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationAmount: 2
-  staminaRegenerationDelay: 2
   blockingPhysicalAbsorption: 100
   blockingFireAbsorption: 100
   blockingMagicAbsorption: 100
@@ -2103,8 +2100,8 @@ MonoBehaviour:
   viewableAngle: 0
   targetsDirection: {x: 0, y: 0, z: 0}
   detectionRadius: 15
-  minimumFOV: -35
-  maximumFOV: 35
+  minimumFOV: 0
+  maximumFOV: 360
   attackRotationSpeed: 25
   rightHandDamageCollider: {fileID: 5247491218295523240}
   leftHandDamageCollider: {fileID: 1293781855610913377}

@@ -14,6 +14,7 @@ namespace RPGKarawara
         public Skill skill;       // Referência para a habilidade associada ao slot
         public Image trianguloIcon;
         public TooltipTrigger tooltipTrigger;
+        public int auxiliarSkill;
 
        [SerializeField] private Sprite spriteIconStart;
         
@@ -73,6 +74,7 @@ namespace RPGKarawara
                 TooltipSystem.current.Restart();
                 skill.active = true;    
                 trianguloIcon.color = new Color32(158,255,252, 255);
+                spriteIconStart = skillIcon.sprite;
                 skill.AddSkill(slotID);
             }
         }
@@ -80,14 +82,15 @@ namespace RPGKarawara
         public void AtivarCabecalho(){
             SkillTreeUiManager.instance.Cabecalho(skill);
         }
-        public void OnUnlockButtonClicked(){
+        public void OnUnlockButtonClicked(int skillIDSlot){
             
             if (skill != null){
                 SkillTreeUiManager.instance.ClearCabecalho();
                
                 trianguloIcon.color = new Color32(255,255,252, 255);
                 ClearSkill();
-                skill.RemoveSkill(1);
+                Debug.Log("remove" + skillIDSlot + " slot");
+                skill.RemoveSkill(skillIDSlot);
             }
         }
 

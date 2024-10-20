@@ -31,7 +31,7 @@ namespace RPGKarawara
                    // Ajusta a posição ancorada dentro do slot.
                    draggedRectTransform.anchoredPosition = Vector2.zero; // Centraliza dentro do slot.
                }
-
+               dragDrop.auxID = slotID;
                dragDrop.skillUISlot.OnSkillButtonClicked(slotID);
                dragDrop.isDragging = true;
             }

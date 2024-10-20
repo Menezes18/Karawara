@@ -8,6 +8,10 @@ public class Projetil : MonoBehaviour
 
     [SerializeField] private float velocidade = 70f;
 
+    public float _Velocidade {
+        get { return velocidade; }
+        set { velocidade = value; }
+    }
 
     public void BuscarAlvo(Transform umTarget)
     {

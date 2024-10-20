@@ -45,7 +45,7 @@ namespace RPGKarawara
             // Se o ataque for à distância, invoca o projétil ou magia.
             if (isRanged)
             {
-               Debug.Log("ATTACK RANGED");
+               MagicSpeel.instance.Tiro(aiCharacter.aiCharacterCombatManager.currentTarget.transform);
             }
         }
     }

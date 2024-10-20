@@ -137,6 +137,7 @@ MonoBehaviour:
   skill: {fileID: 0}
   trianguloIcon: {fileID: 646278945891660619}
   tooltipTrigger: {fileID: 0}
+  spriteIconStart: {fileID: 0}
 --- !u!114 &6482156589733011131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +332,8 @@ GameObject:
   - component: {fileID: 1207482230195897259}
   - component: {fileID: 6361462125909693148}
   - component: {fileID: 4906948203046275415}
+  - component: {fileID: 5745651277878853220}
+  - component: {fileID: 4207070659296535034}
   m_Layer: 5
   m_Name: SkillIcon
   m_TagString: Untagged
@@ -385,7 +388,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ac95fd503ab1c244aab77f09c96de589, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -395,6 +398,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5745651277878853220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709365779930996185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b8cc7b7d0183a498b2ece02011d8c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
+  startPosition: {fileID: 0}
+  parentTransform: {fileID: 0}
+  skillUISlot: {fileID: 0}
+  skillIDSlot: 3
+  auxPoint: 0
+  isDragging: 0
+--- !u!225 &4207070659296535034
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709365779930996185}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8816648917798354477
 GameObject:
   m_ObjectHideFlags: 0
