@@ -31,7 +31,6 @@ namespace RPGKarawara
 
         [Header("Dodge")]
         private Vector3 rollDirection;
-        [SerializeField] float dodgeStaminaCost = 25;
         public bool dodging = false;
         [SerializeField] private float dodgeDistance = 8f;   // Distância do dodge
         [SerializeField] private float dodgeDuration = 11f; // Duração do dodge
