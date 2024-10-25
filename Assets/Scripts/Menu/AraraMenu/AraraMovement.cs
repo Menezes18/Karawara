@@ -15,7 +15,6 @@ public class AraraMovement : MonoBehaviour
         if (waypoints.Length > 0)
         {
             direction = (waypoints[currentWaypointIndex].position - transform.position).normalized;
-            Debug.Log(direction);
         }
     }
 
