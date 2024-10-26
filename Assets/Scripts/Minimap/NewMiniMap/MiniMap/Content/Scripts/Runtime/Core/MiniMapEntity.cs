@@ -69,6 +69,7 @@ public class MiniMapEntity : MiniMapEntityBase
     /// </summary>
     void Start()
     {
+        
         if (MiniMapOwner != null)
         {
             CreateIcon();
@@ -225,8 +226,7 @@ public class MiniMapEntity : MiniMapEntityBase
             }
         }
     }
-
-
+    
     private void OpacityControl()
     {
         if (!opacityBasedDistance || IconInstance == null) return;

@@ -194,6 +194,7 @@ public sealed class SystemMiniMap : MonoBehaviour
     private void Start()
     {
         if (ActiveMiniMap == null) ActiveMiniMap = this;
+        Target = TargetMinimapPlayer();
     }
 
     /// <summary>
@@ -256,9 +257,10 @@ public sealed class SystemMiniMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    private Transform TargetMinimapPlayer(){
+        Transform t = GameObject.FindGameObjectWithTag("TargetPlayerMiniMap").transform;
+        return t;
+    }
     public void ConfigureWorldTarget()
     {
         if (m_Target == null)
