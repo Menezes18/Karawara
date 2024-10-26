@@ -1,5 +1,6 @@
-Shader "Lovatto/MiniMap/MiniMap Mask" {
-    Properties {
+Shader "Custom/MiniMap Mask"
+{
+       Properties {
         [PerRendererData]_MainTex ("MainTex", 2D) = "white" {}
         _Color ("Color", Color) = (1,1,1,1)
         _Mask ("Mask", 2D) = "white" {}
