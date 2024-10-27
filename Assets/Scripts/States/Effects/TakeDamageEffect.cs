@@ -51,7 +51,9 @@ namespace RPGKarawara
             //  IF THE CHARACTER IS DEAD, NO ADDITIONAL DAMAGE EFFECTS SHOULD BE PROCESSED
             if (character.isDead.Value)
                 return;
-
+            if (character.gameObject.CompareTag("Player")){
+                SystemMiniMap.ActiveMiniMap.DoHitEffect();
+            }
             CalculateDamage(character);
             PlayDirectionalBasedDamageAnimation(character);
             //  CHECK FOR BUILD UPS (POISON, BLEED ECT)
