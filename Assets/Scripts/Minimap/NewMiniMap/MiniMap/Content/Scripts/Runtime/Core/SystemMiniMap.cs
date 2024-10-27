@@ -281,7 +281,7 @@ public sealed class SystemMiniMap : MonoBehaviour
         isUpdateFrame = (Time.frameCount % UpdateRate) == 0;
 
         //Controlled inputs key for minimap
-
+        Inputs();
         //controlled that minimap follow the target
         PositionControll();
         //Apply rotation settings
@@ -407,6 +407,7 @@ public sealed class SystemMiniMap : MonoBehaviour
     /// </summary>
     void UpdateItems()
     {
+        Debug.Log("oi");
         if (!isUpdateFrame) return;
         if (miniMapItems == null || miniMapItems.Count <= 0) return;
 
@@ -424,7 +425,7 @@ public sealed class SystemMiniMap : MonoBehaviour
     {
         if (inputHandler == null) return;
 
-        // If the minimap button is pressed then toggle the map state.
+
         if (inputHandler.IsInputDown(InputBaseMiniMap.MiniMapInput.ScreenMode))
         {
             ToggleSize();
@@ -439,10 +440,7 @@ public sealed class SystemMiniMap : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Map FullScreen or MiniMap
-    /// Lerp all transition for smooth effect.
-    /// </summary>
+
     void MapZoomControl()
     {
         float delta = Time.deltaTime;
@@ -451,19 +449,19 @@ public sealed class SystemMiniMap : MonoBehaviour
         miniMapCamera.orthographicSize = zoom;
     }
 
-    /// <summary>
-    /// This called one time when press the toggle key
-    /// </summary>
+
     void ToggleSize()
     {
         isFullScreen = !isFullScreen;
+        MiniMapEntity[] items = FindObjectsOfType<MiniMapEntity>();
+        foreach (MiniMapEntity item in items)
+        {
+            item.OffScreen = !isFullScreen; 
+        }
         if (isFullScreen) SetToFullscreenSize();
         else SetToMiniMapSize();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void SetToMiniMapSize()
     {
         isFullScreen = false;
@@ -504,21 +502,18 @@ public sealed class SystemMiniMap : MonoBehaviour
         mapShape = MapShape.Circle;
         MiniMapUI.minimapMaskManager?.ChangeMaskType(true);
         if (DynamicRotation) { DynamicRotation = false; ResetMapRotation(); }
-
-        if (showCursorOnFullscreen)
-        {
-            wasCursorVisible = Cursor.visible;
-            wasCursorMode = Cursor.lockState;
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
+        
 
         bl_MiniMapOverlay.Instance?.SetActive(isFullScreen);
         //reset offset position 
-
+        if (ResetOffSetOnChange) { GoToTarget(); }
 
         MiniMapUI.MiniMapSize?.DoTransition();
+    }
+    public void GoToTarget()
+    {
+        StopCoroutine("ResetOffset");
+        StartCoroutine("ResetOffset");
     }
     
     public void SetAsActiveMiniMap()

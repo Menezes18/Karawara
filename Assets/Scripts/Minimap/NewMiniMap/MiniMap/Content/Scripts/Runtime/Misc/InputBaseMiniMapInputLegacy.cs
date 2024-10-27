@@ -1,45 +1,46 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace System.MiniMap
 {
-    [CreateAssetMenu(menuName = "Lovatto/MiniMap/Input Handler Legacy")]
+    [CreateAssetMenu(menuName = "Menezes/MiniMap/Input Handler Legacy")]
     public class InputBaseMiniMapInputLegacy : InputBaseMiniMap
     {
-        public KeyCode screenModeKey = KeyCode.M;
-        public KeyCode zoomInKey = KeyCode.KeypadPlus;
-        public KeyCode zoomOutKey = KeyCode.KeypadMinus;
-        
-        /// <summary>
-        /// 
-        /// </summary>
+        public Key screenModeKey = Key.M;
+        public Key zoomInKey = Key.I;
+        public Key zoomOutKey = Key.I;
+
         public override void Init()
         {
            
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
         public override bool IsInputDown(MiniMapInput key)
         {
-#if ENABLE_LEGACY_INPUT_MANAGER
+#if ENABLE_INPUT_SYSTEM
             switch (key)
             {
                 case MiniMapInput.ZoomIn:
-                    return Input.GetKeyDown(zoomInKey);
+                    return IsKeyPressed(zoomInKey);
                 case MiniMapInput.ZoomOut:
-                    return Input.GetKeyDown(zoomOutKey);
+                    return IsKeyPressed(zoomOutKey);
                 case MiniMapInput.ScreenMode:
-                    return Input.GetKeyDown(screenModeKey);
+                    return IsKeyPressed(screenModeKey);
                 default:
                     return false;
             }
 #else
             return false;
 #endif
-
         }
+
+        
+        private bool IsKeyPressed(Key keyCode)
+        {
+            
+            return Keyboard.current[keyCode].wasPressedThisFrame;
+        }
+
+        
     }
 }

@@ -128,7 +128,7 @@ public class MiniMapEntity : MiniMapEntityBase
     }
 
 
-    void IconControl()
+     void IconControl()
     {
         //Setting the modify position
         Vector3 CorrectPosition = TargetPosition + OffSet;
@@ -173,7 +173,7 @@ public class MiniMapEntity : MiniMapEntityBase
             }
         }
 
-
+        //Apply position to the UI (for follow)
         GraphicRect.anchoredPosition = position;
         if (CircleAreaRect != null) { CircleAreaRect.anchoredPosition = UnClampPosition; }
         //Change size with smooth transition
@@ -193,14 +193,15 @@ public class MiniMapEntity : MiniMapEntityBase
         }
         else
         {
-
+            //with this the rotation icon will depend of target
             Vector3 vre = MiniMapOwner.minimapRig.eulerAngles;
             Vector3 re = MiniMapOwner.canvasRenderMode == SystemMiniMap.RenderMode.Mode2D ? Vector3.zero : GraphicRect.eulerAngles;
             //Fix player rotation for apply to el icon.
             re.z = ((-Target.rotation.eulerAngles.y) + vre.y);
             Quaternion q = Quaternion.Euler(re);
             GraphicRect.rotation = q;
-            
+
+
         }
     }
 

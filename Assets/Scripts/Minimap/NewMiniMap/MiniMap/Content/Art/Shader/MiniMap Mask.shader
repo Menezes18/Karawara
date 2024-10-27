@@ -2,8 +2,7 @@ Shader "Custom/CircleMask"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _Radius ("Radius", Range(0, 1)) = 0.5 
+        _Radius ("Radius", Range(0, 1)) = 0.5 // Propriedade para o raio
     }
     SubShader
     {
@@ -33,7 +32,6 @@ Shader "Custom/CircleMask"
             };
 
             sampler2D _MainTex;
-            float4 _Color;
             float _Radius;
 
             v2f vert (appdata_t v)
@@ -46,14 +44,14 @@ Shader "Custom/CircleMask"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float2 center = float2(0.5, 0.5); 
+                float2 center = float2(0.5, 0.5); // Centro da máscara circular
                 float dist = distance(i.uv, center);
                 
-                
+                // Define a máscara de transparência sem alterar a cor
                 float mask = step(dist, _Radius);
 
-
-                fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+                // Apenas aplica a máscara ao canal alfa
+                fixed4 col = tex2D(_MainTex, i.uv);
                 col.a *= mask;
 
                 return col;
