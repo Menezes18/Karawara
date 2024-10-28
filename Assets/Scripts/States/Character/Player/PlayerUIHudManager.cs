@@ -78,7 +78,6 @@ namespace RPGKarawara
             }
             else
             {
-                Debug.Log("true");
                 // Desativa elementos específicos apenas se estiver na "SceneMenu"
                 healthBar.gameObject.SetActive(true);
                 rightWeaponQuickSlotIcon.gameObject.SetActive(true);
