@@ -24,12 +24,11 @@ public class UpdateLog : ScriptableObject
 
     public string GetFormattedUpdateLog()
     {
-        string output = $"<size=50><color=#321d15>{updates[0].version}</color></size>\n"; // Título da versão
-        output += $"<color=white>{updates[0].text}</color>\n"; // Texto da versão
+        string output = $"<size=50><color=#321d15>{updates[0].version}</color> - <color=white>{updates[0].text}</color> </size>\n"; // Texto da versão
 
         foreach (var person in people)
         {
-            output += $"<size=30><color=#1e110c>{person.name}</color></size>\n"; // Nome da pessoa como h2
+            output += $"<size=30><color=#1e110c>{person.name}</color></size>"; // Nome da pessoa como h2
             foreach (var activity in person.activities)
             {
                 output += $"<size=25><color=#46281e>{activity}</color></size>\n"; // Atividade como h3
