@@ -376,7 +376,7 @@ MonoBehaviour:
   cubeTransform: {fileID: 0}
   maxDistanceFromCube: 2
   walkingSpeedCube: 1
-  runningSpeedCube: 50
+  runningSpeedCube: 1
   rotationInput: 0
 --- !u!114 &1582088740868026449
 MonoBehaviour:
@@ -626,7 +626,7 @@ MonoBehaviour:
   rayDistance: 2
   interacting: 0
   currentTarget: {fileID: 0}
-  rotationSpeed: 10
+  rotationSpeed: 50
 --- !u!82 &1983101499933469384
 AudioSource:
   m_ObjectHideFlags: 0
