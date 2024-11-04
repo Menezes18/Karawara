@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 3966517426724844345}
   - component: {fileID: -3508417679261690988}
   - component: {fileID: 4749399969440758544}
+  - component: {fileID: -7168047615407260058}
   m_Layer: 0
   m_Name: Passaro
   m_TagString: Untagged
@@ -260,9 +261,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   centerObject: {fileID: 0}
-  orbitSpeed: 2
+  orbitSpeed: 1.92
   orbitRadius: 3
   yAmplitude: 0.5
+  offsetX: -0.5
+  offsetY: 0.5
+  offsetZ: 0.5
   ySpeed: 2
 --- !u!114 &-3508417679261690988
 MonoBehaviour:
@@ -295,7 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   range: 7
-  enemyTag: Inimigo
+  enemyTag: TargetDamageEnemy
   engrenagem: {fileID: 1985735649435268247}
   turnSpeed: 10
   fireRate: 1
@@ -303,6 +307,23 @@ MonoBehaviour:
   projetilPrefab: {fileID: 8130497022828766391, guid: ace8e626bfafdd74fbaf03b474054560,
     type: 3}
   firePoint: {fileID: 1674991787941171582}
+--- !u!114 &-7168047615407260058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5787228707076762005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 496aced343253554cb06f515af6b4a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 0}
+  physicalDamage: 0
+  magicDamage: 0
+  fireDamage: 0
+  holyDamage: 0
 --- !u!1001 &4068650301337459372
 PrefabInstance:
   m_ObjectHideFlags: 0

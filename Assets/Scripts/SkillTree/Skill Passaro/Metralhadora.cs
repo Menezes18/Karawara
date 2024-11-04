@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using RPGKarawara;
 public class Metralhadora : MonoBehaviour
 {
     // Guarda a posicao do alvo atual
@@ -24,7 +24,7 @@ public class Metralhadora : MonoBehaviour
 
     [SerializeField] private GameObject projetilPrefab;
     [SerializeField] private Transform firePoint;
-
+    private DamageCollider damageCollider;
     private void Start()
     {
         // Vamos chamar o metodo de encontrar alvo assim que entrarmos no Start e apos isso, a cada meio segundo --> dessa forma nao sobrecarregamos o Update
@@ -92,14 +92,24 @@ public class Metralhadora : MonoBehaviour
 
     private void Atirar()
     {
-        // Aqui a referencia para a prefab do projetil se chama projetilPrefab e sua posicao de spawn eh o Transform firePoint
-        GameObject projetilGObject = (GameObject)Instantiate(projetilPrefab, firePoint.position, firePoint.rotation);
-        Projetil projetil = projetilGObject.GetComponent<Projetil>();
-
-        if (projetil != null)
+        RaycastHit hit;
+        int layerMask = ~LayerMask.GetMask("Character");
+        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, range, layerMask))
         {
-            projetil.BuscarAlvo(target);
+            if (hit.transform.CompareTag(enemyTag))
+            {
+                // Aplica dano ao inimigo
+                CharacterManager damageTarget = hit.collider.GetComponentInParent<CharacterManager>();
+                if (damageTarget != null)
+                {
+                    
+                    damageCollider.DamagePublic(damageTarget);
+                }
 
+                // Ativa a partícula de impacto
+                // impactoParticula.transform.position = hit.point;
+                // impactoParticula.Play();
+            }
         }
     }
 

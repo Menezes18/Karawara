@@ -60,6 +60,9 @@ namespace RPGKarawara {
             }
         }
 
+        public void DamagePublic(CharacterManager damageTarget){
+            DamageTarget(damageTarget);
+        }
         protected virtual void DamageTarget(CharacterManager damageTarget)
         {
             //  WE DON'T WANT TO DAMAGE THE SAME TARGET MORE THAN ONCE IN A SINGLE ATTACK
