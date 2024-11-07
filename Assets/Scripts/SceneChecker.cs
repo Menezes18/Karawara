@@ -43,10 +43,10 @@ public class SceneChecker : MonoBehaviour{
         
             statusBar.SetActive(false);
     }
-    public void teleportSpawn(){
-        var player = GameObject.FindGameObjectWithTag("Player");
-        spawn = GameObject.FindGameObjectWithTag("Spawn");
-        player.transform.position = spawn.transform.position;
+    public void teleportSpawn(Vector3 spawnPosition){
+         //var player = GameObject.FindGameObjectWithTag("Player");
+        // spawn = GameObject.FindGameObjectWithTag("Spawn");
+        // player.transform.position = spawnPosition;
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -64,7 +64,9 @@ public class SceneChecker : MonoBehaviour{
         else
         {
             PlayerCamera.instance.canFollow = true;
-            teleportSpawn();
+            var saveData = WorldSaveGameManager.instance.currentCharacterData;
+            //Vector3 spawn = new Vector3(saveData.xPosition, saveData.yPosition, saveData.zPosition);
+           // teleportSpawn(spawn);
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
