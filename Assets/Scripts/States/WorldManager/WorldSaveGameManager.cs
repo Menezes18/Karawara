@@ -174,7 +174,10 @@ namespace RPGKarawara
 
 
 
-       
+        public void SlotTeste()
+        {
+            currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
+        }
         public void LoadGame()
         {
             //  LOAD A PREVIOUS FILE, WITH A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING

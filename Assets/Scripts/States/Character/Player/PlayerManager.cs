@@ -1,4 +1,5 @@
 using System.Collections;
+using RPGKarawara.SkillTree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
@@ -219,8 +220,11 @@ namespace RPGKarawara
 
             currentCharacterData.vitality = playerNetworkManager.vitality.Value;
             currentCharacterData.endurance = playerNetworkManager.endurance.Value;
-        }
+            SkillTreeUiManager.instance.SaveSkillsToData(currentCharacterData);
+            PlayerSkillManager.instance.SaveSkillSlot(currentCharacterData);
 
+        }
+        
         public void LoadGameDataFromCurrentCharacterData(ref CharacterSaveData currentCharacterData)
         {
             playerNetworkManager.characterName.Value = currentCharacterData.characterName;
@@ -235,6 +239,9 @@ namespace RPGKarawara
             //playerNetworkManager.maxStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
             playerNetworkManager.currentHealth.Value = currentCharacterData.currentHealth;
             //playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
+            SkillTreeUiManager.instance.LoadSkillsFromData(WorldSaveGameManager.instance.characterSlot01);
+            PlayerSkillManager.instance.LoadSkillSlot(WorldSaveGameManager.instance.characterSlot01);
+            Debug.Log(currentCharacterData);
             //PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
         }
 

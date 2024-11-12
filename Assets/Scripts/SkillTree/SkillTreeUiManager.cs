@@ -73,7 +73,10 @@ namespace RPGKarawara{
         }
 
         private void Update(){
-            
+            if (Keyboard.current.lKey.wasReleasedThisFrame)
+            {
+                LoadSkillsFromData(WorldSaveGameManager.instance.characterSlot01);
+            }
         }
 
         public void ClearCabecalho(){
@@ -136,8 +139,37 @@ namespace RPGKarawara{
                 }
             }
         }
-        
-        
+
+        public CharacterSaveData SaveSkillsToData(CharacterSaveData saveData)
+        {
+            
+
+            // Copia as habilidades para o saveData
+            saveData.SkillAttack = attackSkills != null ? (Skill[])attackSkills.Clone() : new Skill[0];
+            saveData.SkillDefense = defenseSkills != null ? (Skill[])defenseSkills.Clone() : new Skill[0];
+            saveData.SkillSuport = supportSkills != null ? (Skill[])supportSkills.Clone() : new Skill[0];
+
+            Debug.Log("Habilidades salvas no CharacterSaveData.");
+            return saveData;
+        }
+
+        // Método para carregar habilidades do CharacterSaveData
+        public void LoadSkillsFromData(CharacterSaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Copia as habilidades de volta para os arrays originais
+            attackSkills = saveData.SkillAttack != null ? (Skill[])saveData.SkillAttack.Clone() : new Skill[0];
+            defenseSkills = saveData.SkillDefense != null ? (Skill[])saveData.SkillDefense.Clone() : new Skill[0];
+            supportSkills = saveData.SkillSuport != null ? (Skill[])saveData.SkillSuport.Clone() : new Skill[0];
+
+            // Atualiza os slots da UI
+            SetupSkillSlots(attackSkills, attackSkillSlots);
+            SetupSkillSlots(defenseSkills, defenseSkillSlots);
+            SetupSkillSlots(supportSkills, supportSkillSlots);
+
+            Debug.Log("Habilidades carregadas do CharacterSaveData.");
+        }
         public void AddSkill(Skill newSkill, SkillType skillType){
             newSkill.isUnlocked = true;
            // ((IList)allSkills).Add(newSkill);

@@ -39,6 +39,12 @@ namespace RPGKarawara
         public SerializableDictionary<int, bool> bossesAwakened;    //  THE INT IS THE BOSS I.D, THE BOOL IS THE AWAKENED STATUS
         public SerializableDictionary<int, bool> bossesDefeated;    //  THE INT IS THE BOSS I.D, THE BOOL IS THE DEFEATED STATUS
 
+            [Header("Skills")] 
+            public Skill[] skillsSlot;
+
+        public Skill[] SkillDefense;
+        public Skill[] SkillSuport;
+        public Skill[] SkillAttack;
         public CharacterSaveData()
         {
             sitesOfGrace = new SerializableDictionary<int, bool>();

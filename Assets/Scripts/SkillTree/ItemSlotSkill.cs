@@ -12,6 +12,7 @@ namespace RPGKarawara
         public int slotID;
         private RectTransform draggedRectTransform;
         private IconDragDrop dragDrop;
+        public Skill skillData;
         private void Awake(){
             itemSlotImage = GetComponent<RectTransform>();
         }
