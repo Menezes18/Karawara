@@ -17,7 +17,7 @@ namespace RPGKarawara
         }
 
         // Função para iniciar o fade
-        public void StartFade()
+        public void  StartFade()
         {
             image.color = new Color(image.color.r, image.color.g, image.color.b, 1.0f);
             if (currentFadeCoroutine != null)
