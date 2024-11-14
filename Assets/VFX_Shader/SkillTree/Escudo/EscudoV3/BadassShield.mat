@@ -13,7 +13,10 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _RECEIVE_SHADOWS_OFF
+  - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -42,19 +45,33 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FresnelPower: 3.76
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Blend: 2
+    - _BlendModePreserveSpecular: 1
+    - _CastShadows: 0
+    - _Cull: 0
+    - _DstBlend: 1
+    - _FresnelPower: 10.41
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SphereHardness: 0.35
-    - _SphereMask: 1
+    - _ReceiveShadows: 0
+    - _SphereHardness: 5.11
+    - _SphereMask: 0
     - _SphereRadius: 0
+    - _SrcBlend: 1
+    - _Surface: 1
     - _VertexFrequency: 4
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     m_Colors:
-    - _BackColor: {r: 0.56765074, g: 0.39039555, b: 0, a: 1}
-    - _FresnelColor: {r: 0, g: 2.1240077, b: 0.080172695, a: 1}
-    - _FrontColor: {r: 0, g: 5.278032, b: 0.24870262, a: 1}
+    - _BackColor: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 0}
+    - _FresnelColor: {r: 0.8051808, g: 2.1185472, b: 0, a: 0.7176471}
+    - _FrontColor: {r: 0, g: 5.278032, b: 0.24870262, a: 0.105882354}
     - _SphereCenter: {r: 0, g: 0, b: 0, a: 0}
-    - _VertexAmount: {r: 0.1, g: 0.1, b: 0.1, a: 0}
+    - _VertexAmount: {r: 0.01, g: 0.01, b: 0.01, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &837203460555359411
 MonoBehaviour:

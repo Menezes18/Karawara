@@ -20,7 +20,7 @@ MonoBehaviour:
     x: 405
     y: -190
     width: 960
-    height: 1593
+    height: 1631
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -687,7 +687,7 @@ MonoBehaviour:
   m_Children:
   - {fileID: 8926484042661614639}
   - {fileID: 8926484042661614642}
-  m_UIPosition: {x: 941, y: 746}
+  m_UIPosition: {x: 941, y: 784}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -742,7 +742,35 @@ MonoBehaviour:
     m_PropertyNames:
     - _QueueOffset
     - _QueueControl
+    - _WorkflowMode
+    - _CastShadows
+    - _ReceiveShadows
+    - _Surface
+    - _Blend
+    - _AlphaClip
+    - _BlendModePreserveSpecular
+    - _SrcBlend
+    - _DstBlend
+    - _ZWrite
+    - _ZWriteControl
+    - _ZTest
+    - _Cull
+    - _AlphaToMask
     m_PropertyValues:
+    - 0
+    - 0
+    - 1
+    - 0
+    - 0
+    - 1
+    - 2
+    - 0
+    - 1
+    - 1
+    - 1
+    - 0
+    - 0
+    - 4
     - 0
     - 0
   workflowMode: 0
@@ -855,7 +883,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"r":0.0,"g":5.278033256530762,"b":0.26390141248703005,"a":100.0}'
+      m_SerializableObject: '{"r":0.0,"g":2.2706029415130617,"b":0.11353003978729248,"a":0.6039215922355652}'
     m_Space: 2147483647
   m_Property:
     name: _FrontColor
@@ -1026,7 +1054,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"r":0.5699999928474426,"g":0.3894999921321869,"b":0.0,"a":1.0}'
+      m_SerializableObject: '{"r":0.0,"g":0.0,"b":0.0,"a":0.0}'
     m_Space: 2147483647
   m_Property:
     name: _BackColor
@@ -1947,7 +1975,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":0.21509936451911927,"g":0.4301987886428833,"b":0.10754969716072083,"a":1.0},"time":0.0},{"color":{"r":0.1378876119852066,"g":0.41079023480415347,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.1111162006855011},{"alpha":0.9117646813392639,"time":0.382360577583313},{"alpha":1.0,"time":0.5852903127670288},{"alpha":0.0,"time":1.0}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":0.21509936451911927,"g":0.4301987886428833,"b":0.10754969716072083,"a":1.0},"time":0.0},{"color":{"r":0.1378876119852066,"g":0.41079023480415347,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":0.2823529541492462,"time":0.1111162006855011},{"alpha":0.9117646813392639,"time":0.382360577583313},{"alpha":1.0,"time":0.5852903127670288},{"alpha":0.0,"time":1.0}],"gradientMode":0}'
     m_Space: 2147483647
   m_Property:
     name: gradient
@@ -2322,7 +2350,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":0.0,"g":2.1240081787109377,"b":0.0965457335114479,"a":1.0},"time":0.0},{"color":{"r":0.7161731719970703,"g":2.075471878051758,"b":0.029369831085205079,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.1111162006855011},{"alpha":0.9117646813392639,"time":0.382360577583313},{"alpha":1.0,"time":0.5852903127670288},{"alpha":0.0,"time":1.0}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":0.0,"g":0.9883372783660889,"b":0.044924378395080569,"a":1.0},"time":0.0},{"color":{"r":0.419870525598526,"g":1.2167860269546509,"b":0.017218638211488725,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":0.2666666805744171,"time":0.1111162006855011},{"alpha":0.9117646813392639,"time":0.382360577583313},{"alpha":1.0,"time":0.5555504560470581},{"alpha":0.0,"time":0.695902943611145}],"gradientMode":0}'
     m_Space: 2147483647
   m_Property:
     name: gradient
