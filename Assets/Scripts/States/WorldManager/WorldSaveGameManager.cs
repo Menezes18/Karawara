@@ -31,13 +31,7 @@ namespace RPGKarawara
         public CharacterSaveData characterSlot01;
         public CharacterSaveData characterSlot02;
         public CharacterSaveData characterSlot03;
-        public CharacterSaveData characterSlot04;
-        public CharacterSaveData characterSlot05;
-        public CharacterSaveData characterSlot06;
-        public CharacterSaveData characterSlot07;
-        public CharacterSaveData characterSlot08;
-        public CharacterSaveData characterSlot09;
-        public CharacterSaveData characterSlot10;
+
         public LoadScene loadscene;
         private void Awake()
         {
@@ -88,27 +82,6 @@ namespace RPGKarawara
                 case CharacterSlot.CharacterSlot_03:
                     fileName = "characterSlot_03";
                     break;
-                case CharacterSlot.CharacterSlot_04:
-                    fileName = "characterSlot_04";
-                    break;
-                case CharacterSlot.CharacterSlot_05:
-                    fileName = "characterSlot_05";
-                    break;
-                case CharacterSlot.CharacterSlot_06:
-                    fileName = "characterSlot_06";
-                    break;
-                case CharacterSlot.CharacterSlot_07:
-                    fileName = "characterSlot_07";
-                    break;
-                case CharacterSlot.CharacterSlot_08:
-                    fileName = "characterSlot_08";
-                    break;
-                case CharacterSlot.CharacterSlot_09:
-                    fileName = "characterSlot_09";
-                    break;
-                case CharacterSlot.CharacterSlot_10:
-                    fileName = "characterSlot_10";
-                    break;
                 default:
                     break;
             }
@@ -154,76 +127,7 @@ namespace RPGKarawara
                 return;
             }
 
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_04);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_05);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_06);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_07);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_08);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_09);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_10);
-
-            if (!saveFileDataWriter.CheckToSeeIfFileExists())
-            {
-                currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_10;
-                currentCharacterData = new CharacterSaveData();
-                NewGame();
-                return;
-            }
-
+            
             // Se não houver slots livres, notifica o jogador
             TitleScreenManager.Instance.DisplayNoFreeCharacterSlotsPopUp();
 
@@ -244,27 +148,6 @@ namespace RPGKarawara
                 case "Save-03":
                     currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_03;
                     break;
-                case "Save-04":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
-                    break;
-                case "Save-05":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
-                    break;
-                case "Save-06":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
-                    break;
-                case "Save-07":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
-                    break;
-                case "Save-08":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
-                    break;
-                case "Save-09":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
-                    break;
-                case "Save-10":
-                    currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_10;
-                    break;
                 default:
                     Debug.LogError("Slot selecionado desconhecido.");
                     break;
@@ -274,7 +157,7 @@ namespace RPGKarawara
             // Aqui você deve implementar a lógica para sobrescrever o slot selecionado
             //currentCharacterSlotBeingUsed = selectedSlot;
             //currentCharacterData = new CharacterSaveData();
-            DeleteGame(currentCharacterSlotBeingUsed);
+           // DeleteGame(currentCharacterSlotBeingUsed);
             NewGame();
         }
         private void NewGame()
@@ -282,7 +165,7 @@ namespace RPGKarawara
             // Salva os dados do novo personagem criado, incluindo estatísticas e itens (quando a tela de criação for adicionada)
             player.playerNetworkManager.vitality.Value = 15;
             player.playerNetworkManager.endurance.Value = 10;
-            //player.playerNetworkManager.gameObject.transform.position = new Vector3(-55,80,400);
+            player.playerNetworkManager.gameObject.transform.position = new Vector3(-159.300003f, 180.5f, 554.5f);
 
             SaveGame();
             loadscene.LoadGame();
@@ -290,7 +173,11 @@ namespace RPGKarawara
         }
 
 
-       
+
+        public void SlotTeste()
+        {
+            currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
+        }
         public void LoadGame()
         {
             //  LOAD A PREVIOUS FILE, WITH A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING
@@ -346,26 +233,7 @@ namespace RPGKarawara
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_03);
             characterSlot03 = saveFileDataWriter.LoadSaveFile();
 
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_04);
-            characterSlot04 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_05);
-            characterSlot05 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_06);
-            characterSlot06 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_07);
-            characterSlot07 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_08);
-            characterSlot08 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_09);
-            characterSlot09 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_10);
-            characterSlot10 = saveFileDataWriter.LoadSaveFile();
+            
         }
 
         public IEnumerator LoadWorldScene()

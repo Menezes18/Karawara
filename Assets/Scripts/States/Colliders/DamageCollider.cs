@@ -9,7 +9,7 @@ namespace RPGKarawara {
     {
         [Header("Collider")]
         [SerializeField] protected Collider damageCollider;
-        
+
         [Header("Damage")]
         public float physicalDamage = 0;
         [Header("Para lugares que o escudo não ira proteger")] public float magicDamage = 0;
@@ -22,12 +22,12 @@ namespace RPGKarawara {
         [Header("Characters Damaged")]
         protected List<CharacterManager> charactersDamaged = new List<CharacterManager>();
 
+        [Header("Pet Check")]
+        public bool isPet; // Indica se é um pet
+
         protected virtual void Awake()
         {
-
         }
-
-
 
         protected virtual void OnTriggerEnter(Collider other)
         {
@@ -41,6 +41,9 @@ namespace RPGKarawara {
                 //  CHECK IF TARGET IS BLOCKING
 
                 //damageTarget.IsOwner
+                if (isPet && other.CompareTag("Player"))
+                    return;
+
                 CheckForBlock(damageTarget);
                 DamageTarget(damageTarget);
             }
@@ -56,7 +59,6 @@ namespace RPGKarawara {
                 damageEffect.holyDamage = holyDamage;
 
                 damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
-
             }
         }
 
@@ -88,7 +90,7 @@ namespace RPGKarawara {
         public virtual void DisableDamageCollider()
         {
             damageCollider.enabled = false;
-            charactersDamaged.Clear();      //  WE RESET THE CHARACTERS THAT HAVE BEEN HIT WHEN WE RESET THE COLLIDER, SO THEY MAY BE HIT AGAIN
+            charactersDamaged.Clear(); // Resetar alvos atingidos
         }
     }
 }

@@ -54,8 +54,8 @@ namespace RPGKarawara
                 elapsedTime += Time.unscaledDeltaTime; // Use Time.unscaledDeltaTime para não considerar o timeScale
                 yield return null;
             }
-
-            image.color = endColor; // Garante que a cor final seja exatamente o alvo
+            image.color = new Color(endColor.r, endColor.g, endColor.b, 0.0f);
+            //image.color = endColor; // Garante que a cor final seja exatamente o alvo
         }
     }
 }
