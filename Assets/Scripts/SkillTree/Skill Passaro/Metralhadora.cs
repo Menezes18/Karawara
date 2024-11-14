@@ -10,7 +10,7 @@ public class Metralhadora : MonoBehaviour
     // Define a distancia maxima para a mira
     [SerializeField] private float range = 15f;
 
-    [SerializeField] private string enemyTag = "inimigo";
+    [SerializeField] private string enemyTag;
 
     [SerializeField] private Transform engrenagem;
 
@@ -92,24 +92,13 @@ public class Metralhadora : MonoBehaviour
 
     private void Atirar()
     {
-        RaycastHit hit;
-        int layerMask = ~LayerMask.GetMask("Character");
-        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, range, layerMask))
-        {
-            if (hit.transform.CompareTag(enemyTag))
-            {
-                // Aplica dano ao inimigo
-                CharacterManager damageTarget = hit.collider.GetComponentInParent<CharacterManager>();
-                if (damageTarget != null)
-                {
-                    
-                    damageCollider.DamagePublic(damageTarget);
-                }
+        GameObject projetilGObject = (GameObject)Instantiate(projetilPrefab, firePoint.position, firePoint.rotation);
+        Projetil projetil = projetilGObject.GetComponent<Projetil>();
 
-                // Ativa a partícula de impacto
-                // impactoParticula.transform.position = hit.point;
-                // impactoParticula.Play();
-            }
+        if (projetil != null)
+        {
+            projetil.BuscarAlvo(target);
+
         }
     }
 
