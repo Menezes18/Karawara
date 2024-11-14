@@ -1005,6 +1005,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
   undeadCharacter: {fileID: 0}
 --- !u!1 &2592039477640381825
 GameObject:
@@ -1360,6 +1361,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
   undeadCharacter: {fileID: 0}
 --- !u!1 &3444472406682742568
 GameObject:
@@ -1766,7 +1768,7 @@ GameObject:
   - component: {fileID: 4992773537249216167}
   m_Layer: 3
   m_Name: Dummmy
-  m_TagString: TargetDamageEnemy
+  m_TagString: Inimigo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

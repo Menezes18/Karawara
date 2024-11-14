@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2756972572799295063}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.582, y: 0, z: 0}
+  m_LocalPosition: {x: 0.582, y: 1.91, z: 0.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -324,6 +324,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 1
 --- !u!1001 &4068650301337459372
 PrefabInstance:
   m_ObjectHideFlags: 0
