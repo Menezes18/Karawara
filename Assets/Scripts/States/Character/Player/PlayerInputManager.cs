@@ -530,7 +530,6 @@ namespace RPGKarawara
             {
                 esc_Input = false;
                PlayerUIManager.instance.playerUIHudManager.ActivatePause(1);
-               PlayerUIManager.instance.playerUIHudManager.CursorAtivar();
             }
             
         }
@@ -539,7 +538,6 @@ namespace RPGKarawara
             if (skillUI_Input){
                 skillUI_Input = false;
                 PlayerUIManager.instance.playerUIHudManager.ActivatePause(2);
-                PlayerUIManager.instance.playerUIHudManager.CursorAtivar();
             }
         }
         private void ProcessQuedInput()

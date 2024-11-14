@@ -154,16 +154,6 @@ namespace RPGKarawara
             {
                 pauseMenu.SetActive(!pauseMenu.activeSelf);
         
-                if (pauseMenu.activeSelf)
-                {
-                    DisablePlayerInputs(); // Desativa os inputs do jogador
-                }
-                else
-                {
-                    //Invoke("DeactivatePause", 0.5f);
-                    EnablePlayerInputs(); // Reativa os inputs do jogador
-                }
-        
                 if (pauseSkillMenu.activeSelf)
                 {
                     pauseSkillMenu.SetActive(false);
@@ -173,19 +163,27 @@ namespace RPGKarawara
             else if (index == 2)
             {
                 pauseSkillMenu.SetActive(!pauseSkillMenu.activeSelf);
-                if (pauseSkillMenu.activeSelf)
-                {
-                    DisablePlayerInputs(); // Desativa os inputs do jogador
-                }
-                else
-                {
-                    //Invoke("DeactivatePause", 0.5f);
-                    EnablePlayerInputs(); // Reativa os inputs do jogador
-                }
+
                 if (pauseMenu.activeSelf)
                 {
                     pauseMenu.SetActive(false);
                 }
+            }
+
+            if (pauseMenu.activeSelf || pauseSkillMenu.activeSelf)
+            {
+                DisablePlayerInputs(); // Desativa os inputs do jogador
+                Time.timeScale = 0f;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                //Invoke("DeactivatePause", 0.5f);
+                EnablePlayerInputs(); // Reativa os inputs do jogador
+                Time.timeScale = 1f;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             
         }
@@ -206,21 +204,6 @@ namespace RPGKarawara
             if (PlayerInputManager.instance.playerControls != null)
             {
                 PlayerInputManager.instance.EnableInput(); // Você precisará implementar este método no seu PlayerController
-            }
-        }
-        public void CursorAtivar(){
-            active = !active;
-            if (active)
-            {
-                Time.timeScale = 0f;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
             }
         }
 
