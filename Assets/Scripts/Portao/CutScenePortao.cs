@@ -8,28 +8,31 @@ namespace RPGKarawara
         public GameObject[] stone;
         public FadeImage fadeImage;
         public GameObject cameraObject;
-
-            
+        
+        
+        public GameObject cameraobj;
+        public AnimationTrigger animationTrigger;
         void Start(){
-            
+           // cameraobj.SetActive(false);
 
         }
 
         public void StartSequence(int numero, bool check)
         {
             // Pausa o tempo
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
 
             // Ativa a câmera
-            cameraObject.SetActive(true);
+            
             fadeImage.StartFade();
-            stone[numero].SetActive(check);
+            //stone[numero].SetActive(check);
+            //animationTrigger
             // Ativa o fade
 
             // Ativa o movimento da pedra
 
             // Espera um tempo antes de retomar o tempo
-            StartCoroutine(WaitAndResumeTime());
+            //StartCoroutine(WaitAndResumeTime());
         }
 
         IEnumerator WaitAndResumeTime()

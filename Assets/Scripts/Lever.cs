@@ -12,6 +12,7 @@ namespace RPGKarawara
         public int num;
         public System.Action onActivate; // Action to notify when lever is activated
         public CutScenePortao cutScenePortao;
+        public AnimationTrigger animationTrigger;
         private void Start(){
             cutScenePortao = FindObjectOfType<CutScenePortao>();
         }
@@ -19,7 +20,8 @@ namespace RPGKarawara
         public void Activate()
         {
             isActive = !isActive;
-            cutScenePortao.StartSequence(num, isActive);
+            animationTrigger.AtivarCameraCutScene();
+            //cutScenePortao.StartSequence(num, isActive);
             Debug.Log("Lever activated: " + isActive);
             onActivate?.Invoke(); // Notify that the lever has been activated
         }
