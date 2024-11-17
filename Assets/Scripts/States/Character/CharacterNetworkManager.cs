@@ -57,6 +57,17 @@ namespace RPGKarawara
             if (currentHealth.Value <= 0)
             {
                 StartCoroutine(character.ProcessDeathEvent());
+                GameObject corruptionObject = GameObject.FindWithTag("Corruption");
+
+                // Verifica se o objeto foi encontrado antes de tentar desativá-lo
+                if (corruptionObject != null)
+                {
+                    corruptionObject.SetActive(false);
+                }
+                else
+                {
+                    Debug.LogWarning("Nenhum objeto com a tag 'Corruption' foi encontrado.");
+                }
             }
 
             //  PREVENTS US FROM OVER HEALING

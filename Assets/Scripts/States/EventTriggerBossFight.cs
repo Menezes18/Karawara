@@ -7,6 +7,7 @@ namespace RPGKarawara
     public class EventTriggerBossFight : MonoBehaviour
     {
         [SerializeField] int bossID;
+        public GameObject Corrupcao;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -15,8 +16,17 @@ namespace RPGKarawara
             if (boss != null)
             {
                 boss.WakeBoss();
+                if(Corrupcao != null)
+                {
+                    ChangeCorrupcao();
+                    Corrupcao.GetComponent<Corruption>().dissolveActive = false;
+                }
             }
             Destroy(gameObject);
+        }
+        public void ChangeCorrupcao()
+        {
+            Corrupcao.SetActive(!Corrupcao.activeInHierarchy);
         }
     }
 }
