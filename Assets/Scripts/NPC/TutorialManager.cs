@@ -41,6 +41,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (isTutorialActive && currentStep < tutorialSteps.Length)
         {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
             float distance = Vector3.Distance(player.position, tutorialSteps[currentStep].waypoint.transform.position);
 
             if (distance < distanceWaypoint)  // Se o jogador está perto o suficiente do waypoint
@@ -55,10 +56,10 @@ public class TutorialManager : MonoBehaviour
                     ActivateWaypoint(currentStep);  // Ativa o ícone do próximo waypoint
                 }
                 else{
-                    dicaText.text = "Vá até a vila, descubra onde o Mapinguari se esconde e derrote-o!";
-                    ShowPopup("Vá até a vila, descubra onde o Mapinguari se esconde e derrote-o!");
-                    isTutorialActive = false;  // Desativa o tutorial
-                    Invoke("Acabou", 4f);
+                    // dicaText.text = "Vá até a vila, descubra onde o Mapinguari se esconde e derrote-o!";
+                    // ShowPopup("Vá até a vila, descubra onde o Mapinguari se esconde e derrote-o!");
+                    // isTutorialActive = false;  // Desativa o tutorial
+                    // Invoke("Acabou", 4f);
                     
                 }
             }
