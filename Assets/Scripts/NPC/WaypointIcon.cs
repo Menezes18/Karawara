@@ -8,11 +8,14 @@ using UnityEngine;
     {
         public GameObject waypointIcon;
         public string waypointName;
-        
+        public bool showWaypointIcon;
         public void Start(){
             waypointIcon =  GameObject.Find(waypointName);
+            if (showWaypointIcon){
+                Invoke("DesativarIcon", 5f);
+            }
         }
-
+        
         private void FixedUpdate(){
             if (waypointName == null){
                 waypointIcon =  GameObject.Find(waypointName);
