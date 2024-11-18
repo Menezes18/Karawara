@@ -17,7 +17,7 @@ namespace RPGKarawara
 
         private void Update()
         {
-            /
+            
             if (Vector3.Distance(transform.position, player.position) <= interactionRange)
             {
                
