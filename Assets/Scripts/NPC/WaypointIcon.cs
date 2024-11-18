@@ -11,9 +11,6 @@ using UnityEngine;
         public bool showWaypointIcon;
         public void Start(){
             waypointIcon =  GameObject.Find(waypointName);
-            if (showWaypointIcon){
-                Invoke("DesativarIcon", 5f);
-            }
         }
         
         private void FixedUpdate(){
@@ -21,6 +18,7 @@ using UnityEngine;
                 waypointIcon =  GameObject.Find(waypointName);
             }
         }
+
 
         public void AtivarIcon(){
             
