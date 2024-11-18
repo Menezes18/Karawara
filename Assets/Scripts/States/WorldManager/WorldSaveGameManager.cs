@@ -95,7 +95,12 @@ namespace RPGKarawara
 
             // Verifica se podemos criar um novo arquivo de salvamento (checando a existência de outros arquivos primeiro)
             saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_01);
-
+            currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
+            currentCharacterData = new CharacterSaveData();
+            NewGame();
+            return;
+            
+            /*
             if (!saveFileDataWriter.CheckToSeeIfFileExists())
             {
                 // Se este slot de perfil não estiver ocupado, cria um novo usando este slot
@@ -132,7 +137,7 @@ namespace RPGKarawara
             TitleScreenManager.Instance.DisplayNoFreeCharacterSlotsPopUp();
 
             //OnSlotOverwriteSelected(CharacterSlot.CharacterSlot_01);
-
+            */
         }
         public void OnSlotOverwriteSelected(string selectedSlot)
         {
@@ -165,7 +170,7 @@ namespace RPGKarawara
             // Salva os dados do novo personagem criado, incluindo estatísticas e itens (quando a tela de criação for adicionada)
             player.playerNetworkManager.vitality.Value = 15;
             player.playerNetworkManager.endurance.Value = 10;
-            player.playerNetworkManager.gameObject.transform.position = new Vector3(-159.300003f, 180.5f, 554.5f);
+            player.playerNetworkManager.gameObject.transform.position = new Vector3(-319.92f, 100.13f, 595.46f);
 
             SaveGame();
             loadscene.LoadGame();

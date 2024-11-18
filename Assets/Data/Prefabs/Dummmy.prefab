@@ -685,15 +685,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822406082931528526}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.018975, y: 1.803, z: -0.040743}
-  m_LocalScale: {x: 0.020693729, y: 0.020693729, z: 0.020693729}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0.00018975, y: 0.00040742755, z: 0.018029999}
+  m_LocalScale: {x: 0.00020693729, y: 0.00020693731, z: 0.00020693731}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6420737851396401652}
   - {fileID: 895463019467976801}
   - {fileID: 7518310220285129904}
-  m_Father: {fileID: 7735749764116497296}
+  m_Father: {fileID: 8477978085746925901}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4542105109992860522
 MonoBehaviour:
@@ -3527,7 +3527,6 @@ Transform:
   - {fileID: 4418789414888921149}
   - {fileID: 1391848024956157273}
   - {fileID: 1557698828527550930}
-  - {fileID: 5403945905677524871}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &8412491272462609278
@@ -5292,7 +5291,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5403945905677524871}
   m_Father: {fileID: 7897551227773893211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &1164562694070817233
@@ -6746,6 +6746,11 @@ PrefabInstance:
       propertyPath: VelocityModule.speedModifier.scalar
       value: 0.05
       objectReference: {fileID: 0}
+    - target: {fileID: 1957511049178306980, guid: 2f5e369db468e2345bd7c544cd718e6c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3958949206380061220, guid: 2f5e369db468e2345bd7c544cd718e6c,
         type: 3}
       propertyPath: VelocityModule.enabled
@@ -6770,6 +6775,11 @@ PrefabInstance:
         type: 3}
       propertyPath: VelocityModule.speedModifier.scalar
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5359984887834403785, guid: 2f5e369db468e2345bd7c544cd718e6c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5359984887834403785, guid: 2f5e369db468e2345bd7c544cd718e6c,
         type: 3}
@@ -6830,6 +6840,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fogo_Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6177225470732824479, guid: 2f5e369db468e2345bd7c544cd718e6c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8432182385733437016, guid: 2f5e369db468e2345bd7c544cd718e6c,
         type: 3}
