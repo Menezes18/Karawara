@@ -82,7 +82,7 @@ public class MiniMapEntity : MiniMapEntityBase
         //Instantiate UI in canvas
         GameObject g = MiniMapDataBD.Instance.IconPrefab;
         cacheItem = Instantiate(g) as GameObject;
-        cacheItem.name = $"Icon ({gameObject.name})";
+        cacheItem.name = $"Icon_{gameObject.name}";
         RectRoot = OffScreen ? MiniMapOwner.MiniMapUI.root : MiniMapOwner.MiniMapUI.iconsPanel;
         //SetUp Icon UI
         IconInstance = cacheItem.GetComponent<IconBaseMiniMap>();

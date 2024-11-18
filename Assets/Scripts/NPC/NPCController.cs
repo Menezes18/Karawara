@@ -1,90 +1,94 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace RPGKarawara{
-    public class NPCController : MonoBehaviour{
-        public Transform[] patrolPoints;
-        public float detectionRadius = 5f;
-        public float npcInteractionRadius = 2f;
-        public string[] dialogues;
+public class RandomNPCMovement : MonoBehaviour
+{
+    public float moveInterval = 3f;  // Intervalo entre os movimentos aleatórios
+    public float moveRange = 10f;    // O alcance máximo de movimentação do NPC
+    public float idleChance = 0.5f;  // Probabilidade de o NPC ficar parado (50%)
+    public float idleMinTime = 3f;   // Tempo mínimo de idle
+    public float idleMaxTime = 6f;   // Tempo máximo de idle
 
-        private NavMeshAgent agent;
-        private int currentPatrolIndex;
-        private GameObject player;
-        private bool isInteracting;
-        private bool isTalkingToNPC;
+    private NavMeshAgent navMeshAgent;
+    private Animator animator;
+    private float timeToMove;
+    private float idleTime;
+    private bool isIdle;
 
-        void Start(){
-            agent = GetComponent<NavMeshAgent>();
-            player = GameObject.FindGameObjectWithTag("Player");
-            currentPatrolIndex = 0;
-            GoToNextPatrolPoint();
-        }
+    void Start()
+    {
+        // Obtém os componentes NavMeshAgent e Animator
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        timeToMove = moveInterval;
+    }
 
-        void Update(){
-            if (isInteracting || isTalkingToNPC)
-                return;
+    void Update()
+    {
+        // Se o NPC estiver em idle, espera o tempo de idle
+        if (isIdle)
+        {
+            idleTime -= Time.deltaTime;
 
-            float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-
-            if (distanceToPlayer <= detectionRadius){
-                LookAtPlayer();
-                StartDialogue();
-            }
-            else if (!agent.pathPending && agent.remainingDistance < 0.5f){
-                GoToNextPatrolPoint();
-            }
-
-
-            Collider[] nearbyNPCs = Physics.OverlapSphere(transform.position, npcInteractionRadius);
-            foreach (Collider col in nearbyNPCs){
-                if (col.CompareTag("NPC") && col.gameObject != this.gameObject){
-                    if (Random.Range(0, 100) < 20) // 20% de chance de iniciar uma conversa
-                    {
-                        StartCoroutine(TalkToNPC(col.gameObject));
-                    }
-                }
-            }
-        }
-
-        void GoToNextPatrolPoint(){
-            if (patrolPoints.Length == 0)
-                return;
-
-            agent.destination = patrolPoints[currentPatrolIndex].position;
-            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-        }
-
-        void LookAtPlayer(){
-            Vector3 direction = (player.transform.position - transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-        }
-
-        void StartDialogue(){
-            isInteracting = true;
-            string message = dialogues[Random.Range(0, dialogues.Length)];
-            DialogueSystemNPC.instance.ShowMessage(message);
-            Invoke(nameof(EndInteraction), 3f);
-        }
-
-        void EndInteraction(){
-            isInteracting = false;
-        }
-
-        System.Collections.IEnumerator TalkToNPC(GameObject otherNPC){
-            isTalkingToNPC = true;
-            LookAtPlayer(); // Olha para o outro NPC
-
-            // Simula uma conversa
-            string[] conversation ={ "Olá!", "Como vai?", "Que dia bonito!" };
-            foreach (string line in conversation){
-                DialogueSystemNPC.instance.ShowMessage(line);
-                yield return new WaitForSeconds(2f);
+            if (idleTime <= 0)
+            {
+                isIdle = false;
+                MoveToRandomPosition();  // Faz o NPC se mover depois de "idle"
             }
 
-            isTalkingToNPC = false;
+            // Certifica-se de que a animação está como "idle"
+            animator.SetBool("isWalking", false);
+            return; // Retorna para não continuar a lógica de movimento enquanto estiver idle
+        }
+
+        // Decrementa o contador de tempo para o próximo movimento
+        timeToMove -= Time.deltaTime;
+
+        // Quando o contador chega a zero, o NPC decide se vai se mover ou ficar em idle
+        if (timeToMove <= 0)
+        {
+            if (Random.value < idleChance)
+            {
+                // Decide ficar em idle por um tempo aleatório
+                isIdle = true;
+                idleTime = Random.Range(idleMinTime, idleMaxTime);
+                animator.SetBool("isWalking", false); // Define a animação de "parado"
+            }
+            else
+            {
+                // Se não for em idle, o NPC se move para uma nova posição aleatória
+                MoveToRandomPosition();
+            }
+
+            timeToMove = moveInterval;
+        }
+        else
+        {
+            // Se o NPC estiver em movimento, atualiza a animação para "andando"
+            if (navMeshAgent.velocity.magnitude > 0.1f) // Verifica se o NPC está se movendo
+            {
+                animator.SetBool("isWalking", true); // Ativa animação "andando"
+            }
+            else
+            {
+                animator.SetBool("isWalking", false); // Caso contrário, desativa animação "andando"
+            }
+        }
+    }
+
+    // Move o NPC para uma posição aleatória dentro de um alcance determinado
+    private void MoveToRandomPosition()
+    {
+        // Gera uma posição aleatória dentro de um raio do NPC
+        Vector3 randomDirection = Random.insideUnitSphere * moveRange;
+        randomDirection += transform.position;
+
+        // Garante que a posição está dentro do NavMesh
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, moveRange, NavMesh.AllAreas))
+        {
+            // Comanda o NavMeshAgent a se mover para a posição aleatória encontrada
+            navMeshAgent.SetDestination(hit.position);
         }
     }
 }
