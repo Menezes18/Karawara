@@ -12,6 +12,7 @@ namespace RPGKarawara
         private void OnTriggerEnter(Collider other)
         {
             AIBossCharacterManager boss = WorldAIManager.instance.GetBossCharacterByID(bossID);
+            AudioController.AudioInstance.PlayCombatMusic();
 
             if (boss != null)
             {
