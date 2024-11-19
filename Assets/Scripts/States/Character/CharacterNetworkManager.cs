@@ -68,7 +68,7 @@ namespace RPGKarawara
                 {
                     Debug.LogWarning("Nenhum objeto com a tag 'Corruption' foi encontrado.");
                 }
-                AudioController.AudioInstance.PlayBackgroundMusic();
+               
             }
 
             //  PREVENTS US FROM OVER HEALING
