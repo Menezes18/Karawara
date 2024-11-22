@@ -70,6 +70,7 @@ public class SceneChecker : MonoBehaviour{
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            WorldSaveGameManager.instance.loadscene.desativado();
             //statusBar.SetActive(true);
             // Exibe uma mensagem no console
            
