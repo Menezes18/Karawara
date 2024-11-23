@@ -3,10 +3,10 @@
 namespace RPGKarawara.SkillTree {
     [CreateAssetMenu(fileName = "New Support Skill", menuName = "Skills/SupportSkill")]
     public class SupportSkill : Skill {
-        public float _healingRate;       // Taxa de cura por segundo
-        public int _healingAmount;  
-        public GameObject healCirclePrefab;
-
+        [HideInInspector]public float _healingRate;       // Taxa de cura por segundo
+        [HideInInspector]public int _healingAmount;  
+        [HideInInspector]public GameObject healCirclePrefab;
+        public bool showHealVariables = true;
         protected override void Execute(GameObject user) {
             
             if (healCirclePrefab != null) {
