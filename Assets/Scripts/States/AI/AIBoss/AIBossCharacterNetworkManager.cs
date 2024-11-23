@@ -34,7 +34,10 @@ namespace RPGKarawara
             if (aiBossCharacter.IsOwner)
             {
                 if (currentHealth.Value <= 0)
+                {
+                    AudioController.AudioInstance.PlayBackgroundMusic();
                     return;
+                }
 
                 float healthNeededForShift = maxHealth.Value * (aiBossCharacter.minimumHealthPercentageToShift / 100);
 
