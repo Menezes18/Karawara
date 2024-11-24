@@ -3,6 +3,11 @@
 namespace RPGKarawara.SkillTree {
     [CreateAssetMenu(fileName = "New Support Skill", menuName = "Skills/SupportSkill")]
     public class SupportSkill : Skill {
+        
+        public bool showSkillJacare = false;
+        [HideInInspector] public GameObject skillPrefabJacare;
+        
+        
         [HideInInspector]public float _healingRate;       // Taxa de cura por segundo
         [HideInInspector]public int _healingAmount;  
         [HideInInspector]public GameObject healCirclePrefab;
@@ -17,9 +22,16 @@ namespace RPGKarawara.SkillTree {
                 healCircleScript.Initialize(_healingRate, _healingAmount);
 
             }
-            else{
-                Debug.Log("null o prefab");
+
+            if (skillPrefabJacare != null){
+                GameObject jacare  = Instantiate(skillPrefabJacare, user.transform.position, user.transform.rotation);
+                SkillJacare jacareScript = jacare.GetComponent<SkillJacare>();
+                jacareScript.skillDuration = cooldownDuration;
+                DurationSkill durationSkillScript = jacare.GetComponent<DurationSkill>();
+                durationSkillScript.Init(cooldownDuration);
+                
             }
+            
         }
     }
 }
