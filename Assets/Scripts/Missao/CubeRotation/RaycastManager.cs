@@ -4,26 +4,55 @@ using UnityEngine;
 public class RaycastManager : MonoBehaviour
 {
     public List<Position> targetPositions;
+    public GameObject ponte;
+
+    private Dictionary<GameObject, GameObject> targetMap;
 
     void Start()
     {
+        if (targetPositions == null || targetPositions.Count == 0)
+        {
+            Debug.LogError("Nenhuma posição foi definida no RaycastManager.");
+            return;
+        }
+
+        targetMap = new Dictionary<GameObject, GameObject>();
+
         foreach (var position in targetPositions)
         {
-            position.hasHitTarget = false;
+            if (position.originObject != null && position.targetObject != null)
+            {
+                targetMap[position.originObject] = position.targetObject;
+                position.hasHitTarget = false;
+            }
+            else
+            {
+                Debug.LogError("Um ou mais objetos de origem ou alvo não foram atribuídos em Position.");
+            }
         }
+
+        if (ponte != null) ponte.SetActive(false);
+        else Debug.LogWarning("Objeto 'ponte' não foi atribuído.");
     }
 
     public void RegisterHit(GameObject originObject, GameObject hitObject)
     {
-        foreach (var position in targetPositions)
+        if (targetMap.TryGetValue(originObject, out var target) && target == hitObject)
         {
-            if (position.targetObject == originObject && position.originObject == hitObject)
+            foreach (var position in targetPositions)
             {
-                position.hasHitTarget = true;
-                Debug.Log("Colisão correta detectada: " + originObject.name + " bateu em " + hitObject.name);
-                CheckAllTargetsHit();
-                break;
+                if (position.originObject == originObject && position.targetObject == hitObject)
+                {
+                    position.hasHitTarget = true;
+                    Debug.Log("Colisão correta detectada: " + originObject.name + " bateu em " + hitObject.name);
+                    CheckAllTargetsHit();
+                    break;
+                }
             }
+        }
+        else
+        {
+            Debug.LogWarning("Colisão inválida ou não esperada detectada.");
         }
     }
 
@@ -35,6 +64,7 @@ public class RaycastManager : MonoBehaviour
         }
 
         Debug.Log("Parabéns! Todos os alvos foram atingidos.");
+        if (ponte != null) ponte.SetActive(true);
     }
 }
 
