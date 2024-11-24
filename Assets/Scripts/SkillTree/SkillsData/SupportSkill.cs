@@ -22,7 +22,7 @@ namespace RPGKarawara.SkillTree {
                 healCircleScript.Initialize(_healingRate, _healingAmount);
 
             }
-
+            else
             if (skillPrefabJacare != null){
                 GameObject jacare  = Instantiate(skillPrefabJacare, user.transform.position, user.transform.rotation);
                 SkillJacare jacareScript = jacare.GetComponent<SkillJacare>();
