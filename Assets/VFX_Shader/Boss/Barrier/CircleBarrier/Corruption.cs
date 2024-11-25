@@ -31,9 +31,13 @@ public class Corruption : MonoBehaviour
         }
         else
         {
+            if (gameObjectToDeactivate != null)
+            {
+
+                ReverseDissolveObjects();
+                ReverseVFXArc();
+            }
             // Se dissolveActive for falso, o processo é invertido
-            ReverseDissolveObjects();
-            ReverseVFXArc();
         }
     }
 

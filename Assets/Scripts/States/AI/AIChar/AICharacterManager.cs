@@ -8,11 +8,12 @@ namespace RPGKarawara
 {
     public class AICharacterManager : CharacterManager
     {
-        
         [Header("Character Name")]
         public string characterName = "";
+
         [Header("Elementos")]
         public Element characterElement = Element.None;
+
         [Header("Elementos")]
         [HideInInspector] public AICharacterNetworkManager aiCharacterNetworkManager;
         [HideInInspector] public AICharacterCombatManager aiCharacterCombatManager;
@@ -29,7 +30,12 @@ namespace RPGKarawara
         public PursueTargetState pursueTarget;
         public CombatStanceState combatStance;
         public AttackState attack;
+
+        [Header("Control Variables")]
+        public bool isDisabled = false; // Novo booleano para controle
+
         public SkinnedMeshRenderer skinnedMeshRenderer;
+
         protected override void Awake()
         {
             base.Awake();
@@ -40,7 +46,7 @@ namespace RPGKarawara
 
             navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         }
-       
+
         protected override void Start()
         {
             base.Start();
@@ -75,16 +81,19 @@ namespace RPGKarawara
 
             aiCharacterNetworkManager.currentHealth.OnValueChanged -= aiCharacterNetworkManager.CheckHP;
         }
-        public void ChangeMaterial(Material agua, Material fogo, Element element){
 
-            if (element == Element.Fire){
+        public void ChangeMaterial(Material agua, Material fogo, Element element)
+        {
+            if (element == Element.Fire)
+            {
                 skinnedMeshRenderer.material = fogo;
             }
-            else if (element == Element.Water){
+            else if (element == Element.Water)
+            {
                 skinnedMeshRenderer.material = agua;
             }
-            
         }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -103,7 +112,6 @@ namespace RPGKarawara
 
         protected override void Update()
         {
-
             base.Update();
             aiCharacterCombatManager.HandleActionRecovery(this);
         }
@@ -118,6 +126,18 @@ namespace RPGKarawara
 
         private void ProcessStateMachine()
         {
+            if (isDisabled && !isBoss)
+            {
+
+                currentState = idle;
+                
+                navMeshAgent.isStopped = true; 
+                navMeshAgent.ResetPath();    
+                aiCharacterNetworkManager.isMoving.Value = false;
+
+                return;
+            }
+
             AIState nextState = currentState?.Tick(this);
 
             if (nextState != null)
@@ -167,4 +187,3 @@ namespace RPGKarawara
         }
     }
 }
-

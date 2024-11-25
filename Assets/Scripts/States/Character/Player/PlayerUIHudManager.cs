@@ -214,10 +214,11 @@ namespace RPGKarawara
 
         public void ChangeScene()
         {
+            WorldSaveGameManager.instance.loadscene.LoadGame();
             WorldAIManager.instance.DespawnAllCharacters();
+            SceneManager.UnloadSceneAsync(SceneManager.sceneCount);
             SceneManager.LoadScene("SceneMenu");
             ConfigureUIBasedOnScene();
-            SceneManager.UnloadSceneAsync(SceneManager.sceneCount);
         }
     }
 }

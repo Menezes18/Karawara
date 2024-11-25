@@ -250,13 +250,13 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     private void AtivarHint(int fala)
     {
-        hint.SetActive(true);
-        DialogueHint.instance.currentLineIndex = fala;
-        DialogueHint.instance.ShowNextDialogueLine(fala);
+        // hint.SetActive(true);
+        // DialogueHint.instance.currentLineIndex = fala;
+        // DialogueHint.instance.ShowNextDialogueLine(fala);
     }
     private void DesativarHint()
     {
-        hint.SetActive(false);
+        //hint.SetActive(false);
     }
 
     void PassarObjetivo()
