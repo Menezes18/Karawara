@@ -35,6 +35,7 @@ public enum WeaponModelSlot
     //Right Hips
     //Left Hips
     //Back
+    Bow,
 }
 
 //  THIS IS USED TO CALCULATE DAMAGE BASED ON ATTACK TYPE
