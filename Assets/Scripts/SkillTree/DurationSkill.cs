@@ -3,8 +3,8 @@ using System.Collections;
 
 namespace RPGKarawara.SkillTree
 {
-    public class DurationSkill : MonoBehaviour
-    {
+    public class DurationSkill : MonoBehaviour{
+        public bool skillRoot = false;
         public bool showFields = true; 
         public float erodeRate = 0.03f;
         public float erodeRefreshRate = 0.01f;
@@ -22,12 +22,20 @@ namespace RPGKarawara.SkillTree
             {
                 StartCoroutine(ErodeObject());
             }
+            else if (skillRoot){
+                SkillRootDestroyed();
+            }
             else
             {
                 Destroy(gameObject);
             }
         }
 
+        public void SkillRootDestroyed(){
+            RootSkill root = GetComponent<RootSkill>();
+            root.DestroyAllPrefabsAfterDelay();
+            Destroy(gameObject);
+        }
         IEnumerator ErodeObject()
         {
             float t = erodeObject.material.GetFloat("_Erode");
