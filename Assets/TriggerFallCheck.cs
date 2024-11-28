@@ -25,8 +25,7 @@ namespace RPGKarawara
             // Verifica se a cena ativa é "Video1"
             if (SceneManager.GetActiveScene().name != "Video1")
                 return;
-
-            Debug.Log(transform.position.y);
+            
 
             // Checa se a posição Y do player está abaixo da altura mínima
             if (transform.position.y <= minY)

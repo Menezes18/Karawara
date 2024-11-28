@@ -118,6 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive:
     m_InternalValue: 1
+  aa: 0
   networkPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
@@ -148,6 +149,8 @@ MonoBehaviour:
   isJumping:
     m_InternalValue: 0
   isChargingAttack:
+    m_InternalValue: 0
+  isAttacking:
     m_InternalValue: 0
   currentHealth:
     m_InternalValue: 400
@@ -226,6 +229,8 @@ MonoBehaviour:
         byte0059: 0
         byte0060: 0
         byte0061: 0
+  currentSpellID:
+    m_InternalValue: 0
   currentWeaponBeingUsed:
     m_InternalValue: 0
   currentRightHandWeaponID:
@@ -396,6 +401,7 @@ MonoBehaviour:
     type: 2}
   currentLeftHandWeapon: {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082,
     type: 2}
+  currentSpell: {fileID: 0}
   weaponsInRightHandSlots:
   - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
   - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}

@@ -11,6 +11,7 @@ namespace RPGKarawara
         public NetworkVariable<FixedString64Bytes> characterName = new NetworkVariable<FixedString64Bytes>("Character", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [Header("Equipment")]
+        public NetworkVariable<int> currentSpellID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> currentWeaponBeingUsed = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> currentRightHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> currentLeftHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -63,7 +64,11 @@ namespace RPGKarawara
                 PlayerUIManager.instance.playerUIHudManager.SetRightWeaponQuickSlotIcon(newID);
             }
         }
-
+        public void OnCurrentSpellIDChange(int oldID, int newID)
+        {
+            SpellItem newSpell = Instantiate(WorldItemDatabase.Instance.GetSpellByID(newID));
+            player.playerInventoryManager.currentSpell = newSpell;
+        }
         public void OnCurrentLeftHandWeaponIDChange(int oldID, int newID)
         {
             WeaponItem newWeapon = Instantiate(WorldItemDatabase.Instance.GetWeaponByID(newID));

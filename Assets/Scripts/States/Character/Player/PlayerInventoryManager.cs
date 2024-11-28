@@ -8,7 +8,7 @@ namespace RPGKarawara
     {
         public WeaponItem currentRightHandWeapon;
         public WeaponItem currentLeftHandWeapon;
-
+        public SpellItem currentSpell;
         [Header("Quick Slots")]
         public WeaponItem[] weaponsInRightHandSlots = new WeaponItem[3];
         public int rightHandWeaponIndex = 0;

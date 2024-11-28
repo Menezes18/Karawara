@@ -40,7 +40,7 @@ namespace RPGKarawara
         public void AttemptToPerformAction(AICharacterManager aiCharacter)
         {
             // Executa a animação de ataque baseada no "attackType" e "attackAnimation".
-            aiCharacter.characterAnimatorManager.PlayTargetAttackActionAnimation(attackType, attackAnimation, true);
+            aiCharacter.characterAnimatorManager.PlayTargetActionAnimation(attackAnimation, true);
 
             // Se o ataque for à distância, invoca o projétil ou magia.
             if (isRanged)
