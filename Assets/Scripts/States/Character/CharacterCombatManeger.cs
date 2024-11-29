@@ -87,5 +87,10 @@ namespace RPGKarawara
         {
 
         }
+                
+        public void DestroyAllCurrentActionFX()
+        {
+            character.characterNetworkManager.DestroyAllCurrentActionFXServerRpc();
+        }
     }
 }

@@ -298,6 +298,7 @@ MonoBehaviour:
   playerEquipmentManager: {fileID: 0}
   playerCombatManager: {fileID: 0}
   playerInteractionManager: {fileID: 0}
+  playerEffectsManager: {fileID: 0}
 --- !u!114 &1893489224507998437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,9 +443,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3c80fce431e6748951b1758cfa5b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
   applyRootMotion: 0
   lastDamageAnimationPlayed: 
+  hit_Forward_Ping_01: Hit_Forward_Ping_01
+  hit_Forward_Ping_02: Hit_Forward_Ping_02
+  hit_Backward_Ping_01: Hit_Backward_Ping_01
+  hit_Backward_Ping_02: Hit_Backward_Ping_02
+  hit_Left_Ping_01: Hit_Left_Ping_01
+  hit_Left_Ping_02: Hit_Left_Ping_02
+  hit_Right_Ping_01: Hit_Right_Ping_01
+  hit_Right_Ping_02: Hit_Right_Ping_02
+  forward_Ping_Damage: []
+  backward_Ping_Damage: []
+  left_Ping_Damage: []
+  right_Ping_Damage: []
   hit_Forward_Medium_01: Hit_Forward_Medium_01
   hit_Forward_Medium_02: Hit_Forward_Medium_02
   hit_Backward_Medium_01: Hit_Backward_Medium_01
@@ -453,7 +465,6 @@ MonoBehaviour:
   hit_Left_Medium_02: Hit_Left_Medium_02
   hit_Right_Medium_01: Hit_Right_Medium_01
   hit_Right_Medium_02: Hit_Right_Medium_02
-  hit_and_fall: Hit_And_Fall
   forward_Medium_Damage: []
   backward_Medium_Damage: []
   left_Medium_Damage: []
@@ -470,10 +481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21aab5f08393e2d40969d05bf9ef6944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeSpellWarmUpFX: {fileID: 0}
   bloodSplatterVFX: {fileID: 6970770661046263200, guid: e5a2c0e91245cd84b9a98cdad9ff83a2,
     type: 3}
-  effectToTest: {fileID: 11400000, guid: b4aa7a26a84c8114c91acbe7378c2e51, type: 2}
-  processEffect: 0
 --- !u!114 &1128375074947840352
 MonoBehaviour:
   m_ObjectHideFlags: 0

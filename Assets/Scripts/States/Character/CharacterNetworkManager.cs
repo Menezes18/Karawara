@@ -296,6 +296,19 @@ namespace RPGKarawara
         }
 
     
-
+        [ServerRpc]
+        public void DestroyAllCurrentActionFXServerRpc()
+        {
+            if (IsServer)
+            {
+                DestroyAllCurrentActionFXClientRpc();
+            }
+        }
+        [ClientRpc]
+        public void DestroyAllCurrentActionFXClientRpc()
+        {
+            if (character.characterEffectsManager.activeSpellWarmUpFX != null)
+                Destroy(character.characterEffectsManager.activeSpellWarmUpFX);
+        }
     }
 }

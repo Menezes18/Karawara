@@ -143,8 +143,14 @@ namespace RPGKarawara
             //  IF POISE IS BROKEN, PLAY A STAGGERING DAMAGE ANIMATION
             if (poiseIsBroken)
             {
-                character.characterAnimatorManager.lastDamageAnimationPlayed = damageAnimation;
+                //  IF WE ARE POISE BROKEN RESTRICT OUR MOVEMENT AND ACTIONS
                 character.characterAnimatorManager.PlayTargetActionAnimation(damageAnimation, true);
+                character.characterCombatManager.DestroyAllCurrentActionFX();
+            }
+            else
+            {
+                //  IF WE ARE NOT POISE BROKEN SIMPLY PLAY AN UPPERBODY ANIMATION WITHOUT RESTRICTING
+                character.characterAnimatorManager.PlayTargetActionAnimation(damageAnimation, false, false, true, true);
             }
         }
     }

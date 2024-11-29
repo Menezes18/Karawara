@@ -7,6 +7,6 @@ namespace RPGKarawara
     [CreateAssetMenu(menuName = "Items/Weapons/Caster Weapon")]
     public class CasterWeaponItem : WeaponItem
     {
-
+        
     }
 }

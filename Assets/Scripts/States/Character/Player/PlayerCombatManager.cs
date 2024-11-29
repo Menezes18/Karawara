@@ -137,7 +137,7 @@ namespace RPGKarawara
             if (player.playerInventoryManager.currentSpell == null)
                 return;
 
-            player.playerInventoryManager.currentSpell.InstantiateReleaseFX(player);
+            player.playerInventoryManager.currentSpell.SuccessfullyCastSpell(player);
         }
         public override void DisableCanDoCombo()
         {

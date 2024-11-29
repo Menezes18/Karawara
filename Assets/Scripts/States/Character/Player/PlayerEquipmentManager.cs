@@ -12,8 +12,8 @@ namespace RPGKarawara
         public WeaponModelInstantiationSlot rightHandSlot;
         public WeaponModelInstantiationSlot leftHandSlot;
 
-        [SerializeField] WeaponManager rightWeaponManager;
-        [SerializeField] WeaponManager leftWeaponManager;
+        [SerializeField] public WeaponManager rightWeaponManager;
+        [SerializeField] public WeaponManager leftWeaponManager;
 
         public GameObject rightHandWeaponModel;
         public GameObject leftHandWeaponModel;
