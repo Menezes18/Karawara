@@ -38,12 +38,7 @@ namespace RPGKarawara
             Debug.Log("INSTANTIATED FX");
         }
 
-        public override void InstantiateReleaseFX(PlayerManager player)
-        {
-            base.InstantiateReleaseFX(player);
-
-            Debug.Log("INSTANTIATED PROJECTILE");
-        }
+        
 
         public override bool CanICastThisSpell(PlayerManager player)
         {

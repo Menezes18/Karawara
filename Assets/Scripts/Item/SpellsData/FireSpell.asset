@@ -20,11 +20,14 @@ MonoBehaviour:
   spellSlotsUsed: 1
   spellCastWarmUpFX: {fileID: 7737410947706500988, guid: c809b7acba78191458fbeeec6b358a4b,
     type: 3}
+  spellChargeFX: {fileID: 0}
   spellCastReleaseFX: {fileID: 17655064782474913, guid: a4b1270beef885b4cad88a260ed13ba3,
+    type: 3}
+  spellCastReleaseFXFullCharge: {fileID: 17655064782474913, guid: a5563e62f23abff4584f7d051826bc02,
     type: 3}
   mainHandSpellAnimation: Spell_Main_Fire_Ball_Start_01
   offHandSpellAnimation: Spell_Off_Fire_Ball_Start_01
   warmUpSoundFX: {fileID: 0}
   releaseSoundFX: {fileID: 0}
-  upwardVelocity: 3
-  forwardVelocity: 50
+  upwardVelocity: 8
+  forwardVelocity: 20

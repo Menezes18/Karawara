@@ -16,7 +16,9 @@ namespace RPGKarawara
 
         [Header("Spell FX")]
         [SerializeField] protected GameObject spellCastWarmUpFX;
+        [SerializeField] protected GameObject spellChargeFX;
         [SerializeField] protected GameObject spellCastReleaseFX;
+        [SerializeField] protected GameObject spellCastReleaseFXFullCharge;
         //  FULL CHARGE VERSION OF FX (TO DO)
 
         [Header("Animations")]
@@ -33,20 +35,24 @@ namespace RPGKarawara
 
         }
 
-        //  THIS IS WHERE YOU PLAY THE "THROW" OR "CAST" ANIMATION
-        public virtual void SuccessfullyCastSpell(PlayerManager player)
-        {
-
-        }
-
         //  SPELL FX THAT ARE INSTANTIATED WHEN ATTEMPTING TO CAST THE SPELL
         public virtual void InstantiateWarmUpSpellFX(PlayerManager player)
         {
 
         }
 
-        //  SPELL FX THAT ARE INSTANTIATED WHEN SPELL HAS BEEN SUCCESSFULLY CAST
-        public virtual void InstantiateReleaseFX(PlayerManager player)
+        //  THIS IS WHERE SPELL PROJECTS/FX ARE ACTIVATED
+        public virtual void SuccessfullyCastSpell(PlayerManager player)
+        {
+
+        }
+
+        public virtual void SuccessfullyChargeSpell(PlayerManager player)
+        {
+
+        }
+
+        public virtual void SuccessfullyCastSpellFullCharge(PlayerManager player)
         {
 
         }

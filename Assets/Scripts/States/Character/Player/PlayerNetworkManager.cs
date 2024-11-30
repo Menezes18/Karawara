@@ -17,7 +17,9 @@ namespace RPGKarawara
         public NetworkVariable<int> currentLeftHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<bool> isUsingRightHand = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<bool> isUsingLeftHand = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
+        [Header("Spells")]
+        public NetworkVariable<bool> isChargingRightSpell = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> isChargingLeftSpell = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         protected override void Awake()
         {
             base.Awake();
@@ -106,7 +108,10 @@ namespace RPGKarawara
                 PerformWeaponBasedAction(actionID, weaponID);
             }
         }
-
+        public void OnIsChargingLeftSpellChanged(bool oldStatus, bool newStatus)
+        {
+            player.animator.SetBool("isChargingLeftSpell", isChargingLeftSpell.Value);
+        }
         private void PerformWeaponBasedAction(int actionID, int weaponID)
         {
             WeaponItemAction weaponAction = WorldActionManager.instance.GetWeaponItemActionByID(actionID);

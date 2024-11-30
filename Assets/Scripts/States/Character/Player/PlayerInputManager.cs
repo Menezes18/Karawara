@@ -45,6 +45,7 @@ namespace RPGKarawara
         [SerializeField] bool clicou = false;
         [Header("Bumper Inputs")]
         [SerializeField] bool RB_Input = false;
+        [SerializeField] bool hold_RB_Input = false;
 
         [Header("Trigger Inputs")]
         [SerializeField] bool RT_Input = false;
@@ -134,6 +135,8 @@ namespace RPGKarawara
                 playerControls.UI.SkillTree.performed += i => skillUI_Input = true;
                 //  BUMPERS
                 playerControls.PlayerActions.RB.performed += i => RB_Input = true;
+                playerControls.PlayerActions.HoldRB.performed += i => hold_RB_Input = true;
+                playerControls.PlayerActions.HoldRB.canceled += i => hold_RB_Input = false;
 
                 //  TRIGGERS
                 playerControls.PlayerActions.RT.performed += i => RT_Input = true;
@@ -186,26 +189,25 @@ namespace RPGKarawara
         }
 
         public PlayerLocomotionManager playerLocomotionManager;
-        private void HandleAllInputs()
-        {
-            if(player.isDead.Value == false){
-                HandleLockOnInput();
-                HandleLockOnSwitchTargetInput();
-                HandlePlayerMovementInput();
-                HandleCameraMovementInput();
-                HandleDodgeInput();
-                HandleSprintInput();
-                HandleJumpInput();
-                HandleRBInput();
-                HandleRTInput();
-                HandleChargeRTInput();
-                HandleSwitchRightWeaponInput();
-                HandleSwitchLeftWeaponInput();
-                HandleQuedInputs();
-                HandleInteractionInput();
-                HandlePauseUi();
-                HandleSkillTree();
-            }
+        private void HandleAllInputs(){
+            if (player.isDead.Value != false) return;
+            HandleLockOnInput();
+            HandleHoldRBInput();
+            HandleLockOnSwitchTargetInput();
+            HandlePlayerMovementInput();
+            HandleCameraMovementInput();
+            HandleDodgeInput();
+            HandleSprintInput();
+            HandleJumpInput();
+            HandleRBInput();
+            HandleRTInput();
+            HandleChargeRTInput();
+            HandleSwitchRightWeaponInput();
+            HandleSwitchLeftWeaponInput();
+            HandleQuedInputs();
+            HandleInteractionInput();
+            HandlePauseUi();
+            HandleSkillTree();
         }
 
         //  LOCK ON
@@ -384,6 +386,17 @@ namespace RPGKarawara
                 player.playerNetworkManager.isSprinting.Value = false;
                 clicou = false;
                
+            }
+        }
+        private void HandleHoldRBInput()
+        {
+            if (hold_RB_Input)
+            {
+                player.playerNetworkManager.isChargingRightSpell.Value = true;
+            }
+            else
+            {
+                player.playerNetworkManager.isChargingRightSpell.Value = false;
             }
         }
         public void DisableInput()
