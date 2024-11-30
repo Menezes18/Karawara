@@ -170,7 +170,7 @@ namespace RPGKarawara
             // Salva os dados do novo personagem criado, incluindo estatísticas e itens (quando a tela de criação for adicionada)
             player.playerNetworkManager.vitality.Value = 15;
             player.playerNetworkManager.endurance.Value = 10;
-            player.playerNetworkManager.gameObject.transform.position = new Vector3(-319.92f, 100.13f, 595.46f);
+            player.playerNetworkManager.gameObject.transform.position = new Vector3(-319.92f, 175.81f, 595.46f);
 
             SaveGame();
             loadscene.LoadGame();
