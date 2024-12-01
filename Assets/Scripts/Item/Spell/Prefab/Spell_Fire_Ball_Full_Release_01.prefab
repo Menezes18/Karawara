@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c7ce1b3e5c82245bb35a1e80f3d109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageCollider: {fileID: 0}
-  physicalDamage: 0
+  damageCollider: {fileID: 6569959328445810020}
+  physicalDamage: 100
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
@@ -198,7 +198,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

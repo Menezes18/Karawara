@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
@@ -7,13 +8,13 @@ namespace RPGKarawara
 {
     public class PlayerCombatManager : CharacterCombatManeger
     {
-        PlayerManager player;
+        [NonSerialized]  public PlayerManager player;
 
         public WeaponItem currentWeaponBeingUsed;
 
         [Header("Flags")]
         public bool canComboWithMainHandWeapon = false;
-        private bool isWeaponActive = false;
+        public bool isWeaponActive = false;
         private Coroutine weaponDeactivateCoroutine;
 
         protected override void Awake()
@@ -51,7 +52,7 @@ namespace RPGKarawara
         private IEnumerator DeactivateWeaponAfterDelay()
         {
             yield return new WaitForSeconds(7f);
-
+            Debug.Log("Saiu");
             // Desativa a arma chamando SwitchRightWeapon novamente
             player.playerEquipmentManager.SwitchRightWeapon();
             isWeaponActive = false;

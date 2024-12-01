@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1893489224507998437}
   - component: {fileID: 1085547174913268491}
   - component: {fileID: 1937844861543524253}
+  - component: {fileID: 3074509851261282271}
   - component: {fileID: 1582088740868026449}
   - component: {fileID: 5888413936010217470}
   - component: {fileID: 6408769985629896555}
@@ -241,6 +242,10 @@ MonoBehaviour:
     m_InternalValue: 0
   isUsingLeftHand:
     m_InternalValue: 0
+  isChargingRightSpell:
+    m_InternalValue: 0
+  isChargingLeftSpell:
+    m_InternalValue: 0
 --- !u!114 &5111329972562194323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +391,22 @@ MonoBehaviour:
   walkingSpeedCube: 2
   runningSpeedCube: 4
   rotationInput: 0
+--- !u!114 &3074509851261282271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219663029150363108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ebd8b64cb1f7ee4581404616290c0a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teste: 0
+  espada: {fileID: 11400000, guid: 18879e1b418fd9c4dbcf30e60ff32675, type: 2}
+  spell: {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
+  inventory: {fileID: 1582088740868026449}
 --- !u!114 &1582088740868026449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,12 +423,13 @@ MonoBehaviour:
     type: 2}
   currentLeftHandWeapon: {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082,
     type: 2}
-  currentSpell: {fileID: 0}
+  currentSpell: {fileID: 11400000, guid: 0e7c7c7859ff7f14a9d95b4888659a9d, type: 2}
   weaponsInRightHandSlots:
   - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
   - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
   - {fileID: 11400000, guid: 18879e1b418fd9c4dbcf30e60ff32675, type: 2}
-  rightHandWeaponIndex: 1
+  - {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
+  rightHandWeaponIndex: 0
   weaponsInLeftHandSlots:
   - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
   - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
