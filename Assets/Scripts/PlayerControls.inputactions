@@ -105,6 +105,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Hold RB",
+                    "type": "Button",
+                    "id": "a3eb6196-5865-4094-bfb7-1482f60e5823",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "26db0b39-85bb-4779-8653-6ea83daf6e4d",
@@ -336,6 +345,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Hold RT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e78dcd2c-0bbc-4a3a-97d6-a9e78ca53180",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hold RB",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

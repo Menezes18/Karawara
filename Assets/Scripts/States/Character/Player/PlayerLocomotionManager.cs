@@ -31,25 +31,35 @@ namespace RPGKarawara
 
         [Header("Dodge")]
         private Vector3 rollDirection;
-        [SerializeField] float dodgeStaminaCost = 25;
         public bool dodging = false;
-        [SerializeField] float dodgeDistance = 8f;   // Distância do dodge
-        [SerializeField] float dodgeDuration = 11f; // Duração do dodge
+        [SerializeField] private float dodgeDistance = 8f;   // Distância do dodge
+        [SerializeField] private float dodgeDuration = 11f; // Duração do dodge
         private bool isDodging = false;
         public bool canDodge = true;
         public bool arco = false;
+        public bool isMoving = false;
+        
+        [Header("Interact")]
+        public bool canInteract = false;
+        public Transform cubeTransform;
+        [SerializeField] private float maxDistanceFromCube = 2f; 
+        [SerializeField] float walkingSpeedCube = 2;
+        [SerializeField] float runningSpeedCube = 4;
+        private float auxWalking, auxRunning;
+        public float rotationInput;
         protected override void Awake()
         {
             base.Awake();
+            auxWalking = walkingSpeed;
+            auxRunning = runningSpeed;
             player = GetComponent<PlayerManager>();
         }
-
+        
         protected override void Update()
         {
+            
             base.Update();
-            if (Keyboard.current.oKey.wasReleasedThisFrame){
-                arco = !arco;
-            }
+            LimitPlayerPositionNearCube();
             if (player.IsOwner)
             {
                 player.characterNetworkManager.verticalMovement.Value = verticalMovement;
@@ -74,11 +84,13 @@ namespace RPGKarawara
 
             if (moveAmount > 0)
             {
+                
                 character.animator.SetBool("isMoving", true);
+                isMoving = true;
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
             }
-            else
-            {
+            else{
+                isMoving = false;
                 character.animator.SetBool("isMoving", false);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
             }
@@ -159,78 +171,109 @@ namespace RPGKarawara
             }
         }
 
-        private void HandleRotation(){
-            if (player.isDead.Value)
+        private void HandleRotation()
+        {
+            if (player.isDead.Value || !player.characterLocomotionManager.canRotate)
                 return;
 
-            if (!player.characterLocomotionManager.canRotate)
-                return;
+            Quaternion targetRotation;
 
-            if (player.playerNetworkManager.isLockedOn.Value){
-                if (player.playerNetworkManager.isSprinting.Value || player.playerLocomotionManager.isRolling){
-                    Vector3 targetDirection = Vector3.zero;
-                    targetDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
-                    targetDirection += PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
-                    targetDirection.Normalize();
-                    targetDirection.y = 0;
+            // Checar se canInteract está ativo e o cubo é o alvo
+            if (canInteract && cubeTransform != null)
+            {
+                walkingSpeed = walkingSpeedCube;
+                runningSpeed = runningSpeedCube;
 
-                    if (targetDirection == Vector3.zero)
-                        targetDirection = transform.forward;
+                // Pega o input de rotação do player
+                rotationInput = PlayerInputManager.instance.horizontal_Input;
 
-                    Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-                    Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation,
-                        rotationSpeed * Time.deltaTime);
-                    transform.rotation = finalRotation;
-                }
-                else{
-                    if (player.playerCombatManager.currentTarget == null)
-                        return;
+                if (rotationInput != 0)
+                {
+                    // Calcula a direção do player em relação ao cubo
+                    Vector3 directionToCube = (cubeTransform.position - transform.position).normalized;
+                    directionToCube.y = 0; // Mantém no plano horizontal
 
-                    Vector3 targetDirection;
-                    targetDirection = player.playerCombatManager.currentTarget.transform.position - transform.position;
-                    targetDirection.y = 0;
-                    targetDirection.Normalize();
+                    // Define a rotação-alvo com base na direção do player
+                    targetRotation = Quaternion.LookRotation(directionToCube);
 
-                    Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-                    Quaternion finalRotation = Quaternion.Slerp(transform.rotation, targetRotation,
-                        rotationSpeed * Time.deltaTime);
-                    transform.rotation = finalRotation;
+                    // Altera a rotação do player suavemente em direção ao cubo
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+                    // Aplica a rotação ao cubo com base no input horizontal
+                    
+
+                    return; // Para evitar outras rotações
                 }
             }
-            else if(arco)
+
+            else{
+                walkingSpeed = auxWalking;
+                runningSpeed = auxRunning;
+            }
+
+            // Código padrão de rotação para outras situações (lock-on, arco)
+            if (player.playerNetworkManager.isLockedOn.Value)
             {
-             
-                targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward;
-                targetRotationDirection.y = 0;  // Manter o eixo Y fixo para evitar inclinação vertical
-                targetRotationDirection.Normalize();
-
-                if (targetRotationDirection == Vector3.zero)
+                if (player.playerNetworkManager.isSprinting.Value || player.playerLocomotionManager.isRolling)
                 {
-                    targetRotationDirection = transform.forward;
+                    targetRotation = CalculateFreeRotation();
                 }
-
-                // Gira o personagem suavemente na direção da câmera enquanto está com o arco
-                Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
-                Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
-                transform.rotation = targetRotation;
-                
-            }else{
-                targetRotationDirection = Vector3.zero;
-                targetRotationDirection = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement;
-                targetRotationDirection = targetRotationDirection + PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
-                targetRotationDirection.Normalize();
-                targetRotationDirection.y = 0;
-
-                if (targetRotationDirection == Vector3.zero)
+                else
                 {
-                    targetRotationDirection = transform.forward;
+                    if (player.playerCombatManager.currentTarget == null) return;
+                    targetRotation = CalculateLockedOnRotation();
                 }
+            }
+            else if (arco)
+            {
+                targetRotation = CalculateArcoRotation();
+            }
+            else
+            {
+                targetRotation = CalculateFreeRotation();
+            }
 
-                Quaternion newRotation = Quaternion.LookRotation(targetRotationDirection);
-                Quaternion targetRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
-                transform.rotation = targetRotation;
+            // Aplica a rotação suavemente
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        private void LimitPlayerPositionNearCube()
+        {
+            if (!canInteract || cubeTransform == null) return;
+
+            Vector3 offset = transform.position - cubeTransform.position;
+            float distance = offset.magnitude;
+
+            if (distance > maxDistanceFromCube)
+            {
+                // Limita a posição do player à distância máxima permitida
+                Vector3 clampedPosition = cubeTransform.position + offset.normalized * maxDistanceFromCube;
+                transform.position = clampedPosition;
             }
         }
+
+
+        // Funções auxiliares para cálculos de rotação, permanecem as mesmas
+        private Quaternion CalculateFreeRotation() {
+            Vector3 direction = PlayerCamera.instance.cameraObject.transform.forward * verticalMovement +
+                                PlayerCamera.instance.cameraObject.transform.right * horizontalMovement;
+            direction.y = 0;
+            return Quaternion.LookRotation(direction == Vector3.zero ? transform.forward : direction.normalized);
+        }
+
+        private Quaternion CalculateLockedOnRotation() {
+            Vector3 direction = player.playerCombatManager.currentTarget.transform.position - transform.position;
+            direction.y = 0;
+            return Quaternion.LookRotation(direction.normalized);
+        }
+
+        private Quaternion CalculateArcoRotation() {
+            Vector3 direction = PlayerCamera.instance.cameraObject.transform.forward;
+            direction.y = 0;
+            return Quaternion.LookRotation(direction == Vector3.zero ? transform.forward : direction.normalized);
+        }
+
+
 
         public void HandleSprinting()
         {
@@ -281,8 +324,6 @@ namespace RPGKarawara
             //     return;
 
             //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
-            //  IF WE ARE MOVING WHEN WE ATTEMPT TO DODGE, WE PERFORM A ROLL
             if (PlayerInputManager.instance.moveAmount > 0)
             {
                 rollDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.vertical_Input;
@@ -312,6 +353,41 @@ namespace RPGKarawara
             }
 
             player.playerLocomotionManager.canDodge = true;
+        }
+
+        public void StopPlayer()
+        {
+            Debug.Log("AAA");
+            // Zerando as variáveis de movimento
+            verticalMovement = 0;
+            horizontalMovement = 0;
+            moveAmount = 0;
+
+            // Forçando a velocidade a zero no PlayerLocomotionManager
+            if (character.characterController != null)
+            {
+                character.characterController.Move(Vector3.zero);
+            }
+
+            // Atualiza o Animator para garantir que o jogador pare completamente
+            character.animator.SetBool("isMoving", false);
+
+            // Força a animação de idle imediatamente
+            character.animator.Play("Idle", 0);
+
+            // Parar qualquer animação atual
+            character.animator.speed = 0; // Isso pausa todas as animações
+
+            // Opcional: Reinicie a velocidade da animação após um pequeno atraso
+            // Você pode usar um coroutine para reverter a velocidade de volta ao normal
+            StartCoroutine(ResetAnimatorSpeed());
+        }
+
+        private IEnumerator ResetAnimatorSpeed()
+        {
+            // Espera um pequeno tempo antes de reiniciar a velocidade da animação
+            yield return new WaitForSeconds(0.1f);
+            character.animator.speed = 1; // Reinicia a velocidade da animação
         }
 
 

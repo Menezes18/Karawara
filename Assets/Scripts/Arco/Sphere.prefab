@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 2002344568610681213}
   - component: {fileID: 585709035523447557}
   - component: {fileID: 1937318535356162187}
-  m_Layer: 0
+  - component: {fileID: -141501511059558785}
+  m_Layer: 21
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.077458, y: 0.07597601, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,7 +102,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -146,3 +147,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 601fce32c15741d498fbdcfd611063ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-141501511059558785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991847605463277010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 496aced343253554cb06f515af6b4a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageCollider: {fileID: 2002344568610681213}
+  physicalDamage: 20
+  magicDamage: 0
+  fireDamage: 0
+  holyDamage: 0

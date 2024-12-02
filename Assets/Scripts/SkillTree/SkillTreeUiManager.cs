@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RPGKarawara{
     public class SkillTreeUiManager : MonoBehaviour{
@@ -22,6 +23,7 @@ namespace RPGKarawara{
         public TextMeshProUGUI textCabecalho;
         public Sprite spriteCabecalho;
         public TextMeshProUGUI descriptionCabecalho;
+        public Skill novaSkillAdd;
         private void Awake(){
             instance = this;
             DeactivateAllSkillsAndResetCooldown();
@@ -68,6 +70,13 @@ namespace RPGKarawara{
             if(skill == null) return;
             textCabecalho.text = skill.name;
             descriptionCabecalho.text = skill.description;
+        }
+
+        private void Update(){
+            if (Keyboard.current.lKey.wasReleasedThisFrame)
+            {
+                LoadSkillsFromData(WorldSaveGameManager.instance.characterSlot01);
+            }
         }
 
         public void ClearCabecalho(){
@@ -126,10 +135,70 @@ namespace RPGKarawara{
         private void UpdateSkillUISlot(Skill skill, SkillUISlot[] skillSlots){
             foreach (SkillUISlot slot in skillSlots){
                 if (slot.skill == skill){
-                    // Atualize a cor do triângulo com base no estado da habilidade
                     slot.SetTriangleColor(Color.white);
                 }
             }
+        }
+
+        public CharacterSaveData SaveSkillsToData(CharacterSaveData saveData)
+        {
+            
+
+            // Copia as habilidades para o saveData
+            saveData.SkillAttack = attackSkills != null ? (Skill[])attackSkills.Clone() : new Skill[0];
+            saveData.SkillDefense = defenseSkills != null ? (Skill[])defenseSkills.Clone() : new Skill[0];
+            saveData.SkillSuport = supportSkills != null ? (Skill[])supportSkills.Clone() : new Skill[0];
+
+            Debug.Log("Habilidades salvas no CharacterSaveData.");
+            return saveData;
+        }
+
+        // Método para carregar habilidades do CharacterSaveData
+        public void LoadSkillsFromData(CharacterSaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Copia as habilidades de volta para os arrays originais
+            attackSkills = saveData.SkillAttack != null ? (Skill[])saveData.SkillAttack.Clone() : new Skill[0];
+            defenseSkills = saveData.SkillDefense != null ? (Skill[])saveData.SkillDefense.Clone() : new Skill[0];
+            supportSkills = saveData.SkillSuport != null ? (Skill[])saveData.SkillSuport.Clone() : new Skill[0];
+
+            // Atualiza os slots da UI
+            SetupSkillSlots(attackSkills, attackSkillSlots);
+            SetupSkillSlots(defenseSkills, defenseSkillSlots);
+            SetupSkillSlots(supportSkills, supportSkillSlots);
+
+            Debug.Log("Habilidades carregadas do CharacterSaveData.");
+        }
+        public void AddSkill(Skill newSkill, SkillType skillType){
+            newSkill.isUnlocked = true;
+           // ((IList)allSkills).Add(newSkill);
+
+            switch(skillType){
+                case SkillType.Attack:
+                    Array.Resize(ref attackSkills, attackSkills.Length + 1);
+                    attackSkills[attackSkills.Length - 1] = newSkill;
+                    SetupSkillSlots(attackSkills, attackSkillSlots);
+                    break;
+
+                case SkillType.Defense:
+                    Array.Resize(ref defenseSkills, defenseSkills.Length + 1);
+                    defenseSkills[defenseSkills.Length - 1] = newSkill;
+                    SetupSkillSlots(defenseSkills, defenseSkillSlots);
+                    break;
+
+                case SkillType.Support:
+                    Array.Resize(ref supportSkills, supportSkills.Length + 1);
+                    supportSkills[supportSkills.Length - 1] = newSkill;
+                    SetupSkillSlots(supportSkills, supportSkillSlots);
+                    break;
+            }
+        }
+
+
+        public void AdicionarSkill(Skill  novaSkill){ 
+            AddSkill(novaSkill, SkillType.Attack);
+            UnlockSkill(novaSkill); 
         }
     }
 }

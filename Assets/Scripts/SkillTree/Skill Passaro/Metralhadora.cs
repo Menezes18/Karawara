@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using RPGKarawara;
 public class Metralhadora : MonoBehaviour
 {
     // Guarda a posicao do alvo atual
@@ -10,7 +10,7 @@ public class Metralhadora : MonoBehaviour
     // Define a distancia maxima para a mira
     [SerializeField] private float range = 15f;
 
-    [SerializeField] private string enemyTag = "inimigo";
+    [SerializeField] private string enemyTag;
 
     [SerializeField] private Transform engrenagem;
 
@@ -24,7 +24,7 @@ public class Metralhadora : MonoBehaviour
 
     [SerializeField] private GameObject projetilPrefab;
     [SerializeField] private Transform firePoint;
-
+    private DamageCollider damageCollider;
     private void Start()
     {
         // Vamos chamar o metodo de encontrar alvo assim que entrarmos no Start e apos isso, a cada meio segundo --> dessa forma nao sobrecarregamos o Update
@@ -92,7 +92,6 @@ public class Metralhadora : MonoBehaviour
 
     private void Atirar()
     {
-        // Aqui a referencia para a prefab do projetil se chama projetilPrefab e sua posicao de spawn eh o Transform firePoint
         GameObject projetilGObject = (GameObject)Instantiate(projetilPrefab, firePoint.position, firePoint.rotation);
         Projetil projetil = projetilGObject.GetComponent<Projetil>();
 

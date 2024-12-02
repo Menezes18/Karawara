@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
@@ -7,13 +8,13 @@ namespace RPGKarawara
 {
     public class PlayerCombatManager : CharacterCombatManeger
     {
-        PlayerManager player;
+        [NonSerialized]  public PlayerManager player;
 
         public WeaponItem currentWeaponBeingUsed;
 
         [Header("Flags")]
         public bool canComboWithMainHandWeapon = false;
-        private bool isWeaponActive = false;
+        public bool isWeaponActive = false;
         private Coroutine weaponDeactivateCoroutine;
 
         protected override void Awake()
@@ -51,7 +52,7 @@ namespace RPGKarawara
         private IEnumerator DeactivateWeaponAfterDelay()
         {
             yield return new WaitForSeconds(7f);
-
+            Debug.Log("Saiu");
             // Desativa a arma chamando SwitchRightWeapon novamente
             player.playerEquipmentManager.SwitchRightWeapon();
             isWeaponActive = false;
@@ -92,37 +93,67 @@ namespace RPGKarawara
             switch (currentAttackType)
             {
                 case AttackType.LightAttack01:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.lightAttackStaminaCostMultiplier;
+                   
                     break;
                 case AttackType.LightAttack02:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.lightAttackStaminaCostMultiplier;
+                   
                     break;
                 case AttackType.HeavyAttack01:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.heavyAttackStaminaCostMultiplier;
+                    
                     break;
                 case AttackType.HeavyAttack02:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.heavyAttackStaminaCostMultiplier;
+                    
                     break;
                 case AttackType.ChargedAttack01:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.chargedAttackStaminaCostMultiplier;
+                    
                     break;
                 case AttackType.ChargedAttack02:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.chargedAttackStaminaCostMultiplier;
+                   
                     break;
                 case AttackType.RunningAttack01:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.runningAttackStaminaCostMultiplier;
+                    
                     break;
                 case AttackType.RollingAttack01:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.rollingAttackStaminaCostMultiplier;
+                    
                     break;
                 case AttackType.BackstepAttack01:
-                    staminaDeducted = currentWeaponBeingUsed.baseStaminaCost * currentWeaponBeingUsed.backstepAttackStaminaCostMultiplier;
+                    
                     break;
                 default:
                     break;
             }
 
             //player.playerNetworkManager.currentStamina.Value -= Mathf.RoundToInt(staminaDeducted);
+        }
+        public void InstantiateSpellWarmUpFX()
+        {
+            if (player.playerInventoryManager.currentSpell == null)
+                return;
+
+            player.playerInventoryManager.currentSpell.InstantiateWarmUpSpellFX(player);
+        }
+
+        public void SuccessfullyCastSpell()
+        {
+            if (player.playerInventoryManager.currentSpell == null)
+                return;
+
+            player.playerInventoryManager.currentSpell.SuccessfullyCastSpell(player);
+        }
+        public void SuccessfullyChargeSpell()
+        {
+            if (player.playerInventoryManager.currentSpell == null)
+                return;
+
+            player.playerInventoryManager.currentSpell.SuccessfullyChargeSpell(player);
+        }
+
+        public void SuccessfullyCastSpellFullCharge()
+        {
+            if (player.playerInventoryManager.currentSpell == null)
+                return;
+
+            player.playerInventoryManager.currentSpell.SuccessfullyCastSpellFullCharge(player);
         }
         public override void DisableCanDoCombo()
         {

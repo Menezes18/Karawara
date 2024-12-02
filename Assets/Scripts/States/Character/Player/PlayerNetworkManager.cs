@@ -11,12 +11,15 @@ namespace RPGKarawara
         public NetworkVariable<FixedString64Bytes> characterName = new NetworkVariable<FixedString64Bytes>("Character", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [Header("Equipment")]
+        public NetworkVariable<int> currentSpellID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> currentWeaponBeingUsed = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> currentRightHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<int> currentLeftHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<bool> isUsingRightHand = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<bool> isUsingLeftHand = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
+        [Header("Spells")]
+        public NetworkVariable<bool> isChargingRightSpell = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> isChargingLeftSpell = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         protected override void Awake()
         {
             base.Awake();
@@ -63,7 +66,12 @@ namespace RPGKarawara
                 PlayerUIManager.instance.playerUIHudManager.SetRightWeaponQuickSlotIcon(newID);
             }
         }
-
+        public void OnCurrentSpellIDChange(int oldID, int newID)
+        {
+            SpellItem newSpell = Instantiate(WorldItemDatabase.Instance.GetSpellByID(newID));
+            if (newSpell != null)
+                player.playerInventoryManager.currentSpell = newSpell;
+        }
         public void OnCurrentLeftHandWeaponIDChange(int oldID, int newID)
         {
             WeaponItem newWeapon = Instantiate(WorldItemDatabase.Instance.GetWeaponByID(newID));
@@ -100,7 +108,10 @@ namespace RPGKarawara
                 PerformWeaponBasedAction(actionID, weaponID);
             }
         }
-
+        public void OnIsChargingLeftSpellChanged(bool oldStatus, bool newStatus)
+        {
+            player.animator.SetBool("isChargingLeftSpell", isChargingLeftSpell.Value);
+        }
         private void PerformWeaponBasedAction(int actionID, int weaponID)
         {
             WeaponItemAction weaponAction = WorldActionManager.instance.GetWeaponItemActionByID(actionID);

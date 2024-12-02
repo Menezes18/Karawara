@@ -12,6 +12,7 @@ namespace RPGKarawara
         public int slotID;
         private RectTransform draggedRectTransform;
         private IconDragDrop dragDrop;
+        public Skill skillData;
         private void Awake(){
             itemSlotImage = GetComponent<RectTransform>();
         }
@@ -31,7 +32,7 @@ namespace RPGKarawara
                    // Ajusta a posição ancorada dentro do slot.
                    draggedRectTransform.anchoredPosition = Vector2.zero; // Centraliza dentro do slot.
                }
-
+               dragDrop.auxID = slotID;
                dragDrop.skillUISlot.OnSkillButtonClicked(slotID);
                dragDrop.isDragging = true;
             }

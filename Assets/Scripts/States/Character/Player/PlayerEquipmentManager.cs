@@ -12,8 +12,8 @@ namespace RPGKarawara
         public WeaponModelInstantiationSlot rightHandSlot;
         public WeaponModelInstantiationSlot leftHandSlot;
 
-        [SerializeField] WeaponManager rightWeaponManager;
-        [SerializeField] WeaponManager leftWeaponManager;
+        [SerializeField] public WeaponManager rightWeaponManager;
+        [SerializeField] public WeaponManager leftWeaponManager;
 
         public GameObject rightHandWeaponModel;
         public GameObject leftHandWeaponModel;
@@ -150,10 +150,11 @@ namespace RPGKarawara
                 rightHandSlot.UnloadWeapon();
 
                 //  BRING IN THE NEW WEAPON
-                rightHandWeaponModel = Instantiate(player.playerInventoryManager.currentRightHandWeapon.weaponModel);
+                    rightHandWeaponModel = Instantiate(player.playerInventoryManager.currentRightHandWeapon.weaponModel);
                 rightHandSlot.LoadWeapon(rightHandWeaponModel);
                 rightWeaponManager = rightHandWeaponModel.GetComponent<WeaponManager>();
                 rightWeaponManager.SetWeaponDamage(player, player.playerInventoryManager.currentRightHandWeapon);
+                player.playerAnimatorManager.UpdateAnimatorController(player.playerInventoryManager.currentRightHandWeapon.weaponAnimator);
             }
         }
 

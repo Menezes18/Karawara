@@ -13,7 +13,7 @@ namespace RPGKarawara
         //  PROCESS STATIC EFFECTS (ADDING/REMOVING BUFFS FROM TALISMANS ECT)
 
         CharacterManager character;
-
+        public GameObject activeSpellWarmUpFX;
         [Header("VFX")]
         [SerializeField] GameObject bloodSplatterVFX;
 

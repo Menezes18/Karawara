@@ -11,8 +11,13 @@ namespace RPGKarawara
 
         public WeaponItem unarmedWeapon;
 
+        public GameObject pickUpItemPrefab;
+
         [Header("Weapons")]
         [SerializeField] List<WeaponItem> weapons = new List<WeaponItem>();
+
+        [Header("Spells")]
+        [SerializeField] List<SpellItem> spells = new List<SpellItem>();
 
         //  A LIST OF EVERY ITEM WE HAVE IN THE GAME
         [Header("Items")]
@@ -34,6 +39,10 @@ namespace RPGKarawara
             {
                 items.Add(weapon);
             }
+            foreach (var item in spells)
+            {
+                items.Add(item);
+            }
 
             //  ASSIGN ALL OF OUR ITEMS A UNIQUE ITEM ID
             for (int i = 0; i < items.Count; i++)
@@ -42,9 +51,19 @@ namespace RPGKarawara
             }
         }
 
+        public Item GetItemByID(int ID)
+        {
+            return items.FirstOrDefault(item => item.itemID == ID);
+        }
+
         public WeaponItem GetWeaponByID(int ID)
         {
             return weapons.FirstOrDefault(weapon => weapon.itemID == ID);
+        }
+        
+        public SpellItem GetSpellByID(int ID)
+        {
+            return spells.FirstOrDefault(item => item.itemID == ID);
         }
     }
 }

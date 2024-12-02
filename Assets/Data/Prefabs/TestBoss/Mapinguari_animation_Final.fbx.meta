@@ -3,7 +3,22 @@ guid: ceec48aff7a6bd4468283df02f354f16
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corpo_Mapinguari
+    second: {fileID: 2100000, guid: fedb23ee2e5cf3944b2e7abc9ba72507, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dente_Mapinguari
+    second: {fileID: 2100000, guid: c960ab4fc1eb66c46beb46b73e65fb2c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Garras_Mapinguari
+    second: {fileID: 2100000, guid: a868e6eec73743844b35f375a190cfa7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

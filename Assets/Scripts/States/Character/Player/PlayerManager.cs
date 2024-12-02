@@ -1,4 +1,5 @@
 using System.Collections;
+using RPGKarawara.SkillTree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
@@ -15,7 +16,7 @@ namespace RPGKarawara
         [HideInInspector] public PlayerEquipmentManager playerEquipmentManager;
         [HideInInspector] public PlayerCombatManager playerCombatManager;
         [HideInInspector] public PlayerInteractionManager playerInteractionManager;
-
+        [HideInInspector] public PlayerEffectsManager playerEffectsManager;
 
         protected override void Awake()
         {
@@ -31,6 +32,7 @@ namespace RPGKarawara
             playerEquipmentManager = GetComponent<PlayerEquipmentManager>();
             playerCombatManager = GetComponent<PlayerCombatManager>();
             playerInteractionManager = GetComponent<PlayerInteractionManager>();
+            playerEffectsManager = GetComponent<PlayerEffectsManager>();
         }
 
         protected override void Update()
@@ -104,12 +106,13 @@ namespace RPGKarawara
             //  LOCK ON
             playerNetworkManager.isLockedOn.OnValueChanged += playerNetworkManager.OnIsLockedOnChanged;
             playerNetworkManager.currentTargetNetworkObjectID.OnValueChanged += playerNetworkManager.OnLockOnTargetIDChange;
-
+            //  SPELLS
+            playerNetworkManager.isChargingLeftSpell.OnValueChanged += playerNetworkManager.OnIsChargingLeftSpellChanged;
             //  EQUIPMENT
             playerNetworkManager.currentRightHandWeaponID.OnValueChanged += playerNetworkManager.OnCurrentRightHandWeaponIDChange;
             playerNetworkManager.currentLeftHandWeaponID.OnValueChanged += playerNetworkManager.OnCurrentLeftHandWeaponIDChange;
             playerNetworkManager.currentWeaponBeingUsed.OnValueChanged += playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
-
+            playerNetworkManager.currentSpellID.OnValueChanged += playerNetworkManager.OnCurrentSpellIDChange;
             //  FLAGS
             playerNetworkManager.isChargingAttack.OnValueChanged += playerNetworkManager.OnIsChargingAttackChanged;
 
@@ -145,7 +148,8 @@ namespace RPGKarawara
 
             //  STATS
             playerNetworkManager.currentHealth.OnValueChanged -= playerNetworkManager.CheckHP;
-
+            //  SPELLS
+            playerNetworkManager.isChargingLeftSpell.OnValueChanged -= playerNetworkManager.OnIsChargingLeftSpellChanged;
             //  LOCK ON
             playerNetworkManager.isLockedOn.OnValueChanged -= playerNetworkManager.OnIsLockedOnChanged;
             playerNetworkManager.currentTargetNetworkObjectID.OnValueChanged -= playerNetworkManager.OnLockOnTargetIDChange;
@@ -154,7 +158,7 @@ namespace RPGKarawara
             playerNetworkManager.currentRightHandWeaponID.OnValueChanged -= playerNetworkManager.OnCurrentRightHandWeaponIDChange;
             playerNetworkManager.currentLeftHandWeaponID.OnValueChanged -= playerNetworkManager.OnCurrentLeftHandWeaponIDChange;
             playerNetworkManager.currentWeaponBeingUsed.OnValueChanged -= playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
-
+            playerNetworkManager.currentSpellID.OnValueChanged -= playerNetworkManager.OnCurrentSpellIDChange;
             //  FLAGS
             playerNetworkManager.isChargingAttack.OnValueChanged -= playerNetworkManager.OnIsChargingAttackChanged;
         }
@@ -219,14 +223,17 @@ namespace RPGKarawara
 
             currentCharacterData.vitality = playerNetworkManager.vitality.Value;
             currentCharacterData.endurance = playerNetworkManager.endurance.Value;
-        }
+            SkillTreeUiManager.instance.SaveSkillsToData(currentCharacterData);
+            PlayerSkillManager.instance.SaveSkillSlot(currentCharacterData);
 
+        }
+        
         public void LoadGameDataFromCurrentCharacterData(ref CharacterSaveData currentCharacterData)
         {
             playerNetworkManager.characterName.Value = currentCharacterData.characterName;
-            Vector3 myPosition = new Vector3(currentCharacterData.xPosition, currentCharacterData.yPosition, currentCharacterData.zPosition);
+            Vector3 myPosition = new Vector3(currentCharacterData.xPosition, currentCharacterData.yPosition + 100, currentCharacterData.zPosition);
             transform.position = myPosition;
-
+            //transform.transform.position = new Vector3(-159.300003f, 180.5f, 554.5f);
             playerNetworkManager.vitality.Value = currentCharacterData.vitality;
             playerNetworkManager.endurance.Value = currentCharacterData.endurance;
 
@@ -235,6 +242,9 @@ namespace RPGKarawara
             //playerNetworkManager.maxStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
             playerNetworkManager.currentHealth.Value = currentCharacterData.currentHealth;
             //playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
+            SkillTreeUiManager.instance.LoadSkillsFromData(WorldSaveGameManager.instance.characterSlot01);
+            PlayerSkillManager.instance.LoadSkillSlot(WorldSaveGameManager.instance.characterSlot01);
+            Debug.Log(currentCharacterData);
             //PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
         }
 
@@ -245,7 +255,7 @@ namespace RPGKarawara
             playerNetworkManager.OnCurrentLeftHandWeaponIDChange(0, playerNetworkManager.currentLeftHandWeaponID.Value);
 
             //  ARMOR
-
+            playerNetworkManager.OnCurrentSpellIDChange(0,playerNetworkManager.currentSpellID.Value);
             //  LOCK ON
             if (playerNetworkManager.isLockedOn.Value)
             {

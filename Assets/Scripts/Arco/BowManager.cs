@@ -30,57 +30,58 @@ namespace RPGKarawara{
             currentArrowForce = minArrowForce; // Inicializa a força da flecha
         }
 
-        private void Update(){
-            // Verifica se o botão direito do mouse está pressionado para ativar a mira
-            if (Mouse.current.rightButton.isPressed){
-                ActiveBow(true);
-                playerLocomotionManager.arco = true;
-                isAiming = true;
-                PlayerCamera.instance.ToggleAimMode(true); // Ativa a câmera de mira
-
-                if (!isDrawingBow){
-                    isDrawingBow = true; // O arco está sendo preparado para disparo
-                    chargeStartTime = Time.time; // Registra o tempo de início do carregamento
-                }
-                
-                
-                currentArrowForce =
-                    Mathf.Lerp(minArrowForce, maxArrowForce, (Time.time - chargeStartTime) / chargeTime);
-                string targetAnimation = "ArcoPress";  // A animação que você quer que o player execute
-                //animator.SetBool("Press", true);
-                /*
-                CharacterAnimatorManager animatorManager = GetComponent<CharacterAnimatorManager>();
-                bool isPerformingAction = false;           // Indica que o player está realizando uma ação 
-                bool applyRootMotion = false;              // O movimento deve ser influenciado pela animação
-                bool canRotate = true;                   // O player  pode girar durante 
-                bool canMove = true;                     // O player pode se mover durante 
-                // Chama a animação com os parâmetros estilo Rennala Queen
-                animatorManager.PlayTargetActionAnimation(targetAnimation, isPerformingAction, applyRootMotion, canRotate, canMove);*/
-
-                animator.CrossFade(targetAnimation, 0);
-                currentTimerArrowOff = 0;
-            }
-            else if (Mouse.current.rightButton.wasReleasedThisFrame && isDrawingBow){
-                //animator.SetBool("Press", false);
-                // Quando o botão direito é solto, dispare a flecha
-                FireArrow();
-                isAiming = false;
-                isDrawingBow = false;
-                currentArrowForce = minArrowForce; // Reseta a força da flecha
-                PlayerCamera.instance.ToggleAimMode(false); // Desativa a câmera de mira
-                playerLocomotionManager.arco = false;
-
-            }
-
-            if (currentTimerArrowOff < timerArrowOff && !isAiming){
-                currentTimerArrowOff += Time.deltaTime;
-                if (currentTimerArrowOff >= timerArrowOff){
-                    ActiveBow(false);
-                }
-
-            }
-            
-        }
+        // private void Update(){
+        //     // Verifica se o botão direito do mouse está pressionado para ativar a mira
+        //     
+        //     if (Mouse.current.rightButton.isPressed){
+        //         ActiveBow(true);
+        //         playerLocomotionManager.arco = true;
+        //         isAiming = true;
+        //         PlayerCamera.instance.ToggleAimMode(true); // Ativa a câmera de mira
+        //
+        //         if (!isDrawingBow){
+        //             isDrawingBow = true; // O arco está sendo preparado para disparo
+        //             chargeStartTime = Time.time; // Registra o tempo de início do carregamento
+        //         }
+        //         
+        //         
+        //         currentArrowForce =
+        //             Mathf.Lerp(minArrowForce, maxArrowForce, (Time.time - chargeStartTime) / chargeTime);
+        //         string targetAnimation = "ArcoPress";  // A animação que você quer que o player execute
+        //         //animator.SetBool("Press", true);
+        //         
+        //         CharacterAnimatorManager animatorManager = GetComponent<CharacterAnimatorManager>();
+        //         bool isPerformingAction = false;           // Indica que o player está realizando uma ação 
+        //         bool applyRootMotion = false;              // O movimento deve ser influenciado pela animação
+        //         bool canRotate = true;                   // O player  pode girar durante 
+        //         bool canMove = true;                     // O player pode se mover durante 
+        //         Chama a animação com os parâmetros estilo Rennala Queen
+        //         animatorManager.PlayTargetActionAnimation(targetAnimation, isPerformingAction, applyRootMotion, canRotate, canMove);*/
+        //
+        //         animator.CrossFade(targetAnimation, 0);
+        //         currentTimerArrowOff = 0;
+        //     }
+        //     else if (Mouse.current.rightButton.wasReleasedThisFrame && isDrawingBow){
+        //         animator.SetBool("Press", false);
+        //          Quando o botão direito é solto, dispare a flecha
+        //         FireArrow();
+        //         isAiming = false;
+        //         isDrawingBow = false;
+        //         currentArrowForce = minArrowForce; // Reseta a força da flecha
+        //         PlayerCamera.instance.ToggleAimMode(false); // Desativa a câmera de mira
+        //         playerLocomotionManager.arco = false;
+        //
+        //     }
+        //
+        //     if (currentTimerArrowOff < timerArrowOff && !isAiming){
+        //         currentTimerArrowOff += Time.deltaTime;
+        //         if (currentTimerArrowOff >= timerArrowOff){
+        //             ActiveBow(false);
+        //         }
+        //
+        //     }*/
+        //     
+        // }
 
         public void ActiveBow(bool active){
             arrow.SetActive(active);

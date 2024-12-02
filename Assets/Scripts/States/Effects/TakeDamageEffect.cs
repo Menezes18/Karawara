@@ -51,7 +51,9 @@ namespace RPGKarawara
             //  IF THE CHARACTER IS DEAD, NO ADDITIONAL DAMAGE EFFECTS SHOULD BE PROCESSED
             if (character.isDead.Value)
                 return;
-
+            if (character.gameObject.CompareTag("Player")){
+                SystemMiniMap.ActiveMiniMap.DoHitEffect();
+            }
             CalculateDamage(character);
             PlayDirectionalBasedDamageAnimation(character);
             //  CHECK FOR BUILD UPS (POISON, BLEED ECT)
@@ -99,8 +101,8 @@ namespace RPGKarawara
         {
             AudioClip physicalDamageSFX = WorldSoundFXManager.instance.ChooseRandomSFXFromArray(WorldSoundFXManager.instance.physicalDamageSFX);
 
-            character.characterSoundFXManager.PlaySoundFX(physicalDamageSFX);
-            character.characterSoundFXManager.PlayDamageGrunt();
+            //character.characterSoundFXManager.PlaySoundFX(physicalDamageSFX);
+            //character.characterSoundFXManager.PlayDamageGrunt();
             //  IF FIRE DAMAGE IS GREATER THAN 0, PLAY BURN SFX
             //  IF LIGHTNING DAMAGE IS GREATER THAN 0, PLAY ZAP SFX
         }
@@ -141,8 +143,14 @@ namespace RPGKarawara
             //  IF POISE IS BROKEN, PLAY A STAGGERING DAMAGE ANIMATION
             if (poiseIsBroken)
             {
-                character.characterAnimatorManager.lastDamageAnimationPlayed = damageAnimation;
+                //  IF WE ARE POISE BROKEN RESTRICT OUR MOVEMENT AND ACTIONS
                 character.characterAnimatorManager.PlayTargetActionAnimation(damageAnimation, true);
+                character.characterCombatManager.DestroyAllCurrentActionFX();
+            }
+            else
+            {
+                //  IF WE ARE NOT POISE BROKEN SIMPLY PLAY AN UPPERBODY ANIMATION WITHOUT RESTRICTING
+                character.characterAnimatorManager.PlayTargetActionAnimation(damageAnimation, false, false, true, true);
             }
         }
     }

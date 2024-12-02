@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 2819147495151165346}
   - component: {fileID: 3676434597793926313}
   - component: {fileID: 1931834255253932593}
-  - component: {fileID: 102440977383258677}
+  - component: {fileID: 2022500759514402273}
   m_Layer: 6
   m_Name: Telhado
   m_TagString: Untagged
@@ -200,8 +200,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &102440977383258677
-MeshCollider:
+--- !u!65 &2022500759514402273
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -218,7 +218,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 816353500731703333, guid: 31216929f45661646913ff16f1baadf2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 9.82069, y: 3.4734936, z: 8.691844}
+  m_Center: {x: 0.33944145, y: 4.4277687, z: 0.15095687}

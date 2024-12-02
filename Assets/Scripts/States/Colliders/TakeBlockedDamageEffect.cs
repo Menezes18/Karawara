@@ -67,7 +67,6 @@ namespace RPGKarawara{
 
 
             physicalDamage -= physicalDamage; // blockingPhysicalAbsorption = 100
-            magicDamage = magicDamage;
             fireDamage -= fireDamage; // blockingFireAbsorption = 100
             lightningDamage -= lightningDamage; // blockingLightningAbsorption = 100
             

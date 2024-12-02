@@ -7,7 +7,7 @@ namespace RPGKarawara
     [CreateAssetMenu(menuName = "Character Actions/Weapon Actions/Light Attack Action")]
     public class LightAttackWeaponItemAction : WeaponItemAction
     {
-        [Header("Light Attacks")]
+[Header("Light Attacks")]
         [SerializeField] string light_Attack_01 = "Main_Light_Attack_01";
         [SerializeField] string light_Attack_02 = "Main_Light_Attack_02";
 
@@ -27,11 +27,11 @@ namespace RPGKarawara
             if (!playerPerformingAction.IsOwner)
                 return;
 
-            // if (playerPerformingAction.playerNetworkManager.currentStamina.Value <= 0)
-            //     return;
-
             if (!playerPerformingAction.characterLocomotionManager.isGrounded)
                 return;
+
+            if (playerPerformingAction.IsOwner)
+                playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
 
             //  IF WE ARE SPRINTING, PERFORM A RUNNING ATTACK
             if (playerPerformingAction.characterNetworkManager.isSprinting.Value)
@@ -67,17 +67,17 @@ namespace RPGKarawara
                 //  PERFORM AN ATTACK BASED ON THE PREVIOUS ATTACK WE JUST PLAYED
                 if (playerPerformingAction.characterCombatManager.lastAttackAnimationPerformed == light_Attack_01)
                 {
-                    playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(AttackType.LightAttack02, light_Attack_02, true);
+                    playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(weaponPerformingAction, AttackType.LightAttack02, light_Attack_02, true);
                 }
                 else
                 {
-                    playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(AttackType.LightAttack01, light_Attack_01, true);
+                    playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(weaponPerformingAction, AttackType.LightAttack01, light_Attack_01, true);
                 }
             }
             //  OTHERWISE, IF WE ARE NOT ALREADY ATTACKING JUST PERFORM A REGULAR ATTACK
             else if (!playerPerformingAction.isPerformingAction)
             {
-                playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(AttackType.LightAttack01, light_Attack_01, true);
+                playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(weaponPerformingAction, AttackType.LightAttack01, light_Attack_01, true);
             }
         }
 
@@ -86,7 +86,7 @@ namespace RPGKarawara
             //  IF WE ARE TWO HANDING OUR WEAPON PERFORM A TWO HAND RUN ATTACK (TO DO)
             //  ELSE PERFORM A ONE HAND RUN ATTACK
 
-            playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(AttackType.RunningAttack01, run_Attack_01, true);
+            playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(weaponPerformingAction, AttackType.RunningAttack01, run_Attack_01, true);
         }
 
         private void PerformRollingAttack(PlayerManager playerPerformingAction, WeaponItem weaponPerformingAction)
@@ -94,7 +94,7 @@ namespace RPGKarawara
             //  IF WE ARE TWO HANDING OUR WEAPON PERFORM A TWO HAND RUN ATTACK (TO DO)
             //  ELSE PERFORM A ONE HAND RUN ATTACK
             playerPerformingAction.playerCombatManager.canPerformRollingAttack = false;
-            playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(AttackType.RollingAttack01, roll_Attack_01, true);
+            playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(weaponPerformingAction, AttackType.RollingAttack01, roll_Attack_01, true);
         }
 
         private void PerformBackstepAttack(PlayerManager playerPerformingAction, WeaponItem weaponPerformingAction)
@@ -102,7 +102,7 @@ namespace RPGKarawara
             //  IF WE ARE TWO HANDING OUR WEAPON PERFORM A TWO HAND RUN ATTACK (TO DO)
             //  ELSE PERFORM A ONE HAND RUN ATTACK
             playerPerformingAction.playerCombatManager.canPerformBackstepAttack = false;
-            playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(AttackType.BackstepAttack01, backstep_Attack_01, true);
+            playerPerformingAction.playerAnimatorManager.PlayTargetAttackActionAnimation(weaponPerformingAction, AttackType.BackstepAttack01, backstep_Attack_01, true);
         }
     }
 }

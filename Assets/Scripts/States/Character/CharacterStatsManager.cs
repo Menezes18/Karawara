@@ -7,12 +7,7 @@ namespace RPGKarawara
     public class CharacterStatsManager : MonoBehaviour
     {
         CharacterManager character;
-
-        [Header("Stamina Regeneration")]
-        [SerializeField] float staminaRegenerationAmount = 2;
-        private float staminaRegenerationTimer = 0;
-        private float staminaTickTimer = 0;
-        [SerializeField] float staminaRegenerationDelay = 2;
+        
 
         [Header("Blocking Absorptions")]
         public float blockingPhysicalAbsorption = 100;
@@ -52,17 +47,6 @@ namespace RPGKarawara
 
             return Mathf.RoundToInt(stamina);
         }
-
         
-
-        public virtual void ResetStaminaRegenTimer(float previousStaminaAmount, float currentStaminaAmount)
-        {
-            //  WE ONLY WANT TO RESET THE REGENERATION IF THE ACTION USED STAMINA
-            //  WE DONT WANT TO RESET THE REGENERATION IF WE ARE ALREADY REGENERATING STAMINA
-            if (currentStaminaAmount < previousStaminaAmount)
-            {
-                staminaRegenerationTimer = 0;
-            }
-        }
     }
 }

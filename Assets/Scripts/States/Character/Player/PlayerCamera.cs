@@ -21,7 +21,10 @@ namespace RPGKarawara
         [SerializeField] float maximumPivot = 60;   //  THE HIGHEST POINT YOU ARE ABLE TO LOOK UP
         [SerializeField] float cameraCollisionRadius = 0.2f;
         [SerializeField] LayerMask collideWithLayers;
-
+        
+        [Header("Camera sensitivity ")]
+        [SerializeField] private float sensitivity = 1.0f;
+        
         [Header("Camera Offset")]
         [SerializeField] private Vector3 cameraOffset = new Vector3(-0.5f, 0, 0); 
 
@@ -52,6 +55,10 @@ namespace RPGKarawara
         public CharacterManager leftLockOnTarget;
         public CharacterManager rightLockOnTarget;
         public bool canFollow = false;
+        
+        [Header("Target for camera to look at")]
+        public Transform targetToLookAt;
+        public bool lockOnTarget = false;
         private void Awake()
         {
             if (instance == null)
@@ -91,76 +98,111 @@ namespace RPGKarawara
             }
         }
 
-        private void HandleRotations()
+private void HandleRotations()
+{
+    
+    
+    // SE ESTIVER BLOQUEADO, FORÇA A ROTAÇÃO EM DIREÇÃO AO ALVO
+    if (!isAiming)  // Rotação normal se não estiver mirando
+    {
+        // Atualiza o ângulo de rotação esquerda/direita baseado na entrada do joystick
+        leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
+        // Atualiza o ângulo de rotação para cima/baixo baseado na entrada do joystick
+        upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
+        // Limita o ângulo de rotação para cima/baixo entre os valores mínimo e máximo
+        upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
+
+        Vector3 cameraRotation = Vector3.zero;
+        Quaternion targetRotation;
+
+        // Define a rotação do objeto de câmera esquerda/direita
+        cameraRotation.y = leftAndRightLookAngle;
+        targetRotation = Quaternion.Euler(cameraRotation);
+        transform.rotation = targetRotation;
+
+        // Reseta a rotação e define a rotação para cima/baixo
+        cameraRotation = Vector3.zero;
+        cameraRotation.x = upAndDownLookAngle;
+        targetRotation = Quaternion.Euler(cameraRotation);
+        cameraPivotTransform.localRotation = targetRotation;
+    }
+
+    // Verifica se o jogador está bloqueado em um alvo
+    if (player.playerNetworkManager.isLockedOn.Value)
+    {
+        // ROTACIONA O OBJETO ATUAL
+        // Calcula a direção de rotação em direção ao alvo bloqueado
+        Vector3 rotationDirection = player.playerCombatManager.currentTarget.characterCombatManager.lockOnTransform.position - transform.position;
+        rotationDirection.Normalize();
+        rotationDirection.y = 0; // Mantém a rotação no plano horizontal
+        Quaternion targetRotation = Quaternion.LookRotation(rotationDirection);
+        // Interpola suavemente a rotação atual para a rotação do alvo
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lockOnTargetFollowSpeed);
+
+        // ROTACIONA O OBJETO DE PIVÔ
+        rotationDirection = player.playerCombatManager.currentTarget.characterCombatManager.lockOnTransform.position - cameraPivotTransform.position;
+        rotationDirection.Normalize();
+        targetRotation = Quaternion.LookRotation(rotationDirection);
+        // Interpola suavemente a rotação do pivô da câmera
+        cameraPivotTransform.transform.rotation = Quaternion.Slerp(cameraPivotTransform.rotation, targetRotation, lockOnTargetFollowSpeed);
+
+        // SALVA AS NOSSAS ROTAÇÕES PARA NOSSOS ÂNGULOS DE OLHAR, ASSIM QUANDO DESBLOQUEAMOS NÃO HÁ UM SNAPPING MUITO LONGE
+        leftAndRightLookAngle = transform.eulerAngles.y;
+        upAndDownLookAngle = transform.eulerAngles.x;
+    }else if (targetToLookAt != null && lockOnTarget){
+        Vector3 rotationDirection = targetToLookAt.position - transform.position;
+        rotationDirection.Normalize();
+        rotationDirection.y = 0; // Mantém a rotação no plano horizontal
+        Quaternion targetRotation = Quaternion.LookRotation(rotationDirection);
+        // Interpola suavemente a rotação atual para a rotação do alvo
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lockOnTargetFollowSpeed);
+
+        // ROTACIONA O OBJETO DE PIVÔ
+        rotationDirection = targetToLookAt.position - cameraPivotTransform.position;
+        rotationDirection.Normalize();
+        targetRotation = Quaternion.LookRotation(rotationDirection);
+        // Interpola suavemente a rotação do pivô da câmera
+        cameraPivotTransform.transform.rotation = Quaternion.Slerp(cameraPivotTransform.rotation, targetRotation, lockOnTargetFollowSpeed);
+
+        // SALVA AS NOSSAS ROTAÇÕES PARA NOSSOS ÂNGULOS DE OLHAR, ASSIM QUANDO DESBLOQUEAMOS NÃO HÁ UM SNAPPING MUITO LONGE
+        leftAndRightLookAngle = transform.eulerAngles.y;
+        upAndDownLookAngle = transform.eulerAngles.x;
+    }
+    // CASO CONTRÁRIO, ROTACIONA NORMALMENTE
+    else
+    {
+        // ROTACIONA ESQUERDA E DIREITA BASEADO NO MOVIMENTO HORIZONTAL NO JOYSTICK DIREITO
+        leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
+        // ROTACIONA PARA CIMA E PARA BAIXO BASEADO NO MOVIMENTO VERTICAL NO JOYSTICK DIREITO
+        upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
+        // LIMITA O ÂNGULO DE OLHAR PARA CIMA E PARA BAIXO ENTRE VALORES MÍNIMO E MÁXIMO
+        upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
+
+        Vector3 cameraRotation = Vector3.zero;
+        Quaternion targetRotation;
+
+        // ROTACIONA O OBJETO ATUAL ESQUERDA E DIREITA
+        cameraRotation.y = leftAndRightLookAngle;
+        targetRotation = Quaternion.Euler(cameraRotation);
+        transform.rotation = targetRotation;
+
+        // ROTACIONA O OBJETO DE PIVÔ PARA CIMA E PARA BAIXO
+        cameraRotation = Vector3.zero;
+        cameraRotation.x = upAndDownLookAngle;
+        targetRotation = Quaternion.Euler(cameraRotation);
+        cameraPivotTransform.localRotation = targetRotation;
+    }
+}
+
+        public void SetSensitivity(float newSensitivity)
         {
-            //  IF LOCKED ON, FORCE ROTATION TOWARDS TARGET
-            if (!isAiming)  // Regular rotation if not aiming
-            {
-                leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
-                upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
-                upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
-
-                Vector3 cameraRotation = Vector3.zero;
-                Quaternion targetRotation;
-
-                cameraRotation.y = leftAndRightLookAngle;
-                targetRotation = Quaternion.Euler(cameraRotation);
-                transform.rotation = targetRotation;
-
-                cameraRotation = Vector3.zero;
-                cameraRotation.x = upAndDownLookAngle;
-                targetRotation = Quaternion.Euler(cameraRotation);
-                cameraPivotTransform.localRotation = targetRotation;
-            }
-            if (player.playerNetworkManager.isLockedOn.Value)
-            {
-                //  THIS ROTATES THIS GAMEOBJECT
-                Vector3 rotationDirection = player.playerCombatManager.currentTarget.characterCombatManager.lockOnTransform.position - transform.position;
-                rotationDirection.Normalize();
-                rotationDirection.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(rotationDirection);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lockOnTargetFollowSpeed);
-
-                //  THIS ROTATES THE PIVOT OBJECT
-                rotationDirection = player.playerCombatManager.currentTarget.characterCombatManager.lockOnTransform.position - cameraPivotTransform.position;
-                rotationDirection.Normalize();
-
-                targetRotation = Quaternion.LookRotation(rotationDirection);
-                cameraPivotTransform.transform.rotation = Quaternion.Slerp(cameraPivotTransform.rotation, targetRotation, lockOnTargetFollowSpeed);
-
-                //  SAVE OUR ROTATIONS TO OUR LOOK ANGLES, SO WHEN WE UNLOCK IT DOESNT SNAP TOO FAR AWAY
-                leftAndRightLookAngle = transform.eulerAngles.y;
-                upAndDownLookAngle = transform.eulerAngles.x;
-            }
-            //  ELSE ROTATE REGULARLY
-            else
-            {
-                //  ROTATE LEFT AND RIGHT BASED ON HORIZONTAL MOVEMENT ON THE RIGHT JOYSTICK
-                leftAndRightLookAngle += (PlayerInputManager.instance.cameraHorizontal_Input * leftAndRightRotationSpeed) * Time.deltaTime;
-                //  ROTATE UP AND DOWN BASED ON VERTICAL MOVEMENT ON THE RIGHT JOYSTICK
-                upAndDownLookAngle -= (PlayerInputManager.instance.cameraVertical_Input * upAndDownRotationSpeed) * Time.deltaTime;
-                //  CLAMP THE UP AND DOWN LOOK ANGLE BETWEEN A MIN AND MAX VALUE
-                upAndDownLookAngle = Mathf.Clamp(upAndDownLookAngle, minimumPivot, maximumPivot);
-
-
-                Vector3 cameraRotation = Vector3.zero;
-                Quaternion targetRotation;
-
-                //  ROTATE THIS GAMEOBJECT LEFT AND RIGHT
-                cameraRotation.y = leftAndRightLookAngle;
-                targetRotation = Quaternion.Euler(cameraRotation);
-                transform.rotation = targetRotation;
-
-                //  ROTATE THE PIVOT GAMEOBJECT UP AND DOWN
-                cameraRotation = Vector3.zero;
-                cameraRotation.x = upAndDownLookAngle;
-                targetRotation = Quaternion.Euler(cameraRotation);
-                cameraPivotTransform.localRotation = targetRotation;
-            }
+            sensitivity = newSensitivity;
+            leftAndRightRotationSpeed =+ sensitivity * 10;
+            upAndDownRotationSpeed =+ sensitivity * 10;
         }
         public void ToggleAimMode(bool isAiming)
         {
-            
+            /*
             if (isAiming)
             {
                 // Ajustar a câmera para o modo de mira
@@ -171,7 +213,7 @@ namespace RPGKarawara
             {
                 // Voltar à visão normal
                 cameraObject.fieldOfView = 60f;
-            }
+            }*/
         }
         private void HandleAimMode()
         {

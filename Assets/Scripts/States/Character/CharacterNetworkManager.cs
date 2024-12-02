@@ -12,7 +12,8 @@ namespace RPGKarawara
 
         [Header("Active")]
         public NetworkVariable<bool> isActive = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    
+
+        public bool aa;
         [Header("Position")]
         public NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<Quaternion> networkRotation = new NetworkVariable<Quaternion>(Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -36,6 +37,7 @@ namespace RPGKarawara
         public NetworkVariable<bool> isSprinting = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<bool> isJumping = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<bool> isChargingAttack = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public NetworkVariable<bool> isAttacking = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         [Header("Resources")]
         public NetworkVariable<int> currentHealth = new NetworkVariable<int>(400, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -57,6 +59,18 @@ namespace RPGKarawara
             if (currentHealth.Value <= 0)
             {
                 StartCoroutine(character.ProcessDeathEvent());
+                GameObject corruptionObject = GameObject.FindWithTag("Corruption");
+
+                // Verifica se o objeto foi encontrado antes de tentar desativá-lo
+                if (corruptionObject != null)
+                {
+                    corruptionObject.SetActive(false);
+                }
+                else
+                {
+                    Debug.LogWarning("Nenhum objeto com a tag 'Corruption' foi encontrado.");
+                }
+               
             }
 
             //  PREVENTS US FROM OVER HEALING
@@ -282,6 +296,19 @@ namespace RPGKarawara
         }
 
     
-
+        [ServerRpc]
+        public void DestroyAllCurrentActionFXServerRpc()
+        {
+            if (IsServer)
+            {
+                DestroyAllCurrentActionFXClientRpc();
+            }
+        }
+        [ClientRpc]
+        public void DestroyAllCurrentActionFXClientRpc()
+        {
+            if (character.characterEffectsManager.activeSpellWarmUpFX != null)
+                Destroy(character.characterEffectsManager.activeSpellWarmUpFX);
+        }
     }
 }
