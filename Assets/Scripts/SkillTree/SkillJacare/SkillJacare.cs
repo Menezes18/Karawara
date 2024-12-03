@@ -9,6 +9,7 @@ namespace RPGKarawara
         public float skillRadius = 10f;
         public float skillDuration = 5f;
         public LayerMask enemyLayer;
+        public Material _filtroTela;
 
         [SerializeField]
         private List<AICharacterManager> affectedEnemies = new List<AICharacterManager>();
@@ -58,6 +59,7 @@ namespace RPGKarawara
 
         private void ApplySkillEffect()
         {
+            _filtroTela.SetFloat("Luminosity", 1);
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, skillRadius, enemyLayer);
             foreach (Collider collider in hitColliders)
             {
@@ -84,6 +86,7 @@ namespace RPGKarawara
 
         private void DeactivateSkill()
         {
+            _filtroTela.SetFloat("Luminosity", 0);
             affectedEnemies.Clear(); // Limpa a lista para evitar reativação de objetos destruídos
         }
 
