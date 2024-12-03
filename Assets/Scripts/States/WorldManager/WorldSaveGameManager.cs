@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 namespace RPGKarawara
 {
     public class WorldSaveGameManager : MonoBehaviour
@@ -31,8 +32,10 @@ namespace RPGKarawara
         public CharacterSaveData characterSlot01;
         public CharacterSaveData characterSlot02;
         public CharacterSaveData characterSlot03;
-
+        
         public LoadScene loadscene;
+        [Header("Texture Async")] 
+        [SerializeField] private AssetData assetData;
         private void Awake()
         {
             //  THERE CAN ONLY BE ONE INSTANCE OF THIS SCRIPT AT ONE TIME, IF ANOTHER EXISTS, DESTROY IT
@@ -243,19 +246,127 @@ namespace RPGKarawara
 
         public IEnumerator LoadWorldScene()
         {
-            //  IF YOU JUST WANT 1 WORLD SCENE USE THIS
-            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
+            // Carregar a cena de forma assíncrona
+            AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(worldSceneIndex);
+            sceneLoad.allowSceneActivation = false;
 
-            //  IF YOU WANT TO USE DIFFERENT SCENES FOR LEVELS IN YOUR PROJECT USE THIS
-            //AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
+            float simulatedProgress = 0;
 
-            player.LoadGameDataFromCurrentCharacterData(ref currentCharacterData);
-
-            while (!loadOperation.isDone)
+            while (!sceneLoad.isDone)
             {
+                // Atualizar progresso simulado
+                simulatedProgress = Mathf.Clamp(simulatedProgress + Time.deltaTime * 30, 0, 100);
+
+                Debug.Log($"Progresso: {Mathf.Min(sceneLoad.progress * 100, simulatedProgress):0}%");
+
+                // Verificar se a cena pode ser ativada
+                if (sceneLoad.progress >= 0.9f && simulatedProgress >= 100)
+                {
+                    Debug.Log("Cena carregada!");
+                    sceneLoad.allowSceneActivation = true;
+                }
+
                 yield return null;
             }
+
+            // Esperar o próximo quadro para garantir que a cena está ativa
+            yield return new WaitForEndOfFrame();
+
+            // Aplicar textura e instanciar o prefab de forma assíncrona
+            if (assetData != null && assetData.texturePath != null)
+            {
+                // Carregar e aplicar a textura de forma assíncrona
+                yield return StartCoroutine(InstantiatePrefabWithTextureAsync(assetData.prefab, assetData.texturePath));
+            }
         }
+
+        // Método para instanciar o prefab e aplicar a textura
+        private IEnumerator InstantiatePrefabWithTextureAsync(GameObject prefab, string texturePath)
+        {
+            if (prefab == null)
+            {
+                Debug.LogWarning("Prefab não encontrado.");
+                yield break;
+            }
+
+            GameObject instantiatedObject = Instantiate(prefab, assetData.position, Quaternion.identity);
+            Debug.Log("Prefab instanciado: " + instantiatedObject.name);
+            ResourceRequest resourceRequest = Resources.LoadAsync<Texture2D>(texturePath);
+            yield return resourceRequest;
+            if (resourceRequest.asset == null)
+            {
+                Debug.LogError($"Falha ao carregar o recurso: {texturePath}. Verifique se o caminho está correto e o arquivo está na pasta Resources.");
+                yield break;
+            }
+
+            yield return StartCoroutine(ApplyTextureToObject(instantiatedObject, resourceRequest.asset as Texture2D));
+
+        }
+
+// Método para aplicar a textura ao objeto instanciado
+        private IEnumerator ApplyTextureToObject(GameObject instantiatedObject, Texture2D texture)
+        {
+            if (instantiatedObject == null || texture == null)
+            {
+                Debug.Log("Objeto instanciado ou textura não encontrados.");
+                yield break;
+            }
+
+            // Encontrar todos os Renderers nos filhos do objeto instanciado
+            Renderer[] renderers = instantiatedObject.GetComponentsInChildren<Renderer>();
+            SkinnedMeshRenderer[] skinnedMeshRenderers = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+            // Aplicar textura aos Renderers comuns
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer != null)
+                {
+                    Material material = renderer.sharedMaterial;
+
+                    if (material != null)
+                    {
+                        material.mainTexture = texture;
+                        Debug.Log($"Textura aplicada ao material do Renderer: {renderer.gameObject.name}");
+                    }
+                    else
+                    {
+                        Debug.Log($"Material não encontrado no Renderer: {renderer.gameObject.name}");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Renderer não encontrado em um dos filhos do prefab.");
+                }
+            }
+
+            // Aplicar textura aos SkinnedMeshRenderers
+            foreach (SkinnedMeshRenderer skinnedRenderer in skinnedMeshRenderers)
+            {
+                if (skinnedRenderer != null)
+                {
+                    Material material = skinnedRenderer.sharedMaterial;
+
+                    if (material != null)
+                    {
+                        material.mainTexture = texture;
+                        Debug.Log($"Textura aplicada ao material do SkinnedMeshRenderer: {skinnedRenderer.gameObject.name}");
+                    }
+                    else
+                    {
+                        Debug.Log($"Material não encontrado no SkinnedMeshRenderer: {skinnedRenderer.gameObject.name}");
+                    }
+                }
+                else
+                {
+                    Debug.Log("SkinnedMeshRenderer não encontrado em um dos filhos do prefab.");
+                }
+            }
+        }
+
+        
+
+
+
 
         public int GetWorldSceneIndex()
         {
