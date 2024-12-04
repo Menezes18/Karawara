@@ -50,6 +50,10 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
+  renderPassFeature: {fileID: -7690242109850121530, guid: c40be3174f62c4acf8c1216858c64956,
+    type: 2}
+  curShader: {fileID: 4800000, guid: 7cef9f6b24e1c174d9ede8d4a72ded6e, type: 3}
+  affectedEnemies: []
 --- !u!114 &5662883727141092968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438769eb7e7640f1873e148bc4e06703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillRoot: 0
   showFields: 0
   erodeRate: 0.03
   erodeRefreshRate: 0.01

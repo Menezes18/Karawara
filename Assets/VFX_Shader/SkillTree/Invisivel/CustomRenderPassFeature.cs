@@ -16,6 +16,11 @@ public class CustomRenderPassFeature : ScriptableRendererFeature
             tempRenderTargetHandler.Init("_TemporaryColorTexture");
         }
 
+        public void SetMaterial(Material newMaterial)
+        {
+            material = newMaterial;
+        }
+
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             source = renderingData.cameraData.renderer.cameraColorTarget;
@@ -23,6 +28,12 @@ public class CustomRenderPassFeature : ScriptableRendererFeature
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            if (material == null)
+            {
+                Debug.LogWarning("Material não configurado para o Custom Render Pass.");
+                return;
+            }
+
             CommandBuffer commandBuffer = CommandBufferPool.Get("CustomBlitRenderPass");
 
             commandBuffer.GetTemporaryRT(tempRenderTargetHandler.id, renderingData.cameraData.cameraTargetDescriptor);
@@ -56,5 +67,13 @@ public class CustomRenderPassFeature : ScriptableRendererFeature
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         renderer.EnqueuePass(m_ScriptablePass);
+    }
+
+    public void UpdateMaterial(Material newMaterial)
+    {
+        if (m_ScriptablePass != null)
+        {
+            m_ScriptablePass.SetMaterial(newMaterial);
+        }
     }
 }
