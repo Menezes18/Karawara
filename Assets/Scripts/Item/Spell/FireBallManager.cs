@@ -30,6 +30,7 @@ namespace RPGKarawara
 
             fireBallRigidbody = GetComponent<Rigidbody>();
         }
+        
 
         protected override void Update()
         {
