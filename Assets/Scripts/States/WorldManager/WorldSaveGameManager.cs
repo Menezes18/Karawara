@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 namespace RPGKarawara
@@ -243,7 +244,8 @@ namespace RPGKarawara
 
             
         }
-
+        [SerializeField] private Slider loadingSlider;
+        public GameObject loadingGameObejct;
         public IEnumerator LoadWorldScene()
         {
             // Carregar a cena de forma assíncrona
@@ -256,7 +258,12 @@ namespace RPGKarawara
             {
                 // Atualizar progresso simulado
                 simulatedProgress = Mathf.Clamp(simulatedProgress + Time.deltaTime * 30, 0, 100);
-
+                if (loadingSlider != null )
+                {
+                    loadingGameObejct.SetActive(true);
+                    float progressValue = Mathf.Min(sceneLoad.progress * 100, simulatedProgress) / 100;
+                    loadingSlider.value = progressValue;
+                }
                 Debug.Log($"Progresso: {Mathf.Min(sceneLoad.progress * 100, simulatedProgress):0}%");
 
                 // Verificar se a cena pode ser ativada
@@ -361,6 +368,7 @@ namespace RPGKarawara
                     Debug.Log("SkinnedMeshRenderer não encontrado em um dos filhos do prefab.");
                 }
             }
+
         }
 
         
