@@ -11,6 +11,7 @@ namespace RPGKarawara
         public AudioSource audio;
         public SkinnedMeshRenderer[] materialErode, materialCUCA;
         public GameObject CucaDeFato, TainaraStop,TainaraMove;
+        public CutSceneTrigger trigger;
         void Start()
         {
             foreach (var desativar in cam)
@@ -28,7 +29,7 @@ namespace RPGKarawara
                         foreach ( var mat in materialErode){
                             mat.material.SetFloat("_Erode", t);
                         }
-                        t += 0.03f;
+                        t += 0.015f;
                         yield return new WaitForSeconds(0.01f);
                     }
         }
@@ -50,63 +51,66 @@ namespace RPGKarawara
             {
                 case 0:
                     DesativarCamara(0);
-                    PlayAudioClip(0);
+                    //PlayAudioClip(0);
                     break;
                 case 1:
                     StartCoroutine(ErodeObject());
                     DesativarCamara(1);
-                    PlayAudioClip(1);
+                    //PlayAudioClip(1);
                     break;
                 case 2:
                     DesativarCamara(2);
-                    PlayAudioClip(2);
+                    //PlayAudioClip(2);
                     break;
                 case 3:
                     DesativarCamara(3);
-                    PlayAudioClip(3);
+                    //PlayAudioClip(3);
                     break;
                 case 4:
                     cam[4].gameObject.GetComponent<Animator>().SetBool("Anim4", true);
                     CucaDeFato.SetActive(true);
                     StartCoroutine(ErodeObject2());
                     DesativarCamara(4);
-                    PlayAudioClip(4);
+                    //PlayAudioClip(4);
                     break;
                 case 5:
                     TainaraMove.SetActive(false);
                     DesativarCamara(0);
-                    PlayAudioClip(0);
+                    //PlayAudioClip(0);
                     break;
                 case 6:
                     cam[1].gameObject.GetComponent<Animator>().SetBool("Anim5", true);
                     cam[1].gameObject.GetComponent<Animator>().SetBool("Anim4", false);
                     DesativarCamara(1);
-                    PlayAudioClip(1);
+                    //PlayAudioClip(1);
                     break;
                 case 7:
                     cam[2].gameObject.GetComponent<Animator>().SetBool("Anim6", true);
                     cam[2].gameObject.GetComponent<Animator>().SetBool("Anim5", false);
                     DesativarCamara(2);
-                    PlayAudioClip(2);
+                    //PlayAudioClip(2);
                     break;
                 case 8:
                     TainaraStop.SetActive(true);
                     TainaraStop.gameObject.GetComponent<Animator>().SetBool("Fala1",false);
                     TainaraStop.gameObject.GetComponent<Animator>().SetBool("Fala2",true);
                     DesativarCamara(3);
-                    PlayAudioClip(3);
+                    //PlayAudioClip(3);
                     break;
                 case 9:
                     cam[0].gameObject.GetComponent<Animator>().SetBool("Anim6", false);
                     cam[0].gameObject.GetComponent<Animator>().SetBool("Anim7", true);
                     DesativarCamara(0);
-                    PlayAudioClip(0);
+                    //PlayAudioClip(0);
                     break;
                 case 10:
                     cam[1].gameObject.GetComponent<Animator>().SetBool("Anim7", false);
                     cam[1].gameObject.GetComponent<Animator>().SetBool("Anim8", true);
                     DesativarCamara(1);
-                    PlayAudioClip(1);
+                    //PlayAudioClip(1);
+                    break;
+                case 11:
+                    trigger.FimCutScene();
                     break;
                 default:
                     Debug.LogWarning("Câmera não encontrada: " + numberCam);
