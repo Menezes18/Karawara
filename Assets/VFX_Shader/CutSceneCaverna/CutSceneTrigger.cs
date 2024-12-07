@@ -8,6 +8,8 @@ namespace RPGKarawara
     {
         private Transform _oldPos;
         public GameObject _player,_cutScene;
+        //public BossSpawnerInput Input;
+        //private bool _active;
         void Start()
         {
             _player = GameObject.FindGameObjectWithTag("Player");
@@ -15,8 +17,10 @@ namespace RPGKarawara
         void OnTriggerEnter(Collider col)
         {
 
-            if(col.tag == "Player")
+            if(col.tag == "Player") //&& !_active)
             {
+                //Input.SpawnBoss();
+                //_active = true;
                 _cutScene.SetActive(true);
                 _player.SetActive(false);
             }
