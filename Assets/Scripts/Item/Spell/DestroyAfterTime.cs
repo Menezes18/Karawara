@@ -11,5 +11,8 @@ namespace RPGKarawara
         private void Start(){
             Destroy(gameObject, timeToDestroy);
         }
+        private void Destroyer(){
+            Destroy(gameObject, timeToDestroy);
+        }
     }
 }
