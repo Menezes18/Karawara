@@ -9,8 +9,8 @@ namespace RPGKarawara
         public Camera[] cam;
         public AudioClip[] clip;
         public AudioSource audio;
-        public SkinnedMeshRenderer[] materialErode;
-        public GameObject CucaDeFato, TainaraStop;
+        public SkinnedMeshRenderer[] materialErode, materialCUCA;
+        public GameObject CucaDeFato, TainaraStop,TainaraMove;
         void Start()
         {
             foreach (var desativar in cam)
@@ -29,6 +29,18 @@ namespace RPGKarawara
                             mat.material.SetFloat("_Erode", t);
                         }
                         t += 0.03f;
+                        yield return new WaitForSeconds(0.01f);
+                    }
+        }
+        IEnumerator ErodeObject2()
+        {
+            yield return new WaitForSeconds(1f);
+            float t=1;
+                    while (t > 0){
+                        foreach ( var mat in materialCUCA){
+                            mat.material.SetFloat("_Erode", t);
+                        }
+                        t -= 0.03f;
                         yield return new WaitForSeconds(0.01f);
                     }
         }
@@ -56,10 +68,12 @@ namespace RPGKarawara
                 case 4:
                     cam[4].gameObject.GetComponent<Animator>().SetBool("Anim4", true);
                     CucaDeFato.SetActive(true);
+                    StartCoroutine(ErodeObject2());
                     DesativarCamara(4);
                     PlayAudioClip(4);
                     break;
                 case 5:
+                    TainaraMove.SetActive(false);
                     DesativarCamara(0);
                     PlayAudioClip(0);
                     break;
@@ -76,13 +90,23 @@ namespace RPGKarawara
                     PlayAudioClip(2);
                     break;
                 case 8:
-                    cam[0].gameObject.GetComponent<Animator>().SetBool("Anim7", true);
                     TainaraStop.SetActive(true);
-                    TainaraStop.GetComponent<Animator>().SetBool("Fala1",false);
-                    TainaraStop.GetComponent<Animator>().SetBool("Fala2",true);
+                    TainaraStop.gameObject.GetComponent<Animator>().SetBool("Fala1",false);
+                    TainaraStop.gameObject.GetComponent<Animator>().SetBool("Fala2",true);
+                    DesativarCamara(3);
+                    PlayAudioClip(3);
+                    break;
+                case 9:
                     cam[0].gameObject.GetComponent<Animator>().SetBool("Anim6", false);
+                    cam[0].gameObject.GetComponent<Animator>().SetBool("Anim7", true);
                     DesativarCamara(0);
                     PlayAudioClip(0);
+                    break;
+                case 10:
+                    cam[1].gameObject.GetComponent<Animator>().SetBool("Anim7", false);
+                    cam[1].gameObject.GetComponent<Animator>().SetBool("Anim8", true);
+                    DesativarCamara(1);
+                    PlayAudioClip(1);
                     break;
                 default:
                     Debug.LogWarning("Câmera não encontrada: " + numberCam);
