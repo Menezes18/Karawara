@@ -59,7 +59,7 @@ namespace RPGKarawara
 
                 DamageTarget(damageTarget);
             }
-            
+          
         }
         
         protected override void CheckForBlock(CharacterManager damageTarget){

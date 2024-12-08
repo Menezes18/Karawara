@@ -52,7 +52,7 @@ namespace RPGKarawara
             if (character.isDead.Value)
                 return;
             if (character.gameObject.CompareTag("Player")){
-                SystemMiniMap.ActiveMiniMap.DoHitEffect();
+                //   SystemMiniMap.ActiveMiniMap.DoHitEffect();
             }
             CalculateDamage(character);
             PlayDirectionalBasedDamageAnimation(character);
