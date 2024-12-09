@@ -55,7 +55,9 @@ namespace RPGKarawara
                    SystemMiniMap.ActiveMiniMap.DoHitEffect();
             }
             CalculateDamage(character);
+            if (!character.isBoss){
             PlayDirectionalBasedDamageAnimation(character);
+            }
             //  CHECK FOR BUILD UPS (POISON, BLEED ECT)
             PlayDamageSFX(character);
             PlayDamageVFX(character);
