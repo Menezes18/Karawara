@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.InputSystem;
 
 public class CameraShaker : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class CameraShaker : MonoBehaviour
 
         var dt = Time.deltaTime;
 
-        if(Input.GetKey(KeyCode.Space)) {
+        if(Keyboard.current.eKey.wasPressedThisFrame) {
             intensity += growthIntensity * dt;
         } else {
             //intensity -= decayIntensity * dt;
