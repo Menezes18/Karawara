@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 namespace RPGKarawara
 {
@@ -13,6 +14,7 @@ namespace RPGKarawara
          [TextArea(3, 10)]
         public String textoExplicativo;
         public String titulo;
-        public CustomRenderTexture video;
+        public CustomRenderTexture texture;
+        public VideoClip vClip;
     }
 }
