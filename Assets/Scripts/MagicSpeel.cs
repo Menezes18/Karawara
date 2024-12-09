@@ -20,11 +20,16 @@ namespace RPGKarawara
         public void Tiro(Transform Player)
         {
             player = Player;
+            Invoke("esperaAnim", 1.05f);
+            
+        }
+        void esperaAnim(){
             // Instancia o objeto 'tiro' na posi��o e rota��o definidas por 'inicio'
             GameObject tiroInstance = Instantiate(tiro, inicio.position, inicio.rotation);
             Projetil pro = tiroInstance.GetComponent<Projetil>();
             pro._Velocidade = speed;
-            pro.BuscarAlvo(Player);
+            Vector3 dir = new Vector3(player.position.x, 0, player.position.z);
+            pro.BuscarAlvo(dir);
 
             // Inicia a coroutine para mover o tiro em dire��o ao jogador
             //StartCoroutine(MoveTowardsPlayer(tiroInstance));

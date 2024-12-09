@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projetil : MonoBehaviour
 {
-    [SerializeField] private Transform target;
+    [SerializeField] private Vector3 target;
 
     [SerializeField] private float velocidade = 70f;
 
@@ -13,7 +13,7 @@ public class Projetil : MonoBehaviour
         set { velocidade = value; }
     }
 
-    public void BuscarAlvo(Transform umTarget)
+    public void BuscarAlvo(Vector3 umTarget)
     {
         target = umTarget;
     }
@@ -29,7 +29,7 @@ public class Projetil : MonoBehaviour
         }
 
         // Calcula a direcao para onde o tiro vai ser disparado 
-        Vector3 direcao = target.position - transform.position;
+        Vector3 direcao = target - transform.position;
 
         //Calcula a distancia a ser percorrida float distanciaNesteFrame = speed * Time.deltaTime;
         float distanciaNesteFrame = velocidade * Time.deltaTime;

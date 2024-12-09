@@ -97,7 +97,7 @@ public class Metralhadora : MonoBehaviour
 
         if (projetil != null)
         {
-            projetil.BuscarAlvo(target);
+            projetil.BuscarAlvo(target.position);
 
         }
     }
