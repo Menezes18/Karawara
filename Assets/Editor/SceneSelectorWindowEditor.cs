@@ -13,6 +13,7 @@ public class SceneSelectorWindowEditor : EditorWindow
         "Assets/Scenes/t.unity",        
         "Assets/Scenes/Arte.unity",
         "Assets/Scenes/CucaLoad.unity",
+        "Assets/Scenes/Tutorial_Final.unity",
         
 
     };
