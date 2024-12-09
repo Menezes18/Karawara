@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8187106614497794246}
   - component: {fileID: 7726761757592084735}
   - component: {fileID: 6056588822789298540}
+  - component: {fileID: 5323178273788397440}
+  - component: {fileID: 8543228322895497454}
   m_Layer: 14
   m_Name: Lanca
   m_TagString: Lanca
@@ -123,6 +125,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
   characterCausingDamage: {fileID: 0}
   light_Attack_01_Modifier: 0
   light_Attack_02_Modifier: 0
@@ -133,7 +136,45 @@ MonoBehaviour:
   running_Attack_01_Modifier: 0
   rolling_Attack_01_Modifier: 0
   backstep_Attack_01_Modifier: 0
-  a: {fileID: 0}
+--- !u!54 &5323178273788397440
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5843204293841922719}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &8543228322895497454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5843204293841922719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22921bd69ea92494babbcd02a617b793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7003736831794437496
 GameObject:
   m_ObjectHideFlags: 0

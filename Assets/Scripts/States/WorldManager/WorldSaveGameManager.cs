@@ -257,7 +257,7 @@ namespace RPGKarawara
                 // Atualizar progresso simulado
                 simulatedProgress = Mathf.Clamp(simulatedProgress + Time.deltaTime * 30, 0, 100);
 
-                Debug.Log($"Progresso: {Mathf.Min(sceneLoad.progress * 100, simulatedProgress):0}%");
+                
 
                 // Verificar se a cena pode ser ativada
                 if (sceneLoad.progress >= 0.9f && simulatedProgress >= 100)
