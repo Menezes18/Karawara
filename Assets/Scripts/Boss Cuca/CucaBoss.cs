@@ -3,16 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
+using VTabs.Libs;
 
 namespace RPGKarawara {
     public class CucaBoss : MonoBehaviour {
+        [Header("VFX")]
+        public string tamanhoProperty = "Tamanho"; // Nome da propriedade no VFX Graph
+        public float multiplierSpeed = 1f; // Velocidade de multiplicação ao longo do tempo
+        private VisualEffect vfxComponent; // Referência ao VisualEffect
+        public GameObject VfxLaser;
+
+
         public Transform player; // Referência ao jogador
         public GameObject magicProjectile; // Prefab da magia
         public Transform magicSpawnPoint; // Ponto de origem das magias
         public float detectionRange = 10f; // Alcance para detectar o jogador
         public float stayCloseDuration = 3f; // Tempo que o jogador deve ficar no range para a Cuca reagir
         public float retreatDistance = 15f; // Distância para onde a Cuca recua
-        
         private NavMeshAgent agent; // NavMeshAgent da Cuca
         [SerializeField] private float closeTimer = 0f; // Tempo acumulado dentro do range
         
@@ -48,6 +56,16 @@ namespace RPGKarawara {
             InitLaser();
             healthManager = GetComponent<HealthManager>();
             originalLaserDuration = laserDuration;
+            Transform child = VfxLaser.transform.GetChild(0); // Obtém o primeiro filho
+            if (child != null)
+            {
+                vfxComponent = child.GetComponent<VisualEffect>();
+            }
+
+            if (vfxComponent == null)
+            {
+                Debug.LogError("VisualEffect não encontrado no primeiro filho.");
+            }
         }
         
         private void Update() {
@@ -101,6 +119,18 @@ namespace RPGKarawara {
             {
                 
                 laserProgress += Time.deltaTime * laserSpeed;
+                if (vfxComponent != null)
+                {
+                    // Obtém o valor atual da propriedade 'Tamanho'
+                    float currentSize = vfxComponent.GetFloat(tamanhoProperty);
+
+                    // Calcula o novo valor multiplicado pelo tempo
+                    float newSize = currentSize * (1 + multiplierSpeed * Time.deltaTime);
+
+                    // Atualiza a propriedade 'Tamanho' no VFX Graph
+                    if(newSize < distanceToPlayer - 3.5f)vfxComponent.SetFloat(tamanhoProperty, newSize);
+                    Debug.Log("Tamanho" + tamanhoProperty + "valor" + tamanhoProperty.GetName());
+                }
             }
             else
             {
@@ -184,8 +214,8 @@ namespace RPGKarawara {
             lineRenderer = gameObject.AddComponent<LineRenderer>();
             lineRenderer.startWidth = 0.1f;
             lineRenderer.endWidth = 0.1f;
-            lineRenderer.startColor = Color.red;
-            lineRenderer.endColor = Color.red;
+            lineRenderer.startColor = Color.clear;
+            lineRenderer.endColor = Color.clear;
             lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
             lineRenderer.enabled = false;
         }
@@ -199,7 +229,8 @@ namespace RPGKarawara {
         }
 
         public void DeactivateLaser() {
-
+            VfxLaser.SetActive(false);
+            vfxComponent.SetFloat(tamanhoProperty, 2f);
             atirando = true;
             isLaserActive = false;
             lineRenderer.enabled = false;
@@ -244,6 +275,7 @@ namespace RPGKarawara {
                 AttackPlayer();
             }else if (number == 2){
                 StartCoroutine(ActivateLaserWithDelay());
+                VfxLaser.SetActive(true);
             }
         }
 

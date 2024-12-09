@@ -165,6 +165,6 @@ namespace RPGKarawara
         {
             Gizmos.color = gizmoColor;
             Gizmos.DrawWireSphere(transform.position, detectionRange);
-        }
-    }
+        }
+    }
 }
