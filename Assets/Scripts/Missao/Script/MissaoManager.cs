@@ -62,6 +62,16 @@ namespace RPGKarawara
                 }
             }
 
+            // Verifica se algum inimigo foi desativado
+            for (int i = enemies.Count - 1; i >= 0; i--)
+            {
+                if (enemies[i] != null && !enemies[i].activeSelf)
+                {
+                    enemies.RemoveAt(i); // Remove o inimigo da lista se ele estiver desativado
+                    Debug.Log("Inimigo desativado, removido da lista.");
+                }
+            }
+
             // Verifica se todos os inimigos estão desativados (isso conclui a missão)
             bool allEnemiesDeactivated = true;
 
@@ -80,7 +90,7 @@ namespace RPGKarawara
                 CompleteMission();
             }
 
-            UpdateEnemiesRemainingText(); // Atualiza o número de inimigos restantes
+            UpdateEnemiesRemainingText(); // Atualiza o texto com os inimigos restantes
         }
 
         private void UpdateEnemiesRemainingText()
@@ -95,15 +105,18 @@ namespace RPGKarawara
                 }
             }
 
-            uiEnemies.SetActive(true);
-            enemiesRemainingText.text = $"Inimigos restantes: {remainingEnemies}";
+            if (uiEnemies != null)
+            {
+                uiEnemies?.SetActive(true);
+                enemiesRemainingText.text = remainingEnemies.ToString(); 
+            }
         }
 
         private void CompleteMission()
         {
+            uiEnemies.SetActive(false);
             isMissionCompleted = true;
             Debug.Log("Missão concluída!");
-            uiEnemies.SetActive(false);
             ShowPopup(textPopup);
             if (reward != null)
             {
