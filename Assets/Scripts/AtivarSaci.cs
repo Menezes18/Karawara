@@ -7,14 +7,9 @@ namespace RPGKarawara
     public class AtivarSaci : MonoBehaviour
     {
         public BossSpawnerInput Input;
-        private bool _active;
-        public void OnTriggerEnter(Collider other)
+        public void Start()
         {
-            if(other.CompareTag("Player") && !_active)
-            {
-                Input.SpawnBoss();
-                _active = true;
-            }
+            Input.SpawnBoss();
             
         }
     }

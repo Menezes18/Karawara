@@ -22,7 +22,7 @@ namespace RPGKarawara
         [Header("Interaction Text")]
         [SerializeField] string unactivatedInteractionText = "Restore Site Of Grace";
         [SerializeField] string activatedInteractionText = "Rest";
-        [SerializeField] private GameObject painel;
+        // [SerializeField] private GameObject painel;
         private PlayerManager _playerManager;
         protected override void Start()
         {
@@ -65,7 +65,7 @@ namespace RPGKarawara
             if (Keyboard.current.escapeKey.wasReleasedThisFrame){
                 
                
-                painel.SetActive(false);
+                // painel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked; // Libera o cursor
                 Cursor.visible = false; // Torna o cursor visível (opcional)
                 Time.timeScale = 1f;
@@ -82,25 +82,25 @@ namespace RPGKarawara
         private void RestoreSiteOfGrace(PlayerManager player){
             var painelUI = FindObjectOfType<PlayerUIHudManager>();
            
-            bool panelActive = !painel.activeSelf;
-            painel.SetActive(panelActive);
+            // bool panelActive = !painel.activeSelf;
+            // painel.SetActive(panelActive);
             _playerManager = player;
 
             // Travar/Desativar o Cursor e a Câmera
-            if (panelActive){
+            // if (panelActive){
 
-                Cursor.lockState = CursorLockMode.None; // Trava o cursor
-                Cursor.visible = true; // Torna o cursor visível (opcional)
-            }
-            else{
+            //     Cursor.lockState = CursorLockMode.None; // Trava o cursor
+            //     Cursor.visible = true; // Torna o cursor visível (opcional)
+            // }
+            // else{
 
-                Cursor.lockState = CursorLockMode.Locked; // Libera o cursor
-                Cursor.visible = false; // Torna o cursor visível (opcional)
+            //     Cursor.lockState = CursorLockMode.Locked; // Libera o cursor
+            //     Cursor.visible = false; // Torna o cursor visível (opcional)
 
-            }
+            // }
 
-            // Pausar/Despausar o jogo (opcional)
-            Time.timeScale = panelActive ? 0 : 1;
+            // // Pausar/Despausar o jogo (opcional)
+            // Time.timeScale = panelActive ? 0 : 1;
         }
 
 
