@@ -13,6 +13,6 @@ namespace RPGKarawara
          [TextArea(3, 10)]
         public String textoExplicativo;
         public String titulo;
-        public Texture gif;
+        public CustomRenderTexture video;
     }
 }
