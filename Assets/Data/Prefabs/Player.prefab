@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 788076987
+  GlobalObjectIdHash: 3825751601
   InScenePlacedSourceGlobalObjectIdHash: 788076987
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -408,6 +408,10 @@ MonoBehaviour:
   espada: {fileID: 11400000, guid: 18879e1b418fd9c4dbcf30e60ff32675, type: 2}
   spell: {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
   inventory: {fileID: 1582088740868026449}
+  ImageTroca: {fileID: 0}
+  spriteEspada: {fileID: 21300000, guid: b270be7cb2ab5eb46891a9f686e59249, type: 3}
+  spriteSpell: {fileID: 21300000, guid: 351ead875388aca40bd5d0b139d7a1dd, type: 3}
+  skillCooldownUI: {fileID: 0}
 --- !u!114 &1582088740868026449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,9 +436,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
   rightHandWeaponIndex: 0
   weaponsInLeftHandSlots:
-  - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
-  - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
-  - {fileID: 11400000, guid: d07211af69b896f4981f59b0c3e57082, type: 2}
+  - {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
+  - {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
+  - {fileID: 11400000, guid: eadec8c359fff2a47bcc39b52d754085, type: 2}
   leftHandWeaponIndex: 0
 --- !u!114 &5888413936010217470
 MonoBehaviour:

@@ -35,19 +35,26 @@ namespace RPGKarawara {
         private bool isRetreating = false; // Indica se o boss está recuando
         private Animator animator;
         private HealthManager healthManager;
+        private float delayTimer = 0f; // Timer para o delay
+        public RaycastHit hit;
+        public float cooldownTime = 2f;  // Tempo de cooldown em segundos
+        private float lastDamageTime = 0f;
+        private float originalLaserDuration; 
+        private bool isLaserDurationReduced = false;
         private void Start() {
             animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
-            agent.updateRotation = false; // Controle manual da rotação
+            agent.updateRotation = false; 
             InitLaser();
             healthManager = GetComponent<HealthManager>();
+            originalLaserDuration = laserDuration;
         }
         
         private void Update() {
             if (!isActive)
             {
                 CheckActivationRange();
-                return; // Não faça mais nada enquanto o boss não estiver ativo
+                return; 
             }
             TargetPlayer();
             AttackTimer();
@@ -71,10 +78,7 @@ namespace RPGKarawara {
 
             LookAtPlayer();
         }
-        private float delayTimer = 0f; // Timer para o delay
-        public RaycastHit hit;
-        public float cooldownTime = 2f;  // Tempo de cooldown em segundos
-        private float lastDamageTime = 0f;
+
        public void LaserActivate()
 {
     laserTimer += Time.deltaTime;
@@ -86,22 +90,22 @@ namespace RPGKarawara {
 
         if (delayTimer >= laserDelay) // Quando o delay for alcançado
         {
-            // Calcular a direção e posição do laser
+            
             Vector3 laserDirection = (player.position - laserOrigin.position).normalized;
             
-            // Verificar a distância entre a origem do laser e o jogador
+            
             float distanceToPlayer = Vector3.Distance(laserOrigin.position, player.position);
             
-            // Caso o laser esteja perto do jogador, faz com que ele o acompanhe mais devagar
-            if (distanceToPlayer > 2f) // Distância para atingir a velocidade controlada
+            
+            if (distanceToPlayer > 2f) 
             {
-                // Velocidade de movimentação do laser para seguir o jogador
+                
                 laserProgress += Time.deltaTime * laserSpeed;
             }
             else
             {
-                // Quando o laser está perto o suficiente, a velocidade de acompanhamento será menor
-                laserProgress += Time.deltaTime * laserSpeed * 0.5f; // Reduz a velocidade de seguimento
+                
+                laserProgress += Time.deltaTime * laserSpeed * 0.5f;
             }
 
             // Atualizar a posição do laser
@@ -156,18 +160,26 @@ namespace RPGKarawara {
             Debug.Log("Boss ativado!");
         }
         private void ApplyLaserDamage(CharacterManager damageTarget){
-            // Evita aplicar dano múltiplas vezes ao mesmo alvo
-            // if (!charactersDamaged.Contains(damageTarget)){
-            //     charactersDamaged.Add(damageTarget);
 
+                if (!isLaserDurationReduced) {
+                    StartCoroutine(ReduceLaserDurationTemporarily());
+                }
                 TakeDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
-                damageEffect.physicalDamage = 1f; // Exemplo: dano físico do laser
+                damageEffect.physicalDamage = 5f; 
                 damageEffect.contactPoint = hit.point; // Ponto de contato do laser
 
                 damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
-            // }
-        }
 
+        }
+        private IEnumerator ReduceLaserDurationTemporarily() {
+            isLaserDurationReduced = true; 
+            laserDuration = originalLaserDuration / 2f; 
+
+            yield return new WaitForSeconds(3f); 
+
+            laserDuration = originalLaserDuration; 
+            isLaserDurationReduced = false;
+        }
         public void InitLaser() {
             lineRenderer = gameObject.AddComponent<LineRenderer>();
             lineRenderer.startWidth = 0.1f;
@@ -182,12 +194,12 @@ namespace RPGKarawara {
 
             // Ativa o laser após o delay
             isLaserActive = true;
-            laserTimer = 0f;  // Resetando o temporizador do laser
+            laserTimer = 0f;  
             lineRenderer.enabled = true;
         }
 
         public void DeactivateLaser() {
-            // Desativa o laser e limpa o LineRenderer
+
             atirando = true;
             isLaserActive = false;
             lineRenderer.enabled = false;
@@ -198,11 +210,10 @@ namespace RPGKarawara {
         }
 
         public void AttackTimer() {
-            if (isRetreating) return; // Não atacar enquanto está recuando
+            if (isRetreating) return; 
 
             timer += Time.deltaTime;
 
-            // Aguarde o cooldown entre ataques
             if (timer >= attackCooldown) {
                 if (!isLaserActive) { // Certifique-se de que o laser não está ativo
                     if (atirando) {
@@ -217,7 +228,7 @@ namespace RPGKarawara {
                 }
             }
         }
-        private float laserProgress = 0f; // Progresso do laser
+        private float laserProgress = 0f; 
 
         public void AnimacaoAttack(int num){
             if (num == 1){
@@ -236,7 +247,12 @@ namespace RPGKarawara {
             }
         }
 
-        
+        private IEnumerable TemporailyReduceLaserDuration(float duration, float reducendDuration){
+            float originalLaserDuration = laserDuration;
+            laserDuration = reducendDuration;
+            yield return new WaitForSeconds(reducendDuration);
+            laserDuration = originalLaserDuration;
+        }
 
         private IEnumerator ActivateLaserWithDelay() {
             yield return new WaitForSeconds(laserDelay);

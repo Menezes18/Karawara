@@ -21,6 +21,8 @@ namespace RPGKarawara.SkillTree
         public Image supportBackgroundImage;
 
         public Sprite saveSpriteBackground;
+
+        public Image slotSpellOrLanca;
         private void Awake()
         {
             instance = this;
