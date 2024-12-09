@@ -30,17 +30,20 @@ namespace RPGKarawara
         }
 
         public void OnTriggerEnter(Collider other){
-            gameObject.GetComponent<BoxCollider>().enabled = false;
-            Time.timeScale = 0;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            UI.GetComponentInChildren<TMP_Text>().text = info.textoExplicativo;
-            UI.GetComponentInChildren<RawImage>().texture = info.texture;
-            UI.GetComponentInChildren<Button>().onClick.AddListener(close);
-            videoPlayer.clip = info.vClip;
-            videoPlayer.targetTexture = info.texture;
-            videoPlayer.Play();
-            UI.SetActive(true);
+            if(other.tag == "Player")
+            {
+                gameObject.GetComponent<BoxCollider>().enabled = false;
+                Time.timeScale = 0;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                UI.GetComponentInChildren<TMP_Text>().text = info.textoExplicativo;
+                UI.GetComponentInChildren<RawImage>().texture = info.texture;
+                UI.GetComponentInChildren<Button>().onClick.AddListener(close);
+                videoPlayer.clip = info.vClip;
+                videoPlayer.targetTexture = info.texture;
+                videoPlayer.Play();
+                UI.SetActive(true);
+            }
         }
 
         public void close(){
