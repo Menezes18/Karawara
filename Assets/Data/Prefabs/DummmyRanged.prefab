@@ -219,6 +219,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
   undeadCharacter: {fileID: 0}
 --- !u!1 &1594916601275243600
 GameObject:
@@ -1040,6 +1041,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
   undeadCharacter: {fileID: 0}
 --- !u!1 &2913351037085179338
 GameObject:
@@ -1479,7 +1481,7 @@ Transform:
   m_GameObject: {fileID: 4345075500170634222}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -0.01, y: 1.0971415, z: 0.688}
+  m_LocalPosition: {x: 1.091, y: 1.314, z: -0.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2179,6 +2181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive:
     m_InternalValue: 1
+  aa: 0
   networkPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
@@ -2209,6 +2212,8 @@ MonoBehaviour:
   isJumping:
     m_InternalValue: 0
   isChargingAttack:
+    m_InternalValue: 0
+  isAttacking:
     m_InternalValue: 0
   currentHealth:
     m_InternalValue: 400
@@ -2257,6 +2262,7 @@ MonoBehaviour:
   pursueTarget: {fileID: 11400000, guid: 46a124bca52793446bcb4e19208a673a, type: 2}
   combatStance: {fileID: 11400000, guid: 7c71e5416169144418da990f8dc82dcb, type: 2}
   attack: {fileID: 11400000, guid: c60b9a22fa27fe04781fc9f2640685e8, type: 2}
+  isDisabled: 0
   skinnedMeshRenderer: {fileID: 0}
 --- !u!114 &2386473894482796835
 MonoBehaviour:
@@ -2313,9 +2319,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3bf28f8099a094eb294b4ec5ae6f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
   applyRootMotion: 0
   lastDamageAnimationPlayed: 
+  hit_Forward_Ping_01: Hit_Forward_Ping_01
+  hit_Forward_Ping_02: Hit_Forward_Ping_02
+  hit_Backward_Ping_01: Hit_Backward_Ping_01
+  hit_Backward_Ping_02: Hit_Backward_Ping_02
+  hit_Left_Ping_01: Hit_Left_Ping_01
+  hit_Left_Ping_02: Hit_Left_Ping_02
+  hit_Right_Ping_01: Hit_Right_Ping_01
+  hit_Right_Ping_02: Hit_Right_Ping_02
+  forward_Ping_Damage: []
+  backward_Ping_Damage: []
+  left_Ping_Damage: []
+  right_Ping_Damage: []
   hit_Forward_Medium_01: Hit_Forward_Medium_01
   hit_Forward_Medium_02: Hit_Forward_Medium_02
   hit_Backward_Medium_01: Hit_Backward_Medium_01
@@ -2324,7 +2341,6 @@ MonoBehaviour:
   hit_Left_Medium_02: Hit_Left_Medium_02
   hit_Right_Medium_01: Hit_Right_Medium_01
   hit_Right_Medium_02: Hit_Right_Medium_02
-  hit_and_fall: Hit_And_Fall
   forward_Medium_Damage: []
   backward_Medium_Damage: []
   left_Medium_Damage: []
@@ -2353,6 +2369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d3b91f173a45d4badebe8987694537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeSpellWarmUpFX: {fileID: 0}
   bloodSplatterVFX: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d,
     type: 3}
 --- !u!114 &7310389180656767062
