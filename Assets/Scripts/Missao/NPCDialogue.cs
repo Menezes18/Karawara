@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.InputSystem;
 
 namespace RPGKarawara
@@ -28,16 +27,15 @@ namespace RPGKarawara
         public Image npc1Image;
         public Image npc2Image;
 
-        
-        
-
         private bool playerProximo = false; 
         private bool missaoAceita = false; 
         private bool isTyping = false; 
         private int dialogueIndex = 0; 
         private int npcDialogueIndex = 0;
+        private bool canSkipDialogue = false;
 
-        private void Start(){
+        private void Start()
+        {
             canvasEscolha.SetActive(false);
             player = GameObject.FindGameObjectWithTag("Player");
         }
@@ -45,7 +43,7 @@ namespace RPGKarawara
         private void Update()
         {
             DetectarPlayer();
-            
+
             if (playerProximo && !missaoAceita)
             {
                 if (Keyboard.current.eKey.wasPressedThisFrame) 
@@ -53,15 +51,17 @@ namespace RPGKarawara
                     IniciarDialogo();
                 }
 
+                // Se pressionar "Enter" e o diálogo estiver ativo
                 if (Keyboard.current.enterKey.wasPressedThisFrame && dialogueUI.activeSelf)
                 {
+                    // Se o texto está sendo digitado, o jogador pode pular
                     if (isTyping)
                     {
-                        StopAllCoroutines();
-                        dialogueText.text = missao1.dialogue[npcDialogueIndex].textoDialogue[dialogueIndex];
-                        isTyping = false;
+                        // Completar o texto se o jogador apertar "Enter" durante a digitação
+                        canSkipDialogue = true;
                     }
-                    else
+                    // Se o texto terminou ou foi pulado, avançar para o próximo
+                    else if (!isTyping && !canSkipDialogue)
                     {
                         NextDialogue();
                     }
@@ -82,7 +82,6 @@ namespace RPGKarawara
         {
             if (dialogueIndex < missao1.dialogue[npcDialogueIndex].textoDialogue.Length)
             {
-
                 StartCoroutine(TypeDialogue(missao1.dialogue[npcDialogueIndex].textoDialogue[dialogueIndex]));
                 dialogueIndex++;
             }
@@ -110,11 +109,19 @@ namespace RPGKarawara
 
             foreach (char letter in dialogue.ToCharArray())
             {
+                
+                if (canSkipDialogue)
+                {
+                    dialogueText.text = dialogue;
+                    canSkipDialogue = false; 
+                    break;
+                }
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(textSpeed);
             }
 
-            isTyping = false;
+            isTyping = false; 
+            canSkipDialogue = false; 
         }
         
         private void UpdateNPCSprite()
@@ -122,12 +129,15 @@ namespace RPGKarawara
             npcSprite.sprite = missao1.dialogue[npcDialogueIndex].icon;
         }
 
-        public void SelecionarMissao(int missao){
+        public void SelecionarMissao(int missao)
+        {
             Debug.Log("selecionar missao");
-            if (missao == 1){
+            if (missao == 1)
+            {
                 escolha1.SetActive(true);
             }
-            else if(missao == 2){
+            else if(missao == 2)
+            {
                 escolha2.SetActive(true);
             }
             canvasEscolha.SetActive(false);
@@ -135,7 +145,8 @@ namespace RPGKarawara
             Cursor.lockState = CursorLockMode.Locked;
         }
         
-        private void FinalizarDialogo(){
+        private void FinalizarDialogo()
+        {
             npc1Image.sprite = missao1.dialogue[0].icon;
             npc2Image.sprite = missao1.dialogue[1].icon;
             Cursor.visible = true;
@@ -154,6 +165,6 @@ namespace RPGKarawara
         {
             Gizmos.color = gizmoColor;
             Gizmos.DrawWireSphere(transform.position, detectionRange);
-        }
-    }
+        }
+    }
 }
