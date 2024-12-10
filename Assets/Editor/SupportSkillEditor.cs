@@ -15,6 +15,8 @@ namespace RPGKarawara.SkillTree
         private SerializedProperty prefabProp;
         private SerializedProperty isUnlockedProp;
         private SerializedProperty activeProp;
+        private SerializedProperty vClip;
+        private SerializedProperty texture;
 
         // Propriedades  do SupportSkill
         private SerializedProperty healingRateProp;
@@ -23,6 +25,7 @@ namespace RPGKarawara.SkillTree
         private SerializedProperty skillPrefabJacareProp;
         private SerializedProperty showHealVariablesProp;
         private SerializedProperty showSkillJacareProp;
+
 
         private void OnEnable()
         {
@@ -35,6 +38,8 @@ namespace RPGKarawara.SkillTree
             prefabProp = serializedObject.FindProperty("prefab");
             isUnlockedProp = serializedObject.FindProperty("isUnlocked");
             activeProp = serializedObject.FindProperty("active");
+            vClip = serializedObject.FindProperty("vClip");
+            texture = serializedObject.FindProperty("texture");
 
             // Vincula as propriedades específicas do SupportSkill
             healingRateProp = serializedObject.FindProperty("_healingRate");
@@ -83,6 +88,8 @@ namespace RPGKarawara.SkillTree
             EditorGUILayout.PropertyField(skillTypeProp, new GUIContent("Skill Type"));
             EditorGUILayout.PropertyField(nameProp, new GUIContent("Name"));
             EditorGUILayout.PropertyField(descriptionProp, new GUIContent("Description"));
+            EditorGUILayout.PropertyField(vClip);
+            EditorGUILayout.PropertyField(texture);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Configuration", EditorStyles.boldLabel);

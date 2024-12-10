@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Video;
 
 namespace RPGKarawara.SkillTree {
     [CreateAssetMenu(fileName = "New Support Skill", menuName = "Skills/SupportSkill")]
@@ -6,8 +7,8 @@ namespace RPGKarawara.SkillTree {
         
         public bool showSkillJacare = false;
         [HideInInspector] public GameObject skillPrefabJacare;
-        
-        
+        public CustomRenderTexture texture;
+        public VideoClip vClip;
         [HideInInspector]public float _healingRate;       // Taxa de cura por segundo
         [HideInInspector]public int _healingAmount;  
         [HideInInspector]public GameObject healCirclePrefab;

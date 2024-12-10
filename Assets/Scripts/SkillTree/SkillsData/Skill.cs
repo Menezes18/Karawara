@@ -1,6 +1,7 @@
 ﻿using System;
 using RPGKarawara.SkillTree;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace RPGKarawara
 {
@@ -19,6 +20,8 @@ namespace RPGKarawara
         public new string name;
         [TextArea(5,10)]
         public string description;
+        public CustomRenderTexture texture;
+        public VideoClip vClip;
         public GameObject prefab;
         public bool isUnlocked; // Indica se a habilidade está desbloqueada ou não
         public bool active;

@@ -19,10 +19,17 @@ MonoBehaviour:
   description: "Inspirando-se na energia vital do Jabuti, o personagem cria um c\xEDrculo
     brilhante de luz verde no ch\xE3o, em forma de um casco, que emana uma aura curativa.
     Quando estiver dentro do c\xEDrculo recebe uma cura gradual ao longo do tempo."
+  texture: {fileID: 8600000, guid: 1a4d8901ea8fa304685d70ece04fafef, type: 2}
+  vClip: {fileID: 32900000, guid: 2f380169d6d8e55408e474f2b15f6da4, type: 3}
   prefab: {fileID: 0}
   isUnlocked: 1
   active: 0
+  showSkillJacare: 0
+  skillPrefabJacare: {fileID: 0}
+  texture: {fileID: 0}
+  vClip: {fileID: 0}
   _healingRate: 5
   _healingAmount: 1000
   healCirclePrefab: {fileID: 2693512827172887261, guid: 8eacbe35f1e3c63478db692238a25524,
     type: 3}
+  showHealVariables: 1
