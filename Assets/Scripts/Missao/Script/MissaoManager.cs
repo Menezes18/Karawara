@@ -114,7 +114,9 @@ namespace RPGKarawara
 
         private void CompleteMission()
         {
-            uiEnemies.SetActive(false);
+            if (uiEnemies != null){
+                uiEnemies.SetActive(false);
+            }
             isMissionCompleted = true;
             Debug.Log("Missão concluída!");
             ShowPopup(textPopup);
