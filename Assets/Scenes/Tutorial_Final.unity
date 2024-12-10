@@ -13347,53 +13347,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 992219543}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1002174195
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1002174197}
-  - component: {fileID: 1002174196}
-  m_Layer: 0
-  m_Name: Reviver
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1002174196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1002174195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf1e68b31c304164f94c8e46f8007289, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  savedPostion:
-  - {fileID: 1002174197}
-  numberSave: 0
---- !u!4 &1002174197
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1002174195}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -217.79715, y: 168.51, z: 586.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1003489586 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3267624231175886326, guid: 0d574fbe46b332e44b0cfa30a4c21f36,
@@ -83729,4 +83682,3 @@ SceneRoots:
   - {fileID: 927383122}
   - {fileID: 1063418753}
   - {fileID: 1739601602}
-  - {fileID: 1002174197}
