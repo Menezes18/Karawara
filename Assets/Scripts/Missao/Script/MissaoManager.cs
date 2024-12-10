@@ -107,7 +107,7 @@ namespace RPGKarawara
 
             if (uiEnemies != null)
             {
-                uiEnemies?.SetActive(true);
+                uiEnemies.SetActive(true);
                 enemiesRemainingText.text = remainingEnemies.ToString(); 
             }
         }
