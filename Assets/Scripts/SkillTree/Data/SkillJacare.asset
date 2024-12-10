@@ -16,13 +16,19 @@ MonoBehaviour:
   cooldownDuration: 10
   sprite: {fileID: 21300000, guid: eb6755d907e924b47979b98513858e44, type: 3}
   name: Jacare
-  description: qfqf
+  description: "Assim como o jacar\xE9 se esconde na \xE1gua pronto para atacar a
+    sua v\xEDtima, voc\xEA come\xE7a a se misturar com o ambiente deixando os inimigos
+    perdidos sem saberem onde voc\xEA est\xE1."
+  texture: {fileID: 8600000, guid: d79d77b72daa8cb43a34d50a2bb5c4c6, type: 2}
+  vClip: {fileID: 32900000, guid: 8c9f7c20632ac164db9dbe169b3770ac, type: 3}
   prefab: {fileID: 0}
   isUnlocked: 1
-  active: 1
-  showSkillJacare: 1
+  active: 0
+  showSkillJacare: 0
   skillPrefabJacare: {fileID: 7616249608397630730, guid: 573a2feb116ef904e94622f7374bfc06,
     type: 3}
+  texture: {fileID: 0}
+  vClip: {fileID: 0}
   _healingRate: 0
   _healingAmount: 0
   healCirclePrefab: {fileID: 0}

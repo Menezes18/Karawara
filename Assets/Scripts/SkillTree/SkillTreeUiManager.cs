@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.Video;
 
 namespace RPGKarawara{
     public class SkillTreeUiManager : MonoBehaviour{
@@ -21,7 +23,8 @@ namespace RPGKarawara{
         public Skill[] allSkills;
         [Header("Dados Skill Direita")]
         public TextMeshProUGUI textCabecalho;
-        public Sprite spriteCabecalho;
+        public VideoPlayer videoPlayer;
+        public RawImage rawImage;
         public TextMeshProUGUI descriptionCabecalho;
         public Skill novaSkillAdd;
         private void Awake(){
@@ -70,6 +73,10 @@ namespace RPGKarawara{
             if(skill == null) return;
             textCabecalho.text = skill.name;
             descriptionCabecalho.text = skill.description;
+            rawImage.texture = skill.texture;
+            videoPlayer.clip = skill.vClip;
+            videoPlayer.targetTexture = skill.texture;
+            videoPlayer.Play();
         }
 
         private void Update(){
@@ -82,6 +89,8 @@ namespace RPGKarawara{
         public void ClearCabecalho(){
             textCabecalho.text = "";
             descriptionCabecalho.text = "";
+            videoPlayer.clip = null;
+            videoPlayer.targetTexture = null;
         }
         public void DisableSkillsExcept(SkillType skillType, Skill skillToIgnore, SkillUISlot skillUISlot){
             SkillUISlot[] skillSlots = null;

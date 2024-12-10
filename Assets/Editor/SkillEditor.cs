@@ -14,6 +14,8 @@ namespace RPGKarawara.SkillTree
         private SerializedProperty prefabProp;
         private SerializedProperty isUnlockedProp;
         private SerializedProperty activeProp;
+        private SerializedProperty vClip;
+        private SerializedProperty texture;
 
         private void OnEnable()
         {
@@ -26,6 +28,8 @@ namespace RPGKarawara.SkillTree
             prefabProp = serializedObject.FindProperty("prefab");
             isUnlockedProp = serializedObject.FindProperty("isUnlocked");
             activeProp = serializedObject.FindProperty("active");
+            vClip = serializedObject.FindProperty("vClip");
+            texture = serializedObject.FindProperty("texture");
         }
 
         public override void OnInspectorGUI()
@@ -64,6 +68,8 @@ namespace RPGKarawara.SkillTree
             EditorGUILayout.PropertyField(skillTypeProp);
             EditorGUILayout.PropertyField(nameProp);
             EditorGUILayout.PropertyField(descriptionProp);
+            EditorGUILayout.PropertyField(vClip);
+            EditorGUILayout.PropertyField(texture);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Configuration", EditorStyles.boldLabel);
