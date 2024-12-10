@@ -117,6 +117,7 @@ namespace RPGKarawara
             characterNetworkManager.isActive.OnValueChanged -= characterNetworkManager.OnIsActiveChanged;
         }
 
+        public bool player = false;
         public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
         {
             if (IsOwner)
@@ -143,6 +144,7 @@ namespace RPGKarawara
             //  AWARD PLAYERS WITH RUNES
 
             //  DISABLE CHARACTER
+            if (player) yield break;
             GameObject vfx = Instantiate(vfxDead, transform.position, Quaternion.identity);
             Destroy(vfx, 3f);
             yield return new WaitForSeconds(0.2f);

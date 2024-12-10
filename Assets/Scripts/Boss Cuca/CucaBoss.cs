@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
-using VTabs.Libs;
+
 
 namespace RPGKarawara {
     public class CucaBoss : MonoBehaviour {
@@ -15,7 +15,7 @@ namespace RPGKarawara {
         public GameObject VfxLaser;
 
 
-        public Transform player; // Referência ao jogador
+        public GameObject player; // Referência ao jogador
         public GameObject magicProjectile; // Prefab da magia
         public Transform magicSpawnPoint; // Ponto de origem das magias
         public float detectionRange = 10f; // Alcance para detectar o jogador
@@ -69,14 +69,14 @@ namespace RPGKarawara {
         }
         
         private void Update() {
+            TargetPlayer();
             if (!isActive)
             {
                 CheckActivationRange();
                 return; 
             }
-            TargetPlayer();
             AttackTimer();
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, player.gameObject.transform.position);
 
             if (distanceToPlayer <= detectionRange) {
                 closeTimer += Time.deltaTime; 
@@ -109,10 +109,10 @@ namespace RPGKarawara {
         if (delayTimer >= laserDelay) // Quando o delay for alcançado
         {
             
-            Vector3 laserDirection = (player.position - laserOrigin.position).normalized;
+            Vector3 laserDirection = (player.gameObject.transform.position - laserOrigin.position).normalized;
             
             
-            float distanceToPlayer = Vector3.Distance(laserOrigin.position, player.position);
+            float distanceToPlayer = Vector3.Distance(laserOrigin.position, player.gameObject.transform.position);
             
             
             if (distanceToPlayer > 2f) 
@@ -129,7 +129,7 @@ namespace RPGKarawara {
 
                     // Atualiza a propriedade 'Tamanho' no VFX Graph
                     if(newSize < distanceToPlayer - 3.5f)vfxComponent.SetFloat(tamanhoProperty, newSize);
-                    Debug.Log("Tamanho" + tamanhoProperty + "valor" + tamanhoProperty.GetName());
+
                 }
             }
             else
@@ -139,7 +139,7 @@ namespace RPGKarawara {
             }
 
             // Atualizar a posição do laser
-            Vector3 laserEnd = Vector3.Lerp(laserOrigin.position, player.position, laserProgress / distanceToPlayer);
+            Vector3 laserEnd = Vector3.Lerp(laserOrigin.position, player.gameObject.transform.position, laserProgress / distanceToPlayer);
 
             // Atualizar o LineRenderer com a nova posição
             lineRenderer.SetPosition(0, laserOrigin.position);
@@ -175,7 +175,7 @@ namespace RPGKarawara {
         {
             if (player == null) return;
 
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, player.gameObject.transform.position);
             if (distanceToPlayer <= activationRange)
             {
                 ActivateBoss();
@@ -295,7 +295,7 @@ namespace RPGKarawara {
 
         private void LookAtPlayer() {
             // Rotacionar a Cuca para olhar na direção do jogador
-            Vector3 direction = (player.position - transform.position).normalized;
+            Vector3 direction = (player.gameObject.transform.position - transform.position).normalized;
             direction.y = 0; // Manter a rotação no plano horizontal
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation =
@@ -306,7 +306,7 @@ namespace RPGKarawara {
             isRetreating = true; // O boss está recuando
 
             // Recuar para longe do jogador
-            Vector3 retreatDirection = (transform.position - player.position).normalized;
+            Vector3 retreatDirection = (transform.position - player.gameObject.transform.position).normalized;
             Vector3 retreatPosition = transform.position + retreatDirection * retreatDistance;
 
             // Garantir que o destino seja válido no NavMesh
@@ -325,7 +325,7 @@ namespace RPGKarawara {
         }
 
         public void TargetPlayer(){
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            player = GameObject.FindGameObjectWithTag("Player");
         }
         private void AttackPlayer() {
             StartCoroutine(ShootProjectiles());
@@ -333,7 +333,7 @@ namespace RPGKarawara {
 
         private IEnumerator ShootProjectiles() {
             float spreadAngle = 10f; // A quantidade de spread dos projeteis
-            Vector3 direction = (player.position - magicSpawnPoint.position).normalized;
+            Vector3 direction = (player.gameObject.transform.position - magicSpawnPoint.position).normalized;
 
             for (int i = 0; i < 3; i++) {
                 Vector3 spreadDirection = Quaternion.Euler(0, (i - 1) * spreadAngle, 0) * direction;
