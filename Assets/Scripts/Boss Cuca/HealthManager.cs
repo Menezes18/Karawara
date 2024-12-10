@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI; // Necessário para trabalhar com o Slider
-
+using UnityEngine.SceneManagement;
 namespace RPGKarawara
 {
     public class HealthManager : MonoBehaviour
@@ -83,7 +83,7 @@ namespace RPGKarawara
 
         private void Die()
         {
-            Debug.Log($"{gameObject.name} morreu.");
+            SceneManager.LoadScene("Creditos");
             
         }
     }
