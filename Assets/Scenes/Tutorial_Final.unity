@@ -3828,6 +3828,53 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 244598203}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &245042783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 245042785}
+  - component: {fileID: 245042784}
+  m_Layer: 0
+  m_Name: Reviver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &245042784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245042783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1e68b31c304164f94c8e46f8007289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  savedPostion:
+  - {fileID: 245042785}
+  numberSave: 0
+--- !u!4 &245042785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245042783}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -214.38, y: 167.43, z: 583.16113}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &253952759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83682,3 +83729,4 @@ SceneRoots:
   - {fileID: 927383122}
   - {fileID: 1063418753}
   - {fileID: 1739601602}
+  - {fileID: 245042785}
