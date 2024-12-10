@@ -64,7 +64,7 @@ namespace RPGKarawara
             damageCollider.spellCaster = spellCaster;
 
             //  TO DO SET UP DAMAGE FORMULA TO CALCULATE DAMAGE BASED ON CHARACTERS STATS, SPELL POWER AND SPELL CASTING WEAPON'S SPELL BUFF
-            damageCollider.fireDamage = 45;
+            damageCollider.fireDamage = 55;
 
             if (isFullyCharged)
                 damageCollider.fireDamage *= 1.4f;
