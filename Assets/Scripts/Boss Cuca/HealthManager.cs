@@ -38,7 +38,7 @@ namespace RPGKarawara
             Debug.Log($"{gameObject.name} recebeu {damage} de dano. Vida atual: {currentHealth}");
             UpdateHealthSlider();
 
-            if (currentHealth <= 0)
+            if (currentHealth <= 20)
             {
                 Die();
             }
