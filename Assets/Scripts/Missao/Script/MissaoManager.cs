@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace RPGKarawara
 {
@@ -25,12 +26,15 @@ namespace RPGKarawara
         public GameObject uiEnemies;
         public TextMeshProUGUI enemiesRemainingText; // Referência para o texto que mostra os inimigos restantes
 
+        [Header("CutScene")]
+        public Camera cam;
+
         private void Start()
         {
             popup.alpha = 0;
             popup.interactable = false;
             popup.blocksRaycasts = false;
-
+            cam.gameObject.SetActive(false);
             UpdateEnemiesRemainingText(); 
         }
 
@@ -83,7 +87,7 @@ namespace RPGKarawara
                     break; // Se algum inimigo ainda estiver ativo, não pode concluir a missão
                 }
             }
-
+            //if(Keyboard.current.cKey.wasPressedThisFrame)CompleteMission();
             // Conclui a missão se todos os inimigos estiverem desativados
             if (allEnemiesDeactivated)
             {
@@ -124,6 +128,7 @@ namespace RPGKarawara
             {
                 Instantiate(reward, transform.position, Quaternion.identity);
             }
+            if(cam != null)StartCoroutine(DesativarCamara());
         }
 
         public void ShowPopup(string text)
@@ -175,6 +180,14 @@ namespace RPGKarawara
             // Cor para o contorno do Gizmo (azul sólido)
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, detectionRange);
+        }
+        public IEnumerator DesativarCamara()
+        {
+                yield return new WaitForSeconds(1.3f);
+                cam.gameObject.SetActive(true);
+                cam.GetComponent<Animator>().SetBool("Pode",true);
+                //yield return new WaitForSeconds(10f);
+                //cam.gameObject.SetActive(false);
         }
     }
 }
