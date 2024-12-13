@@ -191,7 +191,7 @@ public class SampleTriggerDialogue : MonoBehaviour
                     break;
 
                 case EventTypeDialogue.MoveNPCToPlayer:
-                    npcMovement.MoveToPlayer();
+                    // npcMovement.MoveToPlayer();
                     break;
 
                 case EventTypeDialogue.CheckPlayerPosition:
