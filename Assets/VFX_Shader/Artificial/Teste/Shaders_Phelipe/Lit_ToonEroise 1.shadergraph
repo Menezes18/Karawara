@@ -50,6 +50,9 @@
         },
         {
             "m_Id": "7468612e873941b5b779880f161642fc"
+        },
+        {
+            "m_Id": "5b5ddeed7b924ad5a47cffd615252f57"
         }
     ],
     "m_Keywords": [],
@@ -275,6 +278,9 @@
         },
         {
             "m_Id": "08bd5862a66f4f34905d9ea9bbe9ef0f"
+        },
+        {
+            "m_Id": "14062cd444bb4be6ac02be9688abfb0c"
         }
     ],
     "m_GroupDatas": [
@@ -463,6 +469,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "077d09098e95df849546359e615b8884"
+                },
+                "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "14062cd444bb4be6ac02be9688abfb0c"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "35b085f161ae4091bb943cc87c71623c"
                 },
                 "m_SlotId": 1
             }
@@ -1493,6 +1513,21 @@
 {
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "046086dff199418d966a3769c1f0d57a",
+    "m_Id": 0,
+    "m_DisplayName": "Erode_Scale",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "04be799e96b74df9b3382fbc3615de50",
     "m_Id": 0,
     "m_DisplayName": "AdditionalLightsSmoothness",
@@ -2301,6 +2336,42 @@
         "e31": 0.0,
         "e32": 0.0,
         "e33": 1.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "14062cd444bb4be6ac02be9688abfb0c",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 2276.0,
+            "y": 1178.0,
+            "width": 139.0,
+            "height": 34.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "046086dff199418d966a3769c1f0d57a"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "5b5ddeed7b924ad5a47cffd615252f57"
     }
 }
 
@@ -3813,7 +3884,7 @@
         "a": 0.0
     },
     "isMainColor": false,
-    "m_ColorMode": 0
+    "m_ColorMode": 1
 }
 
 {
@@ -4015,6 +4086,34 @@
         "w": 0.0
     },
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "5b5ddeed7b924ad5a47cffd615252f57",
+    "m_Guid": {
+        "m_GuidSerialized": "bd1553f0-13c3-480e-8bea-ff0788d17d98"
+    },
+    "m_Name": "Erode_Scale",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Erode_Scale",
+    "m_DefaultReferenceName": "_Erode_Scale",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 80.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
 }
 
 {
@@ -4279,7 +4378,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Scale",
     "m_StageCapability": 3,
-    "m_Value": 30.0,
+    "m_Value": 88.0999984741211,
     "m_DefaultValue": 500.0,
     "m_Labels": []
 }
@@ -6499,6 +6598,9 @@
         },
         {
             "m_Id": "7468612e873941b5b779880f161642fc"
+        },
+        {
+            "m_Id": "5b5ddeed7b924ad5a47cffd615252f57"
         }
     ]
 }
