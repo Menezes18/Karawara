@@ -1,0 +1,49 @@
+{
+    "completed": true,
+    "expectedCases": 8,
+    "passed": 4,
+    "capturedErrors": 0,
+    "saveRoot": "C:\\Users\\migue\\AppData\\Local\\Temp\\Karawara-SaveSlots-bc557b1ef0964f6fbca1cdcde240df3b",
+    "cases": [
+        {
+            "name": "empty slots enable without transition",
+            "passed": true,
+            "detail": ""
+        },
+        {
+            "name": "valid profiles enable without transition or selection",
+            "passed": true,
+            "detail": ""
+        },
+        {
+            "name": "valid names render for all slots",
+            "passed": false,
+            "detail": "Missing profile presentation: CharacterSlot_01"
+        },
+        {
+            "name": "slot2 selection respects legacy load binding",
+            "passed": false,
+            "detail": "Object reference not set to an instance of an object"
+        },
+        {
+            "name": "corrupt profile enable is safe",
+            "passed": true,
+            "detail": ""
+        },
+        {
+            "name": "corrupt explicit load remains menu",
+            "passed": false,
+            "detail": "Object reference not set to an instance of an object"
+        },
+        {
+            "name": "overwrite refresh shows new name",
+            "passed": false,
+            "detail": "Refresh retained stale name"
+        },
+        {
+            "name": "delete refresh hides removed profile",
+            "passed": true,
+            "detail": ""
+        }
+    ]
+}

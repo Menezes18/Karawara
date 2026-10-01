@@ -1,0 +1,80 @@
+{
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "error": null,
+    "data": {
+      "job_id": "8c4b65dd9e41404d90a0a1a9d486916a",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790878888762,
+      "finished_unix_ms": 1790878897187,
+      "last_update_unix_ms": 1790878897187,
+      "progress": {
+        "completed": 12,
+        "total": 12,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790878896925,
+        "last_finished_test_full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.WritingOverInvalidPrimaryPreservesValidBackup",
+        "last_finished_unix_ms": 1790878896928,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.ConcurrentSameSlotReturnsBusy",
+            "message": "  First write must enter the file operation.\r\n  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.DeleteDoesNotRecoverBackup",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.FirstWriteCanBeRead",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.InvalidPayloadDoesNotReplace",
+            "message": "  Expected: InvalidData\r\n  But was:  Missing\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.InvalidPrimaryRecoversBackup",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.ReadIgnoresTmp",
+            "message": "  Expected: \"{\"health\":10}\"\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.ReplaceFailurePreservesPrimary",
+            "message": "  The injected failure must occur after the temporary file is flushed.\r\n  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.SecondWritePreservesBackup",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.UnsafeNameIsRejected(\"../outside.json\")",
+            "message": "  Expected: InvalidData\r\n  But was:  Missing\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.UnsafeNameIsRejected(\"slot01.json.tmp\")",
+            "message": "  Expected: InvalidData\r\n  But was:  Missing\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.UnsafeNameIsRejected(\"slot01.json.bak\")",
+            "message": "  Expected: InvalidData\r\n  But was:  Missing\r\n"
+          },
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.WritingOverInvalidPrimaryPreservesValidBackup",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    },
+    "hint": null
+  }
+}

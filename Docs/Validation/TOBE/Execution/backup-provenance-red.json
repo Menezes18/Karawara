@@ -1,0 +1,36 @@
+{
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "error": null,
+    "data": {
+      "job_id": "ea00caf0975b49b0b87a68bc1f3d8e37",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790879568530,
+      "finished_unix_ms": 1790879570418,
+      "last_update_unix_ms": 1790879570418,
+      "progress": {
+        "completed": 1,
+        "total": 1,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790879570352,
+        "last_finished_test_full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.InvalidPrimaryRecoversBackup",
+        "last_finished_unix_ms": 1790879570381,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "Karawara.Tests.Persistence.AtomicFileStoreTests.InvalidPrimaryRecoversBackup",
+            "message": "  Expected string length 19 but was 0. Strings differ at index 0.\r\n  Expected: \"RecoveredFromBackup\"\r\n  But was:  <string.Empty>\r\n  -----------^\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    },
+    "hint": null
+  }
+}

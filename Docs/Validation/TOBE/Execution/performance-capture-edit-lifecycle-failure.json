@@ -1,0 +1,500 @@
+{
+    "utc": "2026-10-01T18:29:52.3488108Z",
+    "detail": "System.InvalidOperationException: Disable releases handles.\r\n  at RPGKarawara.DevTools.Editor.PerformanceCaptureValidation.Require (System.Boolean value, System.String message) [0x00032] in C:\\Users\\migue\\Dev\\Karawara\\Assets\\DevTools\\Editor\\PerformanceCaptureValidation.cs:108 \r\n  at RPGKarawara.DevTools.Editor.PerformanceCaptureValidation.ValidateLifecycleAndOutput () [0x003d6] in C:\\Users\\migue\\Dev\\Karawara\\Assets\\DevTools\\Editor\\PerformanceCaptureValidation.cs:96 \r\n  at RPGKarawara.DevTools.Editor.PerformanceCaptureValidation.Run () [0x001f5] in C:\\Users\\migue\\Dev\\Karawara\\Assets\\DevTools\\Editor\\PerformanceCaptureValidation.cs:35 ",
+    "passed": false,
+    "completed": true,
+    "cases": [
+        {
+            "name": "Warm-up excluded.",
+            "passed": true
+        },
+        {
+            "name": "Frame crossing warm-up excluded.",
+            "passed": true
+        },
+        {
+            "name": "Capture begins at 30 seconds.",
+            "passed": true
+        },
+        {
+            "name": "Capture ends at 150 seconds.",
+            "passed": true
+        },
+        {
+            "name": "Frames after capture excluded.",
+            "passed": true
+        },
+        {
+            "name": "Artificial timestamps must contain exactly 120 capture seconds.",
+            "passed": true
+        },
+        {
+            "name": "Median must be 10.",
+            "passed": true
+        },
+        {
+            "name": "Nearest-rank p95 must be 30.",
+            "passed": true
+        },
+        {
+            "name": "Run IDs unique.",
+            "passed": true
+        },
+        {
+            "name": "Absent counter must be JSON null.",
+            "passed": true
+        },
+        {
+            "name": "Explicit QA flag required.",
+            "passed": true
+        },
+        {
+            "name": "120-second capture contract required.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 0",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 0",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 1",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 1",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 1",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 2",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 2",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 2",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 3",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 3",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 3",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 4",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 4",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 4",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 5",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 5",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 5",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 6",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 6",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 6",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 7",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 7",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 7",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 8",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 8",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 8",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Begin cycle 9",
+            "passed": true
+        },
+        {
+            "name": "Concurrent Begin rejected.",
+            "passed": true
+        },
+        {
+            "name": "Actual enumerated counter owned during cycle 9",
+            "passed": true
+        },
+        {
+            "name": "Owned handles cleared after cycle 9",
+            "passed": true
+        },
+        {
+            "name": "Immediate fixture End is incomplete, never a measured baseline.",
+            "passed": true
+        },
+        {
+            "name": "Parseable JSON and matching ID.",
+            "passed": true
+        },
+        {
+            "name": "Missing counter remains null in capture output.",
+            "passed": true
+        },
+        {
+            "name": "CSV header present.",
+            "passed": true
+        },
+        {
+            "name": "Real Unity inventory exported.",
+            "passed": true
+        },
+        {
+            "name": "Prior capture never overwritten.",
+            "passed": true
+        },
+        {
+            "name": "End is idempotent.",
+            "passed": true
+        },
+        {
+            "name": "Each run has exclusive files.",
+            "passed": true
+        },
+        {
+            "name": "Begin for disable cleanup.",
+            "passed": true
+        },
+        {
+            "name": "Disable releases handles.",
+            "passed": false
+        }
+    ]
+}
