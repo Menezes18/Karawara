@@ -86,7 +86,7 @@ namespace RPGKarawara
                     characterData = JsonUtility.FromJson<CharacterSaveData>(dataToLoad);
                 }
                 catch (Exception ex){
-                    // ignored
+                    Debug.Log(ex.Message);
                 }
             }
 

@@ -1,5 +1,7 @@
 # Guia do DevPlayground
 
+> Integração Homol em validação: os números antigos no fim deste guia são históricos. Os relatórios novos usam o prefixo `Homol`.
+
 O DevPlayground reúne o jogador, os inimigos e os sistemas existentes de Karawara em uma cena de desenvolvimento. Ele inicia um host local de Netcode for GameObjects e usa o prefab real do jogador. O catálogo permite experimentar habilidades, armas e modelos sem editar seus assets originais durante a sessão.
 
 ## Abrir e usar
@@ -13,6 +15,8 @@ O painel aberto libera o cursor e desativa a entrada de movimentação e habilid
 
 **Karawara → Dev Playground → Refresh Catalog** atualiza a lista de assets. O catálogo fica em `Assets/DevTools/Data/DevPlaygroundCatalog.asset`. Gerar ou atualizar é uma operação de edição; não use durante Play Mode.
 
+A aba **Player** lista os dois SpellItems existentes e permite equipá-los. `FireSpell` dispara a bola de fogo; `NewTestSpell` é um placeholder que apenas registra uma mensagem, não um segundo poder implementado. Feche o painel com F1, selecione o caster com Q e use o ataque da arma. O host mostra a porta local real; quando 7777 está ocupada, usa uma alternativa. Clientes precisam dessa porta.
+
 ## Controles do personagem
 
 Os controles abaixo vêm de `Assets/Scripts/PlayerControls.inputactions` e dos consumidores atuais de entrada. A janela Game precisa ter foco.
@@ -22,9 +26,10 @@ Os controles abaixo vêm de `Assets/Scripts/PlayerControls.inputactions` e dos c
 | W, A, S, D | Movimentar |
 | Mouse | Mover câmera |
 | Shift | Correr |
-| Ctrl | Esquivar |
+| Ctrl | Esquivar; com movimento, rolar; parado, recuar |
+| Q | Alternar lança e caster |
 | Espaço | Pular |
-| Botão esquerdo do mouse | Ataque leve, ação RB da arma |
+| Botão esquerdo do mouse | Ataque leve/RB; no caster, clique dispara e segurar carrega a bola de fogo |
 | Botão direito do mouse | Ataque RT; manter pressionado fornece entrada de carga |
 | Botão central do mouse | Travar alvo |
 | Setas esquerda/direita | Trocar alvo travado |
@@ -75,9 +80,9 @@ Teletransporta o jogador para as estações, chama a interação de produção e
 | Showcase | Modelos de prévia visual |
 | Interactions | Interações com E e teletransportes locais |
 
-A estação de portão usa **Interactable → Lever → CutScenePortao → GateActivator**. Ative as duas alavancas com E para abrir o portão. Cada sequência usa uma câmera e fade próprios e pausa o tempo por aproximadamente dois segundos reais.
+A estação de portão usa **Interactable → Lever → AnimationTrigger → GateActivator**, adaptada à implementação atual de Homol. Ative as duas alavancas com E para abrir o portão. Cada sequência usa uma câmera, Animator e eventos próprios e restaura o tempo após a sequência.
 
-A plataforma de teste usa o componente **Plataforma** de produção: permanecer no gatilho inicia o temporizador e desativa a plataforma após três segundos. Reabrir a cena em uma nova sessão restaura o estado original; o runner de validação restaura apenas sua instância de teste. Não foi encontrado um sistema de elevador para integrar nesta cena.
+A plataforma de teste usa o componente **Plataforma** de produção: permanecer no gatilho inicia o temporizador e desativa a plataforma após três segundos. Reabrir a cena em uma nova sessão restaura o estado original; o runner de validação restaura apenas sua instância de teste. O script histórico de elevador da arena foi recuperado durante a integração Homol; não há uma estação funcional de elevador nesta cena.
 
 ## Isolamento e limites
 
@@ -120,3 +125,21 @@ A execução completa encerrada em `2026-09-30T23:55:00.4817212Z` registra `comp
 A [captura final](Captures/DevPlayground-final.png) mostra o playground após a limpeza, sem os objetos de Spirit ou barras de boss anteriores. As compilações de scripts Release e Development mais recentes registram sucesso em `2026-10-01T00:04:51.7738032Z` e `2026-10-01T00:05:36.132132Z`, respectivamente. São horários UTC, correspondentes à noite de 30/09 em São Paulo.
 
 **Karawara → Validation → Build Windows Release** inicia a construção standalone completa. A execução terminou em `2026-10-01T00:24:34.6877541Z` com `Succeeded`, zero erros e 21 avisos, incluindo avisos de protótipos de Terrain detalhados em [UnityTerrainBuildWarnings.md](UnityTerrainBuildWarnings.md). O executável existe em `Builds/DevToolsValidation/WindowsRelease/Karawara.exe`; o conteúdo do build ocupa aproximadamente 509 MiB. O jogo construído ainda não foi lançado nem jogado. O resultado final está em [UnityWindowsReleaseBuild.json](UnityWindowsReleaseBuild.json).
+
+## Animator após importação do merge
+
+Se um estado de magia avançar sem animação ou eventos, confirme no Animator se o clip está presente. Nesta integração, o cache compilado de Humanoid omitia 19 clips apesar de os motions resolverem no asset. Reimportar `Assets/Animations/Humanoid.controller` e os overrides em `Assets/Animations/AnimatorOverrideController` recuperou os clips; o teste real Ctrl/Q/primeiro clique passou depois disso. Não substitua o controller por uma implementação de debug.
+
+## Validação atual da integração Homol
+
+O catálogo atual contém sete skills, quatro armas, dois SpellItems, oito prefabs de inimigo/boss, 940 prévias de prefab, 213 VFX, 1171 clips e 1292 materiais. `NewTestSpell` continua um placeholder; uma prévia de asset não equivale a um poder funcional.
+
+- `HomolDevPlaygroundGameplaySmokeTest.json`: 72/72 casos aprovados, zero erros, saves inalterados, após os fixes de ciclo de vida e input.
+- `HomolInputRegression.json`: Ctrl/rolagem de 3,38 m e Q/primeiro clique com bola de fogo, sem erros, numa sessão nova.
+- `HomolCombatWindowRegression.json`: idle sem dano, janela de ataque real, disparo normal/carregado e término natural da ação antes de restaurar equipamento; três casos aprovados.
+- `HomolUIRegression.json`, `HomolBossTransitionRegression.json`, `HomolDialogueRegression.json`: HUD, boss bars e escritores de diálogo validados nos limites descritos nos relatórios.
+- `HomolProductionSceneSmokeTest.json`: sete cenas inicializadas sem erros capturados, sem inimigos atravessando cenas, um AudioListener por cena, saves preservados. Cenas pausadas são observadas por tempo não escalado; isso não percorre seu gameplay.
+
+As fixtures de input usam uma cópia temporária de InputSettings para rotear os dispositivos virtuais à GameView; o asset original é restaurado. Scripts reproduzíveis e requisitos estão em `Docs/Validation/README.md`. Aguarde a animação carregada terminar antes de restaurar equipamento; quatro segundos eram insuficientes para a fixture.
+
+A execução completa antiga `HomolDevPlaygroundSmokeTest.json` confirmou as 940 prévias mas falhou numa seleção incorreta de collider da Cuca; a correção foi revalidada nos 72 casos de gameplay. Não se considera essa execução completa integralmente aprovada. Referências herdadas ainda ausentes e shaders de showcase são detalhados em `HomolLegacyAssetAudit.md`.

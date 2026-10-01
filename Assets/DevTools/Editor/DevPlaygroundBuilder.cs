@@ -66,6 +66,9 @@ namespace RPGKarawara.DevTools.Editor
             }
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+            // Homol's Scene Selector may pin SceneMenu as the Play start scene.
+            // Opening the playground explicitly means Play should use this scene.
+            EditorSceneManager.playModeStartScene = null;
         }
 
         [MenuItem("Karawara/Dev Playground/Refresh Catalog")]
@@ -101,7 +104,10 @@ namespace RPGKarawara.DevTools.Editor
                 "Assets/Data/Prefabs/World Managers/World A.I Manager.prefab"
             }.Select(RequiredPrefab).ToArray();
             catalog.skills = FindAssets<Skill>("t:Skill");
-            catalog.weapons = FindAssets<WeaponItem>("t:WeaponItem");
+            // Homol has two unrelated WeaponItem classes in different namespaces.
+            // A name-only type search can select the wrong class; filter by the real CLR type.
+            catalog.weapons = FindAssets<WeaponItem>("t:ScriptableObject");
+            catalog.spells = FindAssets<SpellItem>("t:ScriptableObject");
             catalog.animations = FindSubAssets<AnimationClip>("t:AnimationClip");
             catalog.materials = FindSubAssets<Material>("t:Material");
 
@@ -130,7 +136,7 @@ namespace RPGKarawara.DevTools.Editor
                 var components = prefab.GetComponentsInChildren<MonoBehaviour>(true);
                 bool enemy = components.Any(c => c != null &&
                     (c is AICharacterManager || c.GetType().Name == "BossAISystem" ||
-                     c.GetType().Name == "CucaBossHealth" || c.GetType().Name == "BossControl"));
+                     c is CucaBoss || c.GetType().Name == "BossControl"));
                 if (enemy) enemies.Add(entry);
                 if (components.Any(c => c is Interactable)) interactables.Add(entry);
                 bool effect = prefab.GetComponentInChildren<ParticleSystem>(true) != null ||
@@ -153,7 +159,7 @@ namespace RPGKarawara.DevTools.Editor
             catalog.interactables = interactables.ToArray();
             EditorUtility.SetDirty(catalog);
             Debug.Log($"DevPlayground catalog: {catalog.enemies.Length} enemy/boss prefabs, " +
-                      $"{catalog.skills.Length} skills, {catalog.weapons.Length} weapons, " +
+                      $"{catalog.skills.Length} skills, {catalog.weapons.Length} weapons, {catalog.spells.Length} spells, " +
                       $"{catalog.showcase.Length} models, {catalog.effects.Length} effects, " +
                       $"{catalog.interactables.Length} interaction prefabs, {catalog.animations.Length} animation clips, " +
                       $"{catalog.materials.Length} materials. Catalog entries are asset discovery, not runtime certification.");
@@ -162,7 +168,7 @@ namespace RPGKarawara.DevTools.Editor
 
         private static GameObject ExtractSceneCuca()
         {
-            const string sourcePath = "Assets/Data/Level/LevelCucaCaua/Scenes/CucaLoad.unity";
+            const string sourcePath = "Assets/Scenes/CucaLoad.unity";
             const string targetPath = "Assets/DevTools/Data/Generated/CucaDev.prefab";
             EnsureFolder("Assets/DevTools/Data/Generated");
             var previous = SceneManager.GetActiveScene();
@@ -173,8 +179,8 @@ namespace RPGKarawara.DevTools.Editor
             {
                 if (openedSource) sourceScene = EditorSceneManager.OpenScene(sourcePath, OpenSceneMode.Additive);
                 var candidates = sourceScene.GetRootGameObjects()
-                    .SelectMany(root => root.GetComponentsInChildren<BossAISystem>(true))
-                    .Where(boss => boss.GetComponent<CucaBossHealth>() != null && boss.GetComponent<EnemyAI>() != null).ToArray();
+                    .SelectMany(root => root.GetComponentsInChildren<CucaBoss>(true))
+                    .Where(boss => boss.GetComponent<HealthManager>() != null).ToArray();
                 if (candidates.Length != 1)
                     throw new InvalidOperationException("Expected one fully configured production Cuca in " + sourcePath + ", found " + candidates.Length);
 
@@ -211,7 +217,7 @@ namespace RPGKarawara.DevTools.Editor
                 }
                 var prefab = PrefabUtility.SaveAsPrefabAsset(clone, targetPath, out bool success);
                 if (!success || prefab == null) throw new InvalidOperationException("Could not save generated Cuca prefab.");
-                Debug.Log("Extracted production Cuca hierarchy with EnemyAI, BossAISystem and CucaBossHealth; source scene preserved.");
+                Debug.Log("Extracted Homol Cuca hierarchy with CucaBoss and HealthManager; source scene preserved.");
                 return prefab;
             }
             finally
@@ -344,6 +350,41 @@ namespace RPGKarawara.DevTools.Editor
 
         private static void BuildLeverStation(Transform parent, Material wall, Material orange, Material green)
         {
+            // Exercise Homol's real animation events without moving a production scene camera.
+            const string animationPath = "Assets/DevTools/Data/Generated/LeverCameraDev.anim";
+            const string controllerPath = "Assets/DevTools/Data/Generated/LeverCameraDev.controller";
+            EnsureFolder("Assets/DevTools/Data/Generated");
+            var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath);
+            if (clip == null)
+            {
+                clip = new AnimationClip { name = "LeverCameraDev" };
+                clip.SetCurve("", typeof(Transform), "localScale.x", AnimationCurve.Constant(0, 1, 1));
+                AnimationUtility.SetAnimationEvents(clip, new[]
+                {
+                    new AnimationEvent { time = 0.5f, functionName = "AtivarCollider" },
+                    new AnimationEvent { time = 0.95f, functionName = "DeativarCameraCutScene" }
+                });
+                AssetDatabase.CreateAsset(clip, animationPath);
+            }
+            var animationController = AssetDatabase.LoadAssetAtPath<UnityEditor.Animations.AnimatorController>(controllerPath);
+            if (animationController == null)
+            {
+                animationController = UnityEditor.Animations.AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
+                animationController.AddParameter("AtivarCamera", AnimatorControllerParameterType.Trigger);
+                var machine = animationController.layers[0].stateMachine;
+                var idle = machine.AddState("Idle");
+                var activated = machine.AddState("Lever Camera");
+                activated.motion = clip;
+                machine.defaultState = idle;
+                var begin = idle.AddTransition(activated);
+                begin.hasExitTime = false;
+                begin.duration = 0;
+                begin.AddCondition(UnityEditor.Animations.AnimatorConditionMode.If, 0, "AtivarCamera");
+                var end = activated.AddTransition(idle);
+                end.hasExitTime = true;
+                end.exitTime = 1;
+                end.duration = 0;
+            }
             var station = Child("Production Lever and Gate - Complete Dependencies", parent);
             var gate = Box("Gate - Opens When Both Levers Active", station, new Vector3(9, 1.5f, -25),
                 new Vector3(1, 3, 6), wall);
@@ -353,7 +394,7 @@ namespace RPGKarawara.DevTools.Editor
             camera.depth = 10;
             camera.transform.position = new Vector3(14, 5, -32);
             camera.transform.LookAt(new Vector3(7, 1, -25));
-            view.SetActive(false);
+            camera.enabled = false;
             sequence.cameraObject = view;
 
             var canvasRoot = new GameObject("Gate Fade Overlay", typeof(RectTransform), typeof(Canvas));
@@ -389,6 +430,23 @@ namespace RPGKarawara.DevTools.Editor
                 var lever = interaction.gameObject.AddComponent<Lever>();
                 lever.num = i;
                 lever.cutScenePortao = sequence;
+                var leverView = i == 0 ? view : Child("Lever Sequence Camera", station).gameObject;
+                if (i != 0)
+                {
+                    leverView.transform.SetPositionAndRotation(view.transform.position, view.transform.rotation);
+                    var secondCamera = leverView.AddComponent<Camera>();
+                    secondCamera.depth = camera.depth;
+                    secondCamera.enabled = false;
+                }
+                leverView.name = "Homol Lever Camera " + (i + 1);
+                var leverAnimator = leverView.AddComponent<Animator>();
+                leverAnimator.runtimeAnimatorController = animationController;
+                leverAnimator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                var animationTrigger = leverView.AddComponent<global::AnimationTrigger>();
+                animationTrigger.animator = leverAnimator;
+                animationTrigger.cam = leverView.GetComponent<Camera>();
+                animationTrigger.target = indicator;
+                lever.animationTrigger = animationTrigger;
                 interaction.lever = lever;
                 levers[i] = lever;
             }
@@ -398,7 +456,7 @@ namespace RPGKarawara.DevTools.Editor
             activator.trueorfalse = false;
             activator.cameraAtivar = view;
             activator.cutScenePortao = sequence;
-            Label("GATE SYSTEM: activate both levers with E\nProduction cutscene pauses time for 2 seconds", new Vector3(6, 0.06f, -31), parent, 0.6f);
+            Label("GATE SYSTEM: activate both levers with E\nHomol camera animation toggles indicator and restores time", new Vector3(6, 0.06f, -31), parent, 0.6f);
         }
 
         private static void BuildCrumblingPlatform(Transform parent, Material material)

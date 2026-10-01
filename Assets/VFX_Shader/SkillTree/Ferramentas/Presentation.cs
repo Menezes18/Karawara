@@ -23,6 +23,7 @@ namespace RPGKarawara
             if(Keyboard.current.rightArrowKey.wasReleasedThisFrame)
             {
                 PercorrerLista();
+
                 Debug.Log(_numeroDeSkills);
             }
             

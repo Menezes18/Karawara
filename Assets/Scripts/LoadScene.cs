@@ -27,5 +27,9 @@ namespace RPGKarawara
             image.SetActive(true);
 
         }
+
+        public void desativado(){
+            image.SetActive(false);
+        }
     }
 }

@@ -141,6 +141,7 @@ namespace DialogueSystem
             if (instance != null && instance != this)
             {
                 Destroy(this.gameObject);
+                return;
             }
             else
             {
@@ -172,11 +173,12 @@ namespace DialogueSystem
         }
 
         public void Create(){
+            if (_handler != null) _handler.EndDialogue();
             _handler = new DialogueHandler(Ui, settings, dialogueCallbackActions, dictionary, this);
         }
         public void StopDialogue()
         {
-            IsRunning = false;
+            if (_handler != null) _handler.EndDialogue();
             
         }
         
@@ -222,6 +224,7 @@ namespace DialogueSystem
             if (dialogueGraph == null)
             {
                 Debug.LogError("No dialogue graph is set.");
+                return;
             }
             
             _handler.ExecuteGraph(dialogueGraph);

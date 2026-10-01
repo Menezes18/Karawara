@@ -5,15 +5,18 @@ using RPGKarawara.SkillTree;
 [CustomEditor(typeof(DurationSkill))]
 public class DurationSkillEditor : Editor
 {
+    // Propriedades serializadas
     private SerializedProperty showFields;
     private SerializedProperty erodeRate;
     private SerializedProperty erodeRefreshRate;
     private SerializedProperty erodeDelay;
     private SerializedProperty erodeObject;
+    private SerializedProperty skillRoot;
 
     private void OnEnable()
     {
-        // Pegue as propriedades serializadas
+        // Inicializa as propriedades serializadas
+        skillRoot = serializedObject.FindProperty("skillRoot");
         showFields = serializedObject.FindProperty("showFields");
         erodeRate = serializedObject.FindProperty("erodeRate");
         erodeRefreshRate = serializedObject.FindProperty("erodeRefreshRate");
@@ -23,19 +26,31 @@ public class DurationSkillEditor : Editor
 
     public override void OnInspectorGUI()
     {
+
         serializedObject.Update();
 
-        // Adiciona o toggle para ativar ou desativar a visualização dos campos com base no valor de showFields
-        showFields.boolValue = EditorGUILayout.Toggle("Ativar erode Object!", showFields.boolValue);
+
+        EditorGUILayout.LabelField("Configurações de Duração da Habilidade", EditorStyles.boldLabel);
+        EditorGUILayout.Space(10);
+        skillRoot.boolValue = EditorGUILayout.Toggle("Ativar Skill Root", skillRoot.boolValue);
+        showFields.boolValue = EditorGUILayout.Toggle("Ativar Campos de Erosão", showFields.boolValue);
+        EditorGUILayout.Space(5);
 
         if (showFields.boolValue)
         {
-            EditorGUILayout.PropertyField(erodeRate);
-            EditorGUILayout.PropertyField(erodeRefreshRate);
-            EditorGUILayout.PropertyField(erodeDelay);
-            EditorGUILayout.PropertyField(erodeObject);
+            if (skillRoot.boolValue)
+            {
+                EditorGUILayout.HelpBox("Skill Root está ativado. Campos adicionais desativados.", MessageType.Info);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("Configurações de Erosão", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(erodeRate, new GUIContent("Taxa de Erosão"));
+                EditorGUILayout.PropertyField(erodeRefreshRate, new GUIContent("Taxa de Atualização"));
+                EditorGUILayout.PropertyField(erodeDelay, new GUIContent("Atraso de Erosão"));
+                EditorGUILayout.PropertyField(erodeObject, new GUIContent("Objeto de Erosão"));
+            }
         }
-
         serializedObject.ApplyModifiedProperties();
     }
 }

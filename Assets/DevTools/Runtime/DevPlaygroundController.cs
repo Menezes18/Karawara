@@ -154,9 +154,9 @@ namespace RPGKarawara.DevTools
             { Fail("Production NetworkManager or player prefab is missing."); yield break; }
             network.NetworkConfig.PlayerPrefab = catalog.playerPrefab;
             network.NetworkConfig.EnableSceneManagement = false;
-            // This sandbox hosts locally; an ephemeral port avoids production-session collisions.
+            // Exercise the same local port fallback as the production menu.
             var transport = network.NetworkConfig.NetworkTransport as Unity.Netcode.Transports.UTP.UnityTransport;
-            if (transport != null) transport.SetConnectionData("127.0.0.1", 0, "127.0.0.1");
+            if (transport != null) transport.SetConnectionData("127.0.0.1", 7777, "127.0.0.1");
             // Register explicitly before hosting, preserving production prefab identity/hash.
             var registered = new HashSet<GameObject>();
             foreach (var entry in catalog.enemies)
@@ -164,7 +164,7 @@ namespace RPGKarawara.DevTools
                     RegisterPrefab(entry.prefab);
             BuildNavigation();
             yield return null; // Production InputManager.Start disables controls.
-            if (!network.StartHost()) { Fail("Local host failed to start."); yield break; }
+            if (!LocalHostStartup.TryStartHost(network, out ushort hostPort)) { Fail("Local host failed to start."); yield break; }
             float deadline = Time.realtimeSinceStartup + 15;
             while ((network.LocalClient == null || network.LocalClient.PlayerObject == null) && Time.realtimeSinceStartup < deadline)
                 yield return null;
@@ -175,6 +175,13 @@ namespace RPGKarawara.DevTools
             var inventory = player.playerInventoryManager;
             inventory.currentRightHandWeapon = Clone(inventory.currentRightHandWeapon);
             inventory.currentLeftHandWeapon = Clone(inventory.currentLeftHandWeapon);
+            inventory.currentSpell = Clone(inventory.currentSpell);
+            var spellSwitch = player.GetComponent<TesteSpellManager>();
+            if (spellSwitch != null)
+            {
+                spellSwitch.espada = Clone(spellSwitch.espada);
+                spellSwitch.spell = Clone(spellSwitch.spell);
+            }
             for (int i = 0; i < inventory.weaponsInRightHandSlots.Length; i++) inventory.weaponsInRightHandSlots[i] = Clone(inventory.weaponsInRightHandSlots[i]);
             for (int i = 0; i < inventory.weaponsInLeftHandSlots.Length; i++) inventory.weaponsInLeftHandSlots[i] = Clone(inventory.weaponsInLeftHandSlots[i]);
             yield return null; // Finish production Start methods before applying tools.
@@ -187,7 +194,7 @@ namespace RPGKarawara.DevTools
             Heal();
             ready = true;
             SetOpen(open);
-            status = "Production player and local NGO host ready. Saves isolated. F1 toggles tools.";
+            status = $"Production player and local NGO host ready on port {hostPort}. Saves isolated. F1 toggles tools.";
         }
 
         bool PlayerManagerExists() => FindAnyObjectByType<PlayerManager>() != null;
@@ -205,6 +212,7 @@ namespace RPGKarawara.DevTools
             if (prefab == null) return null;
             var root = Instantiate(prefab, staging.transform);
             root.SetActive(false);
+            if (prefab == catalog.hudPrefab) root.transform.localScale = Vector3.one;
             // Production managers assign item/action IDs. Clone mutable assets before Awake/Start.
             foreach (var component in root.GetComponentsInChildren<MonoBehaviour>(true))
             {
@@ -228,6 +236,12 @@ namespace RPGKarawara.DevTools
                     if (originals != null) foreach (var weapon in originals) copies.Add(Clone(weapon));
                     foreach (var weapon in catalog.weapons) if (weapon != null && !copies.Contains(Clone(weapon))) copies.Add(Clone(weapon));
                     field.SetValue(database, copies);
+                    var spellField = typeof(WorldItemDatabase).GetField("spells", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var originalSpells = spellField.GetValue(database) as List<SpellItem>;
+                    var spellCopies = new List<SpellItem>();
+                    if (originalSpells != null) foreach (var spell in originalSpells) spellCopies.Add(Clone(spell));
+                    foreach (var spell in catalog.spells) if (spell != null && !spellCopies.Contains(Clone(spell))) spellCopies.Add(Clone(spell));
+                    spellField.SetValue(database, spellCopies);
                     database.unarmedWeapon = Clone(database.unarmedWeapon);
                     if (database.unarmedWeapon != null && !copies.Contains(database.unarmedWeapon)) copies.Add(database.unarmedWeapon);
                 }
@@ -344,6 +358,7 @@ namespace RPGKarawara.DevTools
             if (SkillCooldownUI.instance == null)
             {
                 var canvas = new GameObject("Development skill cooldown backing UI", typeof(RectTransform), typeof(Canvas));
+                canvas.SetActive(false);
                 ownedObjects.Add(canvas);
                 var ui = canvas.AddComponent<SkillCooldownUI>();
                 ui.enabled = false;
@@ -355,6 +370,12 @@ namespace RPGKarawara.DevTools
                     ui.skillCooldownImage[i] = image.GetComponent<UnityEngine.UI.Image>();
                     ui.skillCooldownImage[i].enabled = false;
                 }
+                ui.attackCooldownImage = ui.attackBackgroundImage = ui.skillCooldownImage[0];
+                ui.defenseCooldownImage = ui.defenseBackgroundImage = ui.skillCooldownImage[1];
+                ui.supportCooldownImage = ui.supportBackgroundImage = ui.skillCooldownImage[2];
+                ui.slotSpellOrLanca = ui.skillCooldownImage[0];
+                // Configure serialized dependencies before Homol's Awake reads them.
+                canvas.SetActive(true);
             }
         }
 
@@ -455,14 +476,9 @@ namespace RPGKarawara.DevTools
                 if (!NavMesh.SamplePosition(position, out var hit, 5, NavMesh.AllAreas))
                 { status = "No NavMesh at enemy spawn. Build navigation geometry first."; break; }
                 var enemy = Instantiate(entry.prefab, hit.position, Quaternion.identity);
+                DevRangedAnimationFixture.Configure(enemy);
                 spawnedEnemies.Add(enemy);
                 var character = enemy.GetComponent<AICharacterManager>();
-                if (character != null && character.isBoss && character.portal == null)
-                {
-                    character.portal = new GameObject("Development boss exit marker");
-                    character.portal.transform.SetParent(enemy.transform);
-                    character.portal.SetActive(false);
-                }
                 var boss = enemy.GetComponent<AIBossCharacterManager>();
                 if (boss != null)
                 {
@@ -514,6 +530,10 @@ namespace RPGKarawara.DevTools
             if (showcase != null) Destroy(showcase);
             var root = Instantiate(entry.prefab, staging.transform);
             root.SetActive(false);
+            // Input modules require EventSystem; deferred destruction must finish before removing it.
+            var inputModules = root.GetComponentsInChildren<BaseInputModule>(true);
+            foreach (var module in inputModules) if (module != null) Destroy(module);
+            if (inputModules.Length > 0) yield return null;
             // Awake runs on activation even for disabled scripts: remove them while inactive.
             foreach (var behaviour in root.GetComponentsInChildren<MonoBehaviour>(true)) if (behaviour != null) Destroy(behaviour);
             // Animator state behaviours and animation events can call removed gameplay scripts.
@@ -556,6 +576,19 @@ namespace RPGKarawara.DevTools
             if (player.playerNetworkManager.currentRightHandWeaponID.Value == weapon.itemID)
                 player.playerNetworkManager.OnCurrentRightHandWeaponIDChange(weapon.itemID, weapon.itemID);
             else player.playerNetworkManager.currentRightHandWeaponID.Value = weapon.itemID;
+        }
+
+        public void EquipSpell(SpellItem source)
+        {
+            if (player == null || source == null) return;
+            var spell = Clone(source);
+            if (WorldItemDatabase.Instance.GetSpellByID(spell.itemID) != spell)
+            { status = "Spell is absent from the production item database."; return; }
+            if (player.isPerformingAction) { status = "Finish the current action before changing spells."; return; }
+            if (player.playerNetworkManager.currentSpellID.Value == spell.itemID)
+                player.playerNetworkManager.OnCurrentSpellIDChange(spell.itemID, spell.itemID);
+            else player.playerNetworkManager.currentSpellID.Value = spell.itemID;
+            status = "Equipped " + spell.name + ". Q selects the caster; left click casts, hold to charge.";
         }
 
         void OnGUI()
@@ -630,6 +663,10 @@ namespace RPGKarawara.DevTools
             GUILayout.Label("Production weapons");
             foreach (var weapon in catalog.weapons)
                 if (weapon != null && GUILayout.Button("Equip " + weapon.name)) EquipWeapon(weapon);
+            GUILayout.Label("Production spells (Q selects the caster; left click / hold casts)");
+            foreach (var spell in catalog.spells)
+                if (spell != null && GUILayout.Button("Equip spell " + spell.name)) EquipSpell(spell);
+            GUILayout.Label("Controls: WASD move · Shift sprint · Space jump · Ctrl dodge · Q spear/caster · left click attack");
             GUILayout.Label("Production elements");
             var element = player.GetComponent<ElementManager>();
             if (element != null)
@@ -672,7 +709,7 @@ namespace RPGKarawara.DevTools
                     if (enemy != null)
                     {
                         var character = enemy.GetComponent<AICharacterManager>();
-                        var health = enemy.GetComponent<CucaBossHealth>();
+                        var health = enemy.GetComponent<HealthManager>();
                         if (character != null) character.characterNetworkManager.currentHealth.Value = 0;
                         else if (health != null) health.TakeDamage(float.MaxValue);
                         else Destroy(enemy);
@@ -692,7 +729,7 @@ namespace RPGKarawara.DevTools
         void SetEnemyPaused(GameObject enemy, bool paused)
         {
             foreach (var behaviour in enemy.GetComponentsInChildren<MonoBehaviour>(true))
-                if (behaviour is AICharacterManager || behaviour is BossAISystem || behaviour is global::BossControl || behaviour is global::EnemyAI)
+                if (behaviour is AICharacterManager || behaviour is CucaBoss || behaviour is BossAISystem || behaviour is global::BossControl || behaviour is global::EnemyAI)
                 { behaviour.enabled = !paused; if (paused) behaviour.StopAllCoroutines(); }
             foreach (var agent in enemy.GetComponentsInChildren<NavMeshAgent>(true))
                 if (agent.enabled && agent.isOnNavMesh) agent.isStopped = paused;
@@ -771,6 +808,7 @@ namespace RPGKarawara.DevTools
             foreach (var asset in ownedAssets) if (asset != null) Destroy(asset);
             if (navMeshInstance.valid) navMeshInstance.Remove();
             if (navMeshData != null) Destroy(navMeshData);
+            WorldSaveGameManager.DevPlaygroundIsolationActive = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }

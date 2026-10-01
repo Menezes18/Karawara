@@ -2,10 +2,11 @@ using System;
 using RPGKarawara.SkillTree;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace RPGKarawara
 {
-    public class SkillUISlot : MonoBehaviour
+    public class SkillUISlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public Image skillIcon;   // Imagem do ícone da habilidade
         public Button skillButton; // Botão para ativar a habilidade
@@ -13,7 +14,13 @@ namespace RPGKarawara
         public Skill skill;       // Referência para a habilidade associada ao slot
         public Image trianguloIcon;
         public TooltipTrigger tooltipTrigger;
+        public int auxiliarSkill;
+
+       [SerializeField] private Sprite spriteIconStart;
+        
         public void Start(){
+            
+            spriteIconStart = skillIcon.sprite;
             if (skill == null){
                 skillIcon.enabled = false;
                 lockIcon.enabled = true;
@@ -48,12 +55,17 @@ namespace RPGKarawara
             
             
         }
+
+
+        public void ClearSkill(){
+            skillIcon.sprite = spriteIconStart;
+        }
         public void SetTriangleColor(Color color)
         {
             trianguloIcon.color = color;
         }
         // Método chamado ao clicar no botão do slot
-        public void OnSkillButtonClicked()
+        public void OnSkillButtonClicked(int slotID)
         {
             if (skill != null && skill.isUnlocked){
                 SkillTreeUiManager.instance.Cabecalho(skill);
@@ -62,8 +74,32 @@ namespace RPGKarawara
                 TooltipSystem.current.Restart();
                 skill.active = true;    
                 trianguloIcon.color = new Color32(158,255,252, 255);
-                skill.AddSkill();
+                spriteIconStart = skillIcon.sprite;
+                skill.AddSkill(slotID);
             }
+        }
+
+        public void AtivarCabecalho(){
+            SkillTreeUiManager.instance.Cabecalho(skill);
+        }
+        public void OnUnlockButtonClicked(int skillIDSlot){
+            
+            if (skill != null){
+                SkillTreeUiManager.instance.ClearCabecalho();
+               
+                trianguloIcon.color = new Color32(255,255,252, 255);
+                ClearSkill();
+                Debug.Log("remove" + skillIDSlot + " slot");
+                skill.RemoveSkill(skillIDSlot);
+            }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData){
+            SkillTreeUiManager.instance.Cabecalho(skill);
+        }
+
+        public void OnPointerExit(PointerEventData eventData){
+            SkillTreeUiManager.instance.ClearCabecalho();
         }
     }
 }

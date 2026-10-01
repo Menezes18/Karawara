@@ -40,7 +40,8 @@ namespace DialogueSystem
             this.callbackActions = callbackActions;
             theme = defaultTheme == null ? ScriptableObject.CreateInstance<DialogueTheme>() : defaultTheme;
 
-            textEffects = _text.gameObject.AddComponent<TextEffects>();
+            textEffects = _text.GetComponent<TextEffects>();
+            if (textEffects == null) textEffects = _text.gameObject.AddComponent<TextEffects>();
             textEffects.Init(theme, settings, callbackActions);
         }
 
@@ -61,6 +62,7 @@ namespace DialogueSystem
 
         public void Reset()
         {
+            textEffects.StopTypewriter();
             textEffects.ClearAllIndices();
         }
 
@@ -74,10 +76,14 @@ namespace DialogueSystem
                     textEffects.Typewriter(text, callback, typewriterSpeedOverride);
                     break;
                 case TextEffects.TextDisplayMode.INSTANT:
+                    textEffects.StopTypewriter();
+                    _text.maxVisibleCharacters = int.MaxValue;
                     _text.text = text;
                     callback(DialogueEventType.OnTextEnd);
                     break;
                 default:
+                    textEffects.StopTypewriter();
+                    _text.maxVisibleCharacters = int.MaxValue;
                     _text.text = text;
                     break;
             }

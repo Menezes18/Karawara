@@ -27,9 +27,12 @@ namespace RPGKarawara
 
         [Header("Character Slots")]
         public CharacterSlot currentSelectedSlot = CharacterSlot.NO_SLOT;
+        public ushort ActiveHostPort { get; private set; }
+        public string HostStatus { get; private set; }
 
         private void Awake()
         {
+            Time.timeScale = 1;
             if (Instance == null)
             {
                 Instance = this;
@@ -42,12 +45,54 @@ namespace RPGKarawara
 
         public void StartNetworkAsHost()
         {
-            NetworkManager.Singleton.StartHost();
+            TryStartNetworkAsHost();
+        }
+
+        public bool TryStartNetworkAsHost()
+        {
+            try
+            {
+                NetworkManager network = NetworkManager.Singleton;
+                bool started = LocalHostStartup.TryStartHost(network, out ushort port);
+                if (started && port == 0 && network.NetworkConfig.NetworkTransport is Unity.Netcode.Transports.UTP.UnityTransport transport)
+                    port = transport.GetLocalEndpoint().Port;
+                ActiveHostPort = port;
+                HostStatus = started ? "Host ready on port " + port : "Host could not start. Try again.";
+                if (!started) Debug.LogWarning(HostStatus);
+                return started;
+            }
+            catch (System.Exception ex)
+            {
+                ActiveHostPort = 0;
+                HostStatus = "Host could not start: " + ex.Message;
+                Debug.LogWarning(HostStatus);
+                return false;
+            }
         }
 
         public void StartNewGame()
         {
+            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost || !NetworkManager.Singleton.IsListening)
+            {
+                HostStatus = "Host could not start. Try again.";
+                return;
+            }
+            if (WorldSaveGameManager.instance == null || !WorldSaveGameManager.instance.CanCreateNewGame)
+            {
+                HostStatus = "Waiting for the local player before starting a new game.";
+                return;
+            }
             WorldSaveGameManager.instance.AttemptToCreateNewGame();
+        }
+
+        private void OnGUI()
+        {
+            if (string.IsNullOrEmpty(HostStatus)) return;
+            bool hostReady = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost && NetworkManager.Singleton.IsListening;
+            string status = hostReady && ActiveHostPort > 0 ? "Host · porta " + ActiveHostPort : HostStatus;
+            if (hostReady && (WorldSaveGameManager.instance == null || !WorldSaveGameManager.instance.CanCreateNewGame))
+                status += " · preparando jogador";
+            GUI.Label(new Rect(12, Screen.height - 28, Mathf.Min(Screen.width - 24, 550), 24), status);
         }
 
         public void OpenLoadGameMenu()
@@ -76,8 +121,8 @@ namespace RPGKarawara
 
         public void DisplayNoFreeCharacterSlotsPopUp()
         {
-            noCharacterSlotsPopUp.SetActive(true);
-            noCharacterSlotsOkayButton.Select();
+            if (noCharacterSlotsPopUp != null) noCharacterSlotsPopUp.SetActive(true);
+            if (noCharacterSlotsOkayButton != null) noCharacterSlotsOkayButton.Select();
         }
 
         public void CloseNoFreeCharacterSlotsPopUp()

@@ -1,5 +1,7 @@
 # Relatório de migração Unity e DevPlayground — Karawara
 
+> Registro histórico anterior à integração de Homol. Para o estado posterior, consulte [HomolIntegrationReport.md](HomolIntegrationReport.md). Os resultados abaixo não certificam as alterações posteriores do merge.
+
 Data: 30/09/2026. Workspace: `C:\Users\migue\Dev\Karawara`.
 
 ## 1. Objetivo, escopo e preservação do trabalho

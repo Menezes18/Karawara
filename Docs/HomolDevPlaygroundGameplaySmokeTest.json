@@ -1,0 +1,539 @@
+{
+    "startedUtc": "2026-10-01T12:17:51.9192799Z",
+    "finishedUtc": "2026-10-01T12:20:37.9894727Z",
+    "scene": "Assets/DevTools/Scenes/DevPlayground.unity",
+    "persistentDataPath": "C:/Users/migue/AppData/LocalLow/UaiStudio/Karawara - RPG",
+    "boundary": "Baseline captured when runner invoked in an already active Play session; does not cover scene startup before invocation.",
+    "completed": true,
+    "passed": true,
+    "cases": [
+        {
+            "name": "Host / owner / save isolation / navigation",
+            "passed": true,
+            "details": "Production host and owner present; isolation enabled; navigable enemy station.",
+            "errors": []
+        },
+        {
+            "name": "TakeDamageEffect decreases health",
+            "passed": true,
+            "details": "Actual effects manager processed TakeDamageEffect: 450 -> 443",
+            "errors": []
+        },
+        {
+            "name": "God mode blocks actual damage",
+            "passed": true,
+            "details": "TakeDamageEffect rejected by production invulnerability guard.",
+            "errors": []
+        },
+        {
+            "name": "Heal / revive API",
+            "passed": true,
+            "details": "Health restored to maximum (living player; death/revive path not exercised).",
+            "errors": []
+        },
+        {
+            "name": "Lethal TakeDamageEffect / production death",
+            "passed": true,
+            "details": "Actual lethal effect triggered health depletion and isDead.",
+            "errors": []
+        },
+        {
+            "name": "Heal revives dead player",
+            "passed": true,
+            "details": "Dead player revived and health restored through public Heal API.",
+            "errors": []
+        },
+        {
+            "name": "Direct production SaveGame isolation",
+            "passed": true,
+            "details": "Direct SaveGame call left persistent slot set, hashes and timestamps unchanged.",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Hub - Player Spawn",
+            "passed": true,
+            "details": "Actual position=(0.00, 0.07, -12.00) target=(0.00, 0.15, -12.00)",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Combat - Enemy Arena",
+            "passed": true,
+            "details": "Actual position=(0.00, 0.07, 10.00) target=(0.00, 0.15, 10.00)",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Movement - Steps and Slopes",
+            "passed": true,
+            "details": "Actual position=(-23.00, 0.07, -13.00) target=(-23.00, 0.15, -13.00)",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Physics - Dynamic Crates",
+            "passed": true,
+            "details": "Actual position=(-23.00, 0.07, 11.00) target=(-23.00, 0.15, 11.00)",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Skills - Effects Lane",
+            "passed": true,
+            "details": "Actual position=(23.00, 0.07, -19.00) target=(23.00, 0.15, -19.00)",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Showcase - Asset Preview",
+            "passed": true,
+            "details": "Actual position=(23.00, 0.07, 4.00) target=(23.00, 0.15, 4.00)",
+            "errors": []
+        },
+        {
+            "name": "Teleport / Interactions - E Key",
+            "passed": true,
+            "details": "Actual position=(1.00, 0.07, -24.00) target=(1.00, 0.15, -24.00)",
+            "errors": []
+        },
+        {
+            "name": "Player grounded on production environment floor",
+            "passed": true,
+            "details": "Production locomotion reports grounded after 1s at spawn.",
+            "errors": []
+        },
+        {
+            "name": "Wired lever interaction / 1",
+            "passed": true,
+            "details": "Production Interactable -> Lever -> AnimationTrigger events completed; gate active=True",
+            "errors": []
+        },
+        {
+            "name": "Wired lever interaction / 2",
+            "passed": true,
+            "details": "Production Interactable -> Lever -> AnimationTrigger events completed; gate active=False",
+            "errors": []
+        },
+        {
+            "name": "Restore lever station after smoke interaction",
+            "passed": true,
+            "details": "Only runtime test station state restored; scene asset untouched.",
+            "errors": []
+        },
+        {
+            "name": "Production crumbling platform trigger / timer",
+            "passed": true,
+            "details": "Production OnTriggerEnter accepted real player collider and Update deactivated platform.",
+            "errors": []
+        },
+        {
+            "name": "Restore platform runtime test station",
+            "passed": true,
+            "details": "Original runtime platform flags, timer and active state restored.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 0",
+            "passed": true,
+            "details": "Lobo Guará; type=AttackSkill; duration=10; cooldown=True; active=False; created effects=AnimalFogo(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 0",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 1",
+            "passed": true,
+            "details": "Jabuti; type=DefenseSkill; duration=20; cooldown=True; active=False; created effects=Capsule(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 1",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 2",
+            "passed": true,
+            "details": "Cura; type=SupportSkill; duration=5; cooldown=True; active=False; created effects=Cylinder 1(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 2",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 3",
+            "passed": true,
+            "details": "Lobo Guará; type=AttackSkill; duration=10; cooldown=True; active=False; created effects=Bear_4(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 3",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 4",
+            "passed": true,
+            "details": "Arara; type=AttackSkill; duration=10; cooldown=True; active=False; created effects=Fury_effs(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 4",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 5",
+            "passed": true,
+            "details": "Jacare; type=SupportSkill; duration=10; cooldown=True; active=False; created effects=SkillJacare(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 5",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Skill activate / 6",
+            "passed": true,
+            "details": "Skill Passaro; type=AttackSkill; duration=30; cooldown=True; active=True; created effects=Passaro(Clone); activation observed for 1s; effect cleanup observed next.",
+            "errors": []
+        },
+        {
+            "name": "Skill reset / 6",
+            "passed": true,
+            "details": "Cooldown and all slot gates reset; DurationSkill effects expired after observation window.",
+            "errors": []
+        },
+        {
+            "name": "Weapon equip / Lança",
+            "passed": true,
+            "details": "Equipped runtime clone Lança(Clone)(Clone), ID=1",
+            "errors": []
+        },
+        {
+            "name": "Weapon equip / Lança1",
+            "passed": true,
+            "details": "Equipped runtime clone Lança1(Clone)(Clone), ID=2",
+            "errors": []
+        },
+        {
+            "name": "Weapon equip / Unarmed",
+            "passed": true,
+            "details": "Equipped runtime clone Unarmed(Clone)(Clone), ID=0",
+            "errors": []
+        },
+        {
+            "name": "Weapon equip / Charm",
+            "passed": true,
+            "details": "Equipped runtime clone Charm(Clone)(Clone), ID=3",
+            "errors": []
+        },
+        {
+            "name": "Spell equip / FireSpell",
+            "passed": true,
+            "details": "Production spell selected through network callback: FireSpell(Clone)(Clone)",
+            "errors": []
+        },
+        {
+            "name": "Spell equip / New Test Spell",
+            "passed": true,
+            "details": "Production spell selected through network callback: New Test Spell(Clone)(Clone)",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / Cuca - Production Scene Boss",
+            "passed": true,
+            "details": "Assets/DevTools/Data/Generated/CucaDev.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / Cuca - Production Scene Boss",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / Cuca - Production Scene Boss",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / Dummmy",
+            "passed": true,
+            "details": "Assets/Data/Prefabs/Dummmy.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / Dummmy",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / Dummmy",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / DummmyRanged",
+            "passed": true,
+            "details": "Assets/Data/Prefabs/DummmyRanged.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / DummmyRanged",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / DummmyRanged",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / Durk 1",
+            "passed": true,
+            "details": "Assets/Data/Prefabs/Durk 1.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / Durk 1",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / Durk 1",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / Durk",
+            "passed": true,
+            "details": "Assets/Data/Prefabs/Durk.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / Durk",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / Durk",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / HumanoDummy",
+            "passed": true,
+            "details": "Assets/Data/Prefabs/HumanoDummy.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / HumanoDummy",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / HumanoDummy",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / Saci",
+            "passed": true,
+            "details": "Assets/Data/Prefabs/Saci.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / Saci",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / Saci",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Enemy spawn / Cuca_Animations",
+            "passed": true,
+            "details": "Assets/Scripts/Boss Cuca/Cuca_Animations.prefab; one tracked enemy; agents=1; AI ran for 1s.",
+            "errors": []
+        },
+        {
+            "name": "Enemy clear / Cuca_Animations",
+            "passed": true,
+            "details": "Tracked count zero after destruction frame.",
+            "errors": []
+        },
+        {
+            "name": "Enemy respawn / Cuca_Animations",
+            "passed": true,
+            "details": "Selection respawned, then cleared.",
+            "errors": []
+        },
+        {
+            "name": "Homol Cuca / two instances bind their own health",
+            "passed": true,
+            "details": "Two Homol Cuca roots spawned; each CucaBoss uses its own HealthManager after Start.",
+            "errors": []
+        },
+        {
+            "name": "Homol Cuca / weapon trigger damages only contacted boss",
+            "passed": true,
+            "details": "Homol HealthManager.OnTriggerEnter invoked with the equipped Lanca collider against first Cuca; health 3000 -> 2993; second boss unchanged at 3000.",
+            "errors": []
+        },
+        {
+            "name": "Homol Cuca / 15s projectile and laser observation",
+            "passed": true,
+            "details": "Two live Cuca instances observed for 15s with their production AI; errors/exceptions captured for this phase. Observation alone does not prove every random projectile/dash branch executed.",
+            "errors": []
+        },
+        {
+            "name": "Legacy Cuca / clear both instances",
+            "passed": true,
+            "details": "Both legacy bosses destroyed; tracked count zero.",
+            "errors": []
+        },
+        {
+            "name": "Clear tool-activated skills and preview",
+            "passed": true,
+            "details": "Tool-created skill objects and preview cleared; spirit power reset.",
+            "errors": []
+        },
+        {
+            "name": "Original catalog assets unchanged",
+            "passed": true,
+            "details": "13 original skill/item JSON snapshots and disk hashes unchanged.",
+            "errors": []
+        },
+        {
+            "name": "Persistent character slots untouched",
+            "passed": true,
+            "details": "Compared 1 files; path/hash/length-independent UTC timestamp unchanged. Empty set is explicitly reported.",
+            "errors": []
+        },
+        {
+            "name": "Final runtime cleanup and isolation recheck",
+            "passed": true,
+            "details": "Enemies cleared; skills reset; player healed; original position/god mode restored; original assets and saves unchanged.",
+            "errors": []
+        }
+    ],
+    "originalAssets": [
+        {
+            "path": "Assets/Scripts/SkillTree/Data/AttackFogo.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"AttackFogo\",\"m_EditorClassIdentifier\":\"\",\"skillType\":0,\"cooldownDuration\":10.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"d81e31474557ae94597aa68845692fa4\",\"type\":3},\"name\":\"Lobo Guará\",\"description\":\"O jogador invoca o espírito do Lobo-Guará, que lança bolas de fogo incandescentes contra os inimigos. Essas bolas de fogo explodem ao impacto, causando dano. A habilidade é ideal para ataques de média distância e para controlar grupos de inimigos.\",\"texture\":{\"fileID\":8600000,\"guid\":\"f7985d4f6fa8b1942ab6af3dfb4096f6\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"232725e3098669e43a2bfd1ce1d9a06b\",\"type\":3},\"prefab\":{\"fileID\":3534748988268211900,\"guid\":\"30c2510f95992c746aba1f945487f73f\",\"type\":3},\"isUnlocked\":true,\"active\":false,\"SkillType\":0}}",
+            "sha256": "EFA4466EB3DC6F5106D67841B3EA6D3D6D69642112345C8BC610469CF91BF9B4",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/SkillTree/Data/Escudo.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"Escudo\",\"m_EditorClassIdentifier\":\"\",\"skillType\":1,\"cooldownDuration\":20.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"8bc4da6386fccb545a0d187eca0594bc\",\"type\":3},\"name\":\"Jabuti\",\"description\":\"Canalizando a força e a resiliência do Jabuti, o personagem conjura um escudo feito de energia. Esse escudo envolve o personagem, absorvendo o dano e protegendo contra ataques físicos e mágicos.\",\"texture\":{\"fileID\":8600000,\"guid\":\"12c08bddf173ba843b24308a14b74bc8\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"9dead8ae62354d3449784fdbb2518d94\",\"type\":3},\"prefab\":{\"instanceID\":0},\"isUnlocked\":true,\"active\":false,\"vfxPrefab\":{\"fileID\":7482588000550929421,\"guid\":\"ef4e8388a60c91b4fa8bdeaae049e782\",\"type\":3}}}",
+            "sha256": "BC27B3370CA8279877035EC31BA828E042A05054F8355A03617E5520CD09D8F8",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/SkillTree/Data/HealCircle.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"HealCircle\",\"m_EditorClassIdentifier\":\"\",\"skillType\":2,\"cooldownDuration\":5.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"d225f0f8fa353124680f313395d02cf2\",\"type\":3},\"name\":\"Cura\",\"description\":\"Inspirando-se na energia vital do Jabuti, o personagem cria um círculo brilhante de luz verde no chão, em forma de um casco, que emana uma aura curativa. Quando estiver dentro do círculo recebe uma cura gradual ao longo do tempo.\",\"texture\":{\"fileID\":8600000,\"guid\":\"1a4d8901ea8fa304685d70ece04fafef\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"2f380169d6d8e55408e474f2b15f6da4\",\"type\":3},\"prefab\":{\"instanceID\":0},\"isUnlocked\":true,\"active\":false,\"showSkillJacare\":false,\"skillPrefabJacare\":{\"instanceID\":0},\"_healingRate\":5.0,\"_healingAmount\":1000,\"healCirclePrefab\":{\"fileID\":2693512827172887261,\"guid\":\"8eacbe35f1e3c63478db692238a25524\",\"type\":3},\"showHealVariables\":true}}",
+            "sha256": "15EB50B31D195B5344D83FEDCE1814367B290DB80C8D6AC53DC8884FACF4FF56",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/SkillTree/Data/PetPantera.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"PetPantera\",\"m_EditorClassIdentifier\":\"\",\"skillType\":0,\"cooldownDuration\":10.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"936e6b4447dd2e648b5f26e49d1c63f6\",\"type\":3},\"name\":\"Lobo Guará\",\"description\":\"O jogador invoca o espírito do Lobo-Guará, que lança bolas de fogo incandescentes contra os inimigos. Essas bolas de fogo explodem ao impacto, causando dano. A habilidade é ideal para ataques de média distância e para controlar grupos de inimigos.\",\"texture\":{\"fileID\":8600000,\"guid\":\"f7985d4f6fa8b1942ab6af3dfb4096f6\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"232725e3098669e43a2bfd1ce1d9a06b\",\"type\":3},\"prefab\":{\"fileID\":585850293777071993,\"guid\":\"6e2cf1f448fd13e48b5ee62b6df0d95b\",\"type\":3},\"isUnlocked\":true,\"active\":false,\"SkillType\":0}}",
+            "sha256": "F80786F5C76DDF2050B7E66F8944BF4992FB739807BE70191E3F1062B14CEFC0",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/SkillTree/Data/PetSpirit.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"PetSpirit\",\"m_EditorClassIdentifier\":\"\",\"skillType\":0,\"cooldownDuration\":10.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"ec4f4ca65f1352a428999ce8e687df5b\",\"type\":3},\"name\":\"Arara\",\"description\":\"Ao invocar a majestosa arara, o personagem é rodeado por um espírito vibrante e colorido que paira no ar, emitindo gritos poderosos enquanto gira ao redor. A arara cria rajadas de vento fortes e cortantes que atingem os inimigos próximos, empurrando-os para trás e causando dano\",\"texture\":{\"fileID\":8600000,\"guid\":\"812bcbd2170dbfb43b55ba0b12fc6c74\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"c9a76a2a802c44245b570c8e18546aff\",\"type\":3},\"prefab\":{\"fileID\":4900842905152481788,\"guid\":\"7513c0ed7ea8aa94cb22a16acb2cd27a\",\"type\":3},\"isUnlocked\":true,\"active\":false,\"SkillType\":2}}",
+            "sha256": "1A0EBD502A42C7A00FD0AF5069273F22B06F93A84BDB7E1CC5B80300C7A48E40",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/SkillTree/Data/SkillJacare.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"SkillJacare\",\"m_EditorClassIdentifier\":\"\",\"skillType\":2,\"cooldownDuration\":10.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"eb6755d907e924b47979b98513858e44\",\"type\":3},\"name\":\"Jacare\",\"description\":\"Assim como o jacaré se esconde na água pronto para atacar a sua vítima, você começa a se misturar com o ambiente deixando os inimigos perdidos sem saberem onde você está.\",\"texture\":{\"fileID\":8600000,\"guid\":\"d79d77b72daa8cb43a34d50a2bb5c4c6\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"8c9f7c20632ac164db9dbe169b3770ac\",\"type\":3},\"prefab\":{\"instanceID\":0},\"isUnlocked\":true,\"active\":false,\"showSkillJacare\":false,\"skillPrefabJacare\":{\"fileID\":7616249608397630730,\"guid\":\"573a2feb116ef904e94622f7374bfc06\",\"type\":3},\"_healingRate\":0.0,\"_healingAmount\":0,\"healCirclePrefab\":{\"instanceID\":0},\"showHealVariables\":false}}",
+            "sha256": "13A427BEC7C20C0EAD9DA0DEFF28659457EB2C8CB2FE73667E62C421F009B11B",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/SkillTree/Data/SkillPassaro.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"SkillPassaro\",\"m_EditorClassIdentifier\":\"\",\"skillType\":0,\"cooldownDuration\":30.0,\"sprite\":{\"fileID\":21300000,\"guid\":\"f473b9095ee0d8f4b8acb9345f49d52d\",\"type\":3},\"name\":\"Skill Passaro\",\"description\":\"Ao invocar a majestosa arara, o personagem é rodeado por um espírito vibrante e colorido que paira no ar, emitindo gritos poderosos enquanto gira ao redor. A arara cria rajadas de vento fortes e cortantes que atingem os inimigos próximos, empurrando-os para trás e causando dano\",\"texture\":{\"fileID\":8600000,\"guid\":\"812bcbd2170dbfb43b55ba0b12fc6c74\",\"type\":2},\"vClip\":{\"fileID\":32900000,\"guid\":\"c9a76a2a802c44245b570c8e18546aff\",\"type\":3},\"prefab\":{\"fileID\":5787228707076762005,\"guid\":\"2befd428d448fd543bc44e8a6e246b6b\",\"type\":3},\"isUnlocked\":true,\"active\":true,\"SkillType\":0}}",
+            "sha256": "7028056F669508D41EE7BE60C3ABE1ED179A5C306E6545CF710EFD4D7E2E8F54",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/Data AIAttack Actions/Lança.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"Lança\",\"m_EditorClassIdentifier\":\"\",\"itemName\":\"Lança\",\"itemIcon\":{\"fileID\":21300000,\"guid\":\"b270be7cb2ab5eb46891a9f686e59249\",\"type\":3},\"itemDescription\":\"\",\"itemID\":1,\"weaponAnimator\":{\"fileID\":22100000,\"guid\":\"e60e18fa23d8b5d46adc21174173a60a\",\"type\":2},\"weaponModelType\":0,\"weaponModel\":{\"fileID\":8165431050239479360,\"guid\":\"94451ed699ab391468f31acd2f5c8c12\",\"type\":3},\"weaponClass\":0,\"strengthREQ\":10,\"dexREQ\":10,\"intREQ\":0,\"faithREQ\":0,\"physicalDamage\":118,\"magicDamage\":0,\"fireDamage\":0,\"holyDamage\":0,\"lightningDamage\":0,\"poiseDamage\":25.0,\"light_Attack_01_Modifier\":1.100000023841858,\"light_Attack_02_Modifier\":1.2000000476837159,\"heavy_Attack_01_Modifier\":1.399999976158142,\"heavy_Attack_02_Modifier\":1.600000023841858,\"charge_Attack_01_Modifier\":2.0,\"charge_Attack_02_Modifier\":2.200000047683716,\"running_Attack_01_Modifier\":1.100000023841858,\"rolling_Attack_01_Modifier\":1.100000023841858,\"backstep_Attack_01_Modifier\":1.100000023841858,\"oh_RB_Action\":{\"fileID\":11400000,\"guid\":\"cb45ff94dc9ad104c8c039dab9e4759c\",\"type\":2},\"oh_RT_Action\":{\"fileID\":11400000,\"guid\":\"1a567cfb6207c06428039e11a090c0ab\",\"type\":2},\"oh_LB_Action\":{\"instanceID\":0},\"whooshes\":[],\"blocking\":[]}}",
+            "sha256": "A2C733315F4389E0618F740473F71978029AC5044D1EF6F005FA37D67BCB7EE8",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/Data AIAttack Actions/Lança1.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"Lança1\",\"m_EditorClassIdentifier\":\"\",\"itemName\":\"Lança maior\",\"itemIcon\":{\"fileID\":21300000,\"guid\":\"b270be7cb2ab5eb46891a9f686e59249\",\"type\":3},\"itemDescription\":\"\",\"itemID\":2,\"weaponAnimator\":{\"fileID\":22100000,\"guid\":\"e60e18fa23d8b5d46adc21174173a60a\",\"type\":2},\"weaponModelType\":0,\"weaponModel\":{\"fileID\":8165431050239479360,\"guid\":\"94451ed699ab391468f31acd2f5c8c12\",\"type\":3},\"weaponClass\":0,\"strengthREQ\":10,\"dexREQ\":10,\"intREQ\":0,\"faithREQ\":0,\"physicalDamage\":118,\"magicDamage\":0,\"fireDamage\":0,\"holyDamage\":0,\"lightningDamage\":0,\"poiseDamage\":25.0,\"light_Attack_01_Modifier\":1.0,\"light_Attack_02_Modifier\":1.2000000476837159,\"heavy_Attack_01_Modifier\":1.399999976158142,\"heavy_Attack_02_Modifier\":1.600000023841858,\"charge_Attack_01_Modifier\":2.0,\"charge_Attack_02_Modifier\":2.200000047683716,\"running_Attack_01_Modifier\":1.100000023841858,\"rolling_Attack_01_Modifier\":1.100000023841858,\"backstep_Attack_01_Modifier\":1.100000023841858,\"oh_RB_Action\":{\"instanceID\":0},\"oh_RT_Action\":{\"instanceID\":0},\"oh_LB_Action\":{\"instanceID\":0},\"whooshes\":[],\"blocking\":[]}}",
+            "sha256": "0E823776DC2EC292B4D09F3D37C01D62839CFD8CE29F2DC9F97DBE7D1089D0A0",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/Data AIAttack Actions/Unarmed.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"Unarmed\",\"m_EditorClassIdentifier\":\"\",\"itemName\":\"\",\"itemIcon\":{\"instanceID\":0},\"itemDescription\":\"\",\"itemID\":0,\"weaponAnimator\":{\"fileID\":22100000,\"guid\":\"dccbb0b70b0b2b14b87048e97d975557\",\"type\":2},\"weaponModelType\":0,\"weaponModel\":{\"fileID\":4947639488778848360,\"guid\":\"965cb32355e8fe442b31c7675abe389b\",\"type\":3},\"weaponClass\":0,\"strengthREQ\":0,\"dexREQ\":0,\"intREQ\":0,\"faithREQ\":0,\"physicalDamage\":0,\"magicDamage\":0,\"fireDamage\":0,\"holyDamage\":0,\"lightningDamage\":0,\"poiseDamage\":0.0,\"light_Attack_01_Modifier\":1.0,\"light_Attack_02_Modifier\":1.2000000476837159,\"heavy_Attack_01_Modifier\":1.399999976158142,\"heavy_Attack_02_Modifier\":1.600000023841858,\"charge_Attack_01_Modifier\":2.0,\"charge_Attack_02_Modifier\":2.200000047683716,\"running_Attack_01_Modifier\":1.100000023841858,\"rolling_Attack_01_Modifier\":1.100000023841858,\"backstep_Attack_01_Modifier\":1.100000023841858,\"oh_RB_Action\":{\"instanceID\":0},\"oh_RT_Action\":{\"instanceID\":0},\"oh_LB_Action\":{\"instanceID\":0},\"whooshes\":[],\"blocking\":[]}}",
+            "sha256": "8C5C3056D8279AFE22EBC429D28EECBD802F7FE1B265D995ED6C4C38DAC6846C",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/Item/SpellsData/Charm.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"Charm\",\"m_EditorClassIdentifier\":\"\",\"itemName\":\"Charm\",\"itemIcon\":{\"instanceID\":0},\"itemDescription\":\"\",\"itemID\":3,\"weaponAnimator\":{\"fileID\":22100000,\"guid\":\"dccbb0b70b0b2b14b87048e97d975557\",\"type\":2},\"weaponModelType\":0,\"weaponModel\":{\"fileID\":4947639488778848360,\"guid\":\"965cb32355e8fe442b31c7675abe389b\",\"type\":3},\"weaponClass\":0,\"strengthREQ\":0,\"dexREQ\":0,\"intREQ\":0,\"faithREQ\":0,\"physicalDamage\":0,\"magicDamage\":0,\"fireDamage\":0,\"holyDamage\":0,\"lightningDamage\":0,\"poiseDamage\":10.0,\"light_Attack_01_Modifier\":1.0,\"light_Attack_02_Modifier\":1.2000000476837159,\"heavy_Attack_01_Modifier\":1.399999976158142,\"heavy_Attack_02_Modifier\":1.600000023841858,\"charge_Attack_01_Modifier\":2.0,\"charge_Attack_02_Modifier\":2.200000047683716,\"running_Attack_01_Modifier\":1.100000023841858,\"rolling_Attack_01_Modifier\":1.100000023841858,\"backstep_Attack_01_Modifier\":1.100000023841858,\"oh_RB_Action\":{\"fileID\":11400000,\"guid\":\"c5fb87d294ade65419437c98368fd067\",\"type\":2},\"oh_RT_Action\":{\"fileID\":11400000,\"guid\":\"c5fb87d294ade65419437c98368fd067\",\"type\":2},\"oh_LB_Action\":{\"fileID\":11400000,\"guid\":\"c5fb87d294ade65419437c98368fd067\",\"type\":2},\"whooshes\":[],\"blocking\":[]}}",
+            "sha256": "327E93968870D8765B826B7D246B0011B0B3A5A445A972914384981877C12C6C",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/Item/SpellsData/FireSpell.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"FireSpell\",\"m_EditorClassIdentifier\":\"\",\"itemName\":\"\",\"itemIcon\":{\"instanceID\":0},\"itemDescription\":\"\",\"itemID\":5,\"SpellClass\":0,\"spellSlotsUsed\":1,\"spellCastWarmUpFX\":{\"fileID\":7737410947706500988,\"guid\":\"c809b7acba78191458fbeeec6b358a4b\",\"type\":3},\"spellChargeFX\":{\"fileID\":7737410947706500988,\"guid\":\"c809b7acba78191458fbeeec6b358a4b\",\"type\":3},\"spellCastReleaseFX\":{\"fileID\":17655064782474913,\"guid\":\"a4b1270beef885b4cad88a260ed13ba3\",\"type\":3},\"spellCastReleaseFXFullCharge\":{\"fileID\":17655064782474913,\"guid\":\"a5563e62f23abff4584f7d051826bc02\",\"type\":3},\"mainHandSpellAnimation\":\"Spell_Main_Fire_Ball_Start_01\",\"offHandSpellAnimation\":\"Spell_Off_Fire_Ball_Start_01\",\"warmUpSoundFX\":{\"instanceID\":0},\"releaseSoundFX\":{\"instanceID\":0},\"upwardVelocity\":5.0,\"forwardVelocity\":20.0}}",
+            "sha256": "9950A33B42664E7108C799DEC7CADA5E897CDB80F088442CC8446E4D84D348E7",
+            "lastWriteUtcTicks": 0
+        },
+        {
+            "path": "Assets/Scripts/Item/SpellsData/New Test Spell.asset",
+            "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"New Test Spell\",\"m_EditorClassIdentifier\":\"\",\"itemName\":\"Spell_Main_Fire_Ball_Start_01\",\"itemIcon\":{\"instanceID\":0},\"itemDescription\":\"\",\"itemID\":4,\"SpellClass\":0,\"spellSlotsUsed\":1,\"spellCastWarmUpFX\":{\"instanceID\":0},\"spellChargeFX\":{\"instanceID\":0},\"spellCastReleaseFX\":{\"instanceID\":0},\"spellCastReleaseFXFullCharge\":{\"instanceID\":0},\"mainHandSpellAnimation\":\"Spell_Main_Fire_Ball_Start_01\",\"offHandSpellAnimation\":\"Spell_Off_Fire_Ball_Start_01\",\"warmUpSoundFX\":{\"instanceID\":0},\"releaseSoundFX\":{\"instanceID\":0}}}",
+            "sha256": "1F0FD901368647BD856A5DE2E40273BAB56A07780ECE1F8365364AA1ECBAFF14",
+            "lastWriteUtcTicks": 0
+        }
+    ],
+    "saveFilesBefore": [
+        {
+            "path": "C:/Users/migue/AppData/LocalLow/UaiStudio/Karawara - RPG\\characterSlot_01",
+            "json": "",
+            "sha256": "42A883294858C497B5162FD825FDEAE47E0611806E31D9781B6771E0318B23D0",
+            "lastWriteUtcTicks": 639264145182932913
+        }
+    ],
+    "saveFilesAfter": [
+        {
+            "path": "C:/Users/migue/AppData/LocalLow/UaiStudio/Karawara - RPG\\characterSlot_01",
+            "json": "",
+            "sha256": "42A883294858C497B5162FD825FDEAE47E0611806E31D9781B6771E0318B23D0",
+            "lastWriteUtcTicks": 639264145182932913
+        }
+    ]
+}

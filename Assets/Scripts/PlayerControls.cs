@@ -192,6 +192,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Hold RB"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3eb6196-5865-4094-bfb7-1482f60e5823"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""26db0b39-85bb-4779-8653-6ea83daf6e4d"",
@@ -206,34 +215,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""id"": ""91239245-cc85-4e7a-a867-338e9302f772"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RT"",
-                    ""type"": ""Button"",
-                    ""id"": ""1200d899-abd7-4784-b003-bc393917b9a9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Que RT"",
-                    ""type"": ""Button"",
-                    ""id"": ""46eeac00-0b43-436f-9d46-d3a012305e21"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Hold RT"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""ba25bc3f-5619-4c46-ba77-05ffb946923e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold(pressPoint=0.1)"",
+                    ""interactions"": ""SlowTap(duration=0.3,pressPoint=0.3)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -279,6 +261,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RT"",
+                    ""type"": ""Button"",
+                    ""id"": ""1200d899-abd7-4784-b003-bc393917b9a9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Que RT"",
+                    ""type"": ""Button"",
+                    ""id"": ""46eeac00-0b43-436f-9d46-d3a012305e21"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hold RT"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ba25bc3f-5619-4c46-ba77-05ffb946923e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(pressPoint=0.1)"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -362,28 +371,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""df5981cf-f627-4872-a861-6c576631e42c"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RT"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""87104f32-1ee1-41ab-982b-7621e6ecf1f9"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hold RT"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""1b88adc5-d778-4f43-8627-6c6afdf4014e"",
                     ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
@@ -406,8 +393,30 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""5f033709-8dea-4215-8c92-81de0ec30a7c"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df5981cf-f627-4872-a861-6c576631e42c"",
+                    ""path"": ""<Keyboard>/semicolon"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""80f6da5a-2b56-4aee-bd94-b55b22e024f6"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/semicolon"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -417,12 +426,23 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5f033709-8dea-4215-8c92-81de0ec30a7c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""id"": ""87104f32-1ee1-41ab-982b-7621e6ecf1f9"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""Hold RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e78dcd2c-0bbc-4a3a-97d6-a9e78ca53180"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hold RB"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -521,6 +541,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Tap"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillTree"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c5a9444-ebb9-4633-a0ee-54cd24cc250c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Tap"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -545,6 +574,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""PauseBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3349caa5-2c2f-44b4-8876-1ca25cefe2e1"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -559,16 +599,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions_Dodge = m_PlayerActions.FindAction("Dodge", throwIfNotFound: true);
         m_PlayerActions_Jump = m_PlayerActions.FindAction("Jump", throwIfNotFound: true);
         m_PlayerActions_RB = m_PlayerActions.FindAction("RB", throwIfNotFound: true);
+        m_PlayerActions_HoldRB = m_PlayerActions.FindAction("Hold RB", throwIfNotFound: true);
         m_PlayerActions_Interact = m_PlayerActions.FindAction("Interact", throwIfNotFound: true);
         m_PlayerActions_QueRB = m_PlayerActions.FindAction("Que RB", throwIfNotFound: true);
-        m_PlayerActions_RT = m_PlayerActions.FindAction("RT", throwIfNotFound: true);
-        m_PlayerActions_QueRT = m_PlayerActions.FindAction("Que RT", throwIfNotFound: true);
-        m_PlayerActions_HoldRT = m_PlayerActions.FindAction("Hold RT", throwIfNotFound: true);
         m_PlayerActions_Sprint = m_PlayerActions.FindAction("Sprint", throwIfNotFound: true);
         m_PlayerActions_LockOn = m_PlayerActions.FindAction("Lock On", throwIfNotFound: true);
         m_PlayerActions_SeekLeftLockOnTarget = m_PlayerActions.FindAction("Seek Left Lock On Target", throwIfNotFound: true);
         m_PlayerActions_SeekRightLockOnTarget = m_PlayerActions.FindAction("Seek Right Lock On Target", throwIfNotFound: true);
         m_PlayerActions_Teleport = m_PlayerActions.FindAction("Teleport", throwIfNotFound: true);
+        m_PlayerActions_RT = m_PlayerActions.FindAction("RT", throwIfNotFound: true);
+        m_PlayerActions_QueRT = m_PlayerActions.FindAction("Que RT", throwIfNotFound: true);
+        m_PlayerActions_HoldRT = m_PlayerActions.FindAction("Hold RT", throwIfNotFound: true);
         // Player Camera
         m_PlayerCamera = asset.FindActionMap("Player Camera", throwIfNotFound: true);
         m_PlayerCamera_Movement = m_PlayerCamera.FindAction("Movement", throwIfNotFound: true);
@@ -576,6 +617,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_X = m_UI.FindAction("X", throwIfNotFound: true);
         m_UI_PauseBack = m_UI.FindAction("PauseBack", throwIfNotFound: true);
+        m_UI_SkillTree = m_UI.FindAction("SkillTree", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -758,16 +800,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Dodge;
     private readonly InputAction m_PlayerActions_Jump;
     private readonly InputAction m_PlayerActions_RB;
+    private readonly InputAction m_PlayerActions_HoldRB;
     private readonly InputAction m_PlayerActions_Interact;
     private readonly InputAction m_PlayerActions_QueRB;
-    private readonly InputAction m_PlayerActions_RT;
-    private readonly InputAction m_PlayerActions_QueRT;
-    private readonly InputAction m_PlayerActions_HoldRT;
     private readonly InputAction m_PlayerActions_Sprint;
     private readonly InputAction m_PlayerActions_LockOn;
     private readonly InputAction m_PlayerActions_SeekLeftLockOnTarget;
     private readonly InputAction m_PlayerActions_SeekRightLockOnTarget;
     private readonly InputAction m_PlayerActions_Teleport;
+    private readonly InputAction m_PlayerActions_RT;
+    private readonly InputAction m_PlayerActions_QueRT;
+    private readonly InputAction m_PlayerActions_HoldRT;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player Actions".
     /// </summary>
@@ -792,6 +835,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @RB => m_Wrapper.m_PlayerActions_RB;
         /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/HoldRB".
+        /// </summary>
+        public InputAction @HoldRB => m_Wrapper.m_PlayerActions_HoldRB;
+        /// <summary>
         /// Provides access to the underlying input action "PlayerActions/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_PlayerActions_Interact;
@@ -799,18 +846,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActions/QueRB".
         /// </summary>
         public InputAction @QueRB => m_Wrapper.m_PlayerActions_QueRB;
-        /// <summary>
-        /// Provides access to the underlying input action "PlayerActions/RT".
-        /// </summary>
-        public InputAction @RT => m_Wrapper.m_PlayerActions_RT;
-        /// <summary>
-        /// Provides access to the underlying input action "PlayerActions/QueRT".
-        /// </summary>
-        public InputAction @QueRT => m_Wrapper.m_PlayerActions_QueRT;
-        /// <summary>
-        /// Provides access to the underlying input action "PlayerActions/HoldRT".
-        /// </summary>
-        public InputAction @HoldRT => m_Wrapper.m_PlayerActions_HoldRT;
         /// <summary>
         /// Provides access to the underlying input action "PlayerActions/Sprint".
         /// </summary>
@@ -831,6 +866,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActions/Teleport".
         /// </summary>
         public InputAction @Teleport => m_Wrapper.m_PlayerActions_Teleport;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/RT".
+        /// </summary>
+        public InputAction @RT => m_Wrapper.m_PlayerActions_RT;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/QueRT".
+        /// </summary>
+        public InputAction @QueRT => m_Wrapper.m_PlayerActions_QueRT;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/HoldRT".
+        /// </summary>
+        public InputAction @HoldRT => m_Wrapper.m_PlayerActions_HoldRT;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -866,21 +913,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @RB.started += instance.OnRB;
             @RB.performed += instance.OnRB;
             @RB.canceled += instance.OnRB;
+            @HoldRB.started += instance.OnHoldRB;
+            @HoldRB.performed += instance.OnHoldRB;
+            @HoldRB.canceled += instance.OnHoldRB;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
             @QueRB.started += instance.OnQueRB;
             @QueRB.performed += instance.OnQueRB;
             @QueRB.canceled += instance.OnQueRB;
-            @RT.started += instance.OnRT;
-            @RT.performed += instance.OnRT;
-            @RT.canceled += instance.OnRT;
-            @QueRT.started += instance.OnQueRT;
-            @QueRT.performed += instance.OnQueRT;
-            @QueRT.canceled += instance.OnQueRT;
-            @HoldRT.started += instance.OnHoldRT;
-            @HoldRT.performed += instance.OnHoldRT;
-            @HoldRT.canceled += instance.OnHoldRT;
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
@@ -896,6 +937,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Teleport.started += instance.OnTeleport;
             @Teleport.performed += instance.OnTeleport;
             @Teleport.canceled += instance.OnTeleport;
+            @RT.started += instance.OnRT;
+            @RT.performed += instance.OnRT;
+            @RT.canceled += instance.OnRT;
+            @QueRT.started += instance.OnQueRT;
+            @QueRT.performed += instance.OnQueRT;
+            @QueRT.canceled += instance.OnQueRT;
+            @HoldRT.started += instance.OnHoldRT;
+            @HoldRT.performed += instance.OnHoldRT;
+            @HoldRT.canceled += instance.OnHoldRT;
         }
 
         /// <summary>
@@ -916,21 +966,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @RB.started -= instance.OnRB;
             @RB.performed -= instance.OnRB;
             @RB.canceled -= instance.OnRB;
+            @HoldRB.started -= instance.OnHoldRB;
+            @HoldRB.performed -= instance.OnHoldRB;
+            @HoldRB.canceled -= instance.OnHoldRB;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
             @QueRB.started -= instance.OnQueRB;
             @QueRB.performed -= instance.OnQueRB;
             @QueRB.canceled -= instance.OnQueRB;
-            @RT.started -= instance.OnRT;
-            @RT.performed -= instance.OnRT;
-            @RT.canceled -= instance.OnRT;
-            @QueRT.started -= instance.OnQueRT;
-            @QueRT.performed -= instance.OnQueRT;
-            @QueRT.canceled -= instance.OnQueRT;
-            @HoldRT.started -= instance.OnHoldRT;
-            @HoldRT.performed -= instance.OnHoldRT;
-            @HoldRT.canceled -= instance.OnHoldRT;
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
@@ -946,6 +990,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Teleport.started -= instance.OnTeleport;
             @Teleport.performed -= instance.OnTeleport;
             @Teleport.canceled -= instance.OnTeleport;
+            @RT.started -= instance.OnRT;
+            @RT.performed -= instance.OnRT;
+            @RT.canceled -= instance.OnRT;
+            @QueRT.started -= instance.OnQueRT;
+            @QueRT.performed -= instance.OnQueRT;
+            @QueRT.canceled -= instance.OnQueRT;
+            @HoldRT.started -= instance.OnHoldRT;
+            @HoldRT.performed -= instance.OnHoldRT;
+            @HoldRT.canceled -= instance.OnHoldRT;
         }
 
         /// <summary>
@@ -1081,6 +1134,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_X;
     private readonly InputAction m_UI_PauseBack;
+    private readonly InputAction m_UI_SkillTree;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1100,6 +1154,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/PauseBack".
         /// </summary>
         public InputAction @PauseBack => m_Wrapper.m_UI_PauseBack;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/SkillTree".
+        /// </summary>
+        public InputAction @SkillTree => m_Wrapper.m_UI_SkillTree;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1132,6 +1190,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PauseBack.started += instance.OnPauseBack;
             @PauseBack.performed += instance.OnPauseBack;
             @PauseBack.canceled += instance.OnPauseBack;
+            @SkillTree.started += instance.OnSkillTree;
+            @SkillTree.performed += instance.OnSkillTree;
+            @SkillTree.canceled += instance.OnSkillTree;
         }
 
         /// <summary>
@@ -1149,6 +1210,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PauseBack.started -= instance.OnPauseBack;
             @PauseBack.performed -= instance.OnPauseBack;
             @PauseBack.canceled -= instance.OnPauseBack;
+            @SkillTree.started -= instance.OnSkillTree;
+            @SkillTree.performed -= instance.OnSkillTree;
+            @SkillTree.canceled -= instance.OnSkillTree;
         }
 
         /// <summary>
@@ -1226,6 +1290,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRB(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "Hold RB" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHoldRB(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -1239,27 +1310,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnQueRB(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "RT" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRT(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Que RT" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnQueRT(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Hold RT" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnHoldRT(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Sprint" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1295,6 +1345,27 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTeleport(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RT" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRT(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Que RT" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnQueRT(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Hold RT" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHoldRT(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player Camera" which allows adding and removing callbacks.
@@ -1332,5 +1403,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPauseBack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSkillTree(InputAction.CallbackContext context);
     }
 }

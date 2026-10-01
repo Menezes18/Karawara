@@ -26,6 +26,7 @@ namespace RPGKarawara.DevTools
         public DevPlaygroundAsset[] interactables = Array.Empty<DevPlaygroundAsset>();
         public Skill[] skills = Array.Empty<Skill>();
         public WeaponItem[] weapons = Array.Empty<WeaponItem>();
+        public SpellItem[] spells = Array.Empty<SpellItem>();
         public AnimationClip[] animations = Array.Empty<AnimationClip>();
         public Material[] materials = Array.Empty<Material>();
     }

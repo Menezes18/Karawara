@@ -83,10 +83,10 @@ namespace RPGKarawara.DevTools.Editor
                     else report.showcaseShaderProblems.Add(issue);
                 }
             }
-            WriteReport("Docs/UnityMigrationEditorAudit.json", report);
+            WriteReport("Docs/HomolUnityMigrationEditorAudit.json", report);
             Debug.Log($"Migration audit: {report.loadedScenes.Count} scenes loaded, {report.prefabCount} prefabs, " +
                 $"{report.materialCount} reachable materials; {report.missingScripts.Count} missing-script objects, " +
-                $"{report.shaderProblems.Count} shader issues, {report.loadErrors.Count} load errors. See Docs/UnityMigrationEditorAudit.json.");
+                $"{report.shaderProblems.Count} shader issues, {report.loadErrors.Count} load errors. See Docs/HomolUnityMigrationEditorAudit.json.");
         }
 
         static void CheckHierarchy(GameObject root, string assetPath, Report report)
@@ -136,7 +136,7 @@ namespace RPGKarawara.DevTools.Editor
                 if (!report.success) report.error = "Unity returned no compiled player assemblies. Inspect the Console.";
             }
             catch (Exception ex) { report.error = ex.ToString(); }
-            WriteReport("Docs/Unity" + (development ? "Development" : "Release") + "ScriptCompilation.json", report);
+            WriteReport("Docs/HomolUnity" + (development ? "Development" : "Release") + "ScriptCompilation.json", report);
             if (report.success) Debug.Log("Player scripts compiled: " + (development ? "Development" : "Release"));
             else Debug.LogError("Player script compilation failed: " + report.error);
         }
@@ -165,7 +165,7 @@ namespace RPGKarawara.DevTools.Editor
                 output = Path.GetFullPath("Builds/DevToolsValidation/WindowsRelease/Karawara.exe"),
                 scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray()
             };
-            WriteReport("Docs/UnityWindowsReleaseBuild.json", report);
+            WriteReport("Docs/HomolUnityWindowsReleaseBuild.json", report);
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(report.output));
@@ -185,7 +185,7 @@ namespace RPGKarawara.DevTools.Editor
             }
             catch (Exception ex) { report.result = "Exception"; report.error = ex.ToString(); }
             report.finishedUtc = DateTime.UtcNow.ToString("O");
-            WriteReport("Docs/UnityWindowsReleaseBuild.json", report);
+            WriteReport("Docs/HomolUnityWindowsReleaseBuild.json", report);
             Debug.Log("Windows Release build: " + report.result + "; " + report.output);
         }
     }

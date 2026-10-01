@@ -1,0 +1,38 @@
+{
+    "startedUtc": "2026-10-01T02:04:43.4598560Z",
+    "finishedUtc": "2026-10-01T02:04:48.6931539Z",
+    "scene": "Assets/DevTools/Scenes/DevPlayground.unity",
+    "completed": true,
+    "passed": true,
+    "boundary": "Runs inside an already ready DevPlayground. Checks the actual HUD and spawns one production network boss. No physical keyboard input, production scene transition, or production asset save is performed.",
+    "cases": [
+        {
+            "name": "Production HUD canvas and quick slots visible",
+            "details": "Active production HUD canvas, nonzero scale, health bar and both quick-slot hierarchies.",
+            "passed": true,
+            "skipped": false,
+            "errors": []
+        },
+        {
+            "name": "Network boss owns exactly one health bar",
+            "details": "Real network boss spawned and owned one UI bar; lethal health change sent through production callback.",
+            "passed": true,
+            "skipped": false,
+            "errors": []
+        },
+        {
+            "name": "Boss death removes its health bar",
+            "details": "Boss death callback completed and delayed bar was destroyed; spawned fixture despawned.",
+            "passed": true,
+            "skipped": false,
+            "errors": []
+        },
+        {
+            "name": "Cleanup preserves saves and sandbox state",
+            "details": "Fixtures removed; original save context, enemy selection, god mode and cursor restored; save files/hash/timestamps and active scene unchanged.",
+            "passed": true,
+            "skipped": false,
+            "errors": []
+        }
+    ]
+}

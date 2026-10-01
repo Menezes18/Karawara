@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 namespace RPGKarawara
 {
     public class SavePositionOnTrigger : MonoBehaviour{
+        
         public Transform[] savedPostion;
         public int numberSave;
 

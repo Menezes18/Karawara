@@ -6,6 +6,8 @@ using DialogueSystem;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using System.ComponentModel.Design;
+using RPGKarawara;
+using UnityEngine.InputSystem.Controls;
 
 public class SampleTriggerDialogue : MonoBehaviour
 {
@@ -26,15 +28,21 @@ public class SampleTriggerDialogue : MonoBehaviour
     // Variável para o script de movimentação do NPC
     public NPCMovement npcMovement;
     private bool inputCheck = false;
-
     public Transform targetPosition;
     public float playerPositionThreshold = 1.5f;
     public string test1, test2;
     public GameObject hint;
+    private Keyboard keyboard;
+    private Mouse mouse;
+    private bool initialized;
+    private DialogueHandler choiceHandler;
 
     private void Awake()
     {
-        keyboard = Keyboard.current; 
+        if (PlayerUIManager.instance != null && PlayerUIManager.instance.playerUIHudManager != null)
+            PlayerUIManager.instance.playerUIHudManager.activateMarcador(gameObject.transform);
+        keyboard = Keyboard.current;
+        mouse = Mouse.current;
 
         // Esconder o cursor ao iniciar
         Cursor.visible = false;
@@ -43,48 +51,84 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     private void Start()
     {
-        dialogueManager = DialogueSystem.Dialogue.instance;
+        gameStateVariables.Add(new DialogueGameState(false, "Clicou"));
+        gameStateVariables.Add(new DialogueGameState(false, "Completo"));
         flags = GetComponent<SampleFlags>();
+        TryInitialize();
+    }
 
-        dialogueManager.flags = flags.gameEventFlags;
+    private bool TryInitialize()
+    {
+        if (initialized && dialogueManager != null) return true;
+        dialogueManager = DialogueSystem.Dialogue.instance;
+        if (dialogueManager == null || dialogueManager._handler == null || dialogueManager.dialogueCallbackActions == null) return false;
         dialogueManager.dialogueCallbackActions.OnNodeLeave += OnNodeLeave;
         dialogueManager.dialogueCallbackActions.OnNodeEnter += OnNodeEnter;
-
-        gameStateVariables.Add(new DialogueGameState(10f, "floatExample"));
-        dialogueManager.SetDialogGameState(gameStateVariables);
-        dialogueManager.OnChoiceDraw += OnChoiceDraw;
-
-        dialogueManager.dictionary.AddEntry(test1, GetDictionaryValue);
-        dialogueManager.dictionary.AddEntry(test2, "static value");
-
-        dialogueManager.RegisterEventHandler(TestEventHandler);
-    }
-    
-    private void Update(){
-        CheckPlayer();
-        if (isPlayerNearby && Keyboard.current.enterKey.wasPressedThisFrame)  // Verifica se o jogador pressionou Enter
+        dialogueManager.dialogueCallbackActions.OnDialogueGraphEnd += OnDialogueEnded;
+        if (dialogueManager.dictionary != null)
         {
-            
+            if (!string.IsNullOrEmpty(test1)) dialogueManager.dictionary.AddEntry(test1, GetDictionaryValue);
+            if (!string.IsNullOrEmpty(test2)) dialogueManager.dictionary.AddEntry(test2, "static value");
+        }
+        dialogueManager.RegisterEventHandler(TestEventHandler);
+        initialized = true;
+        return true;
+    }
+
+    private void Update()
+    {
+        if (!TryInitialize()) return;
+        CheckPlayer();
+        if (isPlayerNearby && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+
             if (!dialogueManager.IsRunning)
             {
-                
-                dialogueManager.StartDialogue();  // Inicia o diálogo
+                if (graph == null) return;
+                if (dialogueManager.dialogueGraph != graph)
+                {
+                    dialogueManager.dialogueGraph = graph;
+                    dialogueManager.Create();
+                }
+                if (choiceHandler != null) choiceHandler.OnChoiceDraw -= OnChoiceDraw;
+                choiceHandler = dialogueManager._handler;
+                choiceHandler.OnChoiceDraw += OnChoiceDraw;
+                if (flags != null) dialogueManager.flags = flags.gameEventFlags;
+                dialogueManager.SetDialogGameState(gameStateVariables);
                 dialogueActive = true;
+                dialogueManager.StartDialogue();
+                gameStateVariables[0].ChangeValue(true);
 
                 // Mostrar o cursor e destravar
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                // Cursor.visible = true;
+                // Cursor.lockState = CursorLockMode.None;
 
                 // Desativar o controle da câmera
                 if (cameraController != null)
                 {
                     cameraController.enabled = false;  // Desativa a movimentação da câmera
                 }
+                if (DialogueHint.instance != null) AtivarHint(DialogueHint.instance.currentLineIndex);
+                return; // The start key must not also advance the first line.
             }
         }
-    
+
+        if (!isPlayerNearby)
+        {
+            if (dialogueActive)
+            {
+                DesativarHint();
+                dialogueManager.StopDialogue();
+                dialogueActive = false;
+                inputCheck = false;
+                StopAllCoroutines();
+                if (cameraController != null) cameraController.enabled = true;
+            }
+            return;
+        }
+
         // Avança o diálogo se ele já estiver ativo
-        if (dialogueActive && Keyboard.current.enterKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
+        if (dialogueActive && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame && !inputCheck && isPlayerNearby)
         {
             if (dialogueManager.IsRunning)
             {
@@ -96,7 +140,7 @@ public class SampleTriggerDialogue : MonoBehaviour
                 {
                     if (dialogueManager.CurrentState != DialogueState.AwaitingEventResponse)
                         dialogueManager.AdvanceDialogue();
-                    
+
                 }
             }
         }
@@ -114,13 +158,6 @@ public class SampleTriggerDialogue : MonoBehaviour
                 playerFound = true; // Define que o jogador foi encontrado
                 isPlayerNearby = true;
 
-                // Verifica se o diálogo atual não é o mesmo e troca
-                if (dialogueManager.dialogueGraph != graph)
-                {
-                    DialogueSystem.Dialogue.instance._handler.EndDialogue();
-                    dialogueManager.dialogueGraph = graph;
-                    DialogueSystem.Dialogue.instance.Create();
-                }
                 break; // Sai do loop, pois o jogador foi encontrado
             }
         }
@@ -132,18 +169,30 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
     }
 
-    
+
     private void OnTriggerExit(Collider other)
     {
-        
+
     }
 
     public void OnNodeLeave(BaseNode node) { /* Custom logic for when a node is left */ }
 
     public void OnNodeEnter(BaseNode node) { /* Custom logic for when a node is entered */ }
 
+    private void OnDialogueEnded(DialogueGraph endedGraph)
+    {
+        if (!dialogueActive) return;
+        dialogueActive = false;
+        inputCheck = false;
+        StopAllCoroutines();
+        if (choiceHandler != null) choiceHandler.OnChoiceDraw -= OnChoiceDraw;
+        choiceHandler = null;
+        if (cameraController != null) cameraController.enabled = true;
+    }
+
     public bool OnChoiceDraw(DialogueChoices node)
     {
+        if (!dialogueActive || UiHandler == null) return false;
         UiHandler.RenderDialogueChoices(node, dialogueManager);
         return true;
     }
@@ -155,6 +204,7 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     public void TestEventHandler(DialogueEvent myEvent)
     {
+        if (!dialogueActive) return;
         if (myEvent != null)
         {
             switch (myEvent.eventName)
@@ -170,7 +220,7 @@ public class SampleTriggerDialogue : MonoBehaviour
                     break;
 
                 case EventTypeDialogue.MoveNPCToPlayer:
-                    npcMovement.MoveToPlayer();
+                    if (npcMovement != null) npcMovement.MoveToPlayer();
                     break;
 
                 case EventTypeDialogue.CheckPlayerPosition:
@@ -178,10 +228,16 @@ public class SampleTriggerDialogue : MonoBehaviour
                     break;
 
                 case EventTypeDialogue.EnableUI:
-                    AtivarHint();
+                    AtivarHint(myEvent.intParameter);
                     break;
                 case EventTypeDialogue.DisableUI:
-                    AtivarHint();
+                    DesativarHint();
+                    break;
+                case EventTypeDialogue.TutorialCompleto:
+                    PassarObjetivo();
+                    break;
+                case EventTypeDialogue.CheckMouseInput:
+                    StartCoroutine(CheckMouseInputCoroutine(myEvent.inputKey));
                     break;
             }
         }
@@ -189,6 +245,7 @@ public class SampleTriggerDialogue : MonoBehaviour
 
     private void CheckPlayerPosition()
     {
+        if (targetPosition == null) return;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player == null)
@@ -221,18 +278,30 @@ public class SampleTriggerDialogue : MonoBehaviour
         }
     }
 
-    private void AtivarHint(){
-        hint.SetActive(!hint.activeSelf);
+    private void AtivarHint(int fala)
+    {
+        // hint.SetActive(true);
+        // DialogueHint.instance.currentLineIndex = fala;
+        // DialogueHint.instance.ShowNextDialogueLine(fala);
     }
-    
-    private Keyboard keyboard;
-    private Mouse mouse;
+    private void DesativarHint()
+    {
+        //hint.SetActive(false);
+    }
+
+    void PassarObjetivo()
+    {
+        gameStateVariables[1].ChangeValue(true);
+        PontosManager.instance.condicaoPontos[PontosManager.instance.index].podeAvançar = true;
+    }
 
     IEnumerator CheckInputCoroutine(string key)
     {
+        keyboard = Keyboard.current;
+        if (keyboard == null || string.IsNullOrEmpty(key)) { inputCheck = false; yield break; }
         Debug.Log($"Esperando o jogador apertar a tecla {key.ToUpper()}...");
 
-        
+
         if (!Enum.TryParse(key, out Key keyEnum))
         {
             Debug.LogError($"Tecla {key} inválida.");
@@ -240,7 +309,7 @@ public class SampleTriggerDialogue : MonoBehaviour
             yield break;
         }
 
-        
+
         while (!keyboard[keyEnum].isPressed)
         {
             yield return null;
@@ -250,10 +319,65 @@ public class SampleTriggerDialogue : MonoBehaviour
         inputCheck = false;
         dialogueManager.AdvanceDialogue();
     }
+
+    IEnumerator CheckMouseInputCoroutine(string button)
+    {
+        mouse = Mouse.current;
+        if (mouse == null || string.IsNullOrEmpty(button)) { inputCheck = false; yield break; }
+        Debug.Log($"Esperando o jogador apertar o botão do mouse {button}...");
+
+        ButtonControl mouseButton;
+
+        switch (button.ToLower())
+        {
+            case "left":
+            case "leftbutton":
+            case "esquerdo":
+                mouseButton = mouse.leftButton;
+                break;
+            case "right":
+            case "rightbutton":
+            case "direito":
+                mouseButton = mouse.rightButton;
+                break;
+            case "middle":
+            case "middlebutton":
+            case "meio":
+                mouseButton = mouse.middleButton;
+                break;
+            default:
+                Debug.LogError($"Botão do mouse '{button}' inválido.");
+                inputCheck = false;
+                yield break;
+        }
+
+        while (!mouseButton.isPressed)
+        {
+            yield return null;
+        }
+
+        Debug.Log($"Parabéns! Você apertou o botão do mouse {button}.");
+        inputCheck = false;
+        dialogueManager.AdvanceDialogue();
+    }
+
+
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow; 
-        Gizmos.DrawWireSphere(transform.position, distanciaPlayer); 
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, distanciaPlayer);
     }
+
+    private void OnDestroy()
+    {
+        if (choiceHandler != null) choiceHandler.OnChoiceDraw -= OnChoiceDraw;
+        if (dialogueManager == null || !initialized) return;
+        dialogueManager.dialogueCallbackActions.OnNodeLeave -= OnNodeLeave;
+        dialogueManager.dialogueCallbackActions.OnNodeEnter -= OnNodeEnter;
+        dialogueManager.dialogueCallbackActions.OnDialogueGraphEnd -= OnDialogueEnded;
+        dialogueManager.DeregisterEventHandler(TestEventHandler);
+        if (dialogueActive) dialogueManager.StopDialogue();
+    }
+
 }
 

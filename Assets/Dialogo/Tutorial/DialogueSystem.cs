@@ -7,8 +7,9 @@ using Unity.VisualScripting;
 
 namespace RPGKarawara
 {
-    public class DialogueSystem : MonoBehaviour
+    public class DialogueHint : MonoBehaviour
     {
+        public static DialogueHint instance;
         public TextMeshProUGUI dialogueText; // Arraste e solte o componente de texto da UI aqui no Inspector
         public string[] dialogueLines;
         public int currentLineIndex = -2;
@@ -121,35 +122,18 @@ namespace RPGKarawara
         //         }
         //     }
         // }
-
-        void OnEnable(){
-            ShowNextDialogueLine();
+        
+        void Awake(){
+            instance = this;
         }
 
-        void ShowNextDialogueLine()
+        public void ShowNextDialogueLine(int dialogue)
         {
-            if (dialogueLines.Length > 0)
+            if (dialogue >= 0 && dialogue < dialogueLines.Length)
             {
-
-                currentLineIndex++;
-                if (currentLineIndex >= dialogueLines.Length)
-                {
-                    dialogueText.text = "";
-                }
-                else if(currentLineIndex > -1)
-                {
-                    dialogueText.text = dialogueLines[currentLineIndex];
-
-                }
-                else {
-                    Debug.Log("-2");
-                }
+                dialogueText.text = dialogueLines[dialogue];
+                wait = false;
             }
-            else
-            {
-                Debug.Log("AAA");
-            }
-            wait = false;
         }
     }
 }

@@ -42,23 +42,17 @@ public class SceneChecker : MonoBehaviour{
         
             statusBar.SetActive(false);
     }
-    public void teleportSpawn(){
-        var player = GameObject.FindGameObjectWithTag("Player");
-        spawn = GameObject.FindGameObjectWithTag("Spawn");
-        if (player == null) return; // The menu may load before the network player exists.
-        if (spawn == null)
-        {
-            Debug.LogWarning("Scene '" + SceneManager.GetActiveScene().name + "' has no Spawn marker; player position is preserved.", this);
-            return;
-        }
-        player.transform.position = spawn.transform.position;
+    public void teleportSpawn(Vector3 spawnPosition){
+         //var player = GameObject.FindGameObjectWithTag("Player");
+        // spawn = GameObject.FindGameObjectWithTag("Spawn");
+        // player.transform.position = spawnPosition;
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Verifica se a cena carregada é "SceneMenu"
         if (scene.name == "SceneMenu"){
             var player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) player.transform.position = new Vector3(0,30,0);
+          //  player.transform.position = new Vector3(0,30,0);
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -69,10 +63,13 @@ public class SceneChecker : MonoBehaviour{
         else
         {
             if (PlayerCamera.instance != null) PlayerCamera.instance.canFollow = true;
-            teleportSpawn();
+            //Vector3 spawn = new Vector3(saveData.xPosition, saveData.yPosition, saveData.zPosition);
+           // teleportSpawn(spawn);
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            if (WorldSaveGameManager.instance != null && WorldSaveGameManager.instance.loadscene != null)
+                WorldSaveGameManager.instance.loadscene.desativado();
             //statusBar.SetActive(true);
             // Exibe uma mensagem no console
            

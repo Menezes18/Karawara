@@ -25,14 +25,18 @@ namespace RPGKarawara
             character.characterCombatManager.DisableCanDoCombo();
             character.characterCombatManager.DisableCanDoRollingAttack();
             character.characterCombatManager.DisableCanDoBackstepAttack();
+            
+            if (character.characterEffectsManager.activeSpellWarmUpFX != null)
+                Destroy(character.characterEffectsManager.activeSpellWarmUpFX);
 
             if (character.IsOwner)
             {
                 character.characterNetworkManager.isJumping.Value = false;
                 character.characterNetworkManager.isInvulnerable.Value = false;
+                character.characterNetworkManager.isAttacking.Value = false;
             }
             
-            character.animator.SetBool("Released", false);
+           // character.animator.SetBool("Released", false);
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

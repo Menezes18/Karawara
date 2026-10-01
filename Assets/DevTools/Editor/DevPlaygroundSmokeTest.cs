@@ -81,12 +81,12 @@ namespace RPGKarawara.DevTools
             report = new Report { startedUtc = DateTime.UtcNow.ToString("O"), scene = SceneManager.GetActiveScene().path,
                 persistentDataPath = Application.persistentDataPath };
             includePreviews = previews;
-            reportPath = previews ? "Docs/DevPlaygroundSmokeTest.json" : "Docs/DevPlaygroundGameplaySmokeTest.json";
+            reportPath = previews ? "Docs/HomolDevPlaygroundSmokeTest.json" : "Docs/HomolDevPlaygroundGameplaySmokeTest.json";
             steps.Clear(); singletonIdentities.Clear(); current = null;
             originalPosition = controller.Player.transform.position;
             originalRotation = controller.Player.transform.rotation;
             originalGodMode = controller.Player.characterNetworkManager.isInvulnerable.Value;
-            foreach (var asset in controller.catalog.skills.Cast<ScriptableObject>().Concat(controller.catalog.weapons))
+            foreach (var asset in controller.catalog.skills.Cast<ScriptableObject>().Concat(controller.catalog.weapons).Concat(controller.catalog.spells))
                 if (asset != null) report.originalAssets.Add(new Snapshot { path = AssetDatabase.GetAssetPath(asset),
                     json = EditorJsonUtility.ToJson(asset), asset = asset, sha256 = HashAsset(asset) });
             report.saveFilesBefore = SaveFiles();
@@ -96,7 +96,12 @@ namespace RPGKarawara.DevTools
             Add("Host / owner / save isolation / navigation", null, () =>
             {
                 Require(controller.Network.IsHost && controller.Network.IsServer && controller.Network.IsListening, "Local NGO host not listening.");
+                var transport = controller.Network.NetworkConfig.NetworkTransport as Unity.Netcode.Transports.UTP.UnityTransport;
+                Require(transport != null && transport.GetLocalEndpoint().Port != 0, "Host has no bound UDP port.");
                 Require(controller.Player.IsOwner && controller.Player.NetworkObject.IsSpawned, "Production player not owned/spawned.");
+                var initialSpell = controller.Player.playerInventoryManager.currentSpell;
+                Require(initialSpell != null && controller.Player.playerNetworkManager.currentSpellID.Value == initialSpell.itemID,
+                    "Default equipped spell was not published through the network variable.");
                 Require(WorldSaveGameManager.DevPlaygroundIsolationActive, "Save isolation guard inactive.");
                 Require(Time.timeScale > 0, "Time scale is paused; timed effect validation requires advancing gameplay.");
                 Require(NavMesh.CalculateTriangulation().vertices.Length > 0, "No runtime navigation triangles.");
@@ -184,13 +189,20 @@ namespace RPGKarawara.DevTools
                     }
                     var target = gateStation.levers[leverIndex].GetComponent<Interactable>();
                     Require(target != null && target.lever == gateStation.levers[leverIndex], "Lever Interactable is not wired.");
+                    var animation = gateStation.levers[leverIndex].animationTrigger;
+                    Require(animation != null && animation.animator != null && animation.cam != null && animation.target != null,
+                        "Homol AnimationTrigger camera, animator or target is missing.");
                     target.Interact(controller.Player);
+                    Require(Time.timeScale == 0 && animation.cam.enabled && animation.animator.updateMode == AnimatorUpdateMode.UnscaledTime,
+                        "Homol lever did not begin its camera animation with unscaled time.");
                 }, () =>
                 {
                     Require(gateStation.levers[leverIndex].isActive, "Interaction did not activate lever.");
-                    Require(Time.timeScale == 1 && !gateStation.cutScenePortao.cameraObject.activeSelf, "Lever cutscene did not restore gameplay after 2s.");
+                    var animation = gateStation.levers[leverIndex].animationTrigger;
+                    Require(Time.timeScale == 1 && !animation.cam.enabled, "Homol animation event did not restore gameplay.");
+                    Require(animation.target.activeSelf, "Homol AtivarCollider event did not toggle the lever indicator.");
                     if (leverIndex == 1) Require(!gateStation.gate.activeSelf && gateStation.PortaoAtivo, "Both levers failed to open gate.");
-                    return "Production Interactable -> Lever -> CutScenePortao sequence completed; gate active=" + gateStation.gate.activeSelf;
+                    return "Production Interactable -> Lever -> AnimationTrigger events completed; gate active=" + gateStation.gate.activeSelf;
                 }, 2.3);
             }
             Add("Restore lever station after smoke interaction", () =>
@@ -274,6 +286,19 @@ namespace RPGKarawara.DevTools
                     return "Equipped runtime clone " + equipped.name + ", ID=" + equipped.itemID;
                 }, .3);
             }
+            foreach (var spell in controller.catalog.spells)
+            {
+                if (spell == null) continue;
+                Add("Spell equip / " + spell.name, () => controller.EquipSpell(spell), () =>
+                {
+                    var equipped = controller.Player.playerInventoryManager.currentSpell;
+                    Require(equipped != null && equipped != spell, "Spell absent or original asset used.");
+                    Require(equipped.GetType() == spell.GetType(), "Wrong spell type selected.");
+                    Require(controller.Player.playerNetworkManager.currentSpellID.Value == equipped.itemID,
+                        "Spell network ID does not match equipped clone.");
+                    return "Production spell selected through network callback: " + equipped.name;
+                }, .3);
+            }
             for (int i = 0; i < controller.catalog.enemies.Length; i++)
             {
                 int index = i;
@@ -313,56 +338,58 @@ namespace RPGKarawara.DevTools
                 }, 1);
             }
             int cucaIndex = Array.FindIndex(controller.catalog.enemies,
-                e => e.prefab != null && e.prefab.GetComponent<CucaBossHealth>() != null);
-            CucaBossHealth[] cucas = Array.Empty<CucaBossHealth>();
+                e => e.prefab != null && e.prefab.GetComponent<CucaBoss>() != null);
+            HealthManager[] cucas = Array.Empty<HealthManager>();
             float firstHealth = 0, secondHealth = 0;
-            var healthField = typeof(CucaBossHealth).GetField("currentHealth", BindingFlags.Instance | BindingFlags.NonPublic);
-            var aiField = typeof(global::EnemyAI).GetField("_bossAISystem", BindingFlags.Instance | BindingFlags.NonPublic);
-            Add("Legacy Cuca / two instances bind their own AI", () =>
+            var healthField = typeof(CucaBoss).GetField("healthManager", BindingFlags.Instance | BindingFlags.NonPublic);
+            Add("Homol Cuca / two instances bind their own health", () =>
             {
-                Require(cucaIndex >= 0, "Catalog has no CucaBossHealth entry (generate CucaDev and refresh catalog).");
+                Require(cucaIndex >= 0, "Catalog has no Homol Cuca entry (generate CucaDev and refresh catalog).");
                 controller.ClearEnemies(); controller.Heal(); controller.SetGodMode(true); controller.Teleport(controller.playerSpawn);
+                var spear = controller.catalog.weapons.FirstOrDefault(w => w != null && w.weaponModel != null &&
+                    w.weaponModel.GetComponentsInChildren<MeleeWeaponDamageCollider>(true).Any(m => m.CompareTag("Lanca")));
+                Require(spear != null, "Catalog lacks a production spear with the Lanca damage collider.");
+                controller.EquipWeapon(spear);
                 controller.SetEnemySelection(cucaIndex, 2); controller.SpawnEnemies();
             }, () =>
             {
-                cucas = Object.FindObjectsByType<CucaBossHealth>(FindObjectsInactive.Exclude)
+                cucas = Object.FindObjectsByType<HealthManager>(FindObjectsInactive.Exclude)
                     .OrderBy(c => c.GetEntityId().ToString()).ToArray();
-                Require(controller.SpawnedEnemyCount == 2 && cucas.Length == 2, "Expected exactly two live legacy Cuca instances.");
-                Require(aiField != null && healthField != null, "Production Cuca private fields changed; update smoke runner.");
+                Require(controller.SpawnedEnemyCount == 2 && cucas.Length == 2, "Expected exactly two live Homol Cuca instances.");
+                Require(healthField != null, "Production Cuca private fields changed; update smoke runner.");
                 foreach (var cuca in cucas)
                 {
-                    var ai = cuca.GetComponent<global::EnemyAI>();
-                    var system = cuca.GetComponent<BossAISystem>();
-                    Require(ai != null && system != null && aiField.GetValue(ai) == system,
-                        "EnemyAI did not bind its own BossAISystem on " + cuca.name);
+                    var ai = cuca.GetComponent<CucaBoss>();
+                    Require(ai != null && healthField.GetValue(ai) as HealthManager == cuca,
+                        "CucaBoss did not bind its own HealthManager on " + cuca.name);
                 }
-                return "Two production Cuca roots spawned; each EnemyAI._bossAISystem references its own component after Start.";
+                return "Two Homol Cuca roots spawned; each CucaBoss uses its own HealthManager after Start.";
             }, 1);
-            Add("Legacy Cuca / weapon trigger damages only contacted boss", () =>
+            Add("Homol Cuca / weapon trigger damages only contacted boss", () =>
             {
                 Require(cucas.Length == 2 && cucas.All(c => c != null), "Two Cuca instances unavailable for damage case.");
-                var trigger = cucas[0].GetComponentsInChildren<Collider>()
-                    .FirstOrDefault(c => c.enabled && c.GetComponentInParent<CucaBossHealth>() == cucas[0]);
                 var melee = controller.Player.GetComponentsInChildren<MeleeWeaponDamageCollider>()
-                    .FirstOrDefault(m => m.enabled && m.gameObject.activeInHierarchy);
-                Require(trigger != null && melee != null, "Active Cuca collider or equipped player weapon damage component missing.");
+                    .FirstOrDefault(m => m.enabled && m.gameObject.activeInHierarchy && m.CompareTag("Lanca"));
+                Require(melee != null, "Equipped player weapon damage component missing.");
+                var trigger = melee.GetComponent<Collider>();
+                Require(trigger != null && trigger.CompareTag("Lanca"), "Homol weapon trigger must have the production Lanca tag.");
                 Require(melee.characterCausingDamage == controller.Player, "Equipped melee collider is not assigned to the production player.");
-                firstHealth = (float)healthField.GetValue(cucas[0]); secondHealth = (float)healthField.GetValue(cucas[1]);
-                var method = typeof(MeleeWeaponDamageCollider).GetMethod("OnTriggerEnter", BindingFlags.Instance | BindingFlags.NonPublic);
+                firstHealth = cucas[0].currentHealth; secondHealth = cucas[1].currentHealth;
+                var method = typeof(HealthManager).GetMethod("OnTriggerEnter", BindingFlags.Instance | BindingFlags.NonPublic);
                 Require(method != null, "Production melee trigger method unavailable.");
                 float oldDamage = melee.physicalDamage;
-                try { melee.physicalDamage = 7; method.Invoke(melee, new object[] { trigger }); }
+                try { melee.physicalDamage = 7; method.Invoke(cucas[0], new object[] { trigger }); }
                 finally { melee.physicalDamage = oldDamage; }
             }, () =>
             {
-                float firstAfter = (float)healthField.GetValue(cucas[0]);
-                float secondAfter = (float)healthField.GetValue(cucas[1]);
+                float firstAfter = cucas[0].currentHealth;
+                float secondAfter = cucas[1].currentHealth;
                 Require(Mathf.Approximately(firstAfter, firstHealth - 7), "Contacted Cuca did not lose exactly seven health.");
                 Require(Mathf.Approximately(secondAfter, secondHealth), "Uncontacted Cuca health changed (singleton damage regression).");
-                return "Real equipped MeleeWeaponDamageCollider.OnTriggerEnter invoked against first Cuca collider; health "
+                return "Homol HealthManager.OnTriggerEnter invoked with the equipped Lanca collider against first Cuca; health "
                     + firstHealth + " -> " + firstAfter + "; second boss unchanged at " + secondAfter + ".";
             }, .2);
-            Add("Legacy Cuca / 15s projectile and dash observation", null, () =>
+            Add("Homol Cuca / 15s projectile and laser observation", null, () =>
             {
                 Require(cucas.Length == 2 && cucas.All(c => c != null), "Cuca disappeared during AI observation.");
                 foreach (var cuca in cucas)
@@ -423,7 +450,7 @@ namespace RPGKarawara.DevTools
             Flush();
             Application.logMessageReceived += CaptureLog;
             EditorApplication.update += Update;
-            Debug.Log("[DevPlayground smoke] Started " + steps.Count + " cases; report will be written to Docs/DevPlaygroundSmokeTest.json.");
+            Debug.Log("[DevPlayground smoke] Started " + steps.Count + " cases; report will be written to Docs/HomolDevPlaygroundSmokeTest.json.");
         }
 
         private static void Add(string name, Action begin, Func<string> verify, double wait)

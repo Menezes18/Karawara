@@ -43,6 +43,8 @@ namespace DialogueSystem
         private Dictionary<int, CharacterInfo> characterMap = new Dictionary<int, CharacterInfo>();
         private List<TextEffectWrapper> _textEffects = new List<TextEffectWrapper>();
         private Dictionary<int, float> _waitIndices = new Dictionary<int, float>();
+        private Coroutine typewriterCoroutine;
+        private Action<DialogueEventType> typewriterCompletion;
 
         public enum TextDisplayMode
         {
@@ -147,8 +149,24 @@ namespace DialogueSystem
             if (IsAnimating)
             {
                 _textComponent.maxVisibleCharacters = _textComponent.textInfo.characterCount;
-                IsAnimating = false;
+                var completion = typewriterCompletion;
+                StopTypewriter();
+                completion?.Invoke(DialogueEventType.OnTextEnd);
             }
+        }
+
+        public void StopTypewriter()
+        {
+            if (typewriterCoroutine != null) StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+            typewriterCompletion = null;
+            IsAnimating = false;
+            speedUp = false;
+        }
+
+        private void OnDisable()
+        {
+            StopTypewriter();
         }
 
         public void SpeedUp(bool toggle)
@@ -161,9 +179,11 @@ namespace DialogueSystem
 
         public void Typewriter(string text, Action<DialogueEventType> callback, float? typewriterSpeedOverride = null)
         {
+            StopTypewriter();
+            typewriterCompletion = callback;
             _textComponent.maxVisibleCharacters = 0;
             _textComponent.text = text;
-            StartCoroutine(TypewriterEffect(callback, typewriterSpeedOverride));
+            typewriterCoroutine = StartCoroutine(TypewriterEffect(callback, typewriterSpeedOverride));
         }
 
         public IEnumerator TypewriterEffect(Action<DialogueEventType> callback, float? speedOverride)
@@ -193,8 +213,10 @@ namespace DialogueSystem
                 yield return new WaitForSeconds(typeWriterWaitTime);
             }
 
-            callback(DialogueEventType.OnTextEnd);
             IsAnimating = false;
+            typewriterCoroutine = null;
+            typewriterCompletion = null;
+            callback?.Invoke(DialogueEventType.OnTextEnd);
             yield return null;
         }
 
@@ -330,7 +352,7 @@ namespace DialogueSystem
 
         void LateUpdate()
         {
-
+            if (_textComponent == null || theme == null) return;
             if (!Paused)
             {
                 _textInfo = _textComponent.textInfo;

@@ -1,0 +1,8 @@
+# Runtime regression bodies (Unity MCP execute_code)
+
+Use the contents of each `.cs.txt` as the C#6 body for `execute_code` with `action: execute`. These files are outside Assets and do not compile into the game. Run only one fixture at a time in a fresh, ready DevPlayground Play session, with no spawned enemies and save isolation active. Stop Play after completion; do not edit/import scripts during a run.
+
+- `HomolInputRoutingRegression.cs.txt`: runs the existing input regression with temporary cloned InputSettings routing, virtual-device current selection and focus recovery. Restores original settings when the report is written. Read `Docs/HomolInputRegression.json`; only a completed result with observations and no errors is proof.
+- `HomolCombatWindowRegression.cs.txt`: real enemy idle contact, authored animation attack window, real Q/tap/hold fireball input and natural action completion before restoring equipment. Its report is `Docs/HomolCombatWindowRegression.json`. Physical overlap is positioned by the fixture; natural reach/AI decision quality is outside the test. Cloned focus settings are temporary. Save isolation is required but this fixture does not fingerprint disk saves; the gameplay/production smoke runners do.
+
+Input fixtures use explicit temporary focus routing because a background Editor can consume synthetic keyboard/mouse events. They do not establish physical keyboard behavior while GameView lacks focus. The combat fixture waits for the full-charge action to finish naturally, up to eight game seconds after release; restoring equipment after four seconds was premature and invalidated a following input test.
