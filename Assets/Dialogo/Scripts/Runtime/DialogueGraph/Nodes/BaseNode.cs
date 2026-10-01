@@ -19,7 +19,7 @@ namespace DialogueSystem
         protected override void Init()
         {
 #if UNITY_EDITOR
-            id = UnityEditor.GUID.Generate().ToString();
+            id = UnityEngine.GUID.Generate().ToString();
 #else
             id = System.Guid.NewGuid().ToString(); // Alternativa fora do Editor
 #endif

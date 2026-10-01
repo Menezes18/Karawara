@@ -60,10 +60,9 @@ namespace RPGKarawara
                 DamageTarget(damageTarget);
             }
 
-            if (other.CompareTag("TriggerBoss")){
-                Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAAA");
-                CucaBossHealth.instancia.TakeDamage(physicalDamage);
-            }
+            // The scene Cuca has untagged colliders; identify the actual health component.
+            var bossHealth = other.GetComponentInParent<CucaBossHealth>();
+            if (bossHealth != null) bossHealth.TakeDamage(physicalDamage);
         }
 
         public CucaBossHealth a;

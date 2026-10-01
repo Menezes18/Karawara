@@ -39,7 +39,7 @@ public class SpawnMeteorScript : MonoBehaviour {
 				GameObject vfx = Instantiate (vfxPrefab, startPos, Quaternion.identity) as GameObject;
 				var destination = endPos - startPos;				
 				RotateTo (vfx, endPos);
-				vfx.GetComponent<Rigidbody>().velocity = destination.normalized * projectileSpeed;
+				vfx.GetComponent<Rigidbody>().linearVelocity = destination.normalized * projectileSpeed;
 
 				yield return new WaitForSeconds (rateDelay);
 			}

@@ -7,7 +7,6 @@ using UnityEngine.Events;
 [Serializable]
 public class DialogueConditional
 {
-    [SerializeField]
     public enum VariableType
     {
         INT,
@@ -16,7 +15,6 @@ public class DialogueConditional
         FLOAT
     };
 
-    [SerializeField]
     public enum NumberCondition
     {
         LessThan,

@@ -35,6 +35,10 @@ namespace RPGKarawara{
         }
         public void DeactivateAllSkillsAndResetCooldown()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // The playground operates on cloned skills, never on project assets.
+            if (WorldSaveGameManager.DevPlaygroundIsolationActive) return;
+#endif
             // Encontra todas as instâncias de Skill no jogo
             allSkills = Resources.FindObjectsOfTypeAll<Skill>();
 

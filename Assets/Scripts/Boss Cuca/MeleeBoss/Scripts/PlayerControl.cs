@@ -34,7 +34,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private BossAISystem _bossAISystem;
     private void Start(){
         player = GameObject.FindGameObjectWithTag(PlayerTag).transform;
-        _bossAISystem = FindObjectOfType<BossAISystem>();
+        // Each actor owns its attack cycle; scene-wide lookup could select another boss.
+        if (_bossAISystem == null) _bossAISystem = GetComponent<BossAISystem>();
+        if (_bossAISystem == null) _bossAISystem = FindAnyObjectByType<BossAISystem>();
     }
 
     void Update()

@@ -18,7 +18,7 @@ namespace RPGKarawara
 
         private void Start()
         {
-            WorldObjectManager.instance.SpawnObject(this);
+            WorldObjectManager.GetOrCreateInstance().SpawnObject(this);
             gameObject.SetActive(false);
         }
 

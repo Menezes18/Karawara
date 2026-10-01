@@ -116,7 +116,7 @@ namespace RPGKarawara
 
 
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            rb.velocity = direction * _projectile.projectileSpeed;
+            rb.linearVelocity = direction * _projectile.projectileSpeed;
             
             rb.useGravity = false; 
             

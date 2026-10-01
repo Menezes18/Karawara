@@ -9,7 +9,6 @@ public class SceneChecker : MonoBehaviour{
     public GameObject spawn;
     void Awake()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
         // Marca este objeto para não ser destruído ao carregar uma nova cena
         DontDestroyOnLoad(gameObject);
     }
@@ -46,6 +45,12 @@ public class SceneChecker : MonoBehaviour{
     public void teleportSpawn(){
         var player = GameObject.FindGameObjectWithTag("Player");
         spawn = GameObject.FindGameObjectWithTag("Spawn");
+        if (player == null) return; // The menu may load before the network player exists.
+        if (spawn == null)
+        {
+            Debug.LogWarning("Scene '" + SceneManager.GetActiveScene().name + "' has no Spawn marker; player position is preserved.", this);
+            return;
+        }
         player.transform.position = spawn.transform.position;
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -53,7 +58,7 @@ public class SceneChecker : MonoBehaviour{
         // Verifica se a cena carregada é "SceneMenu"
         if (scene.name == "SceneMenu"){
             var player = GameObject.FindGameObjectWithTag("Player");
-            player.transform.position = new Vector3(0,30,0);
+            if (player != null) player.transform.position = new Vector3(0,30,0);
             // Ativa o cursor do mouse
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -63,7 +68,7 @@ public class SceneChecker : MonoBehaviour{
         }
         else
         {
-            PlayerCamera.instance.canFollow = true;
+            if (PlayerCamera.instance != null) PlayerCamera.instance.canFollow = true;
             teleportSpawn();
             // Desativa o cursor do mouse e trava no centro da tela
             Cursor.visible = false;

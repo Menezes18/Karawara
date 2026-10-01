@@ -37,6 +37,7 @@ namespace RPGKarawara
 
         public AudioClip ChooseRandomSFXFromArray(AudioClip[] array)
         {
+            if (array == null || array.Length == 0) return null;
             int index = Random.Range(0, array.Length);
 
             return array[index];

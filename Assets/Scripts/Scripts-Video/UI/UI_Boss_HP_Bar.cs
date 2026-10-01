@@ -20,7 +20,8 @@ namespace RPGKarawara
 
         private void OnDestroy()
         {
-            bossCharacter.aiCharacterNetworkManager.currentHealth.OnValueChanged -= OnBossHPChanged;
+            if (bossCharacter != null && bossCharacter.aiCharacterNetworkManager != null)
+                bossCharacter.aiCharacterNetworkManager.currentHealth.OnValueChanged -= OnBossHPChanged;
         }
 
         private void OnBossHPChanged(int oldValue, int newValue)

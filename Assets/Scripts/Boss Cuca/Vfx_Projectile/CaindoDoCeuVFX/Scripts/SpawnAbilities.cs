@@ -436,9 +436,9 @@ public class SpawnAbilities : MonoBehaviour
                         if(rb != null)
                         {
                             if(effectToSpawn.VFXMarker != null)
-                                projectileVFX.GetComponent<Rigidbody>().velocity = vfxMarker.transform.forward * effectToSpawn.projectileSpeed;
+                                projectileVFX.GetComponent<Rigidbody>().linearVelocity = vfxMarker.transform.forward * effectToSpawn.projectileSpeed;
                             else
-                                projectileVFX.GetComponent<Rigidbody>().velocity = transform.forward * effectToSpawn.projectileSpeed;
+                                projectileVFX.GetComponent<Rigidbody>().linearVelocity = transform.forward * effectToSpawn.projectileSpeed;
                         }
                         else
                         {

@@ -46,7 +46,8 @@ namespace RPGKarawara
 
         private void Awake()
         {
-            SkillTreeUiManager.instance.DeactivateAllSkillsAndResetCooldown();
+            if (SkillTreeUiManager.instance != null)
+                SkillTreeUiManager.instance.DeactivateAllSkillsAndResetCooldown();
         }
 
         void Start()

@@ -19,7 +19,8 @@ namespace RPGKarawara
 
         public void Start()
         {
-            suporte.enabled = false;
+            if (suporte != null)
+                suporte.enabled = false;
             eroding = false;
         }
 

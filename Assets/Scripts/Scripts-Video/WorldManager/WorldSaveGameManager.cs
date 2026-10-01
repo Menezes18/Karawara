@@ -10,6 +10,17 @@ namespace RPGKarawara
     {
         public static WorldSaveGameManager instance;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        // The dedicated playground uses in-memory character data, including boss rewards.
+        public static bool DevPlaygroundIsolationActive { get; set; }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetDevelopmentIsolation()
+        {
+            DevPlaygroundIsolationActive = false;
+        }
+#endif
+
         public PlayerManager player;
 
         [Header("SAVE/LOAD")]
@@ -117,6 +128,9 @@ namespace RPGKarawara
         }
         public void AttemptToCreateNewGame()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return;
+#endif
             saveFileDataWriter = new SaveFileDataWriter();
             saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
 
@@ -232,6 +246,9 @@ namespace RPGKarawara
         }
         public void OnSlotOverwriteSelected(string selectedSlot)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return;
+#endif
 
             switch (selectedSlot)
             {
@@ -293,6 +310,9 @@ namespace RPGKarawara
        
         public void LoadGame()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return;
+#endif
             //  LOAD A PREVIOUS FILE, WITH A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING
             saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(currentCharacterSlotBeingUsed);
 
@@ -307,6 +327,9 @@ namespace RPGKarawara
 
         public void SaveGame()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return;
+#endif
             //  SAVE THE CURRENT FILE UNDER A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING
             saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(currentCharacterSlotBeingUsed);
 
@@ -324,6 +347,9 @@ namespace RPGKarawara
 
         public void DeleteGame(CharacterSlot characterSlot)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return;
+#endif
             //  CHOOSE FILE BASED ON NAME
             saveFileDataWriter = new SaveFileDataWriter();
             saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
@@ -334,6 +360,9 @@ namespace RPGKarawara
         //  LOAD ALL CHARACTER PROFILES ON DEVICE WHEN STARTING GAME
         private void LoadAllCharacterProfiles()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return;
+#endif
             saveFileDataWriter = new SaveFileDataWriter();
             saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
 
@@ -370,6 +399,9 @@ namespace RPGKarawara
 
         public IEnumerator LoadWorldScene()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) yield break;
+#endif
             //  IF YOU JUST WANT 1 WORLD SCENE USE THIS
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
 

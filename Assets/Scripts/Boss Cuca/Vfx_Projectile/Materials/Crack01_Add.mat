@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 10
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -21,7 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Crack01_Add
-  m_Shader: {fileID: -6465566751694194690, guid: 6851fe0a292ce074ca0be49ec934f99d, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 6851fe0a292ce074ca0be49ec934f99d,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,3 +62,4 @@ Material:
     m_Colors:
     - Color_7D9E84EC: {r: 47.937256, g: 47.937256, b: 47.937256, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
