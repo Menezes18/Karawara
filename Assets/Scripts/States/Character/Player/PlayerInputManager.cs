@@ -125,7 +125,9 @@ namespace RPGKarawara
                 playerControls = new PlayerControls();
 
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+                playerControls.PlayerMovement.Movement.canceled += i => movementInput = Vector2.zero;
                 playerControls.PlayerCamera.Movement.performed += i => camera_Input = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Movement.canceled += i => camera_Input = Vector2.zero;
 
                 //  ACTIONS
                 playerControls.PlayerActions.Dodge.performed += i => dodge_Input = true;

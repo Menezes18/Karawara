@@ -73483,6 +73483,7 @@ GameObject:
   - component: {fileID: 268511995}
   - component: {fileID: 268511994}
   - component: {fileID: 268511999}
+  - component: {fileID: 9102000000000000003}
   m_Layer: 5
   m_Name: FadeController
   m_TagString: Untagged
@@ -101444,7 +101445,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 384681791}
   m_SourcePrefab: {fileID: 100100000, guid: 222cd055944b4f04fad28b3d97320eb9, type: 3}
 --- !u!1001 &385261260
 PrefabInstance:
@@ -159088,7 +159093,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 592149830}
   m_SourcePrefab: {fileID: 100100000, guid: 222cd055944b4f04fad28b3d97320eb9, type: 3}
 --- !u!1001 &592379790
 PrefabInstance:
@@ -188991,7 +189000,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 699057040}
   m_SourcePrefab: {fileID: 100100000, guid: 222cd055944b4f04fad28b3d97320eb9, type: 3}
 --- !u!1001 &699086139
 PrefabInstance:
@@ -206998,7 +207011,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 760622772}
   m_SourcePrefab: {fileID: 100100000, guid: 222cd055944b4f04fad28b3d97320eb9, type: 3}
 --- !u!1001 &760906199
 PrefabInstance:
@@ -465363,7 +465380,11 @@ PrefabInstance:
     - {fileID: 5125024050930424540, guid: dcacf787d88bafa4d931806661b94d58, type: 3}
     - {fileID: 5564146108870417062, guid: dcacf787d88bafa4d931806661b94d58, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3924004044231083066, guid: dcacf787d88bafa4d931806661b94d58,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1741042517}
   m_SourcePrefab: {fileID: 100100000, guid: dcacf787d88bafa4d931806661b94d58, type: 3}
 --- !u!1001 &1741938305
 PrefabInstance:
@@ -507113,6 +507134,7 @@ GameObject:
   - component: {fileID: 1904525703}
   - component: {fileID: 1904525702}
   - component: {fileID: 1904525701}
+  - component: {fileID: 9102100000000000003}
   m_Layer: 0
   m_Name: Camera_Maping
   m_TagString: Untagged
@@ -576497,6 +576519,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2022972932}
+    - targetCorrespondingSourceObject: {fileID: 468461242629178838, guid: 7eae24fd18373214e9c04b08f9a0ce8f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2022972933}
   m_SourcePrefab: {fileID: 100100000, guid: 7eae24fd18373214e9c04b08f9a0ce8f, type: 3}
 --- !u!4 &4815765713624853445 stripped
 Transform:
@@ -579924,6 +579950,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 63990857}
+    - targetCorrespondingSourceObject: {fileID: 3668245375423745281, guid: 4b882cf18f60ddd4f93e9c63420303da,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 63990858}
   m_SourcePrefab: {fileID: 100100000, guid: 4b882cf18f60ddd4f93e9c63420303da, type: 3}
 --- !u!4 &5627608588760656657 stripped
 Transform:
@@ -582056,7 +582086,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6828489500135118064}
   m_SourcePrefab: {fileID: 100100000, guid: 222cd055944b4f04fad28b3d97320eb9, type: 3}
 --- !u!4 &6831115810189136435 stripped
 Transform:
@@ -587143,3 +587177,406 @@ SceneRoots:
   - {fileID: 1650561976}
   - {fileID: 650711811}
   - {fileID: 1904525706}
+--- !u!114 &63990858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63990856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 63990857}
+--- !u!1 &1741042515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3924004044231083066, guid: dcacf787d88bafa4d931806661b94d58,
+    type: 3}
+  m_PrefabInstance: {fileID: 1741042514}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1741042516 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7772967333271340282, guid: dcacf787d88bafa4d931806661b94d58,
+    type: 3}
+  m_PrefabInstance: {fileID: 1741042514}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1741042517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741042515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 1741042516}
+--- !u!114 &2022972933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2022972931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 2022972932}
+--- !u!114 &384681786 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 261296087370929713, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 384681785}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &384681787 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6523171194613912568, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 384681785}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &384681788 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8992860352010233730, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 384681785}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3c34ac6c755145a637377dc0dbe4c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!1 &384681789 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 384681785}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &384681790 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 933471997138235169, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 384681785}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &384681791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384681789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 384681790}
+  reviewedComponents:
+  - {fileID: 384681787}
+  - {fileID: 384681786}
+  - {fileID: 384681788}
+--- !u!114 &592149825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 261296087370929713, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 592149824}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &592149826 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6523171194613912568, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 592149824}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &592149827 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8992860352010233730, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 592149824}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3c34ac6c755145a637377dc0dbe4c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!1 &592149828 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 592149824}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &592149829 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 933471997138235169, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 592149824}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &592149830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592149828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 592149829}
+  reviewedComponents:
+  - {fileID: 592149826}
+  - {fileID: 592149825}
+  - {fileID: 592149827}
+--- !u!114 &699057035 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 261296087370929713, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 699057034}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &699057036 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6523171194613912568, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 699057034}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &699057037 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8992860352010233730, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 699057034}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3c34ac6c755145a637377dc0dbe4c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!1 &699057038 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 699057034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &699057039 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 933471997138235169, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 699057034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &699057040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699057038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 699057039}
+  reviewedComponents:
+  - {fileID: 699057036}
+  - {fileID: 699057035}
+  - {fileID: 699057037}
+--- !u!114 &760622767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 261296087370929713, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 760622766}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &760622768 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6523171194613912568, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 760622766}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &760622769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8992860352010233730, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 760622766}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3c34ac6c755145a637377dc0dbe4c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!1 &760622770 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 760622766}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &760622771 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 933471997138235169, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 760622766}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &760622772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760622770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 760622771}
+  reviewedComponents:
+  - {fileID: 760622768}
+  - {fileID: 760622767}
+  - {fileID: 760622769}
+--- !u!114 &6828489500135118059 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 261296087370929713, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 6828489500135118058}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &6828489500135118060 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6523171194613912568, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 6828489500135118058}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705fc216e2fb89b46b29624929deb640, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &6828489500135118061 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8992860352010233730, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 6828489500135118058}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a3c34ac6c755145a637377dc0dbe4c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!1 &6828489500135118062 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8498046520910350390, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 6828489500135118058}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6828489500135118063 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 933471997138235169, guid: 222cd055944b4f04fad28b3d97320eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 6828489500135118058}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6828489500135118064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6828489500135118062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.Performance.PerformanceAuthoredVisual
+  visual: {fileID: 6828489500135118063}
+  reviewedComponents:
+  - {fileID: 6828489500135118060}
+  - {fileID: 6828489500135118059}
+  - {fileID: 6828489500135118061}
+--- !u!114 &9102000000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268511992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af77cec627bcf8145a6e7513f85a0632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 268511999}
+--- !u!114 &9102100000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904525700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e2a3922f06b0744b54ec58d26fd1de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visual: {fileID: 1904525702}
+  source: {fileID: 1904525701}

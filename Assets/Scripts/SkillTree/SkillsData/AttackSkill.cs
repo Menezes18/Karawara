@@ -16,6 +16,8 @@ namespace RPGKarawara.SkillTree {
                 }
 
                 GameObject projectile = Instantiate(prefab, user.transform.position + user.transform.forward, user.transform.rotation);
+                PetAttackController petController = projectile.GetComponent<PetAttackController>();
+                if (petController != null) petController.BindSkillDuration(cooldownDuration);
                 DurationSkill dSkill = projectile.GetComponent<DurationSkill>();
                 if (dSkill != null) {
                     dSkill.Init(cooldownDuration);

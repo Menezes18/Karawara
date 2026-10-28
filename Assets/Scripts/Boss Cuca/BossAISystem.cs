@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 
 public class BossAISystem : MonoBehaviour {
+    void OnEnable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Enabled);
+    void OnDisable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Disabled);
     public GameObject projectilePrefab; // O prefab do projétil
     public Transform firePoint; // Ponto de origem dos tiros
     public float range = 10f; // Distância de detecção do player

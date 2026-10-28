@@ -21,12 +21,19 @@ namespace RPGKarawara
             {
                 //Input.SpawnBoss();
                 //_active = true;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
                 _cutScene.SetActive(true);
                 _player.SetActive(false);
             }
         }
         public void FimCutScene()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
+
             _cutScene.SetActive(false);
             _player.SetActive(true);
             gameObject.SetActive(false);

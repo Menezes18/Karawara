@@ -12,6 +12,32 @@ public class Corruption : MonoBehaviour
     public float dissolveSpeed = 0.5f; // Velocidade com que a dissolução acontece
     public float vfxSpeed = 0.5f; // Velocidade com que o Arc diminui
 
+    struct OwnedMaterial
+    {
+        public Renderer renderer;
+        public Material original, instance;
+    }
+    readonly List<OwnedMaterial> ownedMaterials = new List<OwnedMaterial>();
+    Material GetDissolveMaterial(Renderer renderer)
+    {
+        var original = renderer.sharedMaterial;
+        var material = renderer.material;
+        if (material != original)
+            ownedMaterials.Add(new OwnedMaterial { renderer = renderer, original = original, instance = material });
+        return material;
+    }
+    void OnDestroy()
+    {
+        for (int i = ownedMaterials.Count - 1; i >= 0; i--)
+        {
+            var owned = ownedMaterials[i];
+            if (owned.renderer != null && owned.renderer.sharedMaterial == owned.instance)
+                owned.renderer.sharedMaterial = owned.original;
+            if (owned.instance != null) Destroy(owned.instance);
+        }
+        ownedMaterials.Clear();
+    }
+
     private void Update()
     {
         // Se a dissolução estiver ativa
@@ -51,7 +77,7 @@ public class Corruption : MonoBehaviour
                 Renderer childRenderer = child.GetComponent<Renderer>();
                 if (childRenderer != null)
                 {
-                    Material material = childRenderer.material;
+                    Material material = GetDissolveMaterial(childRenderer);
                     if (material.HasProperty("_Erode"))
                     {
                         // Faz o Erode diminuir gradualmente
@@ -93,7 +119,7 @@ public class Corruption : MonoBehaviour
                 Renderer childRenderer = child.GetComponent<Renderer>();
                 if (childRenderer != null)
                 {
-                    Material material = childRenderer.material;
+                    Material material = GetDissolveMaterial(childRenderer);
                     if (material.HasProperty("_Erode"))
                     {
                         // Reverte o valor de Erode (fazendo ele aumentar gradualmente até 0)

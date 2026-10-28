@@ -7,6 +7,10 @@ namespace RPGKarawara
 {
     public class NPCATIVAR : MonoBehaviour
     {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        private void OnEnable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+        private void OnDisable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
+#endif
         public float interactionRange = 3f; // Distância de interação
         public Transform player; // Referência ao player
         public GameObject dialogBox; // Objeto de UI do diálogo

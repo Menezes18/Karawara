@@ -7,6 +7,10 @@ using UnityEngine.AI;
 
 public class NPCMovement : MonoBehaviour
 {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+    private void OnEnable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Enabled);
+    private void OnDisable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Disabled);
+#endif
     public List<Transform> waypoints;  // Lista de waypoints que o NPC deve seguir
     public float moveSpeed = 3.5f;     // Velocidade de movimento do NPC
     public float waypointThreshold = 1f; // Distância mínima para considerar que o NPC chegou ao waypoint

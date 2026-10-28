@@ -3,6 +3,10 @@ using UnityEngine.AI;
 
 public class RandomNPCMovement : MonoBehaviour
 {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+    private void OnEnable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Enabled);
+    private void OnDisable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Disabled);
+#endif
     public float moveInterval = 3f;  // Intervalo entre os movimentos aleatórios
     public float moveRange = 10f;    // O alcance máximo de movimentação do NPC
     public float idleChance = 0.5f;  // Probabilidade de o NPC ficar parado (50%)

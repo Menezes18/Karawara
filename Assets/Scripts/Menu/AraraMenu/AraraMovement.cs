@@ -10,6 +10,11 @@ public class AraraMovement : MonoBehaviour
 
     private Vector3 direction;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+    void OnEnable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Enabled);
+    void OnDisable() => RPGKarawara.DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, RPGKarawara.DevTools.Performance.PerformanceActorLifecycle.Disabled);
+#endif
+
     void Start()
     {
         if (waypoints.Length > 0)

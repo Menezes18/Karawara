@@ -129,11 +129,10 @@ namespace RPGKarawara
             //  FLAGS
             playerNetworkManager.isChargingAttack.OnValueChanged += playerNetworkManager.OnIsChargingAttackChanged;
 
-            //  UPON CONNECTING, IF WE ARE THE OWNER OF THIS CHARACTER, BUT WE ARE NOT THE SERVER, RELOAD OUR CHARACTER DATA TO THIS NEWLY INSTANTIATED CHARACTER
-            //  WE DONT RUN THIS IF WE ARE THE SERVER, BECAUSE SINCE THEY ARE THE HOST, THEY ARE ALREADY LOADED IN AND DON'T NEED TO RELOAD THEIR DATA
-            if (IsOwner && !IsServer)
+            // Both persistent and recreated local owners use the pending generation.
+            if (IsOwner && WorldSaveGameManager.instance != null)
             {
-                LoadGameDataFromCurrentCharacterData(ref WorldSaveGameManager.instance.currentCharacterData);
+                WorldSaveGameManager.instance.ApplyPendingSaveWhenReady();
             }
         }
 
@@ -265,30 +264,65 @@ namespace RPGKarawara
 
             currentCharacterData.vitality = playerNetworkManager.vitality.Value;
             currentCharacterData.endurance = playerNetworkManager.endurance.Value;
-            SkillTreeUiManager.instance.SaveSkillsToData(currentCharacterData);
-            PlayerSkillManager.instance.SaveSkillSlot(currentCharacterData);
+            var skillUi = FindOwnedSkillUi();
+            var skills = GetComponent<PlayerSkillManager>();
+            if (skillUi == null || skills == null) throw new System.InvalidOperationException("Player skills are not ready for capture.");
+            skillUi.SaveSkillsToData(currentCharacterData);
+            skills.SaveSkillSlot(currentCharacterData);
 
         }
         
         public void LoadGameDataFromCurrentCharacterData(ref CharacterSaveData currentCharacterData)
         {
-            playerNetworkManager.characterName.Value = currentCharacterData.characterName;
-            Vector3 myPosition = new Vector3(currentCharacterData.xPosition, currentCharacterData.yPosition + 100, currentCharacterData.zPosition);
-            transform.position = myPosition;
-            //transform.transform.position = new Vector3(-159.300003f, 180.5f, 554.5f);
-            playerNetworkManager.vitality.Value = currentCharacterData.vitality;
-            playerNetworkManager.endurance.Value = currentCharacterData.endurance;
-
-            //  THIS WILL BE MOVED WHEN SAVING AND LOADING IS ADDED
-            playerNetworkManager.maxHealth.Value = playerStatsManager.CalculateHealthBasedOnVitalityLevel(playerNetworkManager.vitality.Value);
-            //playerNetworkManager.maxStamina.Value = playerStatsManager.CalculateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
-            playerNetworkManager.currentHealth.Value = currentCharacterData.currentHealth;
-            //playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
-            SkillTreeUiManager.instance.LoadSkillsFromData(WorldSaveGameManager.instance.characterSlot01);
-            PlayerSkillManager.instance.LoadSkillSlot(WorldSaveGameManager.instance.characterSlot01);
-            Debug.Log(currentCharacterData);
-            //PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
+            // Preserve the old binding while routing it through generation/readiness checks.
+            if (WorldSaveGameManager.instance != null)
+                WorldSaveGameManager.instance.ApplyPendingSaveWhenReady();
         }
+
+        private SkillTreeUiManager FindOwnedSkillUi()
+        {
+            // The authored skill panel can be inactive and therefore not have run Awake yet.
+            var ui = PlayerUIManager.instance != null
+                ? PlayerUIManager.instance.GetComponentInChildren<SkillTreeUiManager>(true) : null;
+            if (ui != null) return ui;
+            return SkillTreeUiManager.instance != null ? SkillTreeUiManager.instance : FindAnyObjectByType<SkillTreeUiManager>(FindObjectsInactive.Include);
+        }
+
+        public bool ApplyLegacySave(CharacterSaveData data)
+        {
+            var hud = PlayerUIManager.instance != null ? PlayerUIManager.instance.playerUIHudManager : null;
+            var skillUi = FindOwnedSkillUi();
+            var skills = GetComponent<PlayerSkillManager>();
+            if (!IsSpawned || !IsOwner || data == null || playerNetworkManager == null || playerStatsManager == null ||
+                hud == null || !hud.IsHealthBarReady || skillUi == null || skills == null || skills.slot == null || characterController == null)
+                return false;
+            var position = new Vector3(data.xPosition, data.yPosition, data.zPosition);
+            if (!IsFinite(position.x) || !IsFinite(position.y) || !IsFinite(position.z)) return false;
+            Unity.Collections.FixedString64Bytes name;
+            try { name = new Unity.Collections.FixedString64Bytes(data.characterName); }
+            catch (System.ArgumentException) { return false; }
+            playerNetworkManager.characterName.Value = name;
+            playerNetworkManager.vitality.Value = data.vitality;
+            playerNetworkManager.endurance.Value = data.endurance;
+            playerNetworkManager.maxHealth.Value = playerStatsManager.CalculateHealthBasedOnVitalityLevel(data.vitality);
+            playerNetworkManager.currentHealth.Value = data.currentHealth;
+            bool controllerEnabled = characterController.enabled;
+            try
+            {
+                characterController.enabled = false;
+                transform.position = position;
+                playerNetworkManager.networkPosition.Value = position;
+            }
+            finally { characterController.enabled = controllerEnabled; }
+            skillUi.LoadSkillsFromData(data);
+            skills.LoadSkillSlot(data);
+            // Rebind the current scene HUD even when unchanged NetworkVariables emit no callback.
+            hud.SetMaxHealthValue(playerNetworkManager.maxHealth.Value);
+            hud.SetNewHealthValue(0, playerNetworkManager.currentHealth.Value);
+            return true;
+        }
+
+        private static bool IsFinite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
 
         public void LoadOtherPlayerCharacterWhenJoiningServer()
         {

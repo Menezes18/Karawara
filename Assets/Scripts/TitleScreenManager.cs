@@ -18,6 +18,7 @@ namespace RPGKarawara
         [SerializeField] Button loadMenuReturnButton;
         [SerializeField] Button mainMenuLoadGameButton;
         [SerializeField] Button mainMenuNewGameButton;
+        [SerializeField] Button newGameStartButton;
         [SerializeField] Button deleteCharacterPopUpConfirmButton;
 
         [Header("Pop Ups")]
@@ -82,21 +83,38 @@ namespace RPGKarawara
                 HostStatus = "Waiting for the local player before starting a new game.";
                 return;
             }
-            WorldSaveGameManager.instance.AttemptToCreateNewGame();
+            var result = WorldSaveGameManager.instance.TryCreateNewGame();
+            if (!result.Success)
+            {
+                HostStatus = "Save " + result.Error + ": " + result.Message;
+                return;
+            }
+            if (newGameStartButton != null) newGameStartButton.gameObject.SetActive(false);
         }
 
         private void OnGUI()
         {
-            if (string.IsNullOrEmpty(HostStatus)) return;
+            string saveStatus = WorldSaveGameManager.instance != null ? WorldSaveGameManager.instance.SaveStatus : "";
+            if (string.IsNullOrEmpty(HostStatus) && string.IsNullOrEmpty(saveStatus)) return;
             bool hostReady = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost && NetworkManager.Singleton.IsListening;
-            string status = hostReady && ActiveHostPort > 0 ? "Host Â· porta " + ActiveHostPort : HostStatus;
+            string status = hostReady && ActiveHostPort > 0 ? "Host · porta " + ActiveHostPort : HostStatus;
             if (hostReady && (WorldSaveGameManager.instance == null || !WorldSaveGameManager.instance.CanCreateNewGame))
-                status += " Â· preparando jogador";
+                status += " · preparando jogador";
+            if (!string.IsNullOrEmpty(saveStatus)) status += " · " + saveStatus;
             GUI.Label(new Rect(12, Screen.height - 28, Mathf.Min(Screen.width - 24, 550), 24), status);
+        }
+
+        public void RefreshSaveSlotPresentation()
+        {
+            if (titleScreenLoadMenu == null) return;
+            foreach (var slot in titleScreenLoadMenu.GetComponentsInChildren<UI_Character_Save_Slot>(true))
+                slot.RefreshPresentation();
         }
 
         public void OpenLoadGameMenu()
         {
+            if (WorldSaveGameManager.instance != null) WorldSaveGameManager.instance.RefreshCharacterProfiles();
+            RefreshSaveSlotPresentation();
             //  CLOSE MAIN MENU
             titleScreenMainMenu.SetActive(false);
 
@@ -154,14 +172,18 @@ namespace RPGKarawara
 
         public void DeleteCharacterSlot()
         {
-            deleteCharacterSlotPopUp.SetActive(false);
-            WorldSaveGameManager.instance.DeleteGame(currentSelectedSlot);
-
-            //  WE DISABLE AND THEN ENABLE THE LOAD MENU, TO REFRESH THE SLOTS (The deleted slots will now become inactive)
-            titleScreenLoadMenu.SetActive(false);
-            titleScreenLoadMenu.SetActive(true);
-
-            loadMenuReturnButton.Select();
+            if (WorldSaveGameManager.instance == null) return;
+            var result = WorldSaveGameManager.instance.TryDeleteGame(currentSelectedSlot);
+            if (!result.Success)
+            {
+                // Keep the confirmation visible; display the explicit failure through the existing status path.
+                HostStatus = "Save " + result.Error + ": " + result.Message;
+                return;
+            }
+            if (deleteCharacterSlotPopUp != null) deleteCharacterSlotPopUp.SetActive(false);
+            SelectNoSlot();
+            RefreshSaveSlotPresentation();
+            if (loadMenuReturnButton != null) loadMenuReturnButton.Select();
         }
 
         public void CloseDeleteCharacterPopUp()

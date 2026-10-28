@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Karawara.Core.Persistence;
 
 namespace RPGKarawara
 {
     public class UI_Character_Save_Slot : MonoBehaviour
     {
-        SaveFileDataWriter saveFileWriter;
-
         [Header("Game Slot")]
         public CharacterSlot characterSlot;
 
@@ -16,77 +13,39 @@ namespace RPGKarawara
         public TextMeshProUGUI characterName;
         public TextMeshProUGUI timedPlayed;
 
-        private void OnEnable()
+        private void OnEnable() => RefreshPresentation();
+
+        public void RefreshPresentation()
         {
-            LoadSaveSlots();
-        }
-
-        private void LoadSaveSlots()
-        {
-            saveFileWriter = new SaveFileDataWriter();
-            saveFileWriter.saveDataDirectoryPath = Application.persistentDataPath;
-
-            //  SAVE SLOT 01
-            if (characterSlot == CharacterSlot.CharacterSlot_01)
-            {
-                saveFileWriter.saveFileName = WorldSaveGameManager.instance.DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot);
-
-                //  IF THE FILE EXISTS, GET INFORMATION FROM IT
-                if (saveFileWriter.CheckToSeeIfFileExists())
-                {
-                    characterName.text = WorldSaveGameManager.instance.characterSlot01.characterName;
-                }
-                //  IF IT DOES NOT, DISABLE THIS GAMEOBJECT
-                else
-                {
-                    gameObject.SetActive(false);
-                }
-                
-                WorldSaveGameManager.instance.LoadGame();
-            }
-            //  SAVE SLOT 02
-            else if (characterSlot == CharacterSlot.CharacterSlot_02)
-            {
-                saveFileWriter.saveFileName = WorldSaveGameManager.instance.DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot);
-
-                //  IF THE FILE EXISTS, GET INFORMATION FROM IT
-                if (saveFileWriter.CheckToSeeIfFileExists())
-                {
-                    characterName.text = WorldSaveGameManager.instance.characterSlot02.characterName;
-                }
-                //  IF IT DOES NOT, DISABLE THIS GAMEOBJECT
-                else
-                {
-                    gameObject.SetActive(false);
-                }
-            }
-            //  SAVE SLOT 03
-            else if (characterSlot == CharacterSlot.CharacterSlot_03)
-            {
-                saveFileWriter.saveFileName = WorldSaveGameManager.instance.DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot);
-
-                //  IF THE FILE EXISTS, GET INFORMATION FROM IT
-                if (saveFileWriter.CheckToSeeIfFileExists())
-                {
-                    characterName.text = WorldSaveGameManager.instance.characterSlot03.characterName;
-                }
-                //  IF IT DOES NOT, DISABLE THIS GAMEOBJECT
-                else
-                {
-                    gameObject.SetActive(false);
-                }
-            }
+            var manager = WorldSaveGameManager.instance;
+            if (manager == null) return;
+            manager.RefreshCharacterProfiles();
+            var result = manager.GetCharacterProfile(characterSlot);
+            if (result == null) return;
+            if (characterName != null)
+                characterName.text = result.Success ? result.Value.characterName :
+                    (result.Error == SaveError.Missing ? "" : "Save indisponível");
+            if (timedPlayed != null)
+                timedPlayed.text = result.Success
+                    ? (result.Message == "RecoveredFromBackup" ? "Recuperado do backup" : Mathf.FloorToInt(result.Value.secondsPlayed / 60) + " min")
+                    : (result.Error == SaveError.Missing ? "" : result.Error.ToString());
+            // Preserve the existing empty-slot layout; invalid slots stay visible with status.
+            bool visible = result.Success || result.Error != SaveError.Missing;
+            if (gameObject.activeSelf != visible) gameObject.SetActive(visible);
         }
 
         public void LoadGameFromCharacterSlot()
         {
-            WorldSaveGameManager.instance.currentCharacterSlotBeingUsed = characterSlot;
+            SelectCurrentSlot();
+            if (WorldSaveGameManager.instance == null) return;
+            // The prefab command and SceneMenu command use the same selected-slot validation.
             WorldSaveGameManager.instance.LoadGame();
         }
 
         public void SelectCurrentSlot()
         {
-            TitleScreenManager.Instance.SelectCharacterSlot(characterSlot);
+            if (TitleScreenManager.Instance != null)
+                TitleScreenManager.Instance.SelectCharacterSlot(characterSlot);
         }
     }
 }

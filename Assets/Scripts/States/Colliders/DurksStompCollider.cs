@@ -48,7 +48,7 @@ namespace RPGKarawara
                         damageEffect.physicalDamage = durkCharacterManager.durkCombatManager.stompDamage;
                         damageEffect.poiseDamage = durkCharacterManager.durkCombatManager.stompDamage;
 
-                        character.characterEffectsManager.ProcessInstantEffect(damageEffect);
+                        character.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
                     }
                 }
             }

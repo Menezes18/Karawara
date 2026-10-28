@@ -8,6 +8,19 @@ using UnityEngine.VFX;
 
 namespace RPGKarawara {
     public class CucaBoss : MonoBehaviour {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        public int QaActivationCount { get; private set; }
+        public int QaProjectileAttackCount { get; private set; }
+        public int QaLaserAttackCount { get; private set; }
+        public int QaRetreatCount { get; private set; }
+        public int QaProjectileCreatedCount { get; private set; }
+        public int QaLaserActivationCount { get; private set; }
+        public bool QaIsActive => isActive;
+        public bool QaIsRetreating => isRetreating;
+#endif
+
+        void OnEnable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+        void OnDisable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
         [Header("VFX")]
         public string tamanhoProperty = "Tamanho"; // Nome da propriedade no VFX Graph
         public float multiplierSpeed = 1f; // Velocidade de multiplicação ao longo do tempo
@@ -187,9 +200,20 @@ namespace RPGKarawara {
         {
             isActive = true;
             healthManager.AtivarHealthBar();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaActivationCount++;
+#endif
             Debug.Log("Boss ativado!");
         }
+        internal bool TryBeginLaserDamage(float now) {
+            if (float.IsNaN(now) || float.IsInfinity(now) || now < lastDamageTime || now < lastDamageTime + cooldownTime)
+                return false;
+            lastDamageTime = now;
+            return true;
+        }
+
         private void ApplyLaserDamage(CharacterManager damageTarget){
+                if (!TryBeginLaserDamage(Time.time)) return;
 
                 if (!isLaserDurationReduced) {
                     StartCoroutine(ReduceLaserDurationTemporarily());
@@ -198,7 +222,7 @@ namespace RPGKarawara {
                 damageEffect.physicalDamage = 5f; 
                 damageEffect.contactPoint = hit.point; // Ponto de contato do laser
 
-                damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+                damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
 
         }
         private IEnumerator ReduceLaserDurationTemporarily() {
@@ -224,6 +248,9 @@ namespace RPGKarawara {
 
             // Ativa o laser após o delay
             isLaserActive = true;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaLaserActivationCount++;
+#endif
             laserTimer = 0f;  
             lineRenderer.enabled = true;
         }
@@ -273,8 +300,14 @@ namespace RPGKarawara {
         public void EventAttack(int number){
             if (number == 1){
                 AttackPlayer();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaProjectileAttackCount++;
+#endif
             }else if (number == 2){
                 StartCoroutine(ActivateLaserWithDelay());
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaLaserAttackCount++;
+#endif
                 VfxLaser.SetActive(true);
             }
         }
@@ -304,6 +337,9 @@ namespace RPGKarawara {
 
         private void Retreat() {
             isRetreating = true; // O boss está recuando
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaRetreatCount++;
+#endif
 
             // Recuar para longe do jogador
             Vector3 retreatDirection = (transform.position - player.gameObject.transform.position).normalized;
@@ -332,6 +368,10 @@ namespace RPGKarawara {
         }
 
         private IEnumerator ShootProjectiles() {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            // StartCoroutine executes the first emission before EventAttack increments its counter.
+            int qaNaturalAttackOrdinal = QaProjectileAttackCount + 1;
+#endif
             float spreadAngle = 10f; // A quantidade de spread dos projeteis
             Vector3 direction = (player.gameObject.transform.position - magicSpawnPoint.position).normalized;
 
@@ -340,8 +380,17 @@ namespace RPGKarawara {
 
                 // Instanciar o projétil mágico
                 GameObject primeProjectile = Instantiate(magicProjectile, magicSpawnPoint.position, Quaternion.identity);
+                // This authored projectile uses Rigidbody motion, so do not start
+                // ProjectileMovement's additional Transform movement coroutine.
+                Destroy(primeProjectile, ProjectileMovement.DefaultDestroyDelay);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaProjectileCreatedCount++;
+#endif
                 Rigidbody rb = primeProjectile.GetComponent<Rigidbody>();
                 rb.linearVelocity = spreadDirection * 20f;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                DevTools.Performance.PerformanceCucaProjectileRetentionSources.ProjectileCreated(this, magicProjectile, primeProjectile, qaNaturalAttackOrdinal, i);
+#endif
                 yield return new WaitForSeconds(0.1f);
             }
             atirando = false;

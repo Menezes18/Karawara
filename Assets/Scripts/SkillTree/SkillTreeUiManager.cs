@@ -60,10 +60,17 @@ namespace RPGKarawara{
 
         // Método para configurar os slots de habilidade
         private void SetupSkillSlots(Skill[] skills, SkillUISlot[] skillSlots){
-            if (skills == null || skillSlots == null) return;
-            for (int i = 0; i < skills.Length; i++){
-                if (i < skillSlots.Length && skills[i] != null && skillSlots[i] != null){
-                    skillSlots[i].SetSkill(skills[i]); // Configura o slot com a habilidade
+            if (skillSlots == null) return;
+            for (int i = 0; i < skillSlots.Length; i++){
+                if (skillSlots[i] != null){
+                    var skill = skills != null && i < skills.Length ? skills[i] : null;
+                    skillSlots[i].SetSkill(skill);
+                    if (skill == null)
+                    {
+                        if (skillSlots[i].skillIcon != null) skillSlots[i].skillIcon.enabled = false;
+                        if (skillSlots[i].skillButton != null) skillSlots[i].skillButton.interactable = false;
+                        if (skillSlots[i].lockIcon != null) skillSlots[i].lockIcon.enabled = true;
+                    }
                 }
             }
         }
@@ -87,7 +94,7 @@ namespace RPGKarawara{
         private void Update(){
             if (Keyboard.current != null && Keyboard.current.lKey.wasReleasedThisFrame && WorldSaveGameManager.instance != null)
             {
-                LoadSkillsFromData(WorldSaveGameManager.instance.characterSlot01);
+                WorldSaveGameManager.instance.ApplyPendingSaveWhenReady();
             }
         }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FireballShooter : MonoBehaviour
@@ -13,6 +14,7 @@ public class FireballShooter : MonoBehaviour
     public float fireballCooldown = 2f; // Tempo de espera entre disparos
     public Animator _loboAnim;
     private Transform targetEnemy;
+    readonly HashSet<GameObject> ownedFireballs = new HashSet<GameObject>();
     private float nextFireTime = 0f; // Controla quando pode disparar novamente
     
     void Update()
@@ -51,6 +53,10 @@ public class FireballShooter : MonoBehaviour
     {
         
         GameObject fireball = Instantiate(fireballPrefab, fireballSpawnPoint.position, Quaternion.identity);
+        ownedFireballs.Add(fireball);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        RPGKarawara.DevTools.Performance.PerformanceSkillRetentionSources.ProjectileCreated(this, fireballPrefab, fireball);
+#endif
 
         // Calcula a direção do alvo e começa a trajetória parabólica
         StartCoroutine(LaunchFireball(fireball, target));
@@ -58,34 +64,44 @@ public class FireballShooter : MonoBehaviour
 
     IEnumerator LaunchFireball(GameObject fireball, Transform target)
     {
-        Vector3 startPos = fireball.transform.position;
-        Vector3 targetPos = target.position;
-        float time = 0;
-        _loboAnim.SetTrigger("Fire");
-        
-        // A velocidade de lançamento é inversamente proporcional à duração
-        float duration = Vector3.Distance(startPos, targetPos) / launchForce; // Ajuste da duração baseado na distância e força
-
-        while (time < 1)
+        try
         {
-            if (fireball == null || target == null)
+            Vector3 startPos = fireball.transform.position;
+            Vector3 targetPos = target.position;
+            float time = 0;
+            _loboAnim.SetTrigger("Fire");
+            float duration = Vector3.Distance(startPos, targetPos) / launchForce;
+            while (time < 1)
             {
-                yield break; // Sai da coroutine se algum dos objetos foi destruído
+                if (fireball == null || target == null) yield break;
+                time += Time.deltaTime / duration;
+                Vector3 currentPos = Vector3.Lerp(startPos, targetPos, time);
+                float arc = Mathf.Sin(time * Mathf.PI) * arcHeight;
+                currentPos.y += arc;
+                fireball.transform.position = currentPos;
+                yield return null;
             }
-
-            // Lerp entre o ponto de origem e o alvo
-            time += Time.deltaTime / duration; // A velocidade agora depende da força
-            Vector3 currentPos = Vector3.Lerp(startPos, targetPos, time);
-
-            // Adiciona o efeito de arco para a parábola
-            float arc = Mathf.Sin(time * Mathf.PI) * arcHeight;
-            currentPos.y += arc;
-
-            fireball.transform.position = currentPos;
-
+            // Preserve a real physics step at the authored endpoint before release.
+            yield return new WaitForFixedUpdate();
             yield return null;
         }
+        finally { ReleaseFireball(fireball); }
     }
+
+    void ReleaseFireball(GameObject fireball)
+    {
+        if (!ownedFireballs.Remove(fireball)) return;
+        if (fireball != null) Destroy(fireball);
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
+        foreach (var fireball in ownedFireballs) if (fireball != null) Destroy(fireball);
+        ownedFireballs.Clear();
+    }
+
+    void OnDestroy() => OnDisable();
 
     private void OnDrawGizmosSelected()
     {

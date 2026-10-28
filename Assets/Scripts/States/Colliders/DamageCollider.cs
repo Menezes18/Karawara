@@ -9,6 +9,9 @@ namespace RPGKarawara {
     {
         [Header("Collider")]
         [SerializeField] protected Collider damageCollider;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        public Collider QaDamageCollider => damageCollider;
+#endif
 
         [Header("Damage")]
         public float physicalDamage = 0;
@@ -34,6 +37,10 @@ namespace RPGKarawara {
             CharacterManager damageTarget = other.GetComponentInParent<CharacterManager>();
 
             if (damageTarget != null){
+                // Multiple colliders on one character still belong to the same attack target.
+                if (charactersDamaged.Contains(damageTarget))
+                    return;
+
                 //contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
 
                 //  CHECK IF WE CAN DAMAGE THIS TARGET BASED ON FRIENDLY FIRE
@@ -58,7 +65,7 @@ namespace RPGKarawara {
                 damageEffect.fireDamage = fireDamage;
                 damageEffect.holyDamage = holyDamage;
 
-                damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+                damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
             }
         }
 
@@ -79,18 +86,30 @@ namespace RPGKarawara {
             damageEffect.holyDamage = holyDamage;
             damageEffect.contactPoint = contactPoint;
 
-            damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+            damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
         }
 
         public virtual void EnableDamageCollider()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            bool wasEnabled = damageCollider.enabled;
+#endif
             damageCollider.enabled = true;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            if (!wasEnabled) { RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this); DevTools.Performance.PerformanceActorLifecycleScope.NotifyVisualChild(this, DevTools.Performance.PerformanceActorLifecycle.Enabled); }
+#endif
         }
 
         public virtual void DisableDamageCollider()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            bool wasEnabled = damageCollider.enabled;
+#endif
             damageCollider.enabled = false;
             charactersDamaged.Clear(); // Resetar alvos atingidos
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            if (wasEnabled) { RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this); DevTools.Performance.PerformanceActorLifecycleScope.NotifyVisualChild(this, DevTools.Performance.PerformanceActorLifecycle.Disabled); }
+#endif
         }
     }
 }

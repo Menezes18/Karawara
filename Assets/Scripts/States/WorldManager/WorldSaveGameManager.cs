@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Karawara.Core.Persistence;
 
 
 namespace RPGKarawara
@@ -22,8 +23,53 @@ namespace RPGKarawara
         }
 #endif
 
+        #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        public string SaveRootOverride { get; set; }
+        // Actual creation provenance for explicit QA census; never used to drive gameplay.
+        public GameObject QaLoadedWorldObject { get; private set; }
+        public AssetData QaLoadedWorldAsset { get; private set; }
+        public GameObject QaLoadedWorldPrefab { get; private set; }
+        public Texture2D QaLoadedWorldTexture { get; private set; }
+        public string QaLoadedWorldTexturePath { get; private set; }
+        public Vector3 QaLoadedWorldPosition { get; private set; }
+        public bool QaWorldTextureApplied { get; private set; }
+        public AssetData QaCurrentWorldAsset => assetData;
+        private void OnEnable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+        private void OnDisable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
+#endif
+        public string SaveRoot
+        {
+            get
+            {
+                var root = ResolveSaveRoot();
+                if (!root.Success) SaveStatus = "Save " + root.Error + ": " + root.Message;
+                return root.Success ? root.Value : null;
+            }
+        }
+
+        private SaveResult<string> ResolveSaveRoot()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            string[] args = System.Environment.GetCommandLineArgs();
+            if (SaveRootOverride != null)
+                args = new[] { "-karawaraSaveRoot", SaveRootOverride };
+#if KARAWARA_QA
+            if (System.Array.IndexOf(args, "-karawaraSaveRoot") < 0)
+                return SaveResult<string>.Fail(SaveError.InvalidData, "Dedicated QA requires an explicit absolute -karawaraSaveRoot distinct from personal saves.");
+#endif
+            return SaveRootPolicy.Resolve(Application.persistentDataPath, args, true);
+#else
+            return SaveResult<string>.Ok(Application.persistentDataPath);
+#endif
+        }
+
+        protected virtual void RequestWorldSceneLoad() => StartCoroutine(LoadWorldScene());
+
         public PlayerManager player;
-        public bool CanCreateNewGame => player != null && player.playerNetworkManager != null && player.IsSpawned && player.IsOwner && loadscene != null;
+        public bool CanCreateNewGame => !sceneLoading && player != null && player.playerNetworkManager != null && player.IsSpawned && player.IsOwner && loadscene != null;
+        private long loadGeneration;
+        private bool sceneLoading;
+        private readonly Dictionary<PlayerManager, long> appliedPlayers = new Dictionary<PlayerManager, long>();
 
         [Header("SAVE/LOAD")]
         [SerializeField] bool saveGame;
@@ -32,13 +78,14 @@ namespace RPGKarawara
         [Header("World Scene Index")]
         [SerializeField] int worldSceneIndex = 1;
 
-        [Header("Save Data Writer")]
-        private SaveFileDataWriter saveFileDataWriter;
 
         [Header("Current Character Data")]
         public CharacterSlot currentCharacterSlotBeingUsed;
         public CharacterSaveData currentCharacterData;
-        private string saveFileName;
+        public string SaveStatus { get; private set; }
+        private SaveResult<CharacterSaveData> slot01Result;
+        private SaveResult<CharacterSaveData> slot02Result;
+        private SaveResult<CharacterSaveData> slot03Result;
 
         [Header("Character Slots")]
         public CharacterSaveData characterSlot01;
@@ -64,7 +111,7 @@ namespace RPGKarawara
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
-            LoadAllCharacterProfiles();
+            RefreshCharacterProfiles();
         }
 
         private void Update()
@@ -80,6 +127,35 @@ namespace RPGKarawara
                 loadGame = false;
                 LoadGame();
             }
+            ApplyPendingSaveWhenReady();
+        }
+
+        private static bool IsEnabledScene(int index) => index >= 0 && index < SceneManager.sceneCountInBuildSettings &&
+            !string.IsNullOrEmpty(SceneUtility.GetScenePathByBuildIndex(index));
+
+        private void AcceptLoad(CharacterSlot slot, CharacterSaveData data)
+        {
+            currentCharacterSlotBeingUsed = slot;
+            currentCharacterData = data;
+            worldSceneIndex = data.sceneIndex;
+            loadGeneration++;
+            appliedPlayers.Clear();
+            SaveStatus = "";
+        }
+
+        public bool ApplyPendingSaveWhenReady()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return false;
+#endif
+            var scene = SceneManager.GetActiveScene();
+            if (loadGeneration == 0 || sceneLoading || currentCharacterData == null || !scene.isLoaded ||
+                scene.buildIndex != currentCharacterData.sceneIndex || player == null || !player.IsSpawned || !player.IsOwner)
+                return false;
+            if (appliedPlayers.TryGetValue(player, out long generation) && generation == loadGeneration) return false;
+            if (!player.ApplyLegacySave(currentCharacterData)) return false;
+            appliedPlayers[player] = loadGeneration;
+            return true;
         }
 
         public string DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot characterSlot)
@@ -105,23 +181,27 @@ namespace RPGKarawara
         }
         public void AttemptToCreateNewGame()
         {
+            var result = TryCreateNewGame();
+            if (!result.Success) RecordSaveFailure(result.Error, result.Message);
+        }
+
+        public SaveResult<bool> TryCreateNewGame()
+        {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (DevPlaygroundIsolationActive) return;
+            if (DevPlaygroundIsolationActive) return SaveResult<bool>.Fail(SaveError.Busy, "Playground saves are isolated.");
 #endif
             if (!CanCreateNewGame)
-            {
-                Debug.LogWarning("Wait for the local player and loading screen before creating a game.", this);
-                return;
-            }
-            var writer = new SaveFileDataWriter { saveDataDirectoryPath = Application.persistentDataPath };
+                return SaveResult<bool>.Fail(SaveError.Busy, "Wait for the local player and loading screen before creating a game.");
+            var root = ResolveSaveRoot();
+            if (!root.Success) return SaveResult<bool>.Fail(root.Error, root.Message);
             foreach (CharacterSlot slot in new[] { CharacterSlot.CharacterSlot_01, CharacterSlot.CharacterSlot_02, CharacterSlot.CharacterSlot_03 })
             {
-                writer.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(slot);
-                if (writer.CheckToSeeIfFileExists()) continue;
-                NewGame(slot);
-                return;
+                var profile = TryLoadSelectedSlot(slot);
+                if (profile.Success || profile.Error != SaveError.Missing) continue;
+                return NewGame(slot);
             }
             if (TitleScreenManager.Instance != null) TitleScreenManager.Instance.DisplayNoFreeCharacterSlotsPopUp();
+            return SaveResult<bool>.Fail(SaveError.Missing, "No empty character slot is available.");
         }
         public void OnSlotOverwriteSelected(string selectedSlot)
         {
@@ -146,113 +226,196 @@ namespace RPGKarawara
                     return;
             }
             
-            NewGame(slot);
+            var result = NewGame(slot);
+            if (!result.Success) RecordSaveFailure(result.Error, result.Message);
         }
-        private void NewGame(CharacterSlot slot)
+        private SaveResult<bool> NewGame(CharacterSlot slot)
         {
-            if (player == null || player.playerNetworkManager == null || !player.IsSpawned || !player.IsOwner)
+            if (!CanCreateNewGame)
             {
-                Debug.LogWarning("Wait for the local host and player to spawn before creating a game.");
-                return;
+                return SaveResult<bool>.Fail(SaveError.Busy, "Waiting for the local player and loading screen.");
             }
-            if (loadscene == null)
+            var root = ResolveSaveRoot();
+            if (!root.Success) return SaveResult<bool>.Fail(root.Error, root.Message);
+            if (!IsEnabledScene(worldSceneIndex)) return SaveResult<bool>.Fail(SaveError.InvalidData, "The new-game scene is not enabled in build settings.");
+            // Build the initial snapshot without changing the live player or previous save context.
+            CharacterSaveData candidate = new CharacterSaveData();
+            var result = CaptureCharacterData(ref candidate);
+            if (result.Success)
             {
-                Debug.LogError("WorldSaveGameManager has no loading screen; new game was not saved or started.", this);
-                return;
+                candidate.sceneIndex = worldSceneIndex;
+                candidate.vitality = 15;
+                candidate.endurance = 10;
+                candidate.xPosition = -319.92f;
+                candidate.yPosition = 175.81f;
+                candidate.zPosition = 595.46f;
+                if (player.playerStatsManager == null)
+                    result = SaveResult<bool>.Fail(SaveError.InvalidData, "Player stats are not ready.");
+                else
+                {
+                    candidate.currentHealth = player.playerStatsManager.CalculateHealthBasedOnVitalityLevel(candidate.vitality);
+                    result = CreateWriter(slot).TrySave(candidate);
+                }
             }
-            // Only replace the in-memory context once the owned player is ready.
-            currentCharacterSlotBeingUsed = slot;
-            currentCharacterData = new CharacterSaveData();
-            // Salva os dados do novo personagem criado, incluindo estatísticas e itens (quando a tela de criação for adicionada)
-            player.playerNetworkManager.vitality.Value = 15;
-            player.playerNetworkManager.endurance.Value = 10;
-            player.playerNetworkManager.gameObject.transform.position = new Vector3(-319.92f, 175.81f, 595.46f);
-
-            SaveGame();
+            if (!result.Success)
+            {
+                return result;
+            }
+            AcceptLoad(slot, candidate);
+            RefreshCharacterProfiles();
+            if (TitleScreenManager.Instance != null) TitleScreenManager.Instance.RefreshSaveSlotPresentation();
             loadscene.LoadGame();
-            StartCoroutine(LoadWorldScene());
+            RequestWorldSceneLoad();
+            return SaveResult<bool>.Ok(true);
         }
 
-
-
+        // Kept for the existing SceneMenu UnityEvent. Its selection comes from the menu.
         public void SlotTeste()
         {
-            currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
+            // Selection is owned by TitleScreenManager. LoadGame commits active context only after validation.
         }
+
+        public SaveResult<CharacterSaveData> TryLoadSelectedSlot(CharacterSlot slot)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return SaveResult<CharacterSaveData>.Fail(SaveError.Busy, "Playground saves are isolated.");
+#endif
+            string name = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(slot);
+            if (string.IsNullOrEmpty(name)) return SaveResult<CharacterSaveData>.Fail(SaveError.InvalidData, "Select a character slot first.");
+            var root = ResolveSaveRoot();
+            if (!root.Success) return SaveResult<CharacterSaveData>.Fail(root.Error, root.Message);
+            return CreateWriter(slot).TryLoad();
+        }
+
         public void LoadGame()
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DevPlaygroundIsolationActive) return;
 #endif
-            //  LOAD A PREVIOUS FILE, WITH A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING
-            saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(currentCharacterSlotBeingUsed);
-
-            saveFileDataWriter = new SaveFileDataWriter();
-            //  GENERALLY WORKS ON MULTIPLE MACHINE TYPES (Application.persistentDataPath)
-            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
-            saveFileDataWriter.saveFileName = saveFileName;
-            currentCharacterData = saveFileDataWriter.LoadSaveFile();
-
-            StartCoroutine(LoadWorldScene());
+            if (sceneLoading) { RecordSaveFailure(SaveError.Busy, "A world scene is still loading."); return; }
+            CharacterSlot selected = TitleScreenManager.Instance != null
+                ? TitleScreenManager.Instance.currentSelectedSlot : currentCharacterSlotBeingUsed;
+            var result = TryLoadSelectedSlot(selected);
+            if (!result.Success)
+            {
+                RecordSaveFailure(result.Error, result.Message);
+                return;
+            }
+            if (!IsEnabledScene(result.Value.sceneIndex))
+            {
+                RecordSaveFailure(SaveError.InvalidData, "The saved scene is not enabled in build settings.");
+                return;
+            }
+            AcceptLoad(selected, result.Value);
+            RequestWorldSceneLoad();
         }
 
         public void SaveGame()
         {
+            var result = TrySaveGame();
+            if (!result.Success) RecordSaveFailure(result.Error, result.Message);
+        }
+
+        public SaveResult<bool> TrySaveGame()
+        {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (DevPlaygroundIsolationActive) return;
+            if (DevPlaygroundIsolationActive) return SaveResult<bool>.Fail(SaveError.Busy, "Playground saves are isolated.");
 #endif
+            var root = ResolveSaveRoot();
+            if (!root.Success) return SaveResult<bool>.Fail(root.Error, root.Message);
+            if (sceneLoading || (loadGeneration > 0 && (player == null ||
+                !appliedPlayers.TryGetValue(player, out long appliedGeneration) || appliedGeneration != loadGeneration)))
+                return SaveResult<bool>.Fail(SaveError.Busy, "The accepted save is waiting for its scene and player restoration.");
             if (player == null || player.playerNetworkManager == null || !player.IsSpawned || currentCharacterData == null)
+                return SaveResult<bool>.Fail(SaveError.Busy, "No spawned player/save context is ready.");
+            var result = CaptureAndSave(currentCharacterSlotBeingUsed, ref currentCharacterData);
+            if (result.Success)
             {
-                Debug.LogWarning("No spawned player/save context is ready; save was not written.", this);
-                return;
+                SaveStatus = "";
+                RefreshCharacterProfiles();
+                if (TitleScreenManager.Instance != null) TitleScreenManager.Instance.RefreshSaveSlotPresentation();
             }
-            //  SAVE THE CURRENT FILE UNDER A FILE NAME DEPENDING ON WHICH SLOT WE ARE USING
-            saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(currentCharacterSlotBeingUsed);
-            if (string.IsNullOrEmpty(saveFileName)) return;
+            return result;
+        }
 
-            saveFileDataWriter = new SaveFileDataWriter();
-            //  GENERALLY WORKS ON MULTIPLE MACHINE TYPES (Application.persistentDataPath)
-            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
-            saveFileDataWriter.saveFileName = saveFileName;
+        private SaveResult<bool> CaptureAndSave(CharacterSlot slot, ref CharacterSaveData data)
+        {
+            if (string.IsNullOrEmpty(DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(slot)))
+                return SaveResult<bool>.Fail(SaveError.InvalidData, "Select a character slot first.");
+            var capture = CaptureCharacterData(ref data);
+            return capture.Success ? CreateWriter(slot).TrySave(data) : capture;
+        }
 
-            //  PASS THE PLAYERS INFO, FROM GAME, TO THEIR SAVE FILE
-            player.SaveGameDataToCurrentCharacterData(ref currentCharacterData);
+        private SaveResult<bool> CaptureCharacterData(ref CharacterSaveData data)
+        {
+            try { player.SaveGameDataToCurrentCharacterData(ref data); }
+            catch (System.Exception ex) { return SaveResult<bool>.Fail(SaveError.InvalidData, "Character capture failed: " + ex.Message); }
+            return SaveResult<bool>.Ok(true);
+        }
 
-            //  WRITE THAT INFO ONTO A JSON FILE, SAVED TO THIS MACHINE
-            saveFileDataWriter.CreateNewCharacterSaveFile(currentCharacterData);
+        private SaveFileDataWriter CreateWriter(CharacterSlot slot) => new SaveFileDataWriter
+        {
+            saveDataDirectoryPath = SaveRoot,
+            saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(slot)
+        };
+
+        private void RecordSaveFailure(SaveError error, string message)
+        {
+            SaveStatus = "Save " + error + ": " + message;
+            Debug.LogWarning(SaveStatus, this);
         }
 
         public void DeleteGame(CharacterSlot characterSlot)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (DevPlaygroundIsolationActive) return;
-#endif
-            //  CHOOSE FILE BASED ON NAME
-            saveFileDataWriter = new SaveFileDataWriter();
-            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot);
-            saveFileDataWriter.DeleteSaveFile();
+            TryDeleteGame(characterSlot);
         }
 
-        //  LOAD ALL CHARACTER PROFILES ON DEVICE WHEN STARTING GAME
-        private void LoadAllCharacterProfiles()
+        public SaveResult<bool> TryDeleteGame(CharacterSlot characterSlot)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DevPlaygroundIsolationActive) return SaveResult<bool>.Fail(SaveError.Busy, "Playground saves are isolated.");
+#endif
+            var root = ResolveSaveRoot();
+            if (!root.Success)
+            {
+                RecordSaveFailure(root.Error, root.Message);
+                return SaveResult<bool>.Fail(root.Error, root.Message);
+            }
+            if (string.IsNullOrEmpty(DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(characterSlot)))
+                return SaveResult<bool>.Fail(SaveError.InvalidData, "Select a character slot first.");
+            var result = CreateWriter(characterSlot).TryDelete();
+            if (result.Success)
+            {
+                SaveStatus = "";
+                RefreshCharacterProfiles();
+                if (TitleScreenManager.Instance != null) TitleScreenManager.Instance.RefreshSaveSlotPresentation();
+            }
+            else RecordSaveFailure(result.Error, result.Message);
+            return result;
+        }
+
+        public void RefreshCharacterProfiles()
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DevPlaygroundIsolationActive) return;
 #endif
-            saveFileDataWriter = new SaveFileDataWriter();
-            saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
+            slot01Result = TryLoadSelectedSlot(CharacterSlot.CharacterSlot_01);
+            slot02Result = TryLoadSelectedSlot(CharacterSlot.CharacterSlot_02);
+            slot03Result = TryLoadSelectedSlot(CharacterSlot.CharacterSlot_03);
+            characterSlot01 = slot01Result.Success ? slot01Result.Value : null;
+            characterSlot02 = slot02Result.Success ? slot02Result.Value : null;
+            characterSlot03 = slot03Result.Success ? slot03Result.Value : null;
+        }
 
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_01);
-            characterSlot01 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_02);
-            characterSlot02 = saveFileDataWriter.LoadSaveFile();
-
-            saveFileDataWriter.saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_03);
-            characterSlot03 = saveFileDataWriter.LoadSaveFile();
-
-            
+        public SaveResult<CharacterSaveData> GetCharacterProfile(CharacterSlot slot)
+        {
+            switch (slot)
+            {
+                case CharacterSlot.CharacterSlot_01: return slot01Result;
+                case CharacterSlot.CharacterSlot_02: return slot02Result;
+                case CharacterSlot.CharacterSlot_03: return slot03Result;
+                default: return SaveResult<CharacterSaveData>.Fail(SaveError.InvalidData, "Unknown slot.");
+            }
         }
 
         public IEnumerator LoadWorldScene()
@@ -260,6 +423,11 @@ namespace RPGKarawara
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DevPlaygroundIsolationActive) yield break;
 #endif
+            if (!IsEnabledScene(worldSceneIndex)) { RecordSaveFailure(SaveError.InvalidData, "The saved scene is not enabled in build settings."); yield break; }
+            if (sceneLoading) yield break;
+            sceneLoading = true;
+            try
+            {
             // Carregar a cena de forma assíncrona
             AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(worldSceneIndex);
             sceneLoad.allowSceneActivation = false;
@@ -292,11 +460,22 @@ namespace RPGKarawara
                 // Carregar e aplicar a textura de forma assíncrona
                 yield return StartCoroutine(InstantiatePrefabWithTextureAsync(assetData.prefab, assetData.texturePath));
             }
+            }
+            finally { sceneLoading = false; }
+            ApplyPendingSaveWhenReady();
         }
 
         // Método para instanciar o prefab e aplicar a textura
         private IEnumerator InstantiatePrefabWithTextureAsync(GameObject prefab, string texturePath)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaWorldTextureApplied = false;
+            QaLoadedWorldTexture = null;
+            QaLoadedWorldAsset = assetData;
+            QaLoadedWorldPrefab = prefab;
+            QaLoadedWorldTexturePath = texturePath;
+            QaLoadedWorldPosition = assetData == null ? Vector3.zero : assetData.position;
+#endif
             if (prefab == null)
             {
                 Debug.LogWarning("Prefab não encontrado.");
@@ -304,6 +483,10 @@ namespace RPGKarawara
             }
 
             GameObject instantiatedObject = Instantiate(prefab, assetData.position, Quaternion.identity);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            QaLoadedWorldObject = instantiatedObject;
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(instantiatedObject.transform, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+#endif
             Debug.Log("Prefab instanciado: " + instantiatedObject.name);
             ResourceRequest resourceRequest = Resources.LoadAsync<Texture2D>(texturePath);
             yield return resourceRequest;
@@ -314,6 +497,13 @@ namespace RPGKarawara
             }
 
             yield return StartCoroutine(ApplyTextureToObject(instantiatedObject, resourceRequest.asset as Texture2D));
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            if (QaLoadedWorldObject == instantiatedObject && QaLoadedWorldAsset == assetData && QaLoadedWorldPrefab == prefab && QaLoadedWorldTexturePath == texturePath)
+            {
+                QaLoadedWorldTexture = resourceRequest.asset as Texture2D;
+                QaWorldTextureApplied = instantiatedObject != null && QaLoadedWorldTexture != null;
+            }
+#endif
 
         }
 

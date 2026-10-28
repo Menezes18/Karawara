@@ -31,6 +31,48 @@ namespace RPGKarawara
         public CombatStanceState combatStance;
         public AttackState attack;
 
+        readonly List<AIState> ownedRuntimeStates = new List<AIState>(5);
+        IdleState idleTemplate;
+        PursueTargetState pursueTemplate;
+        CombatStanceState combatTemplate;
+        AttackState attackTemplate;
+        bool runtimeStatesAcquired;
+
+        protected T CreateRuntimeState<T>(T template) where T : AIState
+        {
+            var clone = Instantiate(template);
+            ownedRuntimeStates.Add(clone);
+            return clone;
+        }
+        void AcquireRuntimeStates()
+        {
+            if (runtimeStatesAcquired) return;
+            idleTemplate = idle; pursueTemplate = pursueTarget; combatTemplate = combatStance; attackTemplate = attack;
+            runtimeStatesAcquired = true;
+            idle = CreateRuntimeState(idleTemplate);
+            pursueTarget = CreateRuntimeState(pursueTemplate);
+            combatStance = CreateRuntimeState(combatTemplate);
+            attack = CreateRuntimeState(attackTemplate);
+            currentState = idle;
+        }
+        void ReleaseRuntimeStates()
+        {
+            currentState = null;
+            if (runtimeStatesAcquired)
+            {
+                idle = idleTemplate; pursueTarget = pursueTemplate; combatStance = combatTemplate; attack = attackTemplate;
+                idleTemplate = null; pursueTemplate = null; combatTemplate = null; attackTemplate = null;
+                runtimeStatesAcquired = false;
+            }
+            foreach (var state in ownedRuntimeStates) if (state != null) Destroy(state);
+            ownedRuntimeStates.Clear();
+        }
+        public override void OnDestroy()
+        {
+            ReleaseRuntimeStates();
+            base.OnDestroy();
+        }
+
         [Header("Control Variables")]
         public bool isDisabled = false; // Novo booleano para controle
 
@@ -65,11 +107,7 @@ namespace RPGKarawara
 
             if (IsOwner)
             {
-                idle = Instantiate(idle);
-                pursueTarget = Instantiate(pursueTarget);
-                combatStance = Instantiate(combatStance);
-                attack = Instantiate(attack);
-                currentState = idle;
+                AcquireRuntimeStates();
             }
 
             aiCharacterNetworkManager.currentHealth.OnValueChanged += aiCharacterNetworkManager.CheckHP;
@@ -80,6 +118,7 @@ namespace RPGKarawara
             base.OnNetworkDespawn();
 
             aiCharacterNetworkManager.currentHealth.OnValueChanged -= aiCharacterNetworkManager.CheckHP;
+            ReleaseRuntimeStates();
         }
 
         public void ChangeMaterial(Material agua, Material fogo, Element element)

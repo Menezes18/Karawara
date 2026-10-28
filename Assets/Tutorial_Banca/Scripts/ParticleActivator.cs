@@ -21,6 +21,8 @@ namespace RPGKarawara
             {
                 foreach(GameObject particula in Particle)
                 {
+                    // A later traversal can reenter after this effect has expired.
+                    if (particula == null) continue;
                     particula.SetActive(true);
                     Destroy(particula,3f);
                 }

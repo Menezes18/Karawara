@@ -71,7 +71,7 @@ namespace RPGKarawara {
                 damageEffect.holyDamage = holyDamagePerTick;
                 damageEffect.contactPoint = contactPoint;
 
-                damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+                damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
 
                 yield return new WaitForSeconds(tickInterval);
             }

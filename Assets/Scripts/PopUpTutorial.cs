@@ -39,9 +39,12 @@ namespace RPGKarawara
                 UI.GetComponentInChildren<TMP_Text>().text = info.textoExplicativo;
                 UI.GetComponentInChildren<RawImage>().texture = info.texture;
                 UI.GetComponentInChildren<Button>().onClick.AddListener(close);
-                videoPlayer.clip = info.vClip;
-                videoPlayer.targetTexture = info.texture;
-                videoPlayer.Play();
+                if (videoPlayer != null)
+                {
+                    videoPlayer.clip = info.vClip;
+                    videoPlayer.targetTexture = info.texture;
+                    videoPlayer.Play();
+                }
                 UI.SetActive(true);
             }
         }
@@ -52,8 +55,11 @@ namespace RPGKarawara
             Cursor.lockState = CursorLockMode.Locked;
             UI.GetComponentInChildren<TMP_Text>().text = "";
             UI.GetComponentInChildren<RawImage>().texture = null;
-            videoPlayer.clip = null;
-            videoPlayer.targetTexture = null;
+            if (videoPlayer != null)
+            {
+                videoPlayer.clip = null;
+                videoPlayer.targetTexture = null;
+            }
             passou = true;
         }
 

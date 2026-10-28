@@ -47,6 +47,10 @@ namespace RPGKarawara
         }
         public void CameraChange(int numberCam)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
+
             switch (numberCam)
             {
                 case 0:
@@ -120,6 +124,10 @@ namespace RPGKarawara
 
         public void DesativarCamara(int indiceAtiva)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
+
             for (int i = 0; i < cam.Length; i++)
             {
                 cam[i].enabled = (i == indiceAtiva);

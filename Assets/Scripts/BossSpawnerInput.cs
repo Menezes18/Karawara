@@ -18,16 +18,28 @@ namespace RPGKarawara{
         // Método para instanciar o boss
         public void SpawnBoss()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            // A request against the already-owned boss creates no new lifetime.
+            long qaAttempt = instantiatedBoss != null ? 0 : DevTools.Performance.PerformanceAiCreationHistory.StartAttempt(this);
+            try
+            {
+#endif
             if (bossPrefab != null && instantiatedBoss == null) // Verifica se o boss já foi instanciado
             {
                 // Instancia o boss na posição e rotação do spawnPoint
                 instantiatedBoss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedBoss, DevTools.Performance.PerformanceAiCreationHistory.Stage.Instantiated);
+#endif
                 
                 // Certifique-se de que o boss usa o NetworkObject para ser sincronizado na rede
                 NetworkObject networkObject = instantiatedBoss.GetComponent<NetworkObject>();
                 if (networkObject != null)
                 {
                     networkObject.Spawn(destroyWithScene: true);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                    DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedBoss, DevTools.Performance.PerformanceAiCreationHistory.Stage.NetworkSpawned);
+#endif
                 }
 
                 // Definir o ID do boss e adicioná-lo à lista de bosses no WorldAIManager
@@ -36,6 +48,9 @@ namespace RPGKarawara{
                 {
                     bossCharacterManager.bossID = id;
                     WorldAIManager.instance.AddCharacterToSpawnedCharactersList(bossCharacterManager);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                    DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedBoss, DevTools.Performance.PerformanceAiCreationHistory.Stage.Registered);
+#endif
 
                     // Caso você queira acordar o boss imediatamente
                     bossCharacterManager.WakeBoss();
@@ -45,6 +60,13 @@ namespace RPGKarawara{
                     Debug.LogError("AIBossCharacterManager não encontrado no prefab instanciado.");
                 }
             }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            }
+            finally { DevTools.Performance.PerformanceAiCreationHistory.FinishAttempt(qaAttempt); }
+#endif
         }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        public GameObject QaSpawned => instantiatedBoss;
+#endif
     }
 }

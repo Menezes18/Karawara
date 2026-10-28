@@ -92,17 +92,18 @@ namespace RPGKarawara
 
         protected virtual void OnEnable()
         {
-
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
         }
 
         protected virtual void OnDisable()
         {
-
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
         }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.NetworkSpawned);
 
             animator.SetBool("isMoving", characterNetworkManager.isMoving.Value);
             characterNetworkManager.OnIsActiveChanged(false, characterNetworkManager.isActive.Value);
@@ -114,6 +115,7 @@ namespace RPGKarawara
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.NetworkDespawned);
 
             characterNetworkManager.isMoving.OnValueChanged -= characterNetworkManager.OnIsMovingChanged;
             characterNetworkManager.isActive.OnValueChanged -= characterNetworkManager.OnIsActiveChanged;

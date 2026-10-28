@@ -39425,7 +39425,7 @@ GameObject:
   - component: {fileID: 2101230086051389572}
   - component: {fileID: 1929170650650390294}
   - component: {fileID: 1896467661770995780}
-  - component: {fileID: 8017127989841249551}
+  - component: {fileID: 9102200000000000001}
   m_Layer: 0
   m_Name: MiguelGuimaraes_768555
   m_TagString: Untagged
@@ -39577,23 +39577,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8017127989841249551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7265154872910247524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ab2c2b9f387b7d4ea9f64bd40f79c28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraPlayer: {fileID: 0}
-  CameraNPC: {fileID: 0}
-  player: {fileID: 0}
-  interactionRange: 3
-  audio: {fileID: 0}
 --- !u!1 &7267807375977742161
 GameObject:
   m_ObjectHideFlags: 0
@@ -50230,7 +50213,7 @@ GameObject:
   - component: {fileID: 304795070505367984}
   - component: {fileID: 4562438508738702610}
   - component: {fileID: 5533465535019183878}
-  - component: {fileID: 1190162431489062675}
+  - component: {fileID: 9102200000000000002}
   m_Layer: 0
   m_Name: ReimportComTransform
   m_TagString: Untagged
@@ -50377,23 +50360,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1190162431489062675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9049448193556215091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 412d55f7e78e0274b8b4f6f35ec9eaaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraPlayer: {fileID: 0}
-  CameraNPC: {fileID: 1742714821799928274}
-  player: {fileID: 0}
-  interactionRange: 3
-  audio: {fileID: 1896467661770995780}
 --- !u!1 &9054609554434839306
 GameObject:
   m_ObjectHideFlags: 0
@@ -51476,3 +51442,32 @@ Transform:
   - {fileID: 4407650874983332503}
   m_Father: {fileID: 861735124541234268}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9102200000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7265154872910247524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visual: {fileID: 1929170650650390294}
+  reviewedComponents: []
+--- !u!114 &9102200000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9049448193556215091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce907067231fec48bd418fdd6247a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visual: {fileID: 4562438508738702610}
+  reviewedComponents:
+  - {fileID: 2197740786945245362}

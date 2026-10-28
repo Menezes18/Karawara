@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ProjectileMovement : MonoBehaviour
 {
+    public const float DefaultDestroyDelay = 5f;
     public float projectileSpeed = 2f; // Velocidade do projétil
-    public float destroyDelay = 5f; // Tempo antes do projétil ser destruído
+    public float destroyDelay = DefaultDestroyDelay; // Tempo antes do projétil ser destruído
 
     private Vector3 targetPosition;
 

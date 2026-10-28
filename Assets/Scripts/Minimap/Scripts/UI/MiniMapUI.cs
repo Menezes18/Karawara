@@ -79,6 +79,9 @@ namespace System.MiniMap
 
         public void DoHitEffect()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.HitEffect);
+#endif
             if (hitAnimator == null) return;
 
             hitAnimator.speed = hitEffectSpeed;
@@ -110,5 +113,11 @@ namespace System.MiniMap
         {
             get => playerIcon.IconTransform;
         }
-    }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        void OnEnable() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Enabled); }
+        void OnDisable() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Disabled); }
+        void OnDestroy() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Destroyed); }
+#endif
+}
 }

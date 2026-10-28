@@ -12,6 +12,7 @@ namespace RPGKarawara
     {
         [Header("Stat Bars")]
         [SerializeField] UI_StatBar healthBar;
+        public bool IsHealthBarReady => healthBar != null && healthBar.IsInitialized;
 
         [Header("Quick Slots")]
         [SerializeField] Image rightWeaponQuickSlotIcon;
@@ -73,7 +74,7 @@ namespace RPGKarawara
                 SetQuickSlotVisibility(rightWeaponQuickSlotIcon, false);
                 SetQuickSlotVisibility(leftWeaponQuickSlotIcon, false);
                 if (bossHealthBarParent != null) bossHealthBarParent.gameObject.SetActive(false);
-                if (bossHealthBarObject != null) bossHealthBarObject.SetActive(false);
+                if (bossHealthBarObject != null && bossHealthBarObject.scene.IsValid()) bossHealthBarObject.SetActive(false);
                 if (pauseMenu != null) pauseMenu.SetActive(false);
                 if (pauseSkillMenu != null) pauseSkillMenu.SetActive(false);
                 if (SkillSlot != null) SkillSlot.SetActive(false);
@@ -85,7 +86,7 @@ namespace RPGKarawara
                 SetQuickSlotVisibility(rightWeaponQuickSlotIcon, true);
                 SetQuickSlotVisibility(leftWeaponQuickSlotIcon, true);
                 if (bossHealthBarParent != null) bossHealthBarParent.gameObject.SetActive(true);
-                if (bossHealthBarObject != null) bossHealthBarObject.SetActive(true);
+                if (bossHealthBarObject != null && bossHealthBarObject.scene.IsValid()) bossHealthBarObject.SetActive(true);
                 if (SkillSlot != null) SkillSlot.SetActive(true);
             }
         }
@@ -239,7 +240,7 @@ namespace RPGKarawara
         {
             WorldSaveGameManager.instance.loadscene.LoadGame();
             WorldAIManager.instance.DespawnAllCharacters();
-            SceneManager.UnloadSceneAsync(SceneManager.sceneCount);
+            // Single-mode loading unloads the old scene. sceneCount is not a build index.
             SceneManager.LoadScene("SceneMenu");
             ConfigureUIBasedOnScene();
         }

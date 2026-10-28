@@ -28,21 +28,26 @@ namespace RPGKarawara.SkillTree
 
         private void Update()
         {
-            if (Keyboard.current.digit1Key.wasReleasedThisFrame && slot[0].canUse)
+            var keyboard = Keyboard.current;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            keyboard = RPGKarawara.DevTools.Performance.PerformanceSkillRetentionSources.SkillKeyboard;
+#endif
+            if (keyboard == null) return;
+            if (keyboard.digit1Key.wasReleasedThisFrame && slot[0].canUse)
             {
                 ActivateSkill(0); 
             }
-            if (Keyboard.current.digit2Key.wasReleasedThisFrame && slot[1].canUse)
+            if (keyboard.digit2Key.wasReleasedThisFrame && slot[1].canUse)
             {
                 ActivateSkill(1); 
             }
-            if (Keyboard.current.digit3Key.wasReleasedThisFrame && slot[2].canUse)
+            if (keyboard.digit3Key.wasReleasedThisFrame && slot[2].canUse)
             {
                 ActivateSkill(2); 
             }
-            if (Keyboard.current.lKey.wasReleasedThisFrame)
+            if (keyboard.lKey.wasReleasedThisFrame)
             {
-                LoadSkillSlot(WorldSaveGameManager.instance.characterSlot01);
+                if (WorldSaveGameManager.instance != null) WorldSaveGameManager.instance.ApplyPendingSaveWhenReady();
             }
         }
 
@@ -69,20 +74,27 @@ namespace RPGKarawara.SkillTree
         // Método para carregar o estado dos slots de habilidades do CharacterSaveData
         public void LoadSkillSlot(CharacterSaveData saveData)
         {
-            if (saveData == null || saveData.skillsSlot == null) return;
+            if (saveData == null || slot == null) return;
+
+            // A previously equipped skill or cooldown cannot leak from another character slot.
+            StopAllCoroutines();
 
             for (int i = 0; i < slot.Length; i++)
             {
-                if (i < saveData.skillsSlot.Length)
-                {
-                    slot[i].skillSlot = saveData.skillsSlot[i];
-                    slot[i].canUse = true; // Redefine cada slot para "usável" ao carregar
-                }
+                if (slot[i] == null) slot[i] = new SkillSlot();
+                slot[i].skillSlot = saveData.skillsSlot != null && i < saveData.skillsSlot.Length ? saveData.skillsSlot[i] : null;
+                slot[i].canUse = true;
+                if (SkillCooldownUI.instance != null && SkillCooldownUI.instance.skillCooldownImage != null &&
+                    i < SkillCooldownUI.instance.skillCooldownImage.Length && SkillCooldownUI.instance.skillCooldownImage[i] != null)
+                    SkillCooldownUI.instance.skillCooldownImage[i].enabled = false;
             }
 
             Debug.Log("Slots de habilidades carregados do CharacterSaveData.");
         }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        public void QaActivateSkill(int slotIndex) => ActivateSkill(slotIndex);
+#endif
         private void ActivateSkill(int slotIndex)
         {
             // Verifica se a habilidade está desbloqueada e se não está em cooldown interno
@@ -113,7 +125,8 @@ namespace RPGKarawara.SkillTree
         // Coroutine que gerencia o cooldown do slot de habilidade
         private IEnumerator SlotCooldownTimer(int slotIndex)
         {
-            SkillCooldownUI.instance.skillCooldownImage[slotIndex].enabled = true;
+            var image = GetCooldownImage(slotIndex);
+            if (image != null) image.enabled = true;
             float cooldownTime = slot[slotIndex].slotCooldownDuration;
             float elapsedTime = 0f;
 
@@ -123,7 +136,8 @@ namespace RPGKarawara.SkillTree
                 float remainingTime = cooldownTime - elapsedTime;
         
                 // Atualiza o fillAmount baseado no tempo restante
-                SkillCooldownUI.instance.skillCooldownImage[slotIndex].fillAmount = remainingTime / cooldownTime;
+                image = GetCooldownImage(slotIndex);
+                if (image != null) image.fillAmount = remainingTime / cooldownTime;
 
                 
                 yield return null; // Espera até o próximo frame
@@ -132,7 +146,15 @@ namespace RPGKarawara.SkillTree
             // Após o cooldown do slot, a habilidade pode ser usada novamente
             slot[slotIndex].canUse = true;
             
-            SkillCooldownUI.instance.skillCooldownImage[slotIndex].enabled = false; // Desativa a imagem do cooldown ao final
+            image = GetCooldownImage(slotIndex);
+            if (image != null) image.enabled = false; // Desativa a imagem do cooldown ao final
+        }
+
+        private static Image GetCooldownImage(int slotIndex)
+        {
+            var ui = SkillCooldownUI.instance;
+            if (ui == null || ui.skillCooldownImage == null || slotIndex < 0 || slotIndex >= ui.skillCooldownImage.Length) return null;
+            return ui.skillCooldownImage[slotIndex];
         }
 
     }

@@ -59,7 +59,7 @@ namespace RPGKarawara
 
         public AIBossCharacterManager GetBossCharacterByID(int ID)
         {
-            return spawnedInBosses.FirstOrDefault(boss => boss.bossID == ID);
+            return spawnedInBosses.FirstOrDefault(boss => boss != null && boss.bossID == ID);
         }
 
         public void ResetAllCharacters()
@@ -76,11 +76,28 @@ namespace RPGKarawara
         {
             foreach (var character in spawnedInCharacters)
             {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                long qaAttempt = RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.StartDespawn(character);
+                bool qaDespawned = false;
+                try
+                {
+#endif
                 character.GetComponent<NetworkObject>().Despawn();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+                qaDespawned = character == null || !character.IsSpawned;
+                }
+                finally { RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.FinishDespawn(qaAttempt, qaDespawned); }
+#endif
             }
 
             spawnedInCharacters.Clear();
+            spawnedInBosses.Clear();
         }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        public bool QaIsRegistered(AICharacterManager actor) => actor != null && spawnedInCharacters != null && spawnedInCharacters.Contains(actor);
+        public int QaBossReferences => spawnedInBosses == null ? 0 : spawnedInBosses.Count;
+        public int QaLiveBossReferences => spawnedInBosses == null ? 0 : spawnedInBosses.Count(b => b != null && b.IsSpawned);
+#endif
 
         private void DisableAllCharacters()
         {

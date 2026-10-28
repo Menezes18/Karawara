@@ -102,7 +102,16 @@ public class FadeImages : MonoBehaviour
 
     public void Reiniciar()
     {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.SkillRestart);
+#endif
         Inicializar();
         enabled = true; // Reabilita o script para reiniciar a execução
     }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        void OnEnable() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Enabled); }
+        void OnDisable() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Disabled); }
+        void OnDestroy() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Destroyed); }
+#endif
 }

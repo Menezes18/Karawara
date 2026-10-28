@@ -9,6 +9,7 @@ namespace RPGKarawara
 {
     public class NPCDialogue : MonoBehaviour
     {
+        void OnEnable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
         public DataMissao missao1;
         public GameObject player;
         public GameObject dialogueUI;
@@ -176,6 +177,7 @@ namespace RPGKarawara
 
         private void OnDisable()
         {
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
             if (typingCoroutine != null) StopCoroutine(typingCoroutine);
             typingCoroutine = null;
             isTyping = false;

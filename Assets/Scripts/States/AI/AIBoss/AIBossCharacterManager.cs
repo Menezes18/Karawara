@@ -29,6 +29,8 @@ namespace RPGKarawara
 
         [Header("States")]
         [SerializeField] BossSleepState sleepState;
+        BossSleepState sleepStateTemplate;
+        bool sleepStateAcquired;
         UI_Boss_HP_Bar ownedBossHPBar;
 
         protected override void OnEnable()
@@ -75,7 +77,8 @@ namespace RPGKarawara
 
             if (IsOwner)
             {
-                sleepState = Instantiate(sleepState);
+                sleepStateTemplate = sleepState; sleepStateAcquired = true;
+                sleepState = CreateRuntimeState(sleepStateTemplate);
                 currentState = sleepState;
             }
 
@@ -126,6 +129,7 @@ namespace RPGKarawara
 
         public override void OnNetworkDespawn()
         {
+            if (sleepStateAcquired) { sleepState = sleepStateTemplate; sleepStateTemplate = null; sleepStateAcquired = false; }
             base.OnNetworkDespawn();
 
             bossFightIsActive.OnValueChanged -= OnBossFightIsActiveChanged;
@@ -262,8 +266,9 @@ namespace RPGKarawara
 
         public void PhaseShift()
         {
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.PhaseChanged);
             characterAnimatorManager.PlayTargetActionAnimation(phaseShiftAnimation, true);
-            combatStance = Instantiate(phase02CombatStanceState);
+            combatStance = CreateRuntimeState(phase02CombatStanceState);
             currentState = combatStance;
         }
     }

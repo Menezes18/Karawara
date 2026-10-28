@@ -9,6 +9,7 @@ namespace RPGKarawara
     {
         protected Slider slider;
         protected RectTransform rectTransform;
+        public bool IsInitialized => slider != null && rectTransform != null;
 
         [Header("Bar Options")]
         [SerializeField] protected bool scaleBarLengthWithStats = true;

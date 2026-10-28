@@ -5,16 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class SceneChecker : MonoBehaviour{
 
+    static SceneChecker instance;
     public GameObject statusBar;
     public GameObject spawn;
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
         // Marca este objeto para não ser destruído ao carregar uma nova cena
         DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()
     {
+        if (instance != this) return;
         // Registra o callback para ser chamado quando uma nova cena for carregada
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -23,6 +31,12 @@ public class SceneChecker : MonoBehaviour{
     {
         // Remove o callback quando o objeto for desativado ou destruído
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (instance == this) instance = null;
     }
 
     Scene sceneStart;

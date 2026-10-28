@@ -73,7 +73,7 @@ namespace RPGKarawara {
             damageEffect.physicalDamage = physicalDamage;
             damageEffect.contactPoint = contactPoint;
 
-            damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+            damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
         }
 
         private void ApplyPush(CharacterManager damageTarget)

@@ -26,7 +26,12 @@ namespace RPGKarawara
         private void OnDisable()
         {
             if (damageCollider != null) DisableDamageCollider();
+            DevTools.Performance.PerformanceActorLifecycleScope.NotifyVisualChild(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
         }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        private void OnEnable() => DevTools.Performance.PerformanceActorLifecycleScope.NotifyVisualChild(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+        private void OnDestroy() => DevTools.Performance.PerformanceActorLifecycleScope.NotifyVisualChild(this, DevTools.Performance.PerformanceActorLifecycle.Destroyed);
+#endif
 
         protected override void DamageTarget(CharacterManager damageTarget)
         {

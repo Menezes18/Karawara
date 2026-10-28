@@ -292,7 +292,7 @@ namespace RPGKarawara
             damageEffect.contactPoint = new Vector3(contactPointX, contactPointY, contactPointZ);
             damageEffect.characterCausingDamage = characterCausingDamage;
 
-            damagedCharacter.characterEffectsManager.ProcessInstantEffect(damageEffect);
+            damagedCharacter.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
         }
 
     

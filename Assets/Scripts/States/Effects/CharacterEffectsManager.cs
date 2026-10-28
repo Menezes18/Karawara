@@ -27,6 +27,14 @@ namespace RPGKarawara
             effect.ProcessEffect(character);
         }
 
+        // Transfers ownership of a freshly instantiated, synchronous effect.
+        // Shared authored assets continue to use ProcessInstantEffect.
+        public void ProcessOwnedInstantEffect(InstantCharacterEffect effect)
+        {
+            try { ProcessInstantEffect(effect); }
+            finally { if (effect != null) Destroy(effect); }
+        }
+
         public void PlayBloodSplatterVFX(Vector3 contactPoint)
         {
             //  IF WE MANUALLY HAVE PLACED A BLOOD SPLATTER VFX ON THIS MODEL, PLAY ITS VERSION

@@ -111,8 +111,8 @@ namespace RPGKarawara
             player.playerNetworkManager.currentRightHandWeaponID.Value = firstWeapon.itemID;
         }
 
-        // Chama a animação de combo diretamente após a troca de arma.
-        player.playerAnimatorManager.PlayTargetActionAnimation("Combo_Attack_01", false, false, true, true);
+        // Usa o estado de equipar já presente no controlador Humanoid.
+        player.playerAnimatorManager.PlayTargetActionAnimation("Swap_Right_Weapon_01", false, false, true, true);
         return;
     }
 
@@ -126,8 +126,8 @@ namespace RPGKarawara
             // ATRIBUI O ID DA ARMA PARA TODOS OS CLIENTES CONECTADOS
             player.playerNetworkManager.currentRightHandWeaponID.Value = player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex].itemID;
             
-            // Chama a animação de combo diretamente após a troca de arma.
-            player.playerAnimatorManager.PlayTargetActionAnimation("Combo_Attack_01", false, false, true, true);
+            // Usa o estado de equipar já presente no controlador Humanoid.
+            player.playerAnimatorManager.PlayTargetActionAnimation("Swap_Right_Weapon_01", false, false, true, true);
             return;
         }
     }

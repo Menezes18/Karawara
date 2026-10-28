@@ -6,6 +6,8 @@ namespace RPGKarawara
 {
     public class HealthManager : MonoBehaviour
     {
+        void OnEnable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+        void OnDisable() => DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
         public float maxHealth = 100f;
         public float currentHealth;
 
@@ -34,6 +36,7 @@ namespace RPGKarawara
         {
             currentHealth -= damage;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Evita valores negativos
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.HealthChanged);
 
             Debug.Log($"{gameObject.name} recebeu {damage} de dano. Vida atual: {currentHealth}");
             UpdateHealthSlider();
@@ -69,6 +72,7 @@ namespace RPGKarawara
         public void Heal(float amount)
         {
             currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.HealthChanged);
             Debug.Log($"{gameObject.name} foi curado em {amount}. Vida atual: {currentHealth}");
             UpdateHealthSlider();
         }

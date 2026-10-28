@@ -17,6 +17,9 @@ namespace RPGKarawara
 
 
         public void LoadSceneGame(){
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.LoadingRequest);
+#endif
             image.SetActive(true);
             
             _button.enabled = false;
@@ -24,12 +27,24 @@ namespace RPGKarawara
         }
         
         public void LoadGame(){
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.LoadingRequest);
+#endif
             image.SetActive(true);
 
         }
 
         public void desativado(){
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.HiddenRequest);
+#endif
             image.SetActive(false);
         }
-    }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+        void OnEnable() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Enabled); }
+        void OnDisable() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Disabled); }
+        void OnDestroy() { RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.Destroyed); }
+#endif
+}
 }

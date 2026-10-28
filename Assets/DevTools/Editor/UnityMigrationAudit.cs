@@ -155,6 +155,52 @@ namespace RPGKarawara.DevTools.Editor
             public ulong bytes;
         }
 
+        [Serializable] public class QaStandaloneReport : StandaloneReport
+        {
+            public string[] extraScriptingDefines;
+        }
+
+        [MenuItem("Karawara/Validation/TOBE/Build QA Release")]
+        public static void BuildQaRelease()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) throw new InvalidOperationException("Exit Play Mode before building.");
+            const string reportPath = "Docs/Validation/TOBE/01a-qa-release-build.json";
+            var report = new QaStandaloneReport
+            {
+                utc = DateTime.UtcNow.ToString("O"), result = "running",
+                output = Path.GetFullPath("Builds/TOBE-QA/WindowsRelease/Karawara.exe"),
+                scenes = EditorBuildSettings.scenes.Where(scene => scene.enabled).Select(scene => scene.path).ToArray(),
+                extraScriptingDefines = new[] { "KARAWARA_QA" }
+            };
+            WriteReport(reportPath, report);
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(report.output));
+                // Build-local define: no PlayerSettings or Editor build configuration is changed.
+                var build = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+                {
+                    scenes = report.scenes, locationPathName = report.output,
+                    target = BuildTarget.StandaloneWindows64, options = BuildOptions.None,
+                    extraScriptingDefines = report.extraScriptingDefines
+                });
+                if (build == null) throw new InvalidOperationException("Unity returned no build report; inspect Editor.log for its diagnostic.");
+                report.result = build.summary.result.ToString();
+                report.errors = build.summary.totalErrors;
+                report.warnings = build.summary.totalWarnings;
+                report.bytes = build.summary.totalSize;
+                report.error = string.Join("\n", build.steps.SelectMany(step => step.messages)
+                    .Where(message => message.type == LogType.Error || message.type == LogType.Exception)
+                    .Select(message => message.content));
+            }
+            catch (Exception ex) { report.result = "Exception"; report.error = ex.ToString(); }
+            finally
+            {
+                report.finishedUtc = DateTime.UtcNow.ToString("O");
+                WriteReport(reportPath, report);
+            }
+            Debug.Log("QA Windows Release build: " + report.result + "; " + report.output);
+        }
+
         [MenuItem("Karawara/Validation/Build Windows Release")]
         public static void BuildWindowsRelease()
         {

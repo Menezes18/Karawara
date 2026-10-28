@@ -72,7 +72,7 @@ namespace RPGKarawara
                 damageEffect.fireDamage = fireDamage;
                 damageEffect.holyDamage = holyDamage;
 
-                damageTarget.characterEffectsManager.ProcessInstantEffect(damageEffect);
+                damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
                 
             }
         }

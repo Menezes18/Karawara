@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8276213025860804225}
   - component: {fileID: 6900288646350769593}
   - component: {fileID: 5118622295571378541}
+  - component: {fileID: 9102100000000000001}
   m_Layer: 0
   m_Name: ParticleFire_ADD
   m_TagString: Untagged
@@ -19452,3 +19453,17 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &9102100000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2887760234258226546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e2a3922f06b0744b54ec58d26fd1de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visual: {fileID: 5118622295571378541}
+  source: {fileID: 8276213025860804225}

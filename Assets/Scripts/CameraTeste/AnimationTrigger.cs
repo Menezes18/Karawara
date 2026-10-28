@@ -17,6 +17,10 @@ public class AnimationTrigger : MonoBehaviour
     }
 
     public void AtivarCameraCutScene(){
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
+
         cam.enabled = true;
         Time.timeScale = 0;
         
@@ -28,10 +32,18 @@ public class AnimationTrigger : MonoBehaviour
     }
 
     public void AtivarCollider(){
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
+
         target.SetActive(!target.activeSelf);
     }
 
     public void DeativarCameraCutScene(){
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this);
+#endif
+
     Time.timeScale = 1;
         Debug.Log("AAA");
     cam.enabled = false;
