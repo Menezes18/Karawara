@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 
 namespace RPGKarawara.DevTools.Performance
 {
@@ -114,9 +114,9 @@ namespace RPGKarawara.DevTools.Performance
 #endif
         }
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
-        void Watch<T>(NetworkVariable<T> value, Component actor, PerformanceActorLifecycle change) where T : unmanaged, IEquatable<T>
+        void Watch<T>(ObservableValue<T> value, Component actor, PerformanceActorLifecycle change) where T : unmanaged, IEquatable<T>
         {
-            NetworkVariable<T>.OnValueChangedDelegate callback = (previous, current) => Observe(actor, change);
+            Action<T, T> callback = (previous, current) => Observe(actor, change);
             value.OnValueChanged += callback;
             unsubscribe.Add(() => value.OnValueChanged -= callback);
         }

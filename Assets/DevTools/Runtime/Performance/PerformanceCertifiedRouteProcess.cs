@@ -279,7 +279,7 @@ namespace RPGKarawara.DevTools.Performance
                 if (request.config.checkpointImages) session.Evidence.measurementArm = "checkpoint-images-diagnostic";
                 session.player = player; session.input = input; session.cameraOwner = cameraOwner; session.world = WorldSaveGameManager.instance;
                 session.history = history; session.controls = input.playerControls; session.saveOverride = session.world.SaveRootOverride;
-                if (session.world.SaveRoot != request.saveRoot || !player.IsOwner || !player.IsSpawned || input.player != player || cameraOwner.player != player || !cameraOwner.canFollow || cameraOwner.cameraObject == null || !Application.isFocused)
+                if (session.world.SaveRoot != request.saveRoot || !player.IsInitialized || !player.IsInitialized || input.player != player || cameraOwner.player != player || !cameraOwner.canFollow || cameraOwner.cameraObject == null || !Application.isFocused)
                     throw new InvalidOperationException("Actual healthy owned world/controls/camera and isolated root required");
                 session.sceneHandle = SceneManager.GetActiveScene().handle;
                 if (SceneManager.GetActiveScene().name != session.manifest.scene) throw new InvalidOperationException("Certified world scene mismatch");
@@ -353,7 +353,7 @@ namespace RPGKarawara.DevTools.Performance
                     }
                     if (elapsed >= 30) Require(Evidence.lightObserversReleaseEndedElapsed > 0, "Light observer cleanup did not complete before measurement");
                     if (elapsed < 30) ObserveCameraIdentity();
-                    else Require(Application.isFocused && player != null && player.IsSpawned && player.IsOwner && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0 && SceneManager.GetActiveScene().handle == sceneHandle, "Light route focus/scene/player lifetime changed");
+                    else Require(Application.isFocused && player != null && player.IsInitialized && player.IsInitialized && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0 && SceneManager.GetActiveScene().handle == sceneHandle, "Light route focus/scene/player lifetime changed");
                 }
                 poseProof?.Observe(elapsed, player.transform.position, cameraOwner.cameraObject.transform.rotation, Time.frameCount);
                 attribution?.Tick(elapsed);
@@ -394,10 +394,10 @@ namespace RPGKarawara.DevTools.Performance
         {
             if (attribution == null && (UnityEngine.Profiling.Profiler.enabled || UnityEngine.Profiling.Profiler.enableAllocationCallstacks)) throw new InvalidOperationException("Profiler instrumentation is active during a timing session.");
             HandlePlannedPause();
-            var network = Unity.Netcode.NetworkManager.Singleton;
+            var network = GameBootstrap.Instance;
             if (Time.timeScale != 1 || !Application.isFocused || world == null || world != WorldSaveGameManager.instance || world.player != player || world.SaveRootOverride != saveOverride ||
-                network == null || !network.IsListening || !network.IsHost || network.LocalClient?.PlayerObject != player.NetworkObject ||
-                player == null || !player.IsOwner || !player.IsSpawned || player.isDead.Value || player.playerNetworkManager.currentHealth.Value <= 0 ||
+                network == null || !network.Session.IsActive || !network.Session.IsActive || network.Session.Player != player ||
+                player == null || !player.IsInitialized || !player.IsInitialized || player.isDead.Value || player.playerNetworkManager.currentHealth.Value <= 0 ||
                 input != PlayerInputManager.instance || input.player != player || input.playerControls != controls || !controls.asset.enabled ||
                 cameraOwner != PlayerCamera.instance || cameraOwner.player != player || !cameraOwner.canFollow || SceneManager.GetActiveScene().handle != sceneHandle ||
                 Camera.allCamerasCount != cameras.Length || Camera.GetAllCameras(cameraScratch) != cameras.Length)
@@ -526,7 +526,7 @@ namespace RPGKarawara.DevTools.Performance
             foreach (var old in before.actors)
             {
                 var current = after.actors.SingleOrDefault(a => a.objectId == old.objectId);
-                if (current == null || current.sceneHandle != old.sceneHandle || current.scene != old.scene || current.path != old.path || current.primaryType != old.primaryType || current.role != old.role || current.active != old.active || current.enabled != old.enabled || current.spawned != old.spawned || current.networkObjectId != old.networkObjectId || current.dead != old.dead || current.maximumHealth != old.maximumHealth || !current.components.OrderBy(c => c, StringComparer.Ordinal).SequenceEqual(old.components.OrderBy(c => c, StringComparer.Ordinal))) return false;
+                if (current == null || current.sceneHandle != old.sceneHandle || current.scene != old.scene || current.path != old.path || current.primaryType != old.primaryType || current.role != old.role || current.active != old.active || current.enabled != old.enabled || current.spawned != old.spawned || current.localCharacterId != old.localCharacterId || current.dead != old.dead || current.maximumHealth != old.maximumHealth || !current.components.OrderBy(c => c, StringComparer.Ordinal).SequenceEqual(old.components.OrderBy(c => c, StringComparer.Ordinal))) return false;
             }
             return true;
         }

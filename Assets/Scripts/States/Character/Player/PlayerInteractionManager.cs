@@ -22,8 +22,7 @@ namespace RPGKarawara
 
         private void FixedUpdate()
         {
-            if (!player.IsOwner)
-                return;
+            if (!player.IsInitialized || PlayerUIManager.instance == null) return;
 
             //  IF OUR UI MENU IS NOT OPEN, AND WE DONT HAVE A POP UP (CURRENT INTERACTION MESSAGE) CHECK FOR INTERACTABLE
             if (!PlayerUIManager.instance.menuWindowIsOpen && !PlayerUIManager.instance.popUpWindowIsOpen)

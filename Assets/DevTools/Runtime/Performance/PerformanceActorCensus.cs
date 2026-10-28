@@ -16,7 +16,7 @@ namespace RPGKarawara.DevTools.Performance
             public string scene, path, primaryType, role;
             public string[] components;
             public bool active, enabled, supportedBinding, spawned;
-            public ulong? networkObjectId;
+            public int? localCharacterId;
             public float? currentHealth, maximumHealth;
             public bool? dead;
             public float[] position;
@@ -45,7 +45,7 @@ namespace RPGKarawara.DevTools.Performance
             public int spawnerId, prefabId, createdObjectId, actorObjectId;
             public string scene, path, prefabName, createdPath, status;
             public bool spawnerActive, createdActive, supportedActor, uniqueOwner, spawned, linked;
-            public ulong? networkObjectId;
+            public int? localCharacterId;
         }
         [Serializable] public sealed class UiIcon
         {
@@ -95,7 +95,7 @@ namespace RPGKarawara.DevTools.Performance
                         (PerformanceActorRosterContext.AmbientNpcController(primary) && PerformanceActorRosterContext.AmbientNpcController(p)));
                 if (primary is CharacterManager character && character.characterNetworkManager == null) supported = false;
                 if (supported) { bindings.Add(primary); roles.Add(role); ownedRoots.Add(group.Key); }
-                var network = primary as Unity.Netcode.NetworkBehaviour;
+                var network = primary as CharacterManager;
                 var characterSource = primary as CharacterManager;
                 var healthSource = parts.OfType<HealthManager>().FirstOrDefault();
                 var networkSource = characterSource == null ? null : characterSource.characterNetworkManager;
@@ -103,7 +103,7 @@ namespace RPGKarawara.DevTools.Performance
                 actors.Add(new Actor { objectId = root.GetInstanceID(), sceneHandle = root.scene.handle, scene = root.scene.name, path = Path(root.transform),
                     primaryType = primary.GetType().FullName, role = role, components = parts.Select(p => p.GetType().FullName).OrderBy(n => n, StringComparer.Ordinal).ToArray(),
                     active = root.activeInHierarchy, enabled = ((Behaviour)primary).enabled, supportedBinding = supported,
-                    spawned = network != null && network.IsSpawned, networkObjectId = network != null && network.IsSpawned ? network.NetworkObjectId : (ulong?)null,
+                    spawned = network != null && network.IsInitialized, localCharacterId = network != null && network.IsInitialized ? network.LocalId : (int?)null,
                     currentHealth = networkSource != null ? networkSource.currentHealth.Value : healthSource != null ? healthSource.currentHealth : (float?)null,
                     maximumHealth = networkSource != null ? networkSource.maxHealth.Value : healthSource != null ? healthSource.maxHealth : (float?)null,
                     dead = characterSource != null ? characterSource.isDead.Value : (bool?)null,
@@ -171,10 +171,10 @@ namespace RPGKarawara.DevTools.Performance
                 var created = createdBy(s); var prefab = prefabOf(s);
                 var actor = created == null ? null : actors.FirstOrDefault(a => a.objectId == created.GetInstanceID());
                 var ai = created == null ? null : created.GetComponent<AICharacterManager>();
-                var networkObject = created == null ? null : created.GetComponent<Unity.Netcode.NetworkObject>();
+                var networkObject = created == null ? null : created.GetComponent<CharacterManager>();
                 bool unique = created != null && aiSpawners.Count(other => createdBy(other) == created) == 1;
                 bool supported = ai != null && actor != null && actor.supportedBinding && actor.role == "hostile";
-                bool spawned = networkObject != null && networkObject.IsSpawned && ai != null && ai.IsSpawned && ai.NetworkObject == networkObject;
+                bool spawned = networkObject != null && networkObject.IsInitialized && ai != null && ai.IsInitialized && ai == networkObject;
                 string status = created == null ? "not-created" : !unique ? "ambiguous-owner" : !supported ? "unbound-actor" :
                     prefab == null ? "missing-prefab" : !spawned ? "not-network-spawned" : "linked";
                 return new SpawnerAssociation { spawnerId = s.GetInstanceID(), scene = s.gameObject.scene.name, path = Path(s.transform),
@@ -182,7 +182,7 @@ namespace RPGKarawara.DevTools.Performance
                     createdObjectId = created == null ? 0 : created.GetInstanceID(), createdPath = created == null ? null : Path(created.transform),
                     actorObjectId = actor == null ? 0 : actor.objectId, spawnerActive = s.gameObject.activeInHierarchy,
                     createdActive = created != null && created.activeInHierarchy, supportedActor = supported, uniqueOwner = unique,
-                    spawned = spawned, networkObjectId = spawned ? networkObject.NetworkObjectId : (ulong?)null, status = status, linked = status == "linked" };
+                    spawned = spawned, localCharacterId = spawned ? networkObject.LocalId : (int?)null, status = status, linked = status == "linked" };
             }).OrderBy(s => s.scene + "/" + s.path, StringComparer.Ordinal).ToArray();
             return new Snapshot { bindings = bindings.ToArray(), roles = roles.ToArray(), uiCreators = uiCreators.ToArray(), uiSourceOwners = uiSourceOwners.ToArray(), auxiliaryBindings = auxiliaryBindings, report = new Report {
                 utc = DateTime.UtcNow.ToString("O"), activeScene = SceneManager.GetActiveScene().name, frame = Time.frameCount,

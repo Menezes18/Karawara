@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2468125004305962267}
   - component: {fileID: 1564815277958389200}
-  - component: {fileID: 2336088985356631099}
   - component: {fileID: 4054232542551896833}
   m_Layer: 0
   m_Name: SiteOfGraceInteractable
@@ -57,27 +56,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7067891, y: 1.3354138, z: 1.231211}
   m_Center: {x: -0.0171898, y: 0.16770698, z: -0.005816102}
---- !u!114 &2336088985356631099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663985790904950847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1187884612
-  InScenePlacedSourceGlobalObjectIdHash: 2570838139
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &4054232542551896833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,12 +76,9 @@ MonoBehaviour:
   lever: {fileID: 0}
   sceneName: 
   siteOfGraceID: 0
-  isActivated:
-    m_InternalValue: 0
   activatedParticles: {fileID: 0}
   unactivatedInteractionText: Restore Site Of Grace
   activatedInteractionText: Rest
-  painel: {fileID: 1353116680483544710}
 --- !u!1001 &2024003540507234402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,7 +139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 37eaade5be419de4c922bf30b19d757b,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5fd4d9106d1ad9a4d80fe2c3ca0bb52e, type: 2}
     - target: {fileID: 919132149155446097, guid: 37eaade5be419de4c922bf30b19d757b,
@@ -462,12 +437,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c709f7453a10494dbe388b7b7c76f7d, type: 3}
---- !u!1 &1353116680483544710 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7033629775891457874, guid: 7c709f7453a10494dbe388b7b7c76f7d,
-    type: 3}
-  m_PrefabInstance: {fileID: 8312313886032165332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5242149308507041892 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4315748572426488240, guid: 7c709f7453a10494dbe388b7b7c76f7d,

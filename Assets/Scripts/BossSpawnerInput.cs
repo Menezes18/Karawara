@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 using UnityEngine.InputSystem;
 namespace RPGKarawara{
     public class BossSpawnerInput : MonoBehaviour{
@@ -10,7 +10,7 @@ namespace RPGKarawara{
         private GameObject instantiatedBoss; // Referência para o boss instanciado
         public int id = 4;
         private void Update(){
-            if (Keyboard.current.xKey.wasPressedThisFrame){
+            if (Keyboard.current != null && Keyboard.current.xKey.wasPressedThisFrame){
                 SpawnBoss(); // Chama o método para instanciar o boss
             }
         }
@@ -28,25 +28,17 @@ namespace RPGKarawara{
             {
                 // Instancia o boss na posição e rotação do spawnPoint
                 instantiatedBoss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(instantiatedBoss, gameObject.scene);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
                 DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedBoss, DevTools.Performance.PerformanceAiCreationHistory.Stage.Instantiated);
 #endif
-                
-                // Certifique-se de que o boss usa o NetworkObject para ser sincronizado na rede
-                NetworkObject networkObject = instantiatedBoss.GetComponent<NetworkObject>();
-                if (networkObject != null)
-                {
-                    networkObject.Spawn(destroyWithScene: true);
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
-                    DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedBoss, DevTools.Performance.PerformanceAiCreationHistory.Stage.NetworkSpawned);
-#endif
-                }
 
                 // Definir o ID do boss e adicioná-lo à lista de bosses no WorldAIManager
                 var bossCharacterManager = instantiatedBoss.GetComponent<AIBossCharacterManager>();
                 if (bossCharacterManager != null)
                 {
                     bossCharacterManager.bossID = id;
+                    bossCharacterManager.InitializeLocal(bossCharacterManager.State, GameBootstrap.EnsureInstance().Registry);
                     WorldAIManager.instance.AddCharacterToSpawnedCharactersList(bossCharacterManager);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
                     DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedBoss, DevTools.Performance.PerformanceAiCreationHistory.Stage.Registered);

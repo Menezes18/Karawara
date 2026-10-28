@@ -31,6 +31,7 @@ namespace RPGKarawara
 
                 // Instancia o tornado
                 GameObject tornado = Instantiate(tornadoPrefab, spawnPosition, Quaternion.identity);
+                foreach (var hitbox in tornado.GetComponentsInChildren<DamageCollider>()) hitbox.sourceCharacter = saciCharacterManager;
 
                 // Move o tornado na direção do player
                 StartCoroutine(MoveTornadoTowardsPlayer(tornado, playerPosition));

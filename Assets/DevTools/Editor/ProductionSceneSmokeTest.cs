@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using RPGKarawara;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -98,17 +98,14 @@ namespace RPGKarawara.DevTools.Editor
                     characterName = "Production Smoke Test", currentHealth = 400,
                     vitality = 1, endurance = 1, sceneIndex = 1
                 };
-                var network = NetworkManager.Singleton;
+                var network = GameBootstrap.Instance;
                 if (network == null) throw new InvalidOperationException("SceneMenu has no NetworkManager singleton.");
-                if (!network.IsListening)
+                if (!network.Session.IsActive)
                 {
-                    // Keep validation local and avoid a socket left by an interrupted Editor reload.
-                    var transport = network.NetworkConfig.NetworkTransport as Unity.Netcode.Transports.UTP.UnityTransport;
-                    if (transport != null) transport.SetConnectionData("127.0.0.1", 0, "127.0.0.1");
-                    if (TitleScreenManager.Instance == null) throw new InvalidOperationException("No TitleScreenManager singleton.");
-                    TitleScreenManager.Instance.StartNetworkAsHost();
+                    if (network.PlayerPrefab == null) throw new InvalidOperationException("Local bootstrap player prefab missing.");
+                    network.Session.SpawnQaPlayer(network.PlayerPrefab, Vector3.zero, Quaternion.identity);
                 }
-                else if (!network.IsHost) throw new InvalidOperationException("Existing network session is not a host.");
+                
                 stage = 0;
                 sceneIndex = 0;
                 deadline = EditorApplication.timeSinceStartup + 20;
@@ -126,9 +123,9 @@ namespace RPGKarawara.DevTools.Editor
                 var now = EditorApplication.timeSinceStartup;
                 if (stage == 0)
                 {
-                    var network = NetworkManager.Singleton;
+                    var network = GameBootstrap.Instance;
                     var player = LocalPlayer();
-                    if (network != null && network.IsHost && player != null && player.IsSpawned && player.IsOwner)
+                    if (network != null && network.Session.IsActive && player != null && player.IsInitialized && player.IsInitialized)
                     {
                         stage = 1;
                         deadline = now + 3;
@@ -238,10 +235,10 @@ namespace RPGKarawara.DevTools.Editor
 
         static PlayerManager LocalPlayer()
         {
-            var network = NetworkManager.Singleton;
-            if (network != null && network.LocalClient != null && network.LocalClient.PlayerObject != null)
-                return network.LocalClient.PlayerObject.GetComponent<PlayerManager>();
-            return UnityEngine.Object.FindObjectsByType<PlayerManager>(FindObjectsSortMode.None).FirstOrDefault(p => p.IsOwner);
+            var network = GameBootstrap.Instance;
+            if (network != null && network.Session != null && network.Session.Player != null)
+                return network.Session.Player;
+            return UnityEngine.Object.FindObjectsByType<PlayerManager>(FindObjectsSortMode.None).FirstOrDefault(p => p.IsInitialized);
         }
 
         static void Snapshot(Phase phase)
@@ -259,11 +256,11 @@ namespace RPGKarawara.DevTools.Editor
             var scene = SceneManager.GetActiveScene();
             phase.activeScene = scene.path;
             phase.sceneLoaded = scene.isLoaded && scene.buildIndex == phase.buildIndex;
-            phase.hostListening = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost && NetworkManager.Singleton.IsListening;
+            phase.hostListening = GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive && GameBootstrap.Instance.Session.IsActive;
             var player = LocalPlayer();
             phase.playerPresent = player != null;
-            phase.playerOwner = player != null && player.IsOwner;
-            phase.playerSpawned = player != null && player.IsSpawned;
+            phase.playerOwner = player != null && player.IsInitialized;
+            phase.playerSpawned = player != null && player.IsInitialized;
             phase.playerPosition = player != null ? player.transform.position.ToString("F3") : "absent";
             phase.playerCount = UnityEngine.Object.FindObjectsByType<PlayerManager>(FindObjectsSortMode.None).Length;
             var enemies = UnityEngine.Object.FindObjectsByType<AICharacterManager>(FindObjectsSortMode.None);

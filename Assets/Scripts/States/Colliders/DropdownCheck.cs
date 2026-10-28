@@ -9,7 +9,7 @@ namespace RPGKarawara
     {
 
         public TMP_Dropdown  dropdown;
-        
+
 
         void Start()
         {
@@ -31,6 +31,6 @@ namespace RPGKarawara
             //Debug.Log(selectedOption);
             WorldSaveGameManager.instance.OnSlotOverwriteSelected(selectedOption);
         }
-    } 
+    }
 }
 

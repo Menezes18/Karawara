@@ -59,8 +59,7 @@ namespace RPGKarawara
             base.SuccessfullyCastSpell(player);
 
             // DESTROY ANY WARM UP FX REMAINING FROM THE SPELL
-            if (player.IsOwner)
-                player.playerCombatManager.DestroyAllCurrentActionFX();
+            player.playerCombatManager.DestroyAllCurrentActionFX();
 
             // INSTANTIATE THE PROJECTILE
             SpellInstantiationLocation spellInstantiationLocation;
@@ -127,8 +126,7 @@ namespace RPGKarawara
             base.SuccessfullyChargeSpell(player);
 
             // DESTROY ANY WARM UP FX REMAINING FROM THE SPELL
-            if (player.IsOwner)
-                player.playerCombatManager.DestroyAllCurrentActionFX();
+            player.playerCombatManager.DestroyAllCurrentActionFX();
 
             // INSTANTIATE THE PROJECTILE
             SpellInstantiationLocation spellInstantiationLocation;
@@ -158,8 +156,7 @@ namespace RPGKarawara
             base.SuccessfullyCastSpellFullCharge(player);
 
             // DESTROY ANY WARM UP FX REMAINING FROM THE SPELL
-            if (player.IsOwner)
-                player.playerCombatManager.DestroyAllCurrentActionFX();
+            player.playerCombatManager.DestroyAllCurrentActionFX();
 
             // INSTANTIATE THE PROJECTILE
             SpellInstantiationLocation spellInstantiationLocation;

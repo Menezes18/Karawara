@@ -11,9 +11,6 @@ namespace RPGKarawara
         {
             base.AttemptToPerformAction(playerPerformingAction, weaponPerformingAction);
 
-            if (!playerPerformingAction.IsOwner)
-                return;
-
 
 
             if (!playerPerformingAction.characterLocomotionManager.isGrounded)
@@ -25,8 +22,7 @@ namespace RPGKarawara
             if (playerPerformingAction.playerInventoryManager.currentSpell.SpellClass != SpellClass.Incantation)
                 return;
 
-            if (playerPerformingAction.IsOwner)
-                playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
+            playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
 
             CastIncantation(playerPerformingAction, weaponPerformingAction);
         }

@@ -77,46 +77,29 @@ namespace RPGKarawara
             _playerUIHudManager = FindObjectOfType<PlayerUIHudManager>();
         }
 
-        private void Start()
+        private bool sessionInputEnabled;
+        public bool SessionInputEnabled => sessionInputEnabled;
+        public void BindSessionPlayer(PlayerManager sessionPlayer)
         {
-            DontDestroyOnLoad(gameObject);
-
-            //  WHEN THE SCENE CHANGES, RUN THIS LOGIC
-            SceneManager.activeSceneChanged += OnSceneChange;
-
-            instance.enabled = false;
-
-            if (playerControls != null)
-            {
-                playerControls.Disable();
-            }
-            
+            player = sessionPlayer;
+            playerLocomotionManager = player != null ? player.playerLocomotionManager : null;
+            if (player == null) SetSessionInputEnabled(false);
         }
-
-        private void OnSceneChange(Scene oldScene, Scene newScene)
+        public void SetSessionInputEnabled(bool value)
         {
-            //  IF WE ARE LOADING INTO OUR WORLD SCENE, ENABLE OUR PLAYERS CONTROLS
-            if (newScene.buildIndex == WorldSaveGameManager.instance.GetWorldSceneIndex())
-            {
-                instance.enabled = true;
-
-                if (playerControls != null)
-                {
-                    playerControls.Enable();
-                }
-            }
-            //  OTHERWISE WE MUST BE AT THE MAIN MENU, DISABLE OUR PLAYERS CONTROLS
-            //  THIS IS SO OUR PLAYER CANT MOVE AROUND IF WE ENTER THINGS LIKE A CHARACTER CREATION MENU ECT
-            // else
-            // {
-            //     instance.enabled = false;
-            //
-            //     if (playerControls != null)
-            //     {
-            //         playerControls.Disable();
-            //     }
-            // }
+            sessionInputEnabled = value && player != null && player.IsInitialized;
+            movementInput = camera_Input = Vector2.zero;
+            vertical_Input = horizontal_Input = moveAmount = 0;
+            cameraVertical_Input = cameraHorizontal_Input = 0;
+            dodge_Input = sprint_Input = jump_Input = RB_Input = RT_Input = hold_RB_Input = Hold_RT_Input = false;
+            lockOn_Input = lockOn_Left_Input = lockOn_Right_Input = interaction_Input = esc_Input = skillUI_Input = false;
+            input_Que_Is_Active = que_RB_Input = que_RT_Input = false;
+            CancelInvoke();
+            if (lockOnCoroutine != null) { StopCoroutine(lockOnCoroutine); lockOnCoroutine = null; }
+            if (playerControls != null) { if (sessionInputEnabled) playerControls.Enable(); else playerControls.Disable(); }
         }
+        private void Start() { DontDestroyOnLoad(gameObject); SetSessionInputEnabled(sessionInputEnabled); }
+        private void OnDisable() { playerControls?.Disable(); }
 
         private void OnEnable()
         {
@@ -162,13 +145,13 @@ namespace RPGKarawara
                 playerControls.PlayerActions.QueRT.performed += i => QueInput(ref que_RT_Input);
             }
 
-            playerControls.Enable();
+            if (sessionInputEnabled) playerControls.Enable();
         }
 
         private void OnDestroy()
         {
             //  IF WE DESTROY THIS OBJECT, UNSUBSCRIBE FROM THIS EVENT
-            SceneManager.activeSceneChanged -= OnSceneChange;
+
             if (playerControls != null)
             {
                 playerControls.Disable();
@@ -181,7 +164,7 @@ namespace RPGKarawara
         //  IF WE MINIMIZE OR LOWER THE WINDOW, STOP ADJUSTING INPUTS
         private void OnApplicationFocus(bool focus)
         {
-            if (enabled)
+            if (enabled && sessionInputEnabled && playerControls != null)
             {
                 if (focus)
                 {
@@ -196,7 +179,7 @@ namespace RPGKarawara
 
         private void Update()
         {
-            HandleAllInputs();
+            if (sessionInputEnabled && player != null && player.IsInitialized) HandleAllInputs();
         }
 
         public PlayerLocomotionManager playerLocomotionManager;
@@ -307,11 +290,11 @@ namespace RPGKarawara
         public bool inputsEnabled = true; 
         private void HandlePlayerMovementInput()
         {
-            if (!inputsEnabled) // Verifica se os inputs est√£o habilitados
+            if (!inputsEnabled) // Verifica se os inputs est„o habilitados
             {
-                player.playerNetworkManager.isMoving.Value = false; // Para a movimenta√ß√£o
+                player.playerNetworkManager.isMoving.Value = false; // Para a movimentaÁ„o
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, 0, false); // Atualiza o animator
-                return; // Retorna para parar a movimenta√ß√£o
+                return; // Retorna para parar a movimentaÁ„o
             }
             vertical_Input = movementInput.y;
             horizontal_Input = movementInput.x;
@@ -412,6 +395,7 @@ namespace RPGKarawara
         }
         public void DisableInput()
         {
+            if (playerControls == null) return;
             playerControls.PlayerMovement.Disable();
             playerControls.PlayerActions.Disable();
         }
@@ -420,13 +404,15 @@ namespace RPGKarawara
         {
             inputsEnabled = false;
             // Desabilita todos os inputs
-            playerControls.Disable();
+            playerControls?.Disable();
+            if (player == null || !player.IsInitialized) return;
 
             // Para o movimento do jogador imediatamente
             player.playerNetworkManager.isMoving.Value = false;
             player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, 0, false);
         }
         public void EnableAll(){
+            if (!sessionInputEnabled || playerControls == null) return;
             playerControls.PlayerMovement.Enable();
             playerControls.PlayerActions.Enable();
             playerControls.PlayerCamera.Enable();
@@ -435,6 +421,7 @@ namespace RPGKarawara
         }
         public void EnableInput()
         {
+            if (!sessionInputEnabled || playerControls == null) return;
             playerControls.PlayerMovement.Enable();
             playerControls.PlayerActions.Enable();
         }
@@ -470,19 +457,19 @@ namespace RPGKarawara
 
         private void HandleRTInput()
         {
-            // Verifica se o bot√£o de ataque forte foi pressionado
+            // Verifica se o bot„o de ataque forte foi pressionado
             if (RT_Input){
                 
-                // Reseta a entrada para evitar m√∫ltiplos disparos no mesmo pressionamento
+                // Reseta a entrada para evitar m˙ltiplos disparos no mesmo pressionamento
                 RT_Input = false;
 
-                // Aqui voc√™ pode verificar se h√° alguma janela de UI aberta e retornar para evitar ataques indesejados
+                // Aqui vocÍ pode verificar se h· alguma janela de UI aberta e retornar para evitar ataques indesejados
                 // TODO: IF WE HAVE A UI WINDOW OPEN, RETURN AND DO NOTHING
 
-                // Define a a√ß√£o para a m√£o correta
+                // Define a aÁ„o para a m„o correta
                 player.playerNetworkManager.SetCharacterActionHand(true);
 
-                // Realiza o ataque baseado na arma que est√° equipada na m√£o direita
+                // Realiza o ataque baseado na arma que est· equipada na m„o direita
                 player.playerCombatManager.EnsureRightWeaponActive();
                 player.playerCombatManager.PerformWeaponBasedAction(player.playerInventoryManager.currentRightHandWeapon.oh_RT_Action, player.playerInventoryManager.currentRightHandWeapon);
             }

@@ -61,9 +61,6 @@ namespace RPGKarawara
 
         public void SwitchRightWeapon()
         {
-           
-            if (!player.IsOwner)
-                return;
 
     // TROCA DE ARMAS NO ESTILO ELDEN RING
     // 1. Verifica se temos outra arma além da principal, se sim, NUNCA troque para desarmado, alterne entre a arma 1 e 2
@@ -103,12 +100,12 @@ namespace RPGKarawara
         {
             player.playerInventoryManager.rightHandWeaponIndex = -1;
             selectedWeapon = WorldItemDatabase.Instance.unarmedWeapon;
-            player.playerNetworkManager.currentRightHandWeaponID.Value = selectedWeapon.itemID;
+            player.playerNetworkManager.currentRightHandWeaponID.SetAndNotify(selectedWeapon.itemID);
         }
         else // CASO CONTRÁRIO, TROCA PARA A PRIMEIRA ARMA ENCONTRADA
         {
             player.playerInventoryManager.rightHandWeaponIndex = firstWeaponPosition;
-            player.playerNetworkManager.currentRightHandWeaponID.Value = firstWeapon.itemID;
+            player.playerNetworkManager.currentRightHandWeaponID.SetAndNotify(firstWeapon.itemID);
         }
 
         // Usa o estado de equipar já presente no controlador Humanoid.
@@ -124,7 +121,7 @@ namespace RPGKarawara
         {
             selectedWeapon = player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex];
             // ATRIBUI O ID DA ARMA PARA TODOS OS CLIENTES CONECTADOS
-            player.playerNetworkManager.currentRightHandWeaponID.Value = player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex].itemID;
+            player.playerNetworkManager.currentRightHandWeaponID.SetAndNotify(player.playerInventoryManager.weaponsInRightHandSlots[player.playerInventoryManager.rightHandWeaponIndex].itemID);
             
             // Usa o estado de equipar já presente no controlador Humanoid.
             player.playerAnimatorManager.PlayTargetActionAnimation("Swap_Right_Weapon_01", false, false, true, true);
@@ -162,8 +159,6 @@ namespace RPGKarawara
 
         public void SwitchLeftWeapon()
         {
-            if (!player.IsOwner)
-                return;
 
             player.playerAnimatorManager.PlayTargetActionAnimation("Swap_Left_Weapon_01", false, false, true, true);
 
@@ -204,12 +199,12 @@ namespace RPGKarawara
                 {
                     player.playerInventoryManager.leftHandWeaponIndex = -1;
                     selectedWeapon = WorldItemDatabase.Instance.unarmedWeapon;
-                    player.playerNetworkManager.currentLeftHandWeaponID.Value = selectedWeapon.itemID;
+                    player.playerNetworkManager.currentLeftHandWeaponID.SetAndNotify(selectedWeapon.itemID);
                 }
                 else
                 {
                     player.playerInventoryManager.leftHandWeaponIndex = firstWeaponPosition;
-                    player.playerNetworkManager.currentLeftHandWeaponID.Value = firstWeapon.itemID;
+                    player.playerNetworkManager.currentLeftHandWeaponID.SetAndNotify(firstWeapon.itemID);
                 }
 
                 return;
@@ -222,7 +217,7 @@ namespace RPGKarawara
                 {
                     selectedWeapon = player.playerInventoryManager.weaponsInLeftHandSlots[player.playerInventoryManager.leftHandWeaponIndex];
                     //  ASSIGN THE NETWORK WEAPON ID SO IT SWITCHES FOR ALL CONNECTED CLIENTS
-                    player.playerNetworkManager.currentLeftHandWeaponID.Value = player.playerInventoryManager.weaponsInLeftHandSlots[player.playerInventoryManager.leftHandWeaponIndex].itemID;
+                    player.playerNetworkManager.currentLeftHandWeaponID.SetAndNotify(player.playerInventoryManager.weaponsInLeftHandSlots[player.playerInventoryManager.leftHandWeaponIndex].itemID);
                     return;
                 }
             }
@@ -251,16 +246,17 @@ namespace RPGKarawara
         //  DAMAGE COLLIDERS
         public void OpenDamageCollider()
         {
+            if (!player.IsInitialized || player.State.IsDead || !player.isPerformingAction) return;
             //  OPEN RIGHT WEAPON DAMAGE COLLIDER
             if (player.playerNetworkManager.isUsingRightHand.Value)
             {
-                rightWeaponManager.meleeDamageCollider.EnableDamageCollider();
+                if (rightWeaponManager != null && rightWeaponManager.meleeDamageCollider != null) rightWeaponManager.meleeDamageCollider.EnableDamageCollider();
 //                player.characterSoundFXManager.PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(player.playerInventoryManager.currentRightHandWeapon.whooshes));
             }
             //  OPEN LEFT WEAPON DAMAGE COLLIDER
             else if (player.playerNetworkManager.isUsingLeftHand.Value)
             {
-                leftWeaponManager.meleeDamageCollider.EnableDamageCollider();
+                if (leftWeaponManager != null && leftWeaponManager.meleeDamageCollider != null) leftWeaponManager.meleeDamageCollider.EnableDamageCollider();
               //  player.characterSoundFXManager.PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(player.playerInventoryManager.currentLeftHandWeapon.whooshes));
             }
 
@@ -269,16 +265,8 @@ namespace RPGKarawara
 
         public void CloseDamageCollider()
         {
-            //  OPEN RIGHT WEAPON DAMAGE COLLIDER
-            if (player.playerNetworkManager.isUsingRightHand.Value)
-            {
-                rightWeaponManager.meleeDamageCollider.DisableDamageCollider();
-            }
-            //  OPEN LEFT WEAPON DAMAGE COLLIDER
-            else if (player.playerNetworkManager.isUsingLeftHand.Value)
-            {
-                leftWeaponManager.meleeDamageCollider.DisableDamageCollider();
-            }
+            if (rightWeaponManager != null && rightWeaponManager.meleeDamageCollider != null) rightWeaponManager.meleeDamageCollider.DisableDamageCollider();
+            if (leftWeaponManager != null && leftWeaponManager.meleeDamageCollider != null) leftWeaponManager.meleeDamageCollider.DisableDamageCollider();
         }
     }
 }

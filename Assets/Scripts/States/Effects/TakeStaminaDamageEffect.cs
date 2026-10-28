@@ -16,7 +16,6 @@ namespace RPGKarawara
 
         private void CalculateStaminaDamage(CharacterManager character)
         {
-            if (character.IsOwner)
             {
                 Debug.Log("CHARACTER IS TAKING: " + staminaDamage + " STAMINA DAMAGE");
                 //character.characterNetworkManager.currentStamina.Value -= staminaDamage;

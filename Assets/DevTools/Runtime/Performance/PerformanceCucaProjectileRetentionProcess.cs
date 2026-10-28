@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using RPGKarawara.SkillTree;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -19,7 +19,7 @@ namespace RPGKarawara.DevTools.Performance
     // A passive same-process resource diagnostic. Death remains observable and never grants timing or population acceptance.
     public sealed class PerformanceCucaProjectileRetentionProcess : MonoBehaviour
     {
-        enum Stage { Menu, Host, World, Warmup, SnapshotBefore, Observing, Settling, SnapshotAfter, Returning, Shutdown, MenuSettling, Done }
+        enum Stage { Menu, ServicesReady, World, Warmup, SnapshotBefore, Observing, Settling, SnapshotAfter, Returning, Shutdown, MenuSettling, Done }
         struct Effect
         {
             public int ownerId, prefabId, instanceId, attackOrdinal, projectileOrdinal, createdFrame, destroyedFrame;
@@ -59,7 +59,7 @@ namespace RPGKarawara.DevTools.Performance
         PerformanceProcessResponse request;
         CucaProjectileRetentionConfig config;
         WorldSaveGameManager world;
-        NetworkManager network;
+        GameBootstrap network;
         PlayerManager player;
         CucaBoss boss;
         GameObject prefab, frozenLaserVfx;
@@ -140,7 +140,7 @@ namespace RPGKarawara.DevTools.Performance
         }
         void ValidateLiveContext()
         {
-            if (player == null || player.GetInstanceID() != lastPlayerId || !player.IsSpawned || !player.IsOwner || !player.gameObject.activeInHierarchy || network == null || !network.IsHost || SceneManager.GetActiveScene().name != "CucaLoad" || Time.timeScale != 1 ||
+            if (player == null || player.GetInstanceID() != lastPlayerId || !player.IsInitialized || !player.IsInitialized || !player.gameObject.activeInHierarchy || network == null || !network.Session.IsActive || SceneManager.GetActiveScene().name != "CucaLoad" || Time.timeScale != 1 ||
                 boss == null || !boss.gameObject.activeInHierarchy || boss.player != player.gameObject || !ReferenceEquals(boss.magicProjectile, prefab) || !ReferenceEquals(boss.magicSpawnPoint, frozenSpawn) || !ReferenceEquals(boss.VfxLaser, frozenLaserVfx) || !ReferenceEquals(boss.laserOrigin, frozenLaserOrigin) || !ReferenceEquals(boss.lineRenderer, frozenLine) || !BossSettings(boss).SequenceEqual(frozenSettings))
                 throw new InvalidOperationException("Actual Cuca producer/player/host/scene/settings changed. Natural death alone is explicitly allowed.");
             if (boss.QaProjectileAttackCount < boundAttackOrdinal || boss.QaProjectileCreatedCount < boundCreatedCount || boss.QaProjectileCreatedCount - boundCreatedCount != effectCount ||
@@ -150,6 +150,7 @@ namespace RPGKarawara.DevTools.Performance
         }
         void Update()
         {
+            if (network != null) player = network.Session.Player;
             if (!initialized || terminal) return;
             try
             {
@@ -162,23 +163,23 @@ namespace RPGKarawara.DevTools.Performance
                 switch (stage)
                 {
                     case Stage.Menu:
-                        world = WorldSaveGameManager.instance; network = NetworkManager.Singleton;
+                        world = WorldSaveGameManager.instance; network = GameBootstrap.Instance;
                         if (world == null || network == null || TitleScreenManager.Instance == null || PlayerInputManager.instance?.playerControls == null || !Application.isFocused || !SettingsMatch()) return;
-                        if (SceneManager.GetActiveScene().name != "SceneMenu" || network.IsListening || Time.timeScale != 1) throw new InvalidOperationException("Fresh unpaused menu/stopped host required.");
+                        if (SceneManager.GetActiveScene().name != "SceneMenu" || network.Session.IsActive || Time.timeScale != 1) throw new InvalidOperationException("Fresh unpaused menu/stopped host required.");
                         world.SaveRootOverride = request.saveRoot; if (world.SaveRoot != request.saveRoot) throw new InvalidOperationException("Isolated save root rejected.");
-                        ownsHost = TitleScreenManager.Instance.TryStartNetworkAsHost(); if (!ownsHost) throw new InvalidOperationException("Owned host start rejected.");
-                        SetStage(Stage.Host, 60); break;
-                    case Stage.Host:
-                        player = network.LocalClient?.PlayerObject?.GetComponent<PlayerManager>();
+                        ownsHost = TitleScreenManager.Instance.TryStartLocalRuntime(); if (!ownsHost) throw new InvalidOperationException("Owned host start rejected.");
+                        SetStage(Stage.ServicesReady, 60); break;
+                    case Stage.ServicesReady:
+                        player = network.Session.Player?.GetComponent<PlayerManager>();
                         var ui = PlayerUIManager.instance?.GetComponentInChildren<SkillTreeUiManager>(true);
-                        if (player == null || !player.IsSpawned || !player.IsOwner || !world.CanCreateNewGame || ui == null) return;
+                        if (!world.CanCreateNewGame || ui == null) return;
                         var catalog = (ui.attackSkills ?? Array.Empty<Skill>()).Concat(ui.defenseSkills ?? Array.Empty<Skill>()).Concat(ui.supportSkills ?? Array.Empty<Skill>()).ToArray();
                         var seed = PerformanceProcessHarness.BindCucaSeed(config.seedSaveJson, catalog);
                         var writer = new SaveFileDataWriter { saveDataDirectoryPath = request.saveRoot, saveFileName = "characterSlot_01" };
                         var saved = writer.TrySave(seed); if (!saved.Success) throw new InvalidOperationException(saved.Message);
                         world.RefreshCharacterProfiles(); TitleScreenManager.Instance.SelectCharacterSlot(CharacterSlot.CharacterSlot_01); world.LoadGame(); SetStage(Stage.World, 90); break;
                     case Stage.World:
-                        if (SceneManager.GetActiveScene().name != "CucaLoad" || player == null || !player.IsSpawned || !player.IsOwner || PlayerInputManager.instance?.player != player || PlayerUIManager.instance?.playerUIHudManager?.IsHealthBarReady != true || !player.characterLocomotionManager.isGrounded || Time.timeScale != 1) return;
+                        if (SceneManager.GetActiveScene().name != "CucaLoad" || player == null || !player.IsInitialized || !player.IsInitialized || PlayerInputManager.instance?.player != player || PlayerUIManager.instance?.playerUIHudManager?.IsHealthBarReady != true || !player.characterLocomotionManager.isGrounded || Time.timeScale != 1) return;
                         if (player.isDead.Value) throw new InvalidOperationException("Initial loaded player must be healthy; death is allowed only during observed workload.");
                         var bosses = Object.FindObjectsByType<CucaBoss>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Where(b => b.gameObject.scene.name == "CucaLoad").ToArray();
                         if (bosses.Length != 1) throw new InvalidOperationException("One actual authored Cuca required.");
@@ -212,14 +213,14 @@ namespace RPGKarawara.DevTools.Performance
                         finalSnapshotObservedBursts = CountCompleteBurstsAfter(baselineAttackOrdinal); snapshotWorkloadObserved = finalSnapshotObservedBursts >= config.bursts; BeginReturn(); break;
                     case Stage.Returning:
                         if (SceneManager.GetActiveScene().name != "SceneMenu") return;
-                        if (ownsHost && network != null && network.IsListening) network.Shutdown(); shutdownFrame = -1; SetStage(Stage.Shutdown, 20); break;
+                        if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); shutdownFrame = -1; SetStage(Stage.Shutdown, 20); break;
                     case Stage.Shutdown:
-                        if ((network != null && network.IsListening) || (player != null && player.IsSpawned)) return;
+                        if ((network != null && network.Session.IsActive) || (player != null && player.IsInitialized)) return;
                         if (shutdownFrame < 0) shutdownFrame = Time.frameCount;
                         if (Time.frameCount < shutdownFrame + 2) return;
                         ownsHost = false; SetStage(Stage.MenuSettling, 15); break;
                     case Stage.MenuSettling:
-                        if (SceneManager.GetActiveScene().name != "SceneMenu" || (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening) || Time.timeScale != 1) throw new InvalidOperationException("Unpaused menu and stopped host required after return.");
+                        if (SceneManager.GetActiveScene().name != "SceneMenu" || (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive) || Time.timeScale != 1) throw new InvalidOperationException("Unpaused menu and stopped host required after return.");
                         if (now - stageAt < config.settleSeconds) return;
                         liveAfterReturn = Alive(); Finish(true); break;
                 }
@@ -227,7 +228,7 @@ namespace RPGKarawara.DevTools.Performance
             catch (Exception error)
             {
                 errors.Add(error.ToString());
-                if (failed) { if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false); return; }
+                if (failed) { if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false); return; }
                 failed = true;
                 try { BeginReturn(); }
                 catch (Exception cleanup) { errors.Add("Production return failed: " + cleanup); sources?.Dispose(); sources = null; ReleaseInput(); Time.timeScale = 1; SceneManager.LoadSceneAsync("SceneMenu"); SetStage(Stage.Returning, 30); }
@@ -273,7 +274,7 @@ namespace RPGKarawara.DevTools.Performance
             if (terminal) return; terminal = true; sources?.Dispose(); sources = null; ReleaseInput(); Application.logMessageReceived -= OnLog; Sweep();
             Dictionary<string, string> personalAfter = null; try { personalAfter = Fingerprints(personalRoot); } catch (Exception error) { errors.Add("Final personal fingerprint failed: " + error); }
             bool personalUnchanged = personalBefore != null && personalAfter != null && personalBefore.Count == personalAfter.Count && personalBefore.All(p => personalAfter.TryGetValue(p.Key, out var value) && p.Value == value);
-            bool hostStopped = (network == null || !network.IsListening) && (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening);
+            bool hostStopped = (network == null || !network.Session.IsActive) && (GameBootstrap.Instance == null || !GameBootstrap.Instance.Session.IsActive);
             bool passed = !failed && errors.Count == 0 && cleanupPassed && hostStopped && inputRestored && personalUnchanged && workloadObserved && snapshotWorkloadObserved && snapshots.Count == 2 && snapshots.All(s => s.completed && s.succeeded) && !sourceFault && !overflow;
             var report = new { utc = DateTime.UtcNow.ToString("O"), completed = true, passed, cleanupPassed, mode = request.mode, config, buildGuid = Application.buildGUID, development = Debug.isDebugBuild, processId = System.Diagnostics.Process.GetCurrentProcess().Id,
                 inputRestored, personalUnchanged, personalBefore, personalAfter, ownedHostStopped = hostStopped, saveRoot = request.saveRoot, scene = SceneManager.GetActiveScene().name,
@@ -292,7 +293,7 @@ namespace RPGKarawara.DevTools.Performance
             return result;
         }
         void OnLog(string message, string stack, LogType type) { if ((type == LogType.Error || type == LogType.Exception || type == LogType.Assert) && errors.Count < 256) errors.Add(message + "\n" + stack); }
-        void OnDisable() { if (!initialized || terminal) return; failed = true; errors.Add("Owned projectile diagnostic disabled prematurely."); sources?.Dispose(); if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false); }
+        void OnDisable() { if (!initialized || terminal) return; failed = true; errors.Add("Owned projectile diagnostic disabled prematurely."); sources?.Dispose(); if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false); }
         void OnDestroy() { sources?.Dispose(); ReleaseInput(); Application.logMessageReceived -= OnLog; }
     }
 #endif

@@ -5,7 +5,7 @@ using Karawara.Core.Persistence;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -66,7 +66,7 @@ namespace RPGKarawara.DevTools.Performance
         {
             public double elapsed;
             public int frame, sceneHandle, health;
-            public ulong ownerClientId, networkObjectId;
+            public int localPlayerId, localCharacterId;
             public float timeScale, moveAmount;
             public bool focused, grounded, jumping, sprinting, attacking, performingAction, dead;
             public bool canMove, canRotate, interacting;
@@ -204,11 +204,11 @@ namespace RPGKarawara.DevTools.Performance
             if (flags != 1 || config == null || string.IsNullOrWhiteSpace(config.routeId) || config.routeId.Length > 128) throw new ArgumentException("Exactly one explicit rehearsal flag and bounded route ID required.");
             var times = ValidateSchedule(config.timelineJson, config.durationSeconds, config.maxLatenessSeconds);
             var world = WorldSaveGameManager.instance;
-            var network = NetworkManager.Singleton;
+            var network = GameBootstrap.Instance;
             ValidateWorldReadiness(world != null && SceneManager.GetActiveScene().buildIndex == world.GetWorldSceneIndex(),
                 PlayerUIManager.instance != null && PlayerUIManager.instance.playerUIHudManager != null && PlayerUIManager.instance.playerUIHudManager.IsHealthBarReady);
-            if (!Application.isPlaying || !Application.isFocused || Time.timeScale != 1 || world == null || network == null || !network.IsHost || !network.IsListening ||
-                player == null || !player.IsOwner || !player.IsSpawned || network.LocalClient == null || network.LocalClient.PlayerObject != player.NetworkObject || world.player != player ||
+            if (!Application.isPlaying || !Application.isFocused || Time.timeScale != 1 || world == null || network == null || !network.Session.IsActive || !network.Session.IsActive ||
+                player == null || !player.IsInitialized || !player.IsInitialized || network.Session == null || network.Session.Player != player || world.player != player ||
                 input == null || input != PlayerInputManager.instance || input.player != player || !input.isActiveAndEnabled || input.playerControls == null || !input.playerControls.asset.enabled ||
                 player.playerNetworkManager == null || player.characterLocomotionManager == null || player.isDead.Value || player.playerNetworkManager.currentHealth.Value <= 0 ||
                 cameraOwner == null || cameraOwner != PlayerCamera.instance || cameraOwner.player != player || !cameraOwner.canFollow || cameraOwner.cameraObject == null || !cameraOwner.cameraObject.isActiveAndEnabled)
@@ -281,11 +281,11 @@ namespace RPGKarawara.DevTools.Performance
         }
         void Guard()
         {
-            var network = NetworkManager.Singleton;
+            var network = GameBootstrap.Instance;
             if (!Application.isFocused) throw new InvalidOperationException("Focus lost.");
             // SaveRoot resolution allocates: resolve once before Begin, then monitor its mutable override.
             if (world == null || world != WorldSaveGameManager.instance || world.player != player || !string.Equals(world.SaveRootOverride, saveRootOverride, StringComparison.Ordinal) ||
-                player == null || !player.IsOwner || !player.IsSpawned || network == null || !network.IsHost || !network.IsListening || network.LocalClient == null || network.LocalClient.PlayerObject != player.NetworkObject ||
+                player == null || !player.IsInitialized || !player.IsInitialized || network == null || !network.Session.IsActive || !network.Session.IsActive || network.Session == null || network.Session.Player != player ||
                 input == null || input != PlayerInputManager.instance || input.player != player || input.playerControls != controls || !input.isActiveAndEnabled || !controls.asset.enabled ||
                 cameraOwner == null || cameraOwner != PlayerCamera.instance || cameraOwner.player != player || !cameraOwner.canFollow || cameraOwner.cameraObject == null ||
                 SceneManager.GetActiveScene().handle != sceneHandle) throw new InvalidOperationException("Production owner, scene, controls, camera or QA root changed.");
@@ -352,7 +352,7 @@ namespace RPGKarawara.DevTools.Performance
                 if (sampleCount == samples.Length) throw new InvalidOperationException("Observation buffer exhausted.");
                 var movement = controls.PlayerMovement.Movement.ReadValue<Vector2>(); var cameraInput = controls.PlayerCamera.Movement.ReadValue<Vector2>();
                 var net = player.playerNetworkManager;
-                samples[sampleCount] = new Frame { elapsed = elapsed, frame = Time.frameCount, sceneHandle = sceneHandle, ownerClientId = player.OwnerClientId, networkObjectId = player.NetworkObjectId,
+                samples[sampleCount] = new Frame { elapsed = elapsed, frame = Time.frameCount, sceneHandle = sceneHandle, localPlayerId = player.LocalId, localCharacterId = player.LocalId,
                     health = net.currentHealth.Value, timeScale = Time.timeScale, focused = Application.isFocused, playerPosition = player.transform.position, playerRotation = player.transform.rotation,
                     movementAction = movement, cameraAction = cameraInput, movementConsumer = new Vector2(input.horizontal_Input, input.vertical_Input), cameraConsumer = new Vector2(input.cameraHorizontal_Input, input.cameraVertical_Input),
                     moveAmount = input.moveAmount, grounded = player.characterLocomotionManager.isGrounded, jumping = net.isJumping.Value, sprinting = net.isSprinting.Value, attacking = net.isAttacking.Value,

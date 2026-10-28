@@ -1,7 +1,8 @@
+using Karawara.Core.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 using UnityEngine.SceneManagement;
 
 namespace RPGKarawara
@@ -15,9 +16,9 @@ namespace RPGKarawara
         [SerializeField] AudioClip bossBattleLoopClip;
 
         [Header("Status")]
-        public NetworkVariable<bool> bossFightIsActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<bool> hasBeenAwakened = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<bool> hasBeenDefeated = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public ObservableValue<bool> bossFightIsActive = new ObservableValue<bool>(false);
+        public ObservableValue<bool> hasBeenAwakened = new ObservableValue<bool>(false);
+        public ObservableValue<bool> hasBeenDefeated = new ObservableValue<bool>(false);
         [SerializeField] List<FogWallInteractable> fogWalls;
         [SerializeField] string sleepAnimation;
         [SerializeField] string awakenAnimation;
@@ -32,6 +33,7 @@ namespace RPGKarawara
         BossSleepState sleepStateTemplate;
         bool sleepStateAcquired;
         UI_Boss_HP_Bar ownedBossHPBar;
+        bool phaseShifted;
 
         protected override void OnEnable()
         {
@@ -68,97 +70,71 @@ namespace RPGKarawara
             base.Awake();
         }
 
-        public override void OnNetworkSpawn()
+        public override void InitializeLocal(CharacterRuntimeState state, ICharacterRegistry registry)
         {
-            base.OnNetworkSpawn();
-
+            if (IsInitialized) return;
+            base.InitializeLocal(state, registry);
             bossFightIsActive.OnValueChanged += OnBossFightIsActiveChanged;
-            OnBossFightIsActiveChanged(false, bossFightIsActive.Value); // SO IF YOU JOIN WHEN THE FIGHT IS ALREADY ACTIVE, YOU WILL GET A HP BAR
-
-            if (IsOwner)
+            sleepStateTemplate = sleepState; sleepStateAcquired = true;
+            sleepState = CreateRuntimeState(sleepStateTemplate);
+            currentState = sleepState != null ? sleepState : idle;
+            var data = WorldSaveGameManager.instance?.currentCharacterData;
+            if (data != null)
             {
-                sleepStateTemplate = sleepState; sleepStateAcquired = true;
-                sleepState = CreateRuntimeState(sleepStateTemplate);
-                currentState = sleepState;
+                if (!data.bossesAwakened.ContainsKey(bossID)) data.bossesAwakened[bossID] = false;
+                if (!data.bossesDefeated.ContainsKey(bossID)) data.bossesDefeated[bossID] = false;
+                hasBeenAwakened.Value = data.bossesAwakened[bossID];
+                hasBeenDefeated.Value = data.bossesDefeated[bossID];
             }
-
-            if (IsServer)
+            if (hasBeenAwakened.Value) currentState = idle;
+            if (phaseShifted && phase02CombatStanceState != null)
             {
-                //  IF OUR SAVE DATA DOES NOT CONTAIN INFORMATION ON THIS BOSS, ADD IT NOW
-                if (!WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.ContainsKey(bossID))
-                {
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Add(bossID, false);
-                    WorldSaveGameManager.instance.currentCharacterData.bossesDefeated.Add(bossID, false);
-                }
-                //  OTHERWISE, LOAD THE DATA THAT ALREADY EXISTS ON THIS BOSS
-                else
-                {
-                    hasBeenDefeated.Value = WorldSaveGameManager.instance.currentCharacterData.bossesDefeated[bossID];
-                    hasBeenAwakened.Value = WorldSaveGameManager.instance.currentCharacterData.bossesAwakened[bossID];                
-                }
-
-                //  LOCATE FOG WALLS
-                StartCoroutine(GetFogWallsFromWorldObjectManager());
-
-                //  IF THE BOSS HAS BEEN AWAKENED, ENABLE THE FOG WALLS
-                if (hasBeenAwakened.Value)
-                {
-                    for (int i = 0; i < fogWalls.Count; i++)
-                    {
-                        fogWalls[i].isActive.Value = true;
-                    }
-                }
-
-                //  IF THE BOSS HAS BEEN DEFEATED DISABLE THE FOG WALLS
-                if (hasBeenDefeated.Value)
-                {
-                    for (int i = 0; i < fogWalls.Count; i++)
-                    {
-                        fogWalls[i].isActive.Value = false;
-                    }
-
-                    aiCharacterNetworkManager.isActive.Value = false;
-                }
+                combatStance = CreateRuntimeState(phase02CombatStanceState);
+                if (bossFightIsActive.Value) currentState = combatStance;
             }
-
-            if (!hasBeenAwakened.Value)
-            {
+            RefreshFogWalls();
+            WorldObjectManager.GetOrCreateInstance().FogWallsChanged += RefreshFogWalls;
+            if (hasBeenDefeated.Value) { state.SetActive(false); return; }
+            if (!hasBeenAwakened.Value && !string.IsNullOrEmpty(sleepAnimation))
                 characterAnimatorManager.PlayTargetActionAnimation(sleepAnimation, true);
-            }
+            OnBossFightIsActiveChanged(false, bossFightIsActive.Value);
         }
 
-        public override void OnNetworkDespawn()
+        public override void ShutdownLocal()
         {
-            if (sleepStateAcquired) { sleepState = sleepStateTemplate; sleepStateTemplate = null; sleepStateAcquired = false; }
-            base.OnNetworkDespawn();
-
+            if (WorldObjectManager.instance != null) WorldObjectManager.instance.FogWallsChanged -= RefreshFogWalls;
             bossFightIsActive.OnValueChanged -= OnBossFightIsActiveChanged;
+            if (sleepStateAcquired) { sleepState = sleepStateTemplate; sleepStateTemplate = null; sleepStateAcquired = false; }
             RemoveOwnedBossHPBar();
+            if (IsInitialized && bossFightIsActive.Value && WorldSoundFXManager.instance != null) WorldSoundFXManager.instance.StopBossMusic();
+            base.ShutdownLocal();
         }
 
-        private IEnumerator GetFogWallsFromWorldObjectManager()
+        void RefreshFogWalls()
         {
-            while (WorldObjectManager.instance.fogWalls.Count == 0)
-                yield return new WaitForEndOfFrame();
-
             fogWalls = new List<FogWallInteractable>();
-
-            foreach (var fogWall in WorldObjectManager.instance.fogWalls)
-            {
-                if (fogWall.fogWallID == bossID)
-                    fogWalls.Add(fogWall);
-            }
+            if (WorldObjectManager.instance == null) return;
+            foreach (var wall in WorldObjectManager.instance.fogWalls)
+                if (wall != null && wall.fogWallID == bossID)
+                {
+                    fogWalls.Add(wall);
+                    wall.isActive.Value = hasBeenAwakened.Value && !hasBeenDefeated.Value;
+                }
         }
 
+        bool deathProcessed;
         public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
         {
+            if (deathProcessed) yield break;
+            deathProcessed = true;
             if (PlayerUIManager.instance != null && PlayerUIManager.instance.playerUIPopUpManager != null)
                 PlayerUIManager.instance.playerUIPopUpManager.SendBossDefeatedPopUp("BOSS DERROTADO");
 
-            if (IsOwner)
+
             {
+                foreach (var hitbox in GetComponentsInChildren<DamageCollider>(true)) hitbox.DisableDamageCollider();
                 characterNetworkManager.currentHealth.Value = 0;
-                isDead.Value = true;
+
                 bossFightIsActive.Value = false;
 
                 foreach (var fogWall in fogWalls)
@@ -178,22 +154,16 @@ namespace RPGKarawara
 
                 hasBeenDefeated.Value = true;
 
-                //  IF OUR SAVE DATA DOES NOT CONTAIN INFORMATION ON THIS BOSS, ADD IT NOW
-                if (!WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.ContainsKey(bossID))
+                var save = WorldSaveGameManager.instance;
+                var data = save?.currentCharacterData;
+                if (data != null)
                 {
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Add(bossID, true);
-                    WorldSaveGameManager.instance.currentCharacterData.bossesDefeated.Add(bossID, true);
+                    data.bossesAwakened[bossID] = true;
+                    data.bossesDefeated[bossID] = true;
+                    save.SaveGame();
                 }
-                //  OTHERWISE, LOAD THE DATA THAT ALREADY EXISTS ON THIS BOSS
-                else
-                {
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Remove(bossID);
-                    WorldSaveGameManager.instance.currentCharacterData.bossesDefeated.Remove(bossID);
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Add(bossID, true);
-                    WorldSaveGameManager.instance.currentCharacterData.bossesDefeated.Add(bossID, true);
-                }
-
-                WorldSaveGameManager.instance.SaveGame();
+                WorldAIManager.instance?.RemoveCharacter(this);
+                Registry?.Unregister(LocalId);
             }
 
             //  PLAY SOME DEATH SFX
@@ -207,7 +177,8 @@ namespace RPGKarawara
 
         public void WakeBoss()
         {
-            if (IsOwner)
+            if (!IsInitialized || hasBeenDefeated.Value) return;
+
             {
                 if (!hasBeenAwakened.Value)
                 {
@@ -218,15 +189,8 @@ namespace RPGKarawara
                 hasBeenAwakened.Value = true;
                 currentState = idle;
 
-                if (!WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.ContainsKey(bossID))
-                {
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Add(bossID, true);
-                }
-                else
-                {
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Remove(bossID);
-                    WorldSaveGameManager.instance.currentCharacterData.bossesAwakened.Add(bossID, true);
-                }
+                var data = WorldSaveGameManager.instance?.currentCharacterData;
+                if (data != null) data.bossesAwakened[bossID] = true;
 
                 for (int i = 0; i < fogWalls.Count; i++)
                 {
@@ -266,8 +230,11 @@ namespace RPGKarawara
 
         public void PhaseShift()
         {
+            if (phaseShifted || !IsInitialized || State.IsDead) return;
+            phaseShifted = true;
             DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.PhaseChanged);
             characterAnimatorManager.PlayTargetActionAnimation(phaseShiftAnimation, true);
+            if (phase02CombatStanceState == null) return;
             combatStance = CreateRuntimeState(phase02CombatStanceState);
             currentState = combatStance;
         }

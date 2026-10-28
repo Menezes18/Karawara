@@ -2,12 +2,12 @@ using System.Collections;
 using RPGKarawara.SkillTree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine.InputSystem;
 namespace RPGKarawara
 {
     public class PlayerManager : CharacterManager{
-        
+
         [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
         [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         [HideInInspector] public PlayerNetworkManager playerNetworkManager;
@@ -26,7 +26,7 @@ namespace RPGKarawara
             if (playerAudioListener != null) playerAudioListener.enabled = false;
 
             //  DO MORE STUFF, ONLY FOR THE PLAYER
-            
+
             playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
             playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
             playerNetworkManager = GetComponent<PlayerNetworkManager>();
@@ -42,15 +42,15 @@ namespace RPGKarawara
         {
             base.Update();
 
-            //  IF WE DO NOT OWN THIS GAMEOBJECT, WE DO NOT CONTROL OR EDIT IT
-            if (!IsOwner)
+            // Gameplay starts after the session binds this local character.
+            if (!IsInitialized)
                 return;
 
             //  HANDLE MOVEMENT
             playerLocomotionManager.HandleAllMovement();
-            if (Keyboard.current.rKey.wasPressedThisFrame){
+            if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame){
                 var save = FindObjectOfType<SavePositionOnTrigger>();
-                save.Reviver();
+                if (save != null) save.Reviver();
             }
             //  REGEN STAMINA
             //playerStatsManager.RegenerateStamina();
@@ -58,12 +58,12 @@ namespace RPGKarawara
 
         protected override void LateUpdate()
         {
-            if (!IsOwner)
+            if (!IsInitialized)
                 return;
 
             base.LateUpdate();
 
-            PlayerCamera.instance.HandleAllCameraActions();
+            if (PlayerCamera.instance != null) PlayerCamera.instance.HandleAllCameraActions();
         }
 
         protected override void OnEnable()
@@ -76,117 +76,88 @@ namespace RPGKarawara
             base.OnDisable();
         }
 
-        public override void OnNetworkSpawn()
+        public override void InitializeLocal(CharacterRuntimeState state, ICharacterRegistry registry)
         {
-            base.OnNetworkSpawn();
+            if (IsInitialized && ReferenceEquals(State, state) && ReferenceEquals(Registry, registry)) return;
+            base.InitializeLocal(state, registry);
             SceneManager.sceneLoaded += OnAudioSceneLoaded;
             RefreshAudioListener();
-
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
-
-            //  IF THIS IS THE PLAYER OBJECT OWNED BY THIS CLIENT
-            if (IsOwner)
-            {
-                PlayerCamera.instance.player = this;
-                PlayerInputManager.instance.player = this;
-                WorldSaveGameManager.instance.player = this;
-
-                //  UPDATE THE TOTAL AMOUNT OF HEALTH OR STAMINA WHEN THE STAT LINKED TO EITHER CHANGES
-                playerNetworkManager.vitality.OnValueChanged += playerNetworkManager.SetNewMaxHealthValue;
-               // playerNetworkManager.endurance.OnValueChanged += playerNetworkManager.SetNewMaxStaminaValue;
-
-                //  UPDATES UI STAT BARS WHEN A STAT CHANGES (HEALTH OR STAMINA)
-                playerNetworkManager.currentHealth.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewHealthValue;
-               // playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
-               // playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRegenTimer;
-            }
-
-            //  ONLY UPDATE FLOATING HP BAR IF THIS CHARACTER IS NOT THE LOCAL PLAYERS CHARACTER (YOU DONT WANNA SEE A HP BAR FLOATING ABOVE YOUR OWN HEAD)
-            if (!IsOwner)
-                characterNetworkManager.currentHealth.OnValueChanged += characterUIManager.OnHPChanged;
-
-            //  STATS
-            playerNetworkManager.currentHealth.OnValueChanged += playerNetworkManager.CheckHP;
-
-            //  LOCK ON
-            playerNetworkManager.isLockedOn.OnValueChanged += playerNetworkManager.OnIsLockedOnChanged;
-            playerNetworkManager.currentTargetNetworkObjectID.OnValueChanged += playerNetworkManager.OnLockOnTargetIDChange;
-            //  SPELLS
+            if (PlayerCamera.instance != null) PlayerCamera.instance.player = this;
+            if (WorldSaveGameManager.instance != null) WorldSaveGameManager.instance.player = this;
+            playerNetworkManager.vitality.OnValueChanged += playerNetworkManager.SetNewMaxHealthValue;
+            State.HealthChanged += OnPlayerHealthChanged;
+            State.MaxHealthChanged += OnPlayerMaxHealthChanged;
             playerNetworkManager.isChargingLeftSpell.OnValueChanged += playerNetworkManager.OnIsChargingLeftSpellChanged;
             playerNetworkManager.isChargingRightSpell.OnValueChanged += playerNetworkManager.OnIsChargingRightSpellChanged;
-            //  EQUIPMENT
             playerNetworkManager.currentRightHandWeaponID.OnValueChanged += playerNetworkManager.OnCurrentRightHandWeaponIDChange;
             playerNetworkManager.currentLeftHandWeaponID.OnValueChanged += playerNetworkManager.OnCurrentLeftHandWeaponIDChange;
             playerNetworkManager.currentWeaponBeingUsed.OnValueChanged += playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
             playerNetworkManager.currentSpellID.OnValueChanged += playerNetworkManager.OnCurrentSpellIDChange;
-            // Publish the spell already equipped on the player prefab to observers.
-            if (IsOwner && playerInventoryManager.currentSpell != null && WorldItemDatabase.Instance != null)
+            if (playerInventoryManager != null && playerInventoryManager.currentSpell != null && WorldItemDatabase.Instance != null)
             {
                 var equippedSpell = WorldItemDatabase.Instance.GetSpellByID(playerInventoryManager.currentSpell.itemID);
                 if (equippedSpell != null && equippedSpell.GetType() == playerInventoryManager.currentSpell.GetType())
                     playerNetworkManager.currentSpellID.Value = equippedSpell.itemID;
             }
-            //  FLAGS
-            playerNetworkManager.isChargingAttack.OnValueChanged += playerNetworkManager.OnIsChargingAttackChanged;
-
-            // Both persistent and recreated local owners use the pending generation.
-            if (IsOwner && WorldSaveGameManager.instance != null)
-            {
-                WorldSaveGameManager.instance.ApplyPendingSaveWhenReady();
-            }
+            playerNetworkManager.OnIsChargingLeftSpellChanged(false, State.IsChargingLeftSpell);
+            playerNetworkManager.OnIsChargingRightSpellChanged(false, State.IsChargingRightSpell);
+            RefreshLocalHUD();
+            if (GameBootstrap.Instance != null) GameBootstrap.Instance.Session.ResumePlayerBinding(this);
+        }
+        private void OnPlayerHealthChanged(int oldValue, int newValue)
+        {
+            if (PlayerUIManager.instance != null) PlayerUIManager.instance.playerUIHudManager?.SetNewHealthValue(oldValue, newValue);
+        }
+        private void OnPlayerMaxHealthChanged(int oldValue, int newValue)
+        {
+            if (PlayerUIManager.instance == null) return;
+            var hud = PlayerUIManager.instance.playerUIHudManager;
+            if (hud == null) return;
+            hud.SetMaxHealthValue(newValue);
+            hud.SetNewHealthValue(State.Health, State.Health);
+        }
+        public void RefreshLocalHUD()
+        {
+            OnPlayerMaxHealthChanged(State.MaxHealth, State.MaxHealth);
+            OnPlayerHealthChanged(State.Health, State.Health);
         }
 
-        public override void OnNetworkDespawn()
+        public override void ShutdownLocal()
         {
+            if (!IsInitialized) return;
+            if (GameBootstrap.Instance != null) GameBootstrap.Instance.Session.SuspendPlayerBinding(this);
             SceneManager.sceneLoaded -= OnAudioSceneLoaded;
+            playerCombatManager?.ShutdownActions();
             if (playerAudioListener != null) playerAudioListener.enabled = false;
-            base.OnNetworkDespawn();
-
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
-
-            //  IF THIS IS THE PLAYER OBJECT OWNED BY THIS CLIENT
-            if (IsOwner)
-            {
-                //  UPDATE THE TOTAL AMOUNT OF HEALTH OR STAMINA WHEN THE STAT LINKED TO EITHER CHANGES
-                playerNetworkManager.vitality.OnValueChanged -= playerNetworkManager.SetNewMaxHealthValue;
-               // playerNetworkManager.endurance.OnValueChanged -= playerNetworkManager.SetNewMaxStaminaValue;
-
-                //  UPDATES UI STAT BARS WHEN A STAT CHANGES (HEALTH OR STAMINA)
-                playerNetworkManager.currentHealth.OnValueChanged -= PlayerUIManager.instance.playerUIHudManager.SetNewHealthValue;
-                //playerNetworkManager.currentStamina.OnValueChanged -= PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
-               // playerNetworkManager.currentStamina.OnValueChanged -= playerStatsManager.ResetStaminaRegenTimer;
-            }
-
-            if (!IsOwner)
-                characterNetworkManager.currentHealth.OnValueChanged -= characterUIManager.OnHPChanged;
-
-            //  STATS
-            playerNetworkManager.currentHealth.OnValueChanged -= playerNetworkManager.CheckHP;
-            //  SPELLS
+            playerNetworkManager.vitality.OnValueChanged -= playerNetworkManager.SetNewMaxHealthValue;
+            State.HealthChanged -= OnPlayerHealthChanged;
+            State.MaxHealthChanged -= OnPlayerMaxHealthChanged;
+            playerNetworkManager.isChargingLeftSpell.Value = false;
+            playerNetworkManager.isChargingRightSpell.Value = false;
             playerNetworkManager.isChargingLeftSpell.OnValueChanged -= playerNetworkManager.OnIsChargingLeftSpellChanged;
             playerNetworkManager.isChargingRightSpell.OnValueChanged -= playerNetworkManager.OnIsChargingRightSpellChanged;
-            //  LOCK ON
-            playerNetworkManager.isLockedOn.OnValueChanged -= playerNetworkManager.OnIsLockedOnChanged;
-            playerNetworkManager.currentTargetNetworkObjectID.OnValueChanged -= playerNetworkManager.OnLockOnTargetIDChange;
-
-            //  EQUIPMENT
             playerNetworkManager.currentRightHandWeaponID.OnValueChanged -= playerNetworkManager.OnCurrentRightHandWeaponIDChange;
             playerNetworkManager.currentLeftHandWeaponID.OnValueChanged -= playerNetworkManager.OnCurrentLeftHandWeaponIDChange;
             playerNetworkManager.currentWeaponBeingUsed.OnValueChanged -= playerNetworkManager.OnCurrentWeaponBeingUsedIDChange;
             playerNetworkManager.currentSpellID.OnValueChanged -= playerNetworkManager.OnCurrentSpellIDChange;
-            //  FLAGS
-            playerNetworkManager.isChargingAttack.OnValueChanged -= playerNetworkManager.OnIsChargingAttackChanged;
+            playerNetworkManager.isChargingLeftSpell.Value = false;
+            playerNetworkManager.isChargingRightSpell.Value = false;
+            if (PlayerCamera.instance != null && PlayerCamera.instance.player == this) PlayerCamera.instance.player = null;
+            if (PlayerInputManager.instance != null && PlayerInputManager.instance.player == this) PlayerInputManager.instance.BindSessionPlayer(null);
+            if (WorldSaveGameManager.instance != null && WorldSaveGameManager.instance.player == this) WorldSaveGameManager.instance.player = null;
+            base.ShutdownLocal();
         }
 
         private void OnAudioSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             RefreshAudioListener();
+            RefreshLocalHUD();
         }
 
         private void RefreshAudioListener()
         {
             if (playerAudioListener == null) return;
-            bool usePlayerListener = IsSpawned && IsOwner;
+            bool usePlayerListener = IsInitialized;
             if (usePlayerListener)
             {
                 var activeScene = SceneManager.GetActiveScene();
@@ -204,29 +175,13 @@ namespace RPGKarawara
             playerAudioListener.enabled = usePlayerListener;
         }
 
-        private void OnClientConnectedCallback(ulong clientID)
-        {
-            WorldGameSessionManager.instance.AddPlayerToActivePlayersList(this);
 
-            //  IF WE ARE THE SERVER, WE ARE THE HOST, SO WE DONT NEED TO LOAD PLAYERS TO SYNC THEM
-            //  YOU ONLY NEED TO LOAD OTHER PLAYERS GEAR TO SYNC IT IF YOU JOIN A GAME THATS ALREADY BEEN ACTIVE WITHOUT YOU BEING PRESENT
-            if (!IsServer && IsOwner)
-            {
-                foreach (var player in WorldGameSessionManager.instance.players)
-                {
-                    if (player != this)
-                    {
-                        player.LoadOtherPlayerCharacterWhenJoiningServer();
-                    }
-                }
-            }
-        }
 
         public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
         {
-            if (IsOwner)
+
             {
-                PlayerUIManager.instance.playerUIPopUpManager.SendYouDiedPopUp();
+                if (PlayerUIManager.instance != null) PlayerUIManager.instance.playerUIPopUpManager?.SendYouDiedPopUp();
             }
 
             return base.ProcessDeathEvent(manuallySelectDeathAnimation);
@@ -238,7 +193,7 @@ namespace RPGKarawara
         {
             base.ReviveCharacter();
 
-            if (IsOwner)
+
             {
                 isDead.Value = false;
                 playerNetworkManager.currentHealth.Value = playerNetworkManager.maxHealth.Value;
@@ -246,7 +201,7 @@ namespace RPGKarawara
                 //  RESTORE FOCUS POINTS
 
                 //  PLAY REBIRTH EFFECTS
-                playerAnimatorManager.PlayTargetActionAnimation("Empty", false);
+                if (playerAnimatorManager != null && animator != null) playerAnimatorManager.PlayTargetActionAnimation("Empty", false);
             }
         }
 
@@ -271,7 +226,7 @@ namespace RPGKarawara
             skills.SaveSkillSlot(currentCharacterData);
 
         }
-        
+
         public void LoadGameDataFromCurrentCharacterData(ref CharacterSaveData currentCharacterData)
         {
             // Preserve the old binding while routing it through generation/readiness checks.
@@ -293,15 +248,12 @@ namespace RPGKarawara
             var hud = PlayerUIManager.instance != null ? PlayerUIManager.instance.playerUIHudManager : null;
             var skillUi = FindOwnedSkillUi();
             var skills = GetComponent<PlayerSkillManager>();
-            if (!IsSpawned || !IsOwner || data == null || playerNetworkManager == null || playerStatsManager == null ||
+            if (!IsInitialized || data == null || playerNetworkManager == null || playerStatsManager == null ||
                 hud == null || !hud.IsHealthBarReady || skillUi == null || skills == null || skills.slot == null || characterController == null)
                 return false;
             var position = new Vector3(data.xPosition, data.yPosition, data.zPosition);
             if (!IsFinite(position.x) || !IsFinite(position.y) || !IsFinite(position.z)) return false;
-            Unity.Collections.FixedString64Bytes name;
-            try { name = new Unity.Collections.FixedString64Bytes(data.characterName); }
-            catch (System.ArgumentException) { return false; }
-            playerNetworkManager.characterName.Value = name;
+            playerNetworkManager.characterName.Value = data.characterName ?? "Character";
             playerNetworkManager.vitality.Value = data.vitality;
             playerNetworkManager.endurance.Value = data.endurance;
             playerNetworkManager.maxHealth.Value = playerStatsManager.CalculateHealthBasedOnVitalityLevel(data.vitality);
@@ -311,12 +263,11 @@ namespace RPGKarawara
             {
                 characterController.enabled = false;
                 transform.position = position;
-                playerNetworkManager.networkPosition.Value = position;
             }
             finally { characterController.enabled = controllerEnabled; }
             skillUi.LoadSkillsFromData(data);
             skills.LoadSkillSlot(data);
-            // Rebind the current scene HUD even when unchanged NetworkVariables emit no callback.
+            // Refresh the HUD even when applying an unchanged value.
             hud.SetMaxHealthValue(playerNetworkManager.maxHealth.Value);
             hud.SetNewHealthValue(0, playerNetworkManager.currentHealth.Value);
             return true;
@@ -324,20 +275,7 @@ namespace RPGKarawara
 
         private static bool IsFinite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
 
-        public void LoadOtherPlayerCharacterWhenJoiningServer()
-        {
-            //  SYNC WEAPONS
-            playerNetworkManager.OnCurrentRightHandWeaponIDChange(0, playerNetworkManager.currentRightHandWeaponID.Value);
-            playerNetworkManager.OnCurrentLeftHandWeaponIDChange(0, playerNetworkManager.currentLeftHandWeaponID.Value);
 
-            //  ARMOR
-            playerNetworkManager.OnCurrentSpellIDChange(0,playerNetworkManager.currentSpellID.Value);
-            //  LOCK ON
-            if (playerNetworkManager.isLockedOn.Value)
-            {
-                playerNetworkManager.OnLockOnTargetIDChange(0, playerNetworkManager.currentTargetNetworkObjectID.Value);
-            }
-        }
 
     }
 }

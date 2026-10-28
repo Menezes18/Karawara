@@ -17,7 +17,7 @@ namespace RPGKarawara
             if ((Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) ||
                 (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame))
             {
-                if (TitleScreenManager.Instance == null || !TitleScreenManager.Instance.TryStartNetworkAsHost()) return;
+                if (TitleScreenManager.Instance == null || !TitleScreenManager.Instance.TryStartLocalRuntime()) return;
                 if (Menu != null) Menu.SetActive(true);
                 if (newGame != null) newGame.Select();
                 gameObject.SetActive(false);

@@ -86,7 +86,7 @@ namespace RPGKarawara.DevTools.Editor
             }, () =>
             {
                 if (controller.SpawnedEnemyCount == 0) throw new Skip("No network boss fixture spawned; boss cleanup not run.");
-                boss = Object.FindObjectsByType<AIBossCharacterManager>(FindObjectsInactive.Exclude).Single(b => b.IsSpawned);
+                boss = Object.FindObjectsByType<AIBossCharacterManager>(FindObjectsInactive.Exclude).Single(b => b.IsInitialized);
                 var bars = Object.FindObjectsByType<UI_Boss_HP_Bar>(FindObjectsInactive.Include).Where(b => Field(b, "bossCharacter") as AIBossCharacterManager == boss).ToArray();
                 Require(bars.Length == 1, "Spawned boss should own exactly one bar, got " + bars.Length);
                 bossBar = bars[0];

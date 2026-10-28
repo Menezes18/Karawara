@@ -2,13 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 using UnityEngine.SceneManagement;
 
 
 namespace RPGKarawara
 {
-    public class Interactable : NetworkBehaviour
+    public class Interactable : MonoBehaviour
     {
         public enum InteractionType{
             Teleport,
@@ -17,6 +17,7 @@ namespace RPGKarawara
             SceneTeleport,
             SiteOfGraceInteractable
         }
+        readonly HashSet<PlayerManager> interactingPlayers = new HashSet<PlayerManager>();
         public string interactableText; //  TEXT PROMPT WHEN ENTERING THE INTERACTION COLLIDER (PICK UP ITEM, PULL LEVER ECT)
 
         [SerializeField] protected Collider interactableCollider;   //  COLLIDER THAT CHECKS FOR PLAYER INTERACTION
@@ -38,28 +39,27 @@ namespace RPGKarawara
 
         public virtual void Interact(PlayerManager player){
             Debug.Log("YOU HAVE INTERACTED!");
-    
-            if (!player.IsOwner)
-                return;
-    
+
+
+
             //  REMOVE THE INTERACTION FROM THE PLAYER
             interactableCollider.enabled = false;
             player.playerInteractionManager.RemoveInteractionFromList(this);
             PlayerUIManager.instance.playerUIPopUpManager.CloseAllPopUpWindows();
-    
+
             // Perform interaction based on the enum type
             switch (interactionType){
                 case InteractionType.Teleport:
                     if (teleportTarget != null){
                         player.transform.position = teleportTarget.position;
                     }
-    
+
                     break;
-    
+
                 case InteractionType.ShowText:
                     //Debug.Log(interactableText);
                     break;
-    
+
                 case InteractionType.ActivateLever:
                     if (lever != null){
                         lever.Activate();
@@ -71,7 +71,7 @@ namespace RPGKarawara
                     ChangeScene(sceneName);
                     break;
             }
-    
+
             // Re-enable the collider after 1 second
             Invoke("EnableCollider", 0.5f);
         }
@@ -82,21 +82,28 @@ namespace RPGKarawara
         private void ChangeScene(string sceneName){
             SceneManager.LoadScene(sceneName);
         }
-        
+
+
+        protected virtual void OnDisable()
+        {
+            CancelInvoke();
+            foreach (var player in interactingPlayers)
+                if (player != null && player.playerInteractionManager != null) player.playerInteractionManager.RemoveInteractionFromList(this);
+            interactingPlayers.Clear();
+        }
 
         public virtual void OnTriggerEnter(Collider other)
         {
             PlayerManager player = other.GetComponent<PlayerManager>();
-            
+
             if (player != null)
             {
-                if (!player.playerNetworkManager.IsHost && hostOnlyInteractable)
-                    return;
 
-                if (!player.IsOwner)
-                    return;
+
+
 
                 //  PASS THE INTERACTION TO THE PLAYER
+                interactingPlayers.Add(player);
                 player.playerInteractionManager.AddInteractionToList(this);
             }
         }
@@ -106,13 +113,12 @@ namespace RPGKarawara
 
             if (player != null)
             {
-                if (!player.playerNetworkManager.IsHost && hostOnlyInteractable)
-                    return;
 
-                if (!player.IsOwner)
-                    return;
+
+
 
                 //  REMOVE THE INTERACTION FROM THE PLAYER
+                interactingPlayers.Remove(player);
                 player.playerInteractionManager.RemoveInteractionFromList(this);
                 PlayerUIManager.instance.playerUIPopUpManager.CloseAllPopUpWindows();
             }

@@ -14,8 +14,8 @@ namespace RPGKarawara
             base.Awake();
 
             aiBossCharacter = GetComponent<AIBossCharacterManager>();
-            currentHealth.Value = 3000;
             maxHealth.Value = 3000;
+            currentHealth.Value = 3000;
             // if (fogoBoss){
             //     currentHealth.Value = 1500;
             //     maxHealth.Value = 1500;
@@ -23,17 +23,17 @@ namespace RPGKarawara
             // else{
             //     currentHealth.Value = 3000;
             //     maxHealth.Value = 3000;
-            //     
+            //
             // }
         }
 
         public override void CheckHP(int oldValue, int newValue)
         {
             // A health callback can arrive while the scene's boss is being despawned.
-            if (aiBossCharacter == null || !aiBossCharacter.IsSpawned) return;
+            if (aiBossCharacter == null || !aiBossCharacter.IsInitialized) return;
             base.CheckHP(oldValue, newValue);
 
-            if (aiBossCharacter.IsOwner)
+
             {
                 if (currentHealth.Value <= 0)
                 {

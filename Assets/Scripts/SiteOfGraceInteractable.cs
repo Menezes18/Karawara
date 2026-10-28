@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 using UnityEngine.InputSystem;
 
@@ -14,7 +14,7 @@ namespace RPGKarawara
     {
         [Header("Site Of Grace Info")]
         [SerializeField] int siteOfGraceID;
-        public NetworkVariable<bool> isActivated = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public ObservableValue<bool> isActivated = new ObservableValue<bool>(false);
 
         [Header("VFX")]
         [SerializeField] GameObject activatedParticles;
@@ -28,7 +28,7 @@ namespace RPGKarawara
         {
             base.Start();
 
-            if (IsOwner)
+
             {
                 if (WorldSaveGameManager.instance.currentCharacterData.sitesOfGrace.ContainsKey(siteOfGraceID))
                 {
@@ -49,22 +49,14 @@ namespace RPGKarawara
                 interactableText = unactivatedInteractionText;
             }
         }
-        
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
 
-            //  IF WE JOIN WHEN THE STATUS HAS ALREADY CHANGED, WE FORCE THE ONCHANGE FUNCTION TO RUN HERE UPON JOINING
-            if (!IsOwner)
-                OnIsActivatedChanged(false, isActivated.Value);
-
-            isActivated.OnValueChanged += OnIsActivatedChanged;
-        }
+        void OnEnable() { isActivated.OnValueChanged += OnIsActivatedChanged; OnIsActivatedChanged(false, isActivated.Value); }
+        protected override void OnDisable() { isActivated.OnValueChanged -= OnIsActivatedChanged; base.OnDisable(); }
 
         public void Update(){
-            if (Keyboard.current.escapeKey.wasReleasedThisFrame){
-                
-               
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasReleasedThisFrame){
+
+
                 // painel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked; // Libera o cursor
                 Cursor.visible = false; // Torna o cursor visível (opcional)
@@ -72,16 +64,9 @@ namespace RPGKarawara
             }
         }
 
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-
-            isActivated.OnValueChanged -= OnIsActivatedChanged;
-        }
-
         private void RestoreSiteOfGrace(PlayerManager player){
             var painelUI = FindObjectOfType<PlayerUIHudManager>();
-           
+
             // bool panelActive = !painel.activeSelf;
             // painel.SetActive(panelActive);
             _playerManager = player;
@@ -105,7 +90,7 @@ namespace RPGKarawara
 
 
         public void ChangeElement(string element){
-            
+
             var elemento = FindObjectOfType<ElementManager>();
 
             switch (element.ToLower())
@@ -120,7 +105,7 @@ namespace RPGKarawara
                     Debug.LogWarning("Elemento não reconhecido.");
                     break;
             }
-           
+
 
         }
         public void ResetSite(){
@@ -167,7 +152,7 @@ namespace RPGKarawara
             if (isActivated.Value)
             {
                 //  PLAY SOME FX HERE IF YOU'D LIKE OR ENABLE A LIGHT OR SOMETHING TO INDICATE THIS CHECK POINT IS ON
-                activatedParticles.SetActive(true);
+                if (activatedParticles != null) activatedParticles.SetActive(true);
                 interactableText = activatedInteractionText;
             }
             else

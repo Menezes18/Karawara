@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Karawara.Core.Persistence;
@@ -11,8 +12,9 @@ namespace RPGKarawara
     public class WorldSaveGameManager : MonoBehaviour
     {
         public static WorldSaveGameManager instance;
+        [field: System.NonSerialized] internal string SessionSaveRootOverride { get; set; }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
         // The dedicated playground uses in-memory character data, including boss rewards.
         public static bool DevPlaygroundIsolationActive { get; set; }
 
@@ -24,7 +26,7 @@ namespace RPGKarawara
 #endif
 
         #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
-        public string SaveRootOverride { get; set; }
+        [field: System.NonSerialized] public string SaveRootOverride { get; set; }
         // Actual creation provenance for explicit QA census; never used to drive gameplay.
         public GameObject QaLoadedWorldObject { get; private set; }
         public AssetData QaLoadedWorldAsset { get; private set; }
@@ -49,6 +51,10 @@ namespace RPGKarawara
 
         private SaveResult<string> ResolveSaveRoot()
         {
+            // Explicit QA sessions remain isolated even in an ordinary Release build.
+            if (!string.IsNullOrEmpty(SessionSaveRootOverride))
+                return SaveRootPolicy.Resolve(Application.persistentDataPath,
+                    new[] { "-karawaraSaveRoot", SessionSaveRootOverride }, true);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             string[] args = System.Environment.GetCommandLineArgs();
             if (SaveRootOverride != null)
@@ -66,9 +72,10 @@ namespace RPGKarawara
         protected virtual void RequestWorldSceneLoad() => StartCoroutine(LoadWorldScene());
 
         public PlayerManager player;
-        public bool CanCreateNewGame => !sceneLoading && player != null && player.playerNetworkManager != null && player.IsSpawned && player.IsOwner && loadscene != null;
+        public bool CanCreateNewGame => !sceneLoading && (GameBootstrap.Instance == null || !GameBootstrap.Instance.Session.IsBusy);
         private long loadGeneration;
         private bool sceneLoading;
+        private void OnDestroy() { if (instance == this) instance = null; }
         private readonly Dictionary<PlayerManager, long> appliedPlayers = new Dictionary<PlayerManager, long>();
 
         [Header("SAVE/LOAD")]
@@ -77,6 +84,7 @@ namespace RPGKarawara
 
         [Header("World Scene Index")]
         [SerializeField] int worldSceneIndex = 1;
+        [SerializeField] int newGameSceneIndex = 1;
 
 
         [Header("Current Character Data")]
@@ -145,12 +153,12 @@ namespace RPGKarawara
 
         public bool ApplyPendingSaveWhenReady()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return false;
 #endif
             var scene = SceneManager.GetActiveScene();
             if (loadGeneration == 0 || sceneLoading || currentCharacterData == null || !scene.isLoaded ||
-                scene.buildIndex != currentCharacterData.sceneIndex || player == null || !player.IsSpawned || !player.IsOwner)
+                scene.buildIndex != currentCharacterData.sceneIndex || player == null || !player.IsInitialized)
                 return false;
             if (appliedPlayers.TryGetValue(player, out long generation) && generation == loadGeneration) return false;
             if (!player.ApplyLegacySave(currentCharacterData)) return false;
@@ -187,7 +195,7 @@ namespace RPGKarawara
 
         public SaveResult<bool> TryCreateNewGame()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return SaveResult<bool>.Fail(SaveError.Busy, "Playground saves are isolated.");
 #endif
             if (!CanCreateNewGame)
@@ -205,7 +213,7 @@ namespace RPGKarawara
         }
         public void OnSlotOverwriteSelected(string selectedSlot)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return;
 #endif
 
@@ -229,44 +237,45 @@ namespace RPGKarawara
             var result = NewGame(slot);
             if (!result.Success) RecordSaveFailure(result.Error, result.Message);
         }
+        public SaveResult<CharacterSaveData> PrepareNewGame(CharacterSlot slot)
+        {
+            if (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsQaSession)
+                return SaveResult<CharacterSaveData>.Fail(SaveError.Busy, "QA sessions cannot create personal saves.");
+            var root = ResolveSaveRoot();
+            if (!root.Success) return SaveResult<CharacterSaveData>.Fail(root.Error, root.Message);
+            if (string.IsNullOrEmpty(DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(slot)) || !IsEnabledScene(newGameSceneIndex))
+                return SaveResult<CharacterSaveData>.Fail(SaveError.InvalidData, "Invalid new-game slot or scene.");
+            var candidate = new CharacterSaveData
+            {
+                sceneIndex = newGameSceneIndex, vitality = 15, endurance = 10, currentHealth = 225,
+                xPosition = -319.92f, yPosition = 175.81f, zPosition = 595.46f
+            };
+            var write = CreateWriter(slot).TrySave(candidate);
+            return write.Success ? SaveResult<CharacterSaveData>.Ok(candidate) : SaveResult<CharacterSaveData>.Fail(write.Error, write.Message);
+        }
+
         private SaveResult<bool> NewGame(CharacterSlot slot)
         {
-            if (!CanCreateNewGame)
-            {
-                return SaveResult<bool>.Fail(SaveError.Busy, "Waiting for the local player and loading screen.");
-            }
-            var root = ResolveSaveRoot();
-            if (!root.Success) return SaveResult<bool>.Fail(root.Error, root.Message);
-            if (!IsEnabledScene(worldSceneIndex)) return SaveResult<bool>.Fail(SaveError.InvalidData, "The new-game scene is not enabled in build settings.");
-            // Build the initial snapshot without changing the live player or previous save context.
-            CharacterSaveData candidate = new CharacterSaveData();
-            var result = CaptureCharacterData(ref candidate);
-            if (result.Success)
-            {
-                candidate.sceneIndex = worldSceneIndex;
-                candidate.vitality = 15;
-                candidate.endurance = 10;
-                candidate.xPosition = -319.92f;
-                candidate.yPosition = 175.81f;
-                candidate.zPosition = 595.46f;
-                if (player.playerStatsManager == null)
-                    result = SaveResult<bool>.Fail(SaveError.InvalidData, "Player stats are not ready.");
-                else
-                {
-                    candidate.currentHealth = player.playerStatsManager.CalculateHealthBasedOnVitalityLevel(candidate.vitality);
-                    result = CreateWriter(slot).TrySave(candidate);
-                }
-            }
-            if (!result.Success)
-            {
-                return result;
-            }
-            AcceptLoad(slot, candidate);
+            if (!CanCreateNewGame) return SaveResult<bool>.Fail(SaveError.Busy, "A session command is already running.");
+            var prepared = PrepareNewGame(slot);
+            if (!prepared.Success) return SaveResult<bool>.Fail(prepared.Error, prepared.Message);
             RefreshCharacterProfiles();
-            if (TitleScreenManager.Instance != null) TitleScreenManager.Instance.RefreshSaveSlotPresentation();
-            loadscene.LoadGame();
-            RequestWorldSceneLoad();
+            _ = GameBootstrap.EnsureInstance().Session.LoadGameAsync((int)slot + 1);
             return SaveResult<bool>.Ok(true);
+        }
+
+        public void AcceptSessionLoad(CharacterSlot slot, CharacterSaveData data, PlayerManager sessionPlayer)
+        {
+            player = sessionPlayer;
+            AcceptLoad(slot, data);
+        }
+
+        public void ClearSession()
+        {
+            player = null; currentCharacterData = null; loadGeneration = 0; appliedPlayers.Clear();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
+            DevPlaygroundIsolationActive = false;
+#endif
         }
 
         // Kept for the existing SceneMenu UnityEvent. Its selection comes from the menu.
@@ -277,7 +286,7 @@ namespace RPGKarawara
 
         public SaveResult<CharacterSaveData> TryLoadSelectedSlot(CharacterSlot slot)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return SaveResult<CharacterSaveData>.Fail(SaveError.Busy, "Playground saves are isolated.");
 #endif
             string name = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(slot);
@@ -289,36 +298,23 @@ namespace RPGKarawara
 
         public void LoadGame()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (DevPlaygroundIsolationActive) return;
-#endif
-            if (sceneLoading) { RecordSaveFailure(SaveError.Busy, "A world scene is still loading."); return; }
             CharacterSlot selected = TitleScreenManager.Instance != null
                 ? TitleScreenManager.Instance.currentSelectedSlot : currentCharacterSlotBeingUsed;
-            var result = TryLoadSelectedSlot(selected);
-            if (!result.Success)
-            {
-                RecordSaveFailure(result.Error, result.Message);
-                return;
-            }
-            if (!IsEnabledScene(result.Value.sceneIndex))
-            {
-                RecordSaveFailure(SaveError.InvalidData, "The saved scene is not enabled in build settings.");
-                return;
-            }
-            AcceptLoad(selected, result.Value);
-            RequestWorldSceneLoad();
+            _ = GameBootstrap.EnsureInstance().Session.LoadGameAsync((int)selected + 1);
         }
 
         public void SaveGame()
         {
+            if (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsQaSession) return;
             var result = TrySaveGame();
             if (!result.Success) RecordSaveFailure(result.Error, result.Message);
         }
 
         public SaveResult<bool> TrySaveGame()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsQaSession)
+                return SaveResult<bool>.Fail(SaveError.Busy, "QA sessions cannot write personal saves.");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return SaveResult<bool>.Fail(SaveError.Busy, "Playground saves are isolated.");
 #endif
             var root = ResolveSaveRoot();
@@ -326,7 +322,7 @@ namespace RPGKarawara
             if (sceneLoading || (loadGeneration > 0 && (player == null ||
                 !appliedPlayers.TryGetValue(player, out long appliedGeneration) || appliedGeneration != loadGeneration)))
                 return SaveResult<bool>.Fail(SaveError.Busy, "The accepted save is waiting for its scene and player restoration.");
-            if (player == null || player.playerNetworkManager == null || !player.IsSpawned || currentCharacterData == null)
+            if (player == null || !player.IsInitialized || currentCharacterData == null)
                 return SaveResult<bool>.Fail(SaveError.Busy, "No spawned player/save context is ready.");
             var result = CaptureAndSave(currentCharacterSlotBeingUsed, ref currentCharacterData);
             if (result.Success)
@@ -372,7 +368,7 @@ namespace RPGKarawara
 
         public SaveResult<bool> TryDeleteGame(CharacterSlot characterSlot)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return SaveResult<bool>.Fail(SaveError.Busy, "Playground saves are isolated.");
 #endif
             var root = ResolveSaveRoot();
@@ -396,7 +392,7 @@ namespace RPGKarawara
 
         public void RefreshCharacterProfiles()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (DevPlaygroundIsolationActive) return;
 #endif
             slot01Result = TryLoadSelectedSlot(CharacterSlot.CharacterSlot_01);
@@ -420,49 +416,38 @@ namespace RPGKarawara
 
         public IEnumerator LoadWorldScene()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (DevPlaygroundIsolationActive) yield break;
-#endif
-            if (!IsEnabledScene(worldSceneIndex)) { RecordSaveFailure(SaveError.InvalidData, "The saved scene is not enabled in build settings."); yield break; }
-            if (sceneLoading) yield break;
-            sceneLoading = true;
+            if (currentCharacterData == null) yield break;
+            var command = GameBootstrap.EnsureInstance().Session.LoadGameAsync((int)currentCharacterSlotBeingUsed + 1);
+            while (!command.IsCompleted) yield return null;
+        }
+
+        public async Task PrepareWorldAssetsAsync(CancellationToken cancellationToken)
+        {
+            if (assetData == null || string.IsNullOrEmpty(assetData.texturePath)) return;
+            bool finished = false;
+            var operation = StartCoroutine(PrepareWorldAssetsAndSignal(() => finished = true));
+            float deadline = Time.realtimeSinceStartup + 30f;
             try
             {
-            // Carregar a cena de forma assíncrona
-            AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(worldSceneIndex);
-            sceneLoad.allowSceneActivation = false;
-
-            float simulatedProgress = 0;
-
-            while (!sceneLoad.isDone)
-            {
-                // Atualizar progresso simulado
-                simulatedProgress = Mathf.Clamp(simulatedProgress + Time.deltaTime * 30, 0, 100);
-
-                
-
-                // Verificar se a cena pode ser ativada
-                if (sceneLoad.progress >= 0.9f && simulatedProgress >= 100)
+                while (!finished)
                 {
-                    Debug.Log("Cena carregada!");
-                    sceneLoad.allowSceneActivation = true;
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (Time.realtimeSinceStartup >= deadline) throw new System.TimeoutException("World asset preparation timed out.");
+                    await Task.Yield();
                 }
-
-                yield return null;
             }
+            finally { if (!finished && operation != null) StopCoroutine(operation); }
+        }
+        private IEnumerator PrepareWorldAssetsAndSignal(System.Action complete)
+        {
+            yield return PrepareWorldAssets();
+            complete();
+        }
 
-            // Esperar o próximo quadro para garantir que a cena está ativa
-            yield return new WaitForEndOfFrame();
-
-            // Aplicar textura e instanciar o prefab de forma assíncrona
-            if (assetData != null && assetData.texturePath != null)
-            {
-                // Carregar e aplicar a textura de forma assíncrona
-                yield return StartCoroutine(InstantiatePrefabWithTextureAsync(assetData.prefab, assetData.texturePath));
-            }
-            }
-            finally { sceneLoading = false; }
-            ApplyPendingSaveWhenReady();
+        public IEnumerator PrepareWorldAssets()
+        {
+            if (assetData != null && !string.IsNullOrEmpty(assetData.texturePath))
+                yield return InstantiatePrefabWithTextureAsync(assetData.prefab, assetData.texturePath);
         }
 
         // Método para instanciar o prefab e aplicar a textura

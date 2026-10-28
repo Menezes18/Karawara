@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 namespace RPGKarawara
 {
@@ -185,8 +185,6 @@ namespace RPGKarawara
             character.characterLocomotionManager.canRotate = canRotate;
             character.characterLocomotionManager.canMove = canMove;
 
-            //  TELL THE SERVER/HOST WE PLAYED AN ANIMATION, AND TO PLAY THAT ANIMATION FOR EVERYBODY ELSE PRESENT
-            character.characterNetworkManager.NotifyTheServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
 
         public virtual void PlayTargetAttackActionAnimation(
@@ -202,7 +200,6 @@ namespace RPGKarawara
             //  KEEP TRACK OF CURRENT ATTACK TYPE (LIGHT, HEAVY, ECT)
             //  UPDATE ANIMATION SET TO CURRENT WEAPONS ANIMATIONS
             //  DECIDE IF OUR ATTACK CAN BE PARRIED
-            //  TELL THE NETWORK OUR "ISATTACKING" FLAG IS ACTIVE (For counter damage ect)
             character.characterCombatManager.currentAttackType = attackType;
             character.characterCombatManager.lastAttackAnimationPerformed = targetAnimation;
             UpdateAnimatorController(weapon.weaponAnimator);
@@ -212,8 +209,6 @@ namespace RPGKarawara
             character.characterLocomotionManager.canRotate = canRotate;
             character.characterLocomotionManager.canMove = canMove;
 
-            //  TELL THE SERVER/HOST WE PLAYED AN ANIMATION, AND TO PLAY THAT ANIMATION FOR EVERYBODY ELSE PRESENT
-            character.characterNetworkManager.NotifyTheServerOfAttackActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId, targetAnimation, applyRootMotion);
         }
 
         public void UpdateAnimatorController(AnimatorOverrideController weaponController)

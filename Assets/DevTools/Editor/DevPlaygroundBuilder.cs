@@ -89,7 +89,7 @@ namespace RPGKarawara.DevTools.Editor
                 catalog = ScriptableObject.CreateInstance<DevPlaygroundCatalog>();
                 AssetDatabase.CreateAsset(catalog, CatalogPath);
             }
-            catalog.networkManagerPrefab = RequiredPrefab("Assets/Data/Prefabs/World Managers/World NetworkManager.prefab");
+            catalog.networkManagerPrefab = RequiredPrefab("Assets/Data/Prefabs/World Managers/Game Bootstrap.prefab");
             catalog.playerPrefab = RequiredPrefab("Assets/Data/Prefabs/Player.prefab");
             catalog.cameraPrefab = RequiredPrefab("Assets/Data/Prefabs/PlayerCamera (Left & Right).prefab");
             catalog.inputPrefab = RequiredPrefab("Assets/Data/Prefabs/PlayerInputManager.prefab");

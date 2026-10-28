@@ -146,7 +146,7 @@ namespace RPGKarawara.DevTools.Performance
             {
                 var current = after.actors.SingleOrDefault(a => a.objectId == old.objectId);
                 Ensure(current != null && current.role == old.role && current.primaryType == old.primaryType && current.scene == old.scene && current.sceneHandle == old.sceneHandle &&
-                    current.active == old.active && current.enabled == old.enabled && current.spawned == old.spawned && current.networkObjectId == old.networkObjectId &&
+                    current.active == old.active && current.enabled == old.enabled && current.spawned == old.spawned && current.localCharacterId == old.localCharacterId &&
                     current.dead == old.dead && current.maximumHealth == old.maximumHealth && current.components.OrderBy(c => c).SequenceEqual(old.components.OrderBy(c => c)), "actor-replaced-missing-or-state-changed");
             }
         }
@@ -181,9 +181,9 @@ namespace RPGKarawara.DevTools.Performance
             Ensure(history.currentAiCount == typed.Length && history.matchedAiCount == typed.Length && live.Length == typed.Length, "typed-ai-count-mismatch");
             foreach (var row in live)
             {
-                Ensure(actors.TryGetValue(row.createdId, out var actor) && IsAi(actor) && actor.role == "hostile" && actor.spawned && actor.networkObjectId == row.networkObjectId && actor.sceneHandle == row.sceneHandle, "ai-census-identity-mismatch");
+                Ensure(actors.TryGetValue(row.createdId, out var actor) && IsAi(actor) && actor.role == "hostile" && actor.spawned && actor.localCharacterId == row.localCharacterId && actor.sceneHandle == row.sceneHandle, "ai-census-identity-mismatch");
                 Ensure(census.spawnerAssociations.Count(s => s.linked && s.uniqueOwner && s.spawned && s.supportedActor && s.spawnerId == row.spawnerId && s.prefabId == row.prefabId &&
-                    s.createdObjectId == row.createdId && s.actorObjectId == row.createdId && s.networkObjectId == row.networkObjectId) == 1, "ai-creator-census-link-mismatch");
+                    s.createdObjectId == row.createdId && s.actorObjectId == row.createdId && s.localCharacterId == row.localCharacterId) == 1, "ai-creator-census-link-mismatch");
             }
         }
         static void JournalEvents(PhaseObservation observation, Dictionary<int, PerformanceAiCreationHistory.Attempt> added)
@@ -202,7 +202,7 @@ namespace RPGKarawara.DevTools.Performance
                     bool found = added.TryGetValue(row.rootId, out var creation);
                     Ensure(!bindings.ContainsKey(row.componentId) && row.ownerRootId == 0 && found, "unknown-source-without-production-creation");
                     var actor = observation.after.actors.Single(a => a.objectId == row.rootId);
-                    Ensure(row.componentType == actor.primaryType && (row.change == PerformanceActorLifecycle.Enabled || row.change == PerformanceActorLifecycle.NetworkSpawned || row.change == PerformanceActorLifecycle.HealthChanged), "unexpected-generated-actor-component-or-lifecycle");
+                    Ensure(row.componentType == actor.primaryType && (row.change == PerformanceActorLifecycle.Enabled || row.change == PerformanceActorLifecycle.LocalInitialized || row.change == PerformanceActorLifecycle.HealthChanged), "unexpected-generated-actor-component-or-lifecycle");
                     var birth = observation.aiAfter.events.Where(e => e.token == creation.token).ToArray();
                     Ensure(row.time >= birth[0].time && row.time <= observation.lifecycle.endedTime && row.frame >= birth[0].frame, "source-before-production-request");
                     if (row.change != PerformanceActorLifecycle.HealthChanged) Ensure(row.time <= birth[4].time && row.frame <= birth[4].frame, "source-birth-outside-production-attempt");
@@ -213,7 +213,7 @@ namespace RPGKarawara.DevTools.Performance
             foreach (var root in added.Keys)
             {
                 var rows = observation.lifecycle.events.Where(e => !e.initiallyBound && e.rootId == root).ToArray();
-                Ensure(rows.Select(e => e.componentId).Distinct().Count() == 1 && rows.Any(e => e.change == PerformanceActorLifecycle.Enabled) && rows.Any(e => e.change == PerformanceActorLifecycle.NetworkSpawned), "generated-source-birth-incomplete-or-replaced");
+                Ensure(rows.Select(e => e.componentId).Distinct().Count() == 1 && rows.Any(e => e.change == PerformanceActorLifecycle.Enabled) && rows.Any(e => e.change == PerformanceActorLifecycle.LocalInitialized), "generated-source-birth-incomplete-or-replaced");
             }
         }
         static Type ResolveType(string name)

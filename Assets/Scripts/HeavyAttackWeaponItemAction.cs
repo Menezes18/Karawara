@@ -12,15 +12,11 @@ namespace RPGKarawara{
             WeaponItem weaponPerformingAction){
             base.AttemptToPerformAction(playerPerformingAction, weaponPerformingAction);
 
-            if (!playerPerformingAction.IsOwner)
-                return;
-
 
             if (!playerPerformingAction.characterLocomotionManager.isGrounded)
                 return;
 
-            if (playerPerformingAction.IsOwner)
-                playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
+            playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
 
             PerformHeavyAttack(playerPerformingAction, weaponPerformingAction);
         }

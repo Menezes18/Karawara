@@ -49,7 +49,8 @@ namespace RPGKarawara
         }
 
         public void OpenClubDamageCollider()
-        {          
+        {
+            if (aiCharacter == null || !aiCharacter.IsInitialized || aiCharacter.State.IsDead || !aiCharacter.isPerformingAction) return;
             clubDamageCollider.EnableDamageCollider();
             //durkManager.characterSoundFXManager.PlaySoundFX(WorldSoundFXManager.instance.ChooseRandomSFXFromArray(durkManager.durkSoundFXManager.clubWhooshes));
         }
@@ -61,6 +62,7 @@ namespace RPGKarawara
 
         public void ActivateDurkStomp()
         {
+            if (aiCharacter == null || !aiCharacter.IsInitialized || aiCharacter.State.IsDead || !aiCharacter.isPerformingAction) return;
             stompCollider.StompAttack();
         }
 

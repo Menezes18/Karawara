@@ -22,6 +22,8 @@ namespace RPGKarawara
 
         private ElementManager elementManager;
 
+        protected override CharacterManager SourceCharacter => characterCausingDamage;
+
         protected override void Awake()
         {
             base.Awake();
@@ -40,7 +42,7 @@ namespace RPGKarawara
                 Debug.LogError("ElementManager not found in the scene!");
             }
         }
-        
+
         protected override void OnTriggerEnter(Collider other)
         {
             CharacterManager damageTarget = other.GetComponentInParent<CharacterManager>();
@@ -59,11 +61,11 @@ namespace RPGKarawara
 
                 DamageTarget(damageTarget);
             }
-          
+
         }
-        
+
         protected override void CheckForBlock(CharacterManager damageTarget){
-            
+
             if (damageTarget.characterNetworkManager.isBlocking.Value){
                 charactersDamaged.Add(damageTarget);
                 TakeBlockedDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.TakeBlockedDamageEffect);
@@ -73,7 +75,7 @@ namespace RPGKarawara
                 damageEffect.holyDamage = holyDamage;
 
                 damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
-                
+
             }
         }
 
@@ -81,7 +83,7 @@ namespace RPGKarawara
         {
             // WE DON'T WANT TO DAMAGE THE SAME TARGET MORE THAN ONCE IN A SINGLE ATTACK
             // SO WE ADD THEM TO A LIST THAT CHECKS BEFORE APPLYING DAMAGE
-            if (charactersDamaged.Contains(damageTarget))
+            if (!CanDamage(damageTarget))
                 return;
 
             charactersDamaged.Add(damageTarget);
@@ -127,11 +129,11 @@ namespace RPGKarawara
                     break;
             }
 
-            if (characterCausingDamage.IsOwner)
+
             {
-                damageTarget.characterNetworkManager.NotifyTheServerOfCharacterDamageServerRpc(
-                    damageTarget.NetworkObjectId,
-                    characterCausingDamage.NetworkObjectId,
+                damageTarget.characterNetworkManager.ApplyDamage(
+                    damageTarget,
+                    characterCausingDamage,
                     damageEffect.physicalDamage,
                     damageEffect.magicDamage,
                     damageEffect.fireDamage,
@@ -141,6 +143,7 @@ namespace RPGKarawara
                     damageEffect.contactPoint.x,
                     damageEffect.contactPoint.y,
                     damageEffect.contactPoint.z);
+                Destroy(damageEffect);
             }
         }
 
@@ -153,9 +156,9 @@ namespace RPGKarawara
             damage.holyDamage *= modifier;
             damage.poiseDamage *= modifier;
             _playerNetworkManager = FindObjectOfType<PlayerNetworkManager>();
-            
-            if (_playerNetworkManager.isPowerPet.Value){
-                
+
+            if (characterCausingDamage.State.IsPowerPet){
+
                 damage.physicalDamage *=  PlayerSkillManager.instance.damageSpirit;
                 damage.magicDamage *=  PlayerSkillManager.instance.damageSpirit;
                 damage.fireDamage *= PlayerSkillManager.instance.damageSpirit;;
@@ -163,14 +166,14 @@ namespace RPGKarawara
                 damage.poiseDamage *= PlayerSkillManager.instance.damageSpirit;;
                 return;
             }
-            
+
             // Aplicar modificadores de dano baseados no elemento atual
             if (elementManager != null)
             {
                 AICharacterManager aiDamageTarget = damageTarget as AICharacterManager;
                 if (aiDamageTarget != null)
                 {
-                    
+
                     switch (elementManager.currentElement)
                     {
                         case Element.Fire:
@@ -190,7 +193,7 @@ namespace RPGKarawara
                             }
                             else if (aiDamageTarget.characterElement == Element.Fire)
                             {
-                                damage.physicalDamage *= 0.5f; 
+                                damage.physicalDamage *= 0.5f;
                             }
                             break;
                         default:
@@ -198,7 +201,7 @@ namespace RPGKarawara
                     }
                 }
                 else{
-                    
+
                 }
             }
         }

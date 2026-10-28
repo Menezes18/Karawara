@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Unity.Netcode;
+
 using JetBrains.Annotations;
 
 namespace RPGKarawara
@@ -45,6 +45,7 @@ namespace RPGKarawara
 
         public void PerformWeaponBasedAction([CanBeNull] WeaponItemAction weaponAction, [CanBeNull] WeaponItem weaponPerformingAction)
         {
+            if (!player.IsInitialized || weaponAction == null || weaponPerformingAction == null) return;
             // Se a arma não estiver ativa, ativa ela
             EnsureRightWeaponActive();
 
@@ -54,11 +55,10 @@ namespace RPGKarawara
                 StopCoroutine(weaponDeactivateCoroutine);
             }
 
-            if (player.IsOwner){
+            {
                 
                 
                weaponAction?.AttemptToPerformAction(player, weaponPerformingAction);
-               // player?.playerNetworkManager.NotifyTheServerOfWeaponActionServerRpc(NetworkManager.Singleton.LocalClientId, weaponAction.actionID, weaponPerformingAction.itemID);
             }
 
             // Inicia a rotina para desativar a arma após x tempo segundos se nenhum ataque for realizado
@@ -79,10 +79,16 @@ namespace RPGKarawara
         {
             base.SetTarget(newTarget);
 
-            if (player.IsOwner)
             {
-                PlayerCamera.instance.SetLockCameraHeight();
+                if (PlayerCamera.instance != null) PlayerCamera.instance.SetLockCameraHeight();
             }
+        }
+
+        public void ShutdownActions()
+        {
+            StopAllCoroutines();
+            weaponDeactivateCoroutine = null;
+            canComboWithMainHandWeapon = false;
         }
 
         // ANIMATION EVENT CALLS
@@ -99,8 +105,6 @@ namespace RPGKarawara
         }
         public virtual void DrainStaminaBasedOnAttack()
         {
-            if (!player.IsOwner)
-                return;
 
             if (currentWeaponBeingUsed == null)
                 return;

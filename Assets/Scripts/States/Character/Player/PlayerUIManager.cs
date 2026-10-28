@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 namespace RPGKarawara
 {
     public class PlayerUIManager : MonoBehaviour
     {
         public static PlayerUIManager instance;
-
-        [Header("NETWORK JOIN")]
-        [SerializeField] bool startGameAsClient;
 
         [HideInInspector] public PlayerUIHudManager playerUIHudManager;
         [HideInInspector] public PlayerUIPopUpManager playerUIPopUpManager;
@@ -28,27 +25,19 @@ namespace RPGKarawara
             else
             {
                 Destroy(gameObject);
+                return;
             }
 
-            playerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
-            playerUIPopUpManager = GetComponentInChildren<PlayerUIPopUpManager>();
+            playerUIHudManager = GetComponentInChildren<PlayerUIHudManager>(true);
+            playerUIPopUpManager = GetComponentInChildren<PlayerUIPopUpManager>(true);
         }
 
+        private void OnDestroy() { if (instance == this) instance = null; }
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
         }
 
-        private void Update()
-        {
-            if (startGameAsClient)
-            {
-                startGameAsClient = false;
-                //  WE MUST FIRST SHUT DOWN, BECAUSE WE HAVE STARTED AS A HOST DURING THE TITLE SCREEN
-                NetworkManager.Singleton.Shutdown();
-                //  WE THEN RESTART, AS A CLIENT
-                NetworkManager.Singleton.StartClient();
-            }
-        }
+
     }
 }

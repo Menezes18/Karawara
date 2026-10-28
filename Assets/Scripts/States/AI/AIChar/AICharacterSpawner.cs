@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 namespace RPGKarawara
 {
@@ -21,7 +21,7 @@ namespace RPGKarawara
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             RPGKarawara.DevTools.Performance.PerformanceAuxiliaryContext.Notify(this, RPGKarawara.DevTools.Performance.PerformanceAuxiliaryEvent.SpawnRequested);
 #endif
-            WorldAIManager.instance.SpawnCharacter(this);
+            WorldAIManager.GetOrCreateInstance(gameObject.scene).SpawnCharacter(this);
             gameObject.SetActive(false);
         }
 
@@ -31,7 +31,7 @@ namespace RPGKarawara
             RPGKarawara.DevTools.Performance.PerformanceAuxiliaryContext.Notify(this, RPGKarawara.DevTools.Performance.PerformanceAuxiliaryEvent.ElementChanged);
 #endif
             Debug.Log(characterElement);
-            
+
             characterManager = character.GetComponent<AICharacterManager>();
             characterManager.characterElement = characterElement;
             characterManager.ChangeMaterial(agua, fogo, characterElement);
@@ -39,12 +39,24 @@ namespace RPGKarawara
                 var AIBossCharacterManager = character.GetComponent<AIBossCharacterNetworkManager>();
                 AIBossCharacterManager.fogoBoss = true;
             }
-            
-            
+
+
         }
 
-        
 
+
+
+        public void ResetSpawnedCharacter()
+        {
+            if (instantiatedGameObject != null)
+            {
+                instantiatedGameObject.GetComponent<AICharacterManager>()?.ShutdownLocal();
+                instantiatedGameObject.SetActive(false);
+                Destroy(instantiatedGameObject);
+                instantiatedGameObject = null;
+            }
+            AttemptToSpawnCharacter();
+        }
 
         public void AttemptToSpawnCharacter()
         {
@@ -54,24 +66,26 @@ namespace RPGKarawara
             try
             {
 #endif
-            if (characterGameObject != null)
+            if (characterGameObject != null && (instantiatedGameObject == null || !instantiatedGameObject.activeInHierarchy))
             {
                 instantiatedGameObject = Instantiate(characterGameObject, transform.position, transform.rotation);
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(instantiatedGameObject, gameObject.scene);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
                 RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedGameObject, RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Stage.Instantiated);
 #endif
-                instantiatedGameObject.GetComponent<NetworkObject>().Spawn(destroyWithScene: true);
+                characterManager = instantiatedGameObject.GetComponent<AICharacterManager>();
+                characterManager.InitializeLocal(characterManager.State, GameBootstrap.EnsureInstance().Registry);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
-                RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedGameObject, RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Stage.NetworkSpawned);
+                RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedGameObject, RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Stage.LocalInitialized);
 #endif
-                
+
                 WorldAIManager.instance.AddCharacterToSpawnedCharactersList(instantiatedGameObject.GetComponent<AICharacterManager>());
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
                 RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Observe(qaAttempt, this, instantiatedGameObject, RPGKarawara.DevTools.Performance.PerformanceAiCreationHistory.Stage.Registered);
 #endif
-                
+
 //                ChangeElement(instantiatedGameObject);
-              
+
             }
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             }

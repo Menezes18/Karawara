@@ -17,7 +17,7 @@ namespace RPGKarawara
 
         private void OnAnimatorMove()
         {
-            if (applyRootMotion)
+            if (player.IsInitialized && applyRootMotion)
             {
                 Vector3 velocity = player.animator.deltaPosition;
                 player.characterController.Move(velocity);

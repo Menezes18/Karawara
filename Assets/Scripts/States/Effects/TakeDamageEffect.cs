@@ -67,8 +67,6 @@ namespace RPGKarawara
 
         private void CalculateDamage(CharacterManager character)
         {
-            if (!character.IsOwner)
-                return;
 
             if (characterCausingDamage != null)
             {
@@ -111,8 +109,6 @@ namespace RPGKarawara
 
         private void PlayDirectionalBasedDamageAnimation(CharacterManager character)
         {
-            if (!character.IsOwner)
-                return;
 
             if (character.isDead.Value)
                 return;

@@ -1,3 +1,4 @@
+using Karawara.Core.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -40,6 +41,7 @@ namespace RPGKarawara
 
         protected T CreateRuntimeState<T>(T template) where T : AIState
         {
+            if (template == null) return null;
             var clone = Instantiate(template);
             ownedRuntimeStates.Add(clone);
             return clone;
@@ -64,10 +66,10 @@ namespace RPGKarawara
                 idleTemplate = null; pursueTemplate = null; combatTemplate = null; attackTemplate = null;
                 runtimeStatesAcquired = false;
             }
-            foreach (var state in ownedRuntimeStates) if (state != null) Destroy(state);
+            foreach (var state in ownedRuntimeStates) if (state != null) { if (Application.isPlaying) Destroy(state); else DestroyImmediate(state); }
             ownedRuntimeStates.Clear();
         }
-        public override void OnDestroy()
+        protected override void OnDestroy()
         {
             ReleaseRuntimeStates();
             base.OnDestroy();
@@ -92,33 +94,37 @@ namespace RPGKarawara
         protected override void Start()
         {
             base.Start();
+            if (navMeshAgent == null) return;
             navMeshAgent.enabled = false;
             Invoke("Inimigo", 1f);
         }
 
         void Inimigo()
         {
-            navMeshAgent.enabled = true;
+            if (navMeshAgent != null) navMeshAgent.enabled = true;
         }
 
-        public override void OnNetworkSpawn()
+        public override void InitializeLocal(CharacterRuntimeState state, ICharacterRegistry registry)
         {
-            base.OnNetworkSpawn();
-
-            if (IsOwner)
-            {
-                AcquireRuntimeStates();
-            }
-
-            aiCharacterNetworkManager.currentHealth.OnValueChanged += aiCharacterNetworkManager.CheckHP;
+            if (IsInitialized) return;
+            base.InitializeLocal(state, registry);
+            AcquireRuntimeStates();
+            WorldAIManager.instance?.AddCharacterToSpawnedCharactersList(this);
         }
 
-        public override void OnNetworkDespawn()
+        public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
         {
-            base.OnNetworkDespawn();
+            WorldAIManager.instance?.RemoveCharacter(this);
+            Registry?.Unregister(LocalId);
+            foreach (var hitbox in GetComponentsInChildren<DamageCollider>(true)) hitbox.DisableDamageCollider();
+            yield return base.ProcessDeathEvent(manuallySelectDeathAnimation);
+        }
 
-            aiCharacterNetworkManager.currentHealth.OnValueChanged -= aiCharacterNetworkManager.CheckHP;
+        public override void ShutdownLocal()
+        {
+            WorldAIManager.instance?.RemoveCharacter(this);
             ReleaseRuntimeStates();
+            base.ShutdownLocal();
         }
 
         public void ChangeMaterial(Material agua, Material fogo, Element element)
@@ -133,45 +139,29 @@ namespace RPGKarawara
             }
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            if (characterUIManager.hasFloatingHPBar)
-                characterNetworkManager.currentHealth.OnValueChanged += characterUIManager.OnHPChanged;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-
-            if (characterUIManager.hasFloatingHPBar)
-                characterNetworkManager.currentHealth.OnValueChanged -= characterUIManager.OnHPChanged;
-        }
-
         protected override void Update()
         {
             base.Update();
-            aiCharacterCombatManager.HandleActionRecovery(this);
+            if (IsInitialized && aiCharacterCombatManager != null) aiCharacterCombatManager.HandleActionRecovery(this);
         }
 
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            if (IsOwner)
+            if (IsInitialized && !State.IsDead)
                 ProcessStateMachine();
         }
 
         private void ProcessStateMachine()
         {
+            if (navMeshAgent == null) return;
             if (isDisabled && !isBoss)
             {
 
                 currentState = idle;
-                
-                navMeshAgent.isStopped = true; 
-                navMeshAgent.ResetPath();    
+
+                if (navMeshAgent.enabled && navMeshAgent.isOnNavMesh) { navMeshAgent.isStopped = true; navMeshAgent.ResetPath(); }
                 aiCharacterNetworkManager.isMoving.Value = false;
 
                 return;

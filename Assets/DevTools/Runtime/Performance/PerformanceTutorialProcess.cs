@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -19,7 +19,7 @@ namespace RPGKarawara.DevTools.Performance
         internal static bool RequiresDiscoveryScreenshots(string mode) => mode != null && mode != "tutorial-rehearsal" && !PerformanceProcessHarness.IsCertifiedRouteMode(mode) && !PerformanceProcessHarness.IsUiRouteMode(mode) && !PerformanceProcessHarness.IsCucaCertifiedRouteMode(mode);
         PerformanceProcessResponse request;
         WorldSaveGameManager world;
-        NetworkManager network;
+        GameBootstrap network;
         PlayerManager player;
         PerformanceRouteRehearsal rehearsal;
         IPerformanceTimedSession certified;
@@ -164,6 +164,7 @@ namespace RPGKarawara.DevTools.Performance
             GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp && Math.Abs(urp.renderScale - 1) < .0001;
         void Update()
         {
+            if (network != null) player = network.Session.Player;
             using (PerformanceProfilerAttribution.ProcessMarker.Auto())
             {
             if (!initialized || terminal) return;
@@ -173,21 +174,21 @@ namespace RPGKarawara.DevTools.Performance
                 if (state < 4 && errors.Count != 0) throw new InvalidOperationException("Runtime errors were observed.");
                 if (state == 0)
                 {
-                    world = WorldSaveGameManager.instance; network = NetworkManager.Singleton;
+                    world = WorldSaveGameManager.instance; network = GameBootstrap.Instance;
                     if (world == null || network == null || TitleScreenManager.Instance == null || PlayerInputManager.instance?.playerControls == null || !Application.isFocused || !SettingsMatch()) return;
-                    if (SceneManager.GetActiveScene().name != "SceneMenu" || network.IsListening || Time.timeScale != 1)
-                        throw new InvalidOperationException($"Fresh unpaused SceneMenu and stopped network required (scene={SceneManager.GetActiveScene().name}, listening={network.IsListening}, host={network.IsHost}, timeScale={Time.timeScale}).");
+                    if (SceneManager.GetActiveScene().name != "SceneMenu" || network.Session.IsActive || Time.timeScale != 1)
+                        throw new InvalidOperationException($"Fresh unpaused SceneMenu and stopped network required (scene={SceneManager.GetActiveScene().name}, listening={network.Session.IsActive}, host={network.Session.IsActive}, timeScale={Time.timeScale}).");
                     world.SaveRootOverride = request.saveRoot;
                     if (world.SaveRoot != request.saveRoot) throw new InvalidOperationException("QA root rejected before host.");
                     aiCreationHistory = PerformanceAiCreationHistory.Begin(new[] { "-karawaraPerformanceRoster" });
-                    ownsHost = TitleScreenManager.Instance.TryStartNetworkAsHost();
+                    ownsHost = TitleScreenManager.Instance.TryStartLocalRuntime();
                     if (!ownsHost) throw new InvalidOperationException("Production host startup rejected.");
                     SetState(1, 60);
                 }
                 else if (state == 1)
                 {
-                    player = network.LocalClient?.PlayerObject?.GetComponent<PlayerManager>();
-                    if (player == null || !player.IsSpawned || !player.IsOwner || !world.CanCreateNewGame) return;
+                    player = network.Session.Player?.GetComponent<PlayerManager>();
+                    if (!world.CanCreateNewGame) return;
                     if (PerformanceProcessHarness.IsSeededMode(request.mode))
                     {
                         // Prepare after the actual host HUD has loaded its authored assets,
@@ -217,7 +218,7 @@ namespace RPGKarawara.DevTools.Performance
                     var input = PlayerInputManager.instance;
                     var hud = PlayerUIManager.instance?.playerUIHudManager;
                     string expectedScene = PerformanceProcessHarness.RehearsalScene(request.mode);
-                    if (SceneManager.GetActiveScene().name != expectedScene || player == null || !player.IsSpawned || input == null || input.player != player || hud == null || !hud.IsHealthBarReady) return;
+                    if (SceneManager.GetActiveScene().name != expectedScene || player == null || !player.IsInitialized || input == null || input.player != player || hud == null || !hud.IsHealthBarReady) return;
                     if (Time.timeScale == 0)
                     {
                         var popups = FindObjectsByType<PopUpTutorial>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
@@ -381,10 +382,10 @@ namespace RPGKarawara.DevTools.Performance
                 else if (state == 4)
                 {
                     if (returning != null && !returning.isDone) return;
-                    if (ownsHost && network != null && network.IsListening) network.Shutdown();
+                    if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync();
                     SetState(5, 20);
                 }
-                else if (state == 5 && (network == null || !network.IsListening) && (player == null || !player.IsSpawned))
+                else if (state == 5 && (network == null || !network.Session.IsActive) && (player == null || !player.IsInitialized))
                 {
                     if (shutdownFrame < 0) shutdownFrame = Time.frameCount;
                     if (Time.frameCount >= shutdownFrame + 2) Finish(true);
@@ -394,7 +395,7 @@ namespace RPGKarawara.DevTools.Performance
             {
                 errors.Add(error.ToString());
                 if (state < 4 || state >= 6) BeginCleanup();
-                else { if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false); }
+                else { if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false); }
             }
         
             }
@@ -453,7 +454,7 @@ namespace RPGKarawara.DevTools.Performance
             string signature = JsonConvert.SerializeObject(new { target = selected[0].GetInstanceID(),
                 enemies = mission.enemies.Select(e => e.GetInstanceID()).OrderBy(id => id).ToArray(),
                 actors = census.report.actors.OrderBy(a => a.objectId).Select(a => new { a.objectId, a.sceneHandle, a.role,
-                    a.active, a.enabled, a.supportedBinding, a.spawned, a.networkObjectId, a.maximumHealth, a.dead }).ToArray(),
+                    a.active, a.enabled, a.supportedBinding, a.spawned, a.localCharacterId, a.maximumHealth, a.dead }).ToArray(),
                 links = census.report.spawnerAssociations,
                 icons = census.report.uiIcons.OrderBy(i => i.creatorId).ToArray(),
                 ui = census.report.uiSources.OrderBy(s => s.animatorId).ToArray(),
@@ -605,7 +606,7 @@ namespace RPGKarawara.DevTools.Performance
                 boundary = request.config?.renderingInspection != null ? "Standalone paused rendering inspection only; no timing/population/G1B acceptance." : request.config?.checkpointImages == true ? "Standalone internal checkpoint image diagnostic only; timing ineligible. Request frame/time is not exact present frame. Full G1B remains separate." : request.mode == "video1-route-attribution" ? "Explicit diagnostic profiler attribution only; timing is ineligible. Full G1B remains separate." : certified != null ? "Explicit timing/route/population evidence. Rendering/GC/retention/tooling-overhead and full G1B acceptance remain separate." : "Standalone actual production-scene controls discovery only; no frozen route, population or timing acceptance",
                 processId = System.Diagnostics.Process.GetCurrentProcess().Id, development = Debug.isDebugBuild,
                 mode = request.mode, routeId = request.config?.rehearsal?.routeId, requiredJump = request.config?.rehearsal?.requireObservedJump ?? false,
-                scene = SceneManager.GetActiveScene().name, ownedHostStopped = network == null || !network.IsListening,
+                scene = SceneManager.GetActiveScene().name, ownedHostStopped = network == null || !network.Session.IsActive,
                 saveRoot = request.saveRoot, observationPath = observation?.outputPath, certifiedEvidence = certified?.EvidenceObject, errors, tutorialActions, missionStates,
                 cucaEncounterBefore, cucaEncounterAfter, actorPreflight, actorPostflight, actorNotifications, actorScopeFaulted, actorLifecycleHistory, missionProducerDeclarations, postMissionActorPhase = postMissionActorPhase?.Evidence,
                 postMissionUiPhase = postMissionUiPhase?.Evidence,
@@ -659,7 +660,7 @@ namespace RPGKarawara.DevTools.Performance
             errors.Add("Explicit Tutorial process owner was disabled before completion.");
             try { StopRehearsal(false); }
             catch (Exception error) { errors.Add("Disabled owner cleanup: " + error); }
-            try { if (ownsHost && network != null && network.IsListening) network.Shutdown(); }
+            try { if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); }
             catch (Exception error) { errors.Add("Disabled owner host shutdown: " + error); }
             Finish(false);
         }

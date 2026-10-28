@@ -11,9 +11,8 @@ namespace RPGKarawara
 
         public virtual void AttemptToPerformAction(PlayerManager playerPerformingAction, WeaponItem weaponPerformingAction)
         {
-            if (playerPerformingAction.IsOwner)
             {
-                playerPerformingAction.playerNetworkManager.currentWeaponBeingUsed.Value = weaponPerformingAction.itemID;
+                playerPerformingAction.playerNetworkManager.currentWeaponBeingUsed.SetAndNotify(weaponPerformingAction.itemID);
             }
         }
     }

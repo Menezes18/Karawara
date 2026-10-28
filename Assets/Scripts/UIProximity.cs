@@ -62,7 +62,7 @@ namespace RPGKarawara
         private void ResolvePlayer()
         {
             var owned = WorldSaveGameManager.instance != null ? WorldSaveGameManager.instance.player : null;
-            if (owned != null && owned.IsSpawned && owned.IsOwner)
+            if (owned != null && owned.IsInitialized && GameBootstrap.Instance != null && GameBootstrap.Instance.Session.Player == owned)
             {
                 player = owned.transform;
                 hadBinding = true;

@@ -1,19 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 namespace RPGKarawara
 {
-    public class CharacterCombatManeger : NetworkBehaviour
+    public class CharacterCombatManeger : MonoBehaviour
     {
         protected CharacterManager character;
 
         [Header("Last Attack Animation Performed")]
         public string lastAttackAnimationPerformed;
 
-        [Header("Attack Target")]
-        public CharacterManager currentTarget;
+        public CharacterManager currentTarget
+        {
+            get => character != null ? CharacterManager.Resolve(character.State.Target) : null;
+            set { if (character != null) character.State.SetTarget(value != null ? value.State : null); }
+        }
 
         [Header("Attack Type")]
         public AttackType currentAttackType;
@@ -32,29 +35,16 @@ namespace RPGKarawara
 
         public virtual void SetTarget(CharacterManager newTarget)
         {
-            if (character.IsOwner)
-            {
-                if (newTarget != null)
-                {
-                    currentTarget = newTarget;
-                    character.characterNetworkManager.currentTargetNetworkObjectID.Value = newTarget.GetComponent<NetworkObject>().NetworkObjectId;
-                }
-                else
-                {
-                    currentTarget = null;
-                }
-            }
+            currentTarget = newTarget;
         }
 
         public void EnableIsInvulnerable()
         {
-            if (character.IsOwner)
                 character.characterNetworkManager.isInvulnerable.Value = true;
         }
 
         public void DisableIsInvulnerable()
         {
-            if (character.IsOwner)
                 character.characterNetworkManager.isInvulnerable.Value = false;
         }
 
@@ -90,7 +80,7 @@ namespace RPGKarawara
                 
         public void DestroyAllCurrentActionFX()
         {
-            character.characterNetworkManager.DestroyAllCurrentActionFXServerRpc();
+            character.characterNetworkManager.DestroyAllCurrentActionFX();
         }
     }
 }

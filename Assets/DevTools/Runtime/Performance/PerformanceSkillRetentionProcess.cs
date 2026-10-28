@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using RPGKarawara.SkillTree;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -19,7 +19,7 @@ namespace RPGKarawara.DevTools.Performance
     // Separate actual production skill lifecycle diagnostic, never baseline timing.
     public sealed class PerformanceSkillRetentionProcess : MonoBehaviour
     {
-        enum Stage { Menu, Host, World, Warmup, Cast, Settling, ControlSettling, SnapshotBefore, SnapshotAfter, Returning, Shutdown, MenuSettling, Done }
+        enum Stage { Menu, ServicesReady, World, Warmup, Cast, Settling, ControlSettling, SnapshotBefore, SnapshotAfter, Returning, Shutdown, MenuSettling, Done }
         struct Effect
         {
             public int cycle, slot, instanceId, activationSkillId, declaredSkillPrefabId, createdFrame, destroyedFrame;
@@ -52,7 +52,7 @@ namespace RPGKarawara.DevTools.Performance
         InputBinding? previousMask;
         bool inputRestored = true;
         WorldSaveGameManager world;
-        NetworkManager network;
+        GameBootstrap network;
         PlayerManager player;
         PlayerSkillManager skills;
         Skill[] bound;
@@ -88,6 +88,7 @@ namespace RPGKarawara.DevTools.Performance
         bool SettingsMatch() => Screen.width == 1920 && Screen.height == 1080 && QualitySettings.names[QualitySettings.GetQualityLevel()] == request.config.quality && QualitySettings.vSyncCount == 0 && Application.targetFrameRate == -1 && GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp && Math.Abs(urp.renderScale - 1) < .0001;
         void Update()
         {
+            if (network != null) player = network.Session.Player;
             if (!initialized || terminal) return;
             try
             {
@@ -95,7 +96,7 @@ namespace RPGKarawara.DevTools.Performance
                 if (now > deadline) throw new TimeoutException("Skill retention stage " + stage + " cycle " + cycleIndex);
                 if (!failed && errors.Count != 0) throw new InvalidOperationException("Runtime errors during skill retention.");
                 if (!failed && stage != Stage.Menu && stage != Stage.SnapshotBefore && stage != Stage.SnapshotAfter && (!Application.isFocused || !SettingsMatch())) throw new InvalidOperationException("Focus/settings changed during skill retention.");
-                if (!failed && stage >= Stage.Warmup && stage <= Stage.SnapshotAfter && (player == null || !player.IsSpawned || !player.IsOwner || player.isDead.Value || network == null || !network.IsHost || SceneManager.GetActiveScene().name != "Video1" || Time.timeScale != 1)) throw new InvalidOperationException("Actual skill workload player/host/scene changed.");
+                if (!failed && stage >= Stage.Warmup && stage <= Stage.SnapshotAfter && (player == null || !player.IsInitialized || !player.IsInitialized || player.isDead.Value || network == null || !network.Session.IsActive || SceneManager.GetActiveScene().name != "Video1" || Time.timeScale != 1)) throw new InvalidOperationException("Actual skill workload player/host/scene changed.");
                 if (!failed && sources != null && (sources.Faulted || sourceFault || overflow)) throw new InvalidOperationException("Skill source journal fault or overflow.");
                 if (!failed && idleInput != null)
                 {
@@ -106,16 +107,16 @@ namespace RPGKarawara.DevTools.Performance
                 switch (stage)
                 {
                     case Stage.Menu:
-                        world = WorldSaveGameManager.instance; network = NetworkManager.Singleton;
+                        world = WorldSaveGameManager.instance; network = GameBootstrap.Instance;
                         if (world == null || network == null || TitleScreenManager.Instance == null || PlayerInputManager.instance?.playerControls == null || !Application.isFocused || !SettingsMatch()) return;
-                        if (SceneManager.GetActiveScene().name != "SceneMenu" || network.IsListening || Time.timeScale != 1) throw new InvalidOperationException("Fresh unpaused SceneMenu/stopped host required.");
+                        if (SceneManager.GetActiveScene().name != "SceneMenu" || network.Session.IsActive || Time.timeScale != 1) throw new InvalidOperationException("Fresh unpaused SceneMenu/stopped host required.");
                         world.SaveRootOverride = request.saveRoot; if (world.SaveRoot != request.saveRoot) throw new InvalidOperationException("QA save root rejected.");
-                        ownsHost = TitleScreenManager.Instance.TryStartNetworkAsHost(); if (!ownsHost) throw new InvalidOperationException("Owned host start rejected.");
-                        SetStage(Stage.Host, 60); break;
-                    case Stage.Host:
-                        player = network.LocalClient?.PlayerObject?.GetComponent<PlayerManager>();
+                        ownsHost = TitleScreenManager.Instance.TryStartLocalRuntime(); if (!ownsHost) throw new InvalidOperationException("Owned host start rejected.");
+                        SetStage(Stage.ServicesReady, 60); break;
+                    case Stage.ServicesReady:
+                        player = network.Session.Player?.GetComponent<PlayerManager>();
                         var ui = PlayerUIManager.instance?.GetComponentInChildren<SkillTreeUiManager>(true);
-                        if (player == null || !player.IsSpawned || !player.IsOwner || !world.CanCreateNewGame || ui == null) return;
+                        if (!world.CanCreateNewGame || ui == null) return;
                         // Owned/unlocked arrays and the UI's earlier Awake snapshot can
                         // omit assets loaded later. Resolve only actual current-process assets.
                         var catalog = Resources.FindObjectsOfTypeAll<Skill>();
@@ -141,7 +142,7 @@ namespace RPGKarawara.DevTools.Performance
                         world.RefreshCharacterProfiles(); TitleScreenManager.Instance.SelectCharacterSlot(CharacterSlot.CharacterSlot_01); world.LoadGame();
                         SetStage(Stage.World, 90); break;
                     case Stage.World:
-                        if (SceneManager.GetActiveScene().name != "Video1" || player == null || !player.IsSpawned || PlayerUIManager.instance?.playerUIHudManager?.IsHealthBarReady != true || PlayerInputManager.instance?.player != player || !player.characterLocomotionManager.isGrounded || Time.timeScale != 1) return;
+                        if (SceneManager.GetActiveScene().name != "Video1" || player == null || !player.IsInitialized || PlayerUIManager.instance?.playerUIHudManager?.IsHealthBarReady != true || PlayerInputManager.instance?.player != player || !player.characterLocomotionManager.isGrounded || Time.timeScale != 1) return;
                         skills = player.GetComponent<PlayerSkillManager>(); if (skills == null || skills.slot == null || skills.slot.Length != 3) throw new InvalidOperationException("Actual player skill manager required.");
                         // HUD/grounded can become ready before the normal asynchronous save
                         // application finishes. Observe restoration; never assign slots here.
@@ -213,10 +214,10 @@ namespace RPGKarawara.DevTools.Performance
                     case Stage.Returning:
                         if (SceneManager.GetActiveScene().name != "SceneMenu") return;
                         DisposeOwnedDefenseGraphs();
-                        if (ownsHost && network != null && network.IsListening) network.Shutdown();
+                        if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync();
                         SetStage(Stage.Shutdown, 20); break;
                     case Stage.Shutdown:
-                        if ((network != null && network.IsListening) || (player != null && player.IsSpawned)) return;
+                        if ((network != null && network.Session.IsActive) || (player != null && player.IsInitialized)) return;
                         if (shutdownFrame < 0) shutdownFrame = Time.frameCount;
                         if (Time.frameCount < shutdownFrame + 2) return;
                         ownsHost = false; SetStage(Stage.MenuSettling, 10); break;
@@ -227,7 +228,7 @@ namespace RPGKarawara.DevTools.Performance
             catch (Exception error)
             {
                 errors.Add(error.ToString());
-                if (failed) { if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false); return; }
+                if (failed) { if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false); return; }
                 failed = true;
                 if (warmed && snapshots.Count < 1 + config.cycles / 10 && stage == Stage.Settling) TakeSnapshot("skills-after-failed-cycle", Stage.SnapshotAfter);
                 else BeginReturn();
@@ -361,7 +362,7 @@ namespace RPGKarawara.DevTools.Performance
             Dictionary<string, string> personalAfter = null;
             try { personalAfter = Fingerprints(personalRoot); } catch (Exception error) { errors.Add("Final personal fingerprint failed: " + error); }
             bool personalUnchanged = personalBefore != null && personalAfter != null && personalBefore.Count == personalAfter.Count && personalBefore.All(p => personalAfter.TryGetValue(p.Key, out var value) && value == p.Value);
-            bool hostStopped = (network == null || !network.IsListening) && (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening);
+            bool hostStopped = (network == null || !network.Session.IsActive) && (GameBootstrap.Instance == null || !GameBootstrap.Instance.Session.IsActive);
             bool ownedGraphsPassed = ownedDefenseGraph != null && ownedDefenseGraph.CleanupComplete && !ownedDefenseGraph.CleanupConflict && ownedDefenseGraph.ObservedCasts == config.warmupCycles + config.cycles && ownedDefenseGraph.EveryObservedCastHadActiveBatch && ownedDefenseGraph.SettledNativeZeroObservations == snapshots.Count;
             bool liveImagesReady = liveImages.Count == 1 && liveImages.All(i => File.Exists(i.path) && new FileInfo(i.path).Length > 0);
             bool passed = !failed && errors.Count == 0 && cleanupPassed && inputRestored && personalUnchanged && hostStopped && CompletedProtocol() && ownedGraphsPassed && liveImagesReady;
@@ -384,7 +385,7 @@ namespace RPGKarawara.DevTools.Performance
             return result;
         }
         void OnLog(string message, string stack, LogType type) { if ((type == LogType.Error || type == LogType.Exception || type == LogType.Assert) && errors.Count < 256) errors.Add(message + "\n" + stack); }
-        void OnDisable() { if (!initialized || terminal) return; failed = true; errors.Add("Owned skill retention process disabled prematurely."); sources?.Dispose(); if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false); }
+        void OnDisable() { if (!initialized || terminal) return; failed = true; errors.Add("Owned skill retention process disabled prematurely."); sources?.Dispose(); if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false); }
         void OnDestroy()
         {
             ownedDefenseGraph?.RestoreBinding();

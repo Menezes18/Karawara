@@ -23,40 +23,20 @@ namespace RPGKarawara
             }
         }
 
+        void OnDestroy()
+        {
+            if (instance == this) instance = null;
+            players.Clear();
+        }
         public void AddPlayerToActivePlayersList(PlayerManager player)
         {
-            //  CHECK THE LIST, IF IT DOES NOT ALREADY CONTAIN THE PLAYER, ADD THEM
-            if (!players.Contains(player))
-            {
-                players.Add(player);
-            }
-
-            //  CHECK THE LIST FOR NULL SLOTS, AND REMOVE THE NULL SLOTS
-            for (int i = players.Count - 1; i > -1; i--)
-            {
-                if (players[i] == null)
-                {
-                    players.RemoveAt(i);
-                }
-            }
+            players.RemoveAll(value => value == null || !value.IsInitialized);
+            if (player != null && !players.Contains(player)) players.Add(player);
         }
-
         public void RemovePlayerFromActivePlayersList(PlayerManager player)
         {
-            //  CHECK THE LIST, IF IT DOES CONTAIN THE PLAYER, REMOVE THEM
-            if (players.Contains(player))
-            {
-                players.Remove(player);
-            }
-
-            //  CHECK THE LIST FOR NULL SLOTS, AND REMOVE THE NULL SLOTS
-            for (int i = players.Count - 1; i > -1; i--)
-            {
-                if (players[i] == null)
-                {
-                    players.RemoveAt(i);
-                }
-            }
+            players.Remove(player);
+            players.RemoveAll(value => value == null || !value.IsInitialized);
         }
     }
 }

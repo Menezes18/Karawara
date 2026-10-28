@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using RPGKarawara;
 using RPGKarawara.SkillTree;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -92,8 +92,8 @@ public static class LegacyProductionSceneValidation
     static bool originalInvulnerable;
     static Skill qaSkill;
     static readonly Dictionary<Skill, string> skillSnapshots = new Dictionary<Skill, string>();
-    static NetworkVariable<int>.OnValueChangedDelegate onHealth;
-    static NetworkVariable<Vector3>.OnValueChangedDelegate onPosition;
+    static Action<int, int> onHealth;
+    static Action<Vector3, Vector3> onPosition;
 
     [MenuItem("Karawara/Validation/TOBE/Prepare Legacy Production Spawn Plan")]
     public static void Prepare()
@@ -133,50 +133,7 @@ public static class LegacyProductionSceneValidation
     [MenuItem("Karawara/Validation/TOBE/Run Legacy Production Scene Validation")]
     public static void Run()
     {
-        if (report != null) { Debug.LogWarning("Legacy production validation already running."); return; }
-        manager = null; player = null; current = null; originalApplied = null; originalPlayer = null;
-        returning = null; capturedState = false; startedHost = false; stage = -1; onHealth = null; onPosition = null;
-        report = new Report { startedUtc = DateTime.UtcNow.ToString("O"), result = "running" };
-        try
-        {
-            Require(EditorApplication.isPlaying && SceneManager.GetActiveScene().name == "SceneMenu", "Run requires a fresh SceneMenu Play session; it never starts PlayMode.");
-            Require(Time.timeScale > 0, "Fresh SceneMenu must be unpaused; the QA fixture will not force time scale.");
-            plan = JsonUtility.FromJson<SpawnPlan>(File.ReadAllText(PlanPath));
-            Require(plan != null && plan.completed && plan.scenes.Count == Targets.Length, "Prepare a completed authored spawn plan first.");
-            foreach (var spawn in plan.scenes)
-                Require(SceneUtility.GetScenePathByBuildIndex(spawn.buildIndex) == spawn.path && Hash(spawn.path) == spawn.sceneHash, "Authored scene/build index changed after preparation: " + spawn.scene);
-            manager = WorldSaveGameManager.instance;
-            Require(manager != null && TitleScreenManager.Instance != null && NetworkManager.Singleton != null, "Actual SceneMenu save/title/network managers missing.");
-            Require(!WorldSaveGameManager.DevPlaygroundIsolationActive && Object.FindAnyObjectByType<RPGKarawara.DevTools.DevPlaygroundController>() == null, "Fresh production SceneMenu required; playground lifecycle must not participate.");
-            report.originalScene = SceneManager.GetActiveScene().path;
-            report.personalBefore = PersonalFiles();
-            originalRoot = manager.SaveRootOverride; originalIsolation = WorldSaveGameManager.DevPlaygroundIsolationActive;
-            originalManagerEnabled = manager.enabled; originalContext = manager.currentCharacterData; originalSlot = manager.currentCharacterSlotBeingUsed;
-            originalSelected = TitleScreenManager.Instance.currentSelectedSlot;
-            originalGeneration = (long)Field("loadGeneration").GetValue(manager); originalWorldIndex = manager.GetWorldSceneIndex();
-            originalApplied = new Dictionary<PlayerManager, long>((Dictionary<PlayerManager, long>)Field("appliedPlayers").GetValue(manager));
-            originalTimeScale = Time.timeScale; originalCursor = Cursor.visible; originalLock = Cursor.lockState;
-            originalCameraPlayer = PlayerCamera.instance != null ? PlayerCamera.instance.player : null;
-            originalCameraFollow = PlayerCamera.instance != null && PlayerCamera.instance.canFollow;
-            originalInputEnabled = PlayerInputManager.instance != null && PlayerInputManager.instance.enabled;
-            originalControlsEnabled = PlayerInputManager.instance != null && PlayerInputManager.instance.playerControls != null && PlayerInputManager.instance.playerControls.asset.enabled;
-            capturedState = true;
-            report.saveRoot = Path.Combine(Path.GetTempPath(), "Karawara-ProductionRestore-" + Guid.NewGuid().ToString("N"));
-            manager.SaveRootOverride = report.saveRoot;
-            Require(manager.SaveRoot == report.saveRoot, "QA root was not accepted; no host/load command issued.");
-            Directory.CreateDirectory(report.saveRoot);
-            manager.enabled = true;
-            Application.logMessageReceived += Capture;
-            EditorApplication.update += Tick;
-            EditorApplication.playModeStateChanged += OnPlayState;
-            AssemblyReloadEvents.beforeAssemblyReload += OnReload;
-            startedHost = !NetworkManager.Singleton.IsListening;
-            Require(TitleScreenManager.Instance.TryStartNetworkAsHost(), "Production title host failed: " + TitleScreenManager.Instance.HostStatus);
-            stage = 0; target = 0; lastFrame = -1;
-            deadline = EditorApplication.timeSinceStartup + 30;
-            Flush();
-        }
-        catch (Exception ex) { Abort(ex.GetBaseException().Message); }
+        RPGKarawara.DevTools.Editor.ProductionSceneSmokeTest.Run();
     }
 
     static void Tick()
@@ -214,7 +171,7 @@ public static class LegacyProductionSceneValidation
                         { current.actualAuthoredRestore = player.transform.position; current.authoredRestoreObserved = true; current.initialSettling.Add(SampleGround()); }
                     };
                     player.playerNetworkManager.currentHealth.OnValueChanged += onHealth;
-                    player.playerNetworkManager.networkPosition.OnValueChanged += onPosition;
+
                     BeginTarget();
                 }
                 else if (now >= deadline) Abort("Actual SceneMenu host/player/HUD/skill readiness timeout.");
@@ -259,9 +216,9 @@ public static class LegacyProductionSceneValidation
                 if (SceneManager.GetActiveScene().buildIndex == current.authored.buildIndex && Ready(true) && ApplicationRecordedForPlayer())
                 {
                     if (!current.exactRestoreObserved && current.healthRestores == 1 &&
-                        Vector3.Distance(player.playerNetworkManager.networkPosition.Value, current.savedPosition) < .001f &&
+                        Vector3.Distance(player.transform.position, current.savedPosition) < .001f &&
                         Vector3.Distance(player.transform.position, current.savedPosition) < .05f)
-                    { current.exactRestoreObserved = true; current.actualRestore = player.playerNetworkManager.networkPosition.Value; current.positionEvidence = "Unchanged actual network position, matching Transform, one health restore and completed generation"; current.ground.Add(SampleGround()); }
+                    { current.exactRestoreObserved = true; current.actualRestore = player.transform.position; current.positionEvidence = "Unchanged actual network position, matching Transform, one health restore and completed generation"; current.ground.Add(SampleGround()); }
                     if (current.exactRestoreObserved)
                     {
                         Snapshot();
@@ -296,12 +253,12 @@ public static class LegacyProductionSceneValidation
             {
                 if (returning == null || !returning.isDone) { if (now >= deadline) Finish(false, "Original SceneMenu cleanup load timeout", false); return; }
                 RestoreRuntime();
-                if (startedHost && NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening) NetworkManager.Singleton.Shutdown();
+                if (startedHost && GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive) _ = GameBootstrap.Instance.Session.ReturnToMenuAsync();
                 stage = 4; deadline = now + 20;
             }
             else if (stage == 4)
             {
-                if (!startedHost || NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
+                if (!startedHost || GameBootstrap.Instance == null || !GameBootstrap.Instance.Session.IsActive)
                     Finish(report.scenes.Count == Targets.Length && report.scenes.All(s => s.completed && s.passed), "Finished production scene restore validation", true);
                 else if (now >= deadline) Finish(false, "QA-started host shutdown timeout", false);
             }
@@ -366,7 +323,7 @@ public static class LegacyProductionSceneValidation
     static bool Ready(bool world)
     {
         var hud = PlayerUIManager.instance != null ? PlayerUIManager.instance.playerUIHudManager : null;
-        return NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost && NetworkManager.Singleton.IsListening && player != null && player.IsSpawned && player.IsOwner &&
+        return GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive && GameBootstrap.Instance.Session.IsActive && player != null && player.IsInitialized && player.IsInitialized &&
             player.playerNetworkManager != null && player.playerStatsManager != null && player.GetComponent<PlayerSkillManager>() != null &&
             Object.FindAnyObjectByType<SkillTreeUiManager>(FindObjectsInactive.Include) != null && hud != null && hud.IsHealthBarReady &&
             PlayerCamera.instance != null && PlayerCamera.instance.player == player && PlayerCamera.instance.cameraObject != null &&
@@ -375,8 +332,8 @@ public static class LegacyProductionSceneValidation
     static void Snapshot()
     {
         if (current == null || player == null) return;
-        current.host = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost;
-        current.owner = player.IsOwner; current.spawned = player.IsSpawned;
+        current.host = GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive;
+        current.owner = player.IsInitialized; current.spawned = player.IsInitialized;
         current.health = player.playerNetworkManager.currentHealth.Value; current.vitality = player.playerNetworkManager.vitality.Value;
         var hud = PlayerUIManager.instance != null ? PlayerUIManager.instance.playerUIHudManager : null;
         current.hudReady = hud != null && hud.IsHealthBarReady;
@@ -455,7 +412,7 @@ public static class LegacyProductionSceneValidation
     static void BlockInput() { if (PlayerInputManager.instance != null) { PlayerInputManager.instance.enabled = false; PlayerInputManager.instance.playerControls?.Disable(); } }
     static void RestoreRuntime()
     {
-        if (player != null && player.IsSpawned && originalPlayer != null) { Require(player.ApplyLegacySave(originalPlayer), "Original runtime player state could not restore."); player.transform.rotation = originalRotation; player.characterNetworkManager.isInvulnerable.Value = originalInvulnerable; }
+        if (player != null && player.IsInitialized && originalPlayer != null) { Require(player.ApplyLegacySave(originalPlayer), "Original runtime player state could not restore."); player.transform.rotation = originalRotation; player.characterNetworkManager.isInvulnerable.Value = originalInvulnerable; }
         if (manager != null)
         {
             manager.currentCharacterSlotBeingUsed = originalSlot; manager.currentCharacterData = originalContext;
@@ -469,7 +426,7 @@ public static class LegacyProductionSceneValidation
         if (report == null) return;
         var finished = report;
         Action<Action> cleanup = action => { try { action(); } catch (Exception ex) { finished.cleanupError += ex.GetBaseException().Message + "\n"; } };
-        cleanup(() => { if (player != null) { player.playerNetworkManager.currentHealth.OnValueChanged -= onHealth; player.playerNetworkManager.networkPosition.OnValueChanged -= onPosition; } });
+        cleanup(() => { if (player != null) { player.playerNetworkManager.currentHealth.OnValueChanged -= onHealth; } });
         cleanup(() => { foreach (var pair in skillSnapshots) if (pair.Key != null) EditorJsonUtility.FromJsonOverwrite(pair.Value, pair.Key); skillSnapshots.Clear(); if (qaSkill != null) Object.DestroyImmediate(qaSkill); });
         cleanup(() => { if (manager != null && originalApplied != null) RestoreRuntime(); });
         cleanup(() => { finished.personalAfter = PersonalFiles(); finished.personalFilesUnchanged = JsonUtility.ToJson(new FingerprintList { files = finished.personalBefore }) == JsonUtility.ToJson(new FingerprintList { files = finished.personalAfter }); });
@@ -496,7 +453,7 @@ public static class LegacyProductionSceneValidation
     static void OnReload() { if (report != null) Finish(false, "Assembly reload interrupted validation", false); }
     static void Flush() { if (report != null) { Directory.CreateDirectory(Path.GetDirectoryName(ReportPath)); File.WriteAllText(ReportPath, JsonUtility.ToJson(report, true)); } }
     static FieldInfo Field(string name) => typeof(WorldSaveGameManager).GetField(name, BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new MissingFieldException(name);
-    static PlayerManager LocalPlayer() => NetworkManager.Singleton != null && NetworkManager.Singleton.LocalClient != null && NetworkManager.Singleton.LocalClient.PlayerObject != null ? NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerManager>() : null;
+    static PlayerManager LocalPlayer() => GameBootstrap.Instance != null && GameBootstrap.Instance.Session != null && GameBootstrap.Instance.Session.Player != null ? GameBootstrap.Instance.Session.Player : null;
     static string Hierarchy(Transform transform) { string path = transform.name; while (transform.parent != null) { transform = transform.parent; path = transform.name + "/" + path; } return path; }
     static string Hash(string path) { using (var sha = SHA256.Create()) return BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(path))).Replace("-", ""); }
     static void Require(bool condition, string message) { if (!condition) throw new InvalidOperationException(message); }

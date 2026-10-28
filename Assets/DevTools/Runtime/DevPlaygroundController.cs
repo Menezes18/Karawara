@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using RPGKarawara.SkillTree;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -29,7 +29,7 @@ namespace RPGKarawara.DevTools
         readonly List<Skill> skills = new List<Skill>();
         readonly List<ScriptableObject> ownedAssets = new List<ScriptableObject>();
         readonly Dictionary<ScriptableObject, ScriptableObject> clones = new Dictionary<ScriptableObject, ScriptableObject>();
-        NetworkManager network;
+        GameBootstrap network;
         PlayerManager player;
         PlayerSkillManager skillManager;
         GameObject showcase;
@@ -58,7 +58,7 @@ namespace RPGKarawara.DevTools
         readonly string[] tabs = { "Player", "Enemies", "Assets", "Systems" };
         public bool Ready => ready;
         public PlayerManager Player => player;
-        public NetworkManager Network => network;
+        public GameBootstrap Network => network;
         public int SpawnedEnemyCount => spawnedEnemies.Count;
         public int ActiveToolSkillObjects => spawnedEffects.FindAll(effect => effect != null).Count;
         public int SkillCount => skills.Count;
@@ -103,7 +103,7 @@ namespace RPGKarawara.DevTools
         IEnumerator Start()
         {
             if (catalog == null) { Fail("Missing playground catalog."); yield break; }
-            if (NetworkManager.Singleton != null || PlayerManagerExists())
+            if ((GameBootstrap.Instance != null && (GameBootstrap.Instance.Session.IsActive || GameBootstrap.Instance.Session.IsBusy)) || PlayerManagerExists())
             { Fail("Start this scene directly in a fresh Play session; another gameplay session is active."); yield break; }
 
             // A boss can call SaveGame even on a disabled manager. Require the production guard.
@@ -149,29 +149,13 @@ namespace RPGKarawara.DevTools
                 PlayerUIManager.instance.playerUIHudManager == null || WorldItemDatabase.Instance == null || WorldUtilityManager.Instance == null)
             { Fail("Production camera, input, HUD, item database or utility manager is missing."); yield break; }
             CreatePrepared(catalog.networkManagerPrefab);
-            network = NetworkManager.Singleton;
+            network = GameBootstrap.Instance;
             if (network == null || catalog.playerPrefab == null)
             { Fail("Production NetworkManager or player prefab is missing."); yield break; }
-            network.NetworkConfig.PlayerPrefab = catalog.playerPrefab;
-            network.NetworkConfig.EnableSceneManagement = false;
-            // Exercise the same local port fallback as the production menu.
-            var transport = network.NetworkConfig.NetworkTransport as Unity.Netcode.Transports.UTP.UnityTransport;
-            if (transport != null) transport.SetConnectionData("127.0.0.1", 7777, "127.0.0.1");
-            // Register explicitly before hosting, preserving production prefab identity/hash.
-            var registered = new HashSet<GameObject>();
-            foreach (var entry in catalog.enemies)
-                if (entry.prefab != null && entry.prefab.GetComponent<NetworkObject>() != null && registered.Add(entry.prefab))
-                    RegisterPrefab(entry.prefab);
+            network.ConfigurePlayerPrefab(catalog.playerPrefab.GetComponent<PlayerManager>());
             BuildNavigation();
-            yield return null; // Production InputManager.Start disables controls.
-            if (!LocalHostStartup.TryStartHost(network, out ushort hostPort)) { Fail("Local host failed to start."); yield break; }
-            float deadline = Time.realtimeSinceStartup + 15;
-            while ((network.LocalClient == null || network.LocalClient.PlayerObject == null) && Time.realtimeSinceStartup < deadline)
-                yield return null;
-            if (network.LocalClient == null || network.LocalClient.PlayerObject == null)
-            { Fail("Host started but did not spawn the production player."); yield break; }
-            player = network.LocalClient.PlayerObject.GetComponent<PlayerManager>();
-            if (player == null) { Fail("Configured player has no PlayerManager."); yield break; }
+            player = network.Session.SpawnQaPlayer(catalog.playerPrefab.GetComponent<PlayerManager>(), playerSpawn.position, playerSpawn.rotation);
+            if (player == null) { Fail("Local session did not create its player."); yield break; }
             var inventory = player.playerInventoryManager;
             inventory.currentRightHandWeapon = Clone(inventory.currentRightHandWeapon);
             inventory.currentLeftHandWeapon = Clone(inventory.currentLeftHandWeapon);
@@ -194,7 +178,7 @@ namespace RPGKarawara.DevTools
             Heal();
             ready = true;
             SetOpen(open);
-            status = $"Production player and local NGO host ready on port {hostPort}. Saves isolated. F1 toggles tools.";
+            status = $"Production player and local session ready. Saves isolated. F1 toggles tools.";
         }
 
         bool PlayerManagerExists() => FindAnyObjectByType<PlayerManager>() != null;
@@ -305,15 +289,6 @@ namespace RPGKarawara.DevTools
                     field.SetValue(manager, Activator.CreateInstance(field.FieldType));
         }
 
-        void RegisterPrefab(GameObject prefab)
-        {
-            // Prefabs is populated on Initialize; serialized lists are authoritative before hosting.
-            foreach (var list in network.NetworkConfig.Prefabs.NetworkPrefabsLists)
-                if (list != null && list.Contains(prefab)) return;
-            foreach (var entry in network.NetworkConfig.Prefabs.Prefabs)
-                if (entry.Prefab == prefab) return;
-            network.AddNetworkPrefab(prefab);
-        }
 
         void BuildNavigation()
         {
@@ -453,19 +428,19 @@ namespace RPGKarawara.DevTools
             bool wasEnabled = player.characterController != null && player.characterController.enabled;
             if (wasEnabled) player.characterController.enabled = false;
             player.transform.SetPositionAndRotation(target.position, target.rotation);
-            player.characterNetworkManager.networkPosition.Value = target.position;
-            player.characterNetworkManager.networkRotation.Value = target.rotation;
+            player.transform.position = target.position;
+            player.transform.rotation = target.rotation;
             if (wasEnabled) player.characterController.enabled = true;
         }
 
         public void SpawnEnemies()
         {
-            if (network == null || !network.IsServer || catalog.enemies.Length == 0) return;
+            if (network == null || !network.Session.IsActive || catalog.enemies.Length == 0) return;
             enemyIndex = Mathf.Clamp(enemyIndex, 0, catalog.enemies.Length - 1);
             var entry = catalog.enemies[enemyIndex];
             if (entry.prefab == null) return;
             bool networkCharacter = entry.prefab.GetComponent<AICharacterManager>() != null;
-            if (networkCharacter && entry.prefab.GetComponent<NetworkObject>() == null)
+            if (networkCharacter && entry.prefab.GetComponent<CharacterManager>() == null)
             { status = "Network enemy is missing its NetworkObject."; return; }
             Vector3 center = enemySpawn != null ? enemySpawn.position : player.transform.position + player.transform.forward * 8;
             int baseIndex = spawnedEnemies.Count;
@@ -486,7 +461,7 @@ namespace RPGKarawara.DevTools
                     data.bossesAwakened[boss.bossID] = false;
                     data.bossesDefeated[boss.bossID] = false;
                 }
-                if (networkCharacter) enemy.GetComponent<NetworkObject>().Spawn();
+                if (networkCharacter) { var actor = enemy.GetComponent<CharacterManager>(); actor.InitializeLocal(actor.State, network.Registry); }
                 if (character != null && WorldAIManager.instance != null) WorldAIManager.instance.AddCharacterToSpawnedCharactersList(character);
                 var legacyControl = enemy.GetComponent<global::BossControl>();
                 if (legacyControl != null)
@@ -498,7 +473,7 @@ namespace RPGKarawara.DevTools
 
         public void ClearEnemies()
         {
-            if (network == null || !network.IsServer) return;
+            if (network == null || !network.Session.IsActive) return;
             if (player != null) { player.playerNetworkManager.isLockedOn.Value = false; PlayerCamera.instance.ClearLockOnTargets(); }
             foreach (var enemy in spawnedEnemies)
             {
@@ -516,8 +491,8 @@ namespace RPGKarawara.DevTools
                 if (character != null && WorldAIManager.instance != null)
                     foreach (var field in typeof(WorldAIManager).GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
                         if (field.GetValue(WorldAIManager.instance) is IList list && list.Contains(character)) list.Remove(character);
-                var obj = enemy.GetComponent<NetworkObject>();
-                if (obj != null && obj.IsSpawned) obj.Despawn(); else Destroy(enemy);
+                var obj = enemy.GetComponent<CharacterManager>();
+                if (obj != null) obj.ShutdownLocal(); Destroy(enemy);
             }
             spawnedEnemies.Clear();
         }
@@ -685,7 +660,7 @@ namespace RPGKarawara.DevTools
             int living = 0;
             foreach (var enemy in spawnedEnemies)
                 if (enemy != null && (enemy.GetComponent<AICharacterManager>() == null || !enemy.GetComponent<AICharacterManager>().isDead.Value)) living++;
-            GUILayout.Label($"Spawned: {spawnedEnemies.Count} · alive: {living} · server: {network.IsServer}");
+            GUILayout.Label($"Spawned: {spawnedEnemies.Count} · alive: {living} · local session: {network.Session.IsActive}");
             if (catalog.enemies.Length == 0) { GUILayout.Label("No production enemy prefabs found."); return; }
             GUILayout.Label("Choose any production enemy");
             for (int i = 0; i < catalog.enemies.Length; i++)
@@ -792,7 +767,7 @@ namespace RPGKarawara.DevTools
             foreach (var entry in catalog.effects) if (entry.prefab != null && GUILayout.Button(entry.label)) StartCoroutine(Preview(entry));
             GUILayout.Label("Interactable assets (visual preview; scene stations test wired interactions)");
             foreach (var entry in catalog.interactables) if (entry.prefab != null && GUILayout.Button(entry.label)) StartCoroutine(Preview(entry));
-            GUILayout.Label($"NGO host {network.IsHost}; player owner {player.IsOwner}; NavMesh valid {navMeshInstance.valid}");
+            GUILayout.Label($"Local session {network.Session.IsActive}; player initialized {player.IsInitialized}; NavMesh valid {navMeshInstance.valid}");
         }
 
         void OnDestroy()
@@ -800,7 +775,7 @@ namespace RPGKarawara.DevTools
             Time.timeScale = 1;
             if (showcase != null) Destroy(showcase);
             // Keep isolation active until host callbacks and owned objects have been torn down.
-            if (network != null && network.IsListening) network.Shutdown();
+            if (network != null && network.Session.IsActive) network.Session.DisposeSession();
             if (player != null) Destroy(player.gameObject);
             foreach (var enemy in spawnedEnemies) if (enemy != null) Destroy(enemy);
             foreach (var effect in spawnedEffects) if (effect != null) Destroy(effect);

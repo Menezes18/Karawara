@@ -58,30 +58,9 @@ namespace RPGKarawara
         protected override void Update()
         {
             
+            if (!player.IsInitialized || PlayerInputManager.instance == null) return;
             base.Update();
             LimitPlayerPositionNearCube();
-            if (player.IsOwner)
-            {
-                player.characterNetworkManager.verticalMovement.Value = verticalMovement;
-                player.characterNetworkManager.horizontalMovement.Value = horizontalMovement;
-                player.characterNetworkManager.moveAmount.Value = moveAmount;
-            }
-            else
-            {
-                verticalMovement = player.characterNetworkManager.verticalMovement.Value;
-                horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
-                moveAmount = player.characterNetworkManager.moveAmount.Value;
-
-                if (!player.playerNetworkManager.isLockedOn.Value || player.playerNetworkManager.isSprinting.Value)
-                {
-                    player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
-                }
-                else
-                {
-                    player.playerAnimatorManager.UpdateAnimatorMovementParameters(horizontalMovement, verticalMovement, player.playerNetworkManager.isSprinting.Value);
-                }
-            }
-
             if (moveAmount > 0)
             {
                 
@@ -94,6 +73,16 @@ namespace RPGKarawara
                 character.animator.SetBool("isMoving", false);
                 player.playerAnimatorManager.UpdateAnimatorMovementParameters(PlayerInputManager.instance.horizontal_Input, PlayerInputManager.instance.vertical_Input, player.playerNetworkManager.isSprinting.Value);
             }
+        }
+
+        public override void ResetLocalMotion()
+        {
+            base.ResetLocalMotion();
+            isDodging = false;
+            dodging = false;
+            verticalMovement = horizontalMovement = moveAmount = 0;
+            isMoving = false;
+            if (character.animator != null) character.animator.speed = 1;
         }
 
         public void HandleAllMovement()

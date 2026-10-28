@@ -66,8 +66,8 @@ namespace RPGKarawara
                     {
                         //  LASTLY, WE CHECK FOR ENVIRO BLOCKS
                         if (Physics.Linecast(
-                            aiCharacter.characterCombatManager.lockOnTransform.position, 
-                            targetCharacter.characterCombatManager.lockOnTransform.position, 
+                            aiCharacter.characterCombatManager.lockOnTransform.position,
+                            targetCharacter.characterCombatManager.lockOnTransform.position,
                             WorldUtilityManager.Instance.GetEnviroLayers()))
                         {
                             Debug.DrawLine(aiCharacter.characterCombatManager.lockOnTransform.position, targetCharacter.characterCombatManager.lockOnTransform.position);
@@ -168,7 +168,7 @@ namespace RPGKarawara
                 }
             }
         }
-        
+
         // Gizmos para visualizar o campo de visão e o raio de detecção
         private void OnDrawGizmosSelected()
         {
@@ -187,6 +187,6 @@ namespace RPGKarawara
             Gizmos.DrawLine(aiCharacter.transform.position, aiCharacter.transform.position + leftBoundary);
             Gizmos.DrawLine(aiCharacter.transform.position, aiCharacter.transform.position + rightBoundary);
         }
-    
+
     }
 }

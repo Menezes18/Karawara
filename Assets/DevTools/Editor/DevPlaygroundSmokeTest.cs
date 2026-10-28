@@ -90,15 +90,14 @@ namespace RPGKarawara.DevTools
                 if (asset != null) report.originalAssets.Add(new Snapshot { path = AssetDatabase.GetAssetPath(asset),
                     json = EditorJsonUtility.ToJson(asset), asset = asset, sha256 = HashAsset(asset) });
             report.saveFilesBefore = SaveFiles();
-            foreach (Type type in new[] { typeof(Unity.Netcode.NetworkManager), typeof(WorldItemDatabase), typeof(WorldUtilityManager),
+            foreach (Type type in new[] { typeof(GameBootstrap), typeof(WorldItemDatabase), typeof(WorldUtilityManager),
                 typeof(WorldSaveGameManager), typeof(PlayerInputManager), typeof(PlayerUIManager), typeof(PlayerCamera) })
                 singletonIdentities[type] = Identities(type);
             Add("Host / owner / save isolation / navigation", null, () =>
             {
-                Require(controller.Network.IsHost && controller.Network.IsServer && controller.Network.IsListening, "Local NGO host not listening.");
-                var transport = controller.Network.NetworkConfig.NetworkTransport as Unity.Netcode.Transports.UTP.UnityTransport;
-                Require(transport != null && transport.GetLocalEndpoint().Port != 0, "Host has no bound UDP port.");
-                Require(controller.Player.IsOwner && controller.Player.NetworkObject.IsSpawned, "Production player not owned/spawned.");
+                Require(controller.Network.Session.IsActive && controller.Network.Session.IsActive && controller.Network.Session.IsActive, "Local NGO host not listening.");
+                Require(controller.Network.Session.Player == controller.Player, "Local session must own its single player.");
+                Require(controller.Player.IsInitialized && controller.Network.Session.Player == controller.Player, "Production player not owned/spawned.");
                 var initialSpell = controller.Player.playerInventoryManager.currentSpell;
                 Require(initialSpell != null && controller.Player.playerNetworkManager.currentSpellID.Value == initialSpell.itemID,
                     "Default equipped spell was not published through the network variable.");
@@ -418,7 +417,7 @@ namespace RPGKarawara.DevTools
                     Require(preview.GetComponentsInChildren<Collider>(true).All(c => !c.enabled), "Preview retained enabled colliders.");
                     Require(preview.GetComponentsInChildren<Rigidbody>(true).All(b => b.isKinematic && !b.detectCollisions), "Preview retained physical bodies.");
                     foreach (var pair in singletonIdentities) Require(pair.Value.SequenceEqual(Identities(pair.Key)), "Preview changed manager instances: " + pair.Key.Name);
-                    Require(controller.Network.IsHost && controller.Player.IsOwner, "Preview disturbed host/player ownership.");
+                    Require(controller.Network.Session.IsActive && controller.Player.IsInitialized, "Preview disturbed host/player ownership.");
                     return entry.path + "; scripts removed; collisions disabled; singleton IDs unchanged.";
                 }, .25);
             }

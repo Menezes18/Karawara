@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 
 namespace RPGKarawara.DevTools.Performance
 {
@@ -160,7 +160,7 @@ namespace RPGKarawara.DevTools.Performance
             var data = JsonUtility.FromJson<CharacterSaveData>(json);
             if (data == null || data.sceneIndex != expectedScene || data.currentHealth <= 0 || data.vitality <= 0 || data.endurance <= 0 || string.IsNullOrWhiteSpace(data.characterName))
                 throw new ArgumentException("Healthy scene" + expectedScene + " QA seed required.");
-            _ = new Unity.Collections.FixedString64Bytes(data.characterName);
+            _ = Convert.ToString(data.characterName);
             return data;
         }
         static readonly string[] SeedSkillFields = { "skillsSlot", "SkillAttack", "SkillDefense", "SkillSuport" };
@@ -839,7 +839,7 @@ namespace RPGKarawara.DevTools.Performance
             bool ready = false;
             while (Time.realtimeSinceStartupAsDouble < deadline)
             {
-                if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening) { Abort("Stationary SceneMenu requires no active host/client."); yield break; }
+                if (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive) { Abort("Stationary SceneMenu requires no active host/client."); yield break; }
                 if (SettingsMatch() && PerformanceProcessHarness.BindStationaryContext(controller)) { ready = true; break; }
                 yield return null;
             }
@@ -851,7 +851,7 @@ namespace RPGKarawara.DevTools.Performance
             while (controller.IsCapturing)
             {
                 if (Time.realtimeSinceStartupAsDouble > watchdog || SceneManager.GetActiveScene().name != "SceneMenu" ||
-                    (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening))
+                    (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive))
                 { Abort("Stationary scene/host/watchdog boundary failed."); yield break; }
                 yield return null;
             }

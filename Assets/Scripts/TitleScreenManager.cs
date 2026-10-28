@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 using UnityEngine.UI;
 
 namespace RPGKarawara
@@ -28,8 +28,7 @@ namespace RPGKarawara
 
         [Header("Character Slots")]
         public CharacterSlot currentSelectedSlot = CharacterSlot.NO_SLOT;
-        public ushort ActiveHostPort { get; private set; }
-        public string HostStatus { get; private set; }
+        public string SessionStatus { get; private set; }
 
         private void Awake()
         {
@@ -44,65 +43,27 @@ namespace RPGKarawara
             }
         }
 
-        public void StartNetworkAsHost()
+        // Preserve serialized menu UnityEvents while starting only application services.
+        public void StartLocalRuntime() { TryStartLocalRuntime(); }
+        public bool TryStartLocalRuntime()
         {
-            TryStartNetworkAsHost();
+            GameBootstrap.EnsureInstance(); SessionStatus = null; return true;
         }
-
-        public bool TryStartNetworkAsHost()
-        {
-            try
-            {
-                NetworkManager network = NetworkManager.Singleton;
-                bool started = LocalHostStartup.TryStartHost(network, out ushort port);
-                if (started && port == 0 && network.NetworkConfig.NetworkTransport is Unity.Netcode.Transports.UTP.UnityTransport transport)
-                    port = transport.GetLocalEndpoint().Port;
-                ActiveHostPort = port;
-                HostStatus = started ? "Host ready on port " + port : "Host could not start. Try again.";
-                if (!started) Debug.LogWarning(HostStatus);
-                return started;
-            }
-            catch (System.Exception ex)
-            {
-                ActiveHostPort = 0;
-                HostStatus = "Host could not start: " + ex.Message;
-                Debug.LogWarning(HostStatus);
-                return false;
-            }
-        }
-
         public void StartNewGame()
         {
-            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsHost || !NetworkManager.Singleton.IsListening)
-            {
-                HostStatus = "Host could not start. Try again.";
-                return;
-            }
-            if (WorldSaveGameManager.instance == null || !WorldSaveGameManager.instance.CanCreateNewGame)
-            {
-                HostStatus = "Waiting for the local player before starting a new game.";
-                return;
-            }
+            if (WorldSaveGameManager.instance == null) { SessionStatus = "Save service is unavailable. Try again."; return; }
             var result = WorldSaveGameManager.instance.TryCreateNewGame();
-            if (!result.Success)
-            {
-                HostStatus = "Save " + result.Error + ": " + result.Message;
-                return;
-            }
+            if (!result.Success) { SessionStatus = "Save " + result.Error + ": " + result.Message; return; }
+            SessionStatus = null;
             if (newGameStartButton != null) newGameStartButton.gameObject.SetActive(false);
         }
-
         private void OnGUI()
         {
-            string saveStatus = WorldSaveGameManager.instance != null ? WorldSaveGameManager.instance.SaveStatus : "";
-            if (string.IsNullOrEmpty(HostStatus) && string.IsNullOrEmpty(saveStatus)) return;
-            bool hostReady = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost && NetworkManager.Singleton.IsListening;
-            string status = hostReady && ActiveHostPort > 0 ? "Host · porta " + ActiveHostPort : HostStatus;
-            if (hostReady && (WorldSaveGameManager.instance == null || !WorldSaveGameManager.instance.CanCreateNewGame))
-                status += " · preparando jogador";
-            if (!string.IsNullOrEmpty(saveStatus)) status += " · " + saveStatus;
-            GUI.Label(new Rect(12, Screen.height - 28, Mathf.Min(Screen.width - 24, 550), 24), status);
+            string status = WorldSaveGameManager.instance != null ? WorldSaveGameManager.instance.SaveStatus : SessionStatus;
+            if (string.IsNullOrEmpty(status)) status = SessionStatus;
+            if (!string.IsNullOrEmpty(status)) GUI.Label(new Rect(12, Screen.height - 28, Mathf.Min(Screen.width - 24, 650), 24), status);
         }
+        private void OnDestroy() { if (Instance == this) Instance = null; }
 
         public void RefreshSaveSlotPresentation()
         {
@@ -177,7 +138,7 @@ namespace RPGKarawara
             if (!result.Success)
             {
                 // Keep the confirmation visible; display the explicit failure through the existing status path.
-                HostStatus = "Save " + result.Error + ": " + result.Message;
+                SessionStatus = "Save " + result.Error + ": " + result.Message;
                 return;
             }
             if (deleteCharacterSlotPopUp != null) deleteCharacterSlotPopUp.SetActive(false);

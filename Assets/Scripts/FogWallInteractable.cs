@@ -1,54 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
-
 namespace RPGKarawara
 {
-    public class FogWallInteractable : NetworkBehaviour
+    public class FogWallInteractable : MonoBehaviour
     {
-        [Header("Fog")]
-        [SerializeField] GameObject[] fogGameObjects;
-
-        [Header("I.D")]
+        [Header("Fog")] [SerializeField] GameObject[] fogGameObjects;
         public int fogWallID;
-
-        [Header("Active")]
-        public NetworkVariable<bool> isActive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
-        public override void OnNetworkSpawn()
+        public ObservableValue<bool> isActive = new ObservableValue<bool>(false);
+        void OnEnable()
         {
-            base.OnNetworkSpawn();
-
-            OnIsActiveChanged(false, isActive.Value);
             isActive.OnValueChanged += OnIsActiveChanged;
-            WorldObjectManager.instance.AddFogWallToList(this);
+            OnIsActiveChanged(false, isActive.Value);
+            WorldObjectManager.GetOrCreateInstance().AddFogWallToList(this);
         }
-
-        public override void OnNetworkDespawn()
+        void OnDisable()
         {
-            base.OnNetworkDespawn();
-
             isActive.OnValueChanged -= OnIsActiveChanged;
-            WorldObjectManager.instance.RemoveFogWallFromList(this);
+            if (WorldObjectManager.instance != null) WorldObjectManager.instance.RemoveFogWallFromList(this);
         }
-
-        private void OnIsActiveChanged(bool oldStatus, bool newStatus)
+        void OnIsActiveChanged(bool previous, bool active)
         {
-            if (isActive.Value)
-            {
-                foreach (var fogObject in fogGameObjects)
-                {
-                    fogObject.SetActive(true);
-                }
-            }
-            else
-            {
-                foreach (var fogObject in fogGameObjects)
-                {
-                    fogObject.SetActive(false);
-                }
-            }
+            if (fogGameObjects == null) return;
+            foreach (var fog in fogGameObjects) if (fog != null) fog.SetActive(active);
         }
     }
 }

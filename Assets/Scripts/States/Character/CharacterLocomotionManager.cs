@@ -32,6 +32,7 @@ namespace RPGKarawara
 
         protected virtual void Update()
         {
+            if (character == null || !character.IsInitialized || character.characterController == null || !character.characterController.enabled) return;
             HandleGroundCheck();
 
             if (character.characterLocomotionManager.isGrounded)
@@ -72,6 +73,17 @@ namespace RPGKarawara
         protected void OnDrawGizmosSelected()
         {
             //Gizmos.DrawSphere(character.transform.position, groundCheckSphereRadius);
+        }
+
+        public virtual void ResetLocalMotion()
+        {
+            StopAllCoroutines();
+            yVelocity = Vector3.zero;
+            fallingVelocityHAsBeenSet = false;
+            inAirTimer = 0;
+            isRolling = false;
+            canRotate = true;
+            canMove = true;
         }
 
         public void EnableCanRotate()

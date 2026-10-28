@@ -84,7 +84,7 @@ namespace RPGKarawara.DevTools.Editor
                     try
                     {
                         root.SetActive(true); context = Context(ai); scope = Bind(context);
-                        Require(!ai.IsSpawned, "Fixture must not fabricate network spawn/ownership");
+                        Require(!ai.IsInitialized, "Fixture must not fabricate network spawn/ownership");
                         if (mutation == "root") { root.SetActive(false); root.SetActive(true); }
                         else if (mutation == "maximum") { int max = network.maxHealth.Value; network.maxHealth.Value = max + 1; network.maxHealth.Value = max; }
                         else { ai.isDead.Value = true; ai.isDead.Value = false; }

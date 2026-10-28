@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -16,7 +16,7 @@ namespace RPGKarawara.DevTools.Performance
     // Actual production load/return entry points; owned isolated process, never timing acceptance.
     public sealed class PerformanceWorldRetentionProcess : MonoBehaviour
     {
-        enum Stage { Menu, Host, World, WorldSettling, Returning, Shutdown, MenuSettling, SnapshotBefore, SnapshotAfter, Done }
+        enum Stage { Menu, ServicesReady, World, WorldSettling, Returning, Shutdown, MenuSettling, SnapshotBefore, SnapshotAfter, Done }
         sealed class WorldVisit
         {
             public int visit, sceneHandle, playerId;
@@ -40,7 +40,7 @@ namespace RPGKarawara.DevTools.Performance
         }
         PerformanceProcessResponse request;
         WorldSaveGameManager world;
-        NetworkManager network;
+        GameBootstrap network;
         PlayerManager player;
         PerformanceAiCreationHistory history;
         AsyncOperation returning;
@@ -84,6 +84,7 @@ namespace RPGKarawara.DevTools.Performance
             GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset urp && Math.Abs(urp.renderScale - 1) < .0001;
         void Update()
         {
+            if (network != null) player = network.Session.Player;
             if (!initialized || terminal) return;
             try
             {
@@ -95,9 +96,9 @@ namespace RPGKarawara.DevTools.Performance
                 switch (stage)
                 {
                     case Stage.Menu:
-                        world = WorldSaveGameManager.instance; network = NetworkManager.Singleton;
+                        world = WorldSaveGameManager.instance; network = GameBootstrap.Instance;
                         if (world == null || network == null || TitleScreenManager.Instance == null || PlayerInputManager.instance?.playerControls == null || !Application.isFocused || !SettingsMatch()) return;
-                        if (SceneManager.GetActiveScene().name != "SceneMenu" || network.IsListening || Time.timeScale != 1)
+                        if (SceneManager.GetActiveScene().name != "SceneMenu" || network.Session.IsActive || Time.timeScale != 1)
                             throw new InvalidOperationException("Fresh unpaused menu and stopped host required for each visit.");
                         world.SaveRootOverride = request.saveRoot;
                         if (world.SaveRoot != request.saveRoot) throw new InvalidOperationException("Isolated save root rejected.");
@@ -105,23 +106,23 @@ namespace RPGKarawara.DevTools.Performance
                         var saved = writer.TrySave(PerformanceProcessHarness.ParseVideoSeed(request.config.retention.seedSaveJson));
                         if (!saved.Success) throw new InvalidOperationException("Retention seed write rejected: " + saved.Message);
                         history = PerformanceAiCreationHistory.Begin(new[] { "-karawaraPerformanceRoster" });
-                        ownsHost = TitleScreenManager.Instance.TryStartNetworkAsHost();
+                        ownsHost = TitleScreenManager.Instance.TryStartLocalRuntime();
                         if (!ownsHost) throw new InvalidOperationException("Owned host start rejected.");
-                        SetStage(Stage.Host, 60); break;
-                    case Stage.Host:
-                        player = network.LocalClient?.PlayerObject?.GetComponent<PlayerManager>();
-                        if (player == null || !player.IsSpawned || !player.IsOwner || !world.CanCreateNewGame) return;
+                        SetStage(Stage.ServicesReady, 60); break;
+                    case Stage.ServicesReady:
+                        player = network.Session.Player?.GetComponent<PlayerManager>();
+                        if (!world.CanCreateNewGame) return;
                         world.RefreshCharacterProfiles(); TitleScreenManager.Instance.SelectCharacterSlot(CharacterSlot.CharacterSlot_01); world.LoadGame();
                         groundedSince = -1; SetStage(Stage.World, 90); break;
                     case Stage.World:
                         var hud = PlayerUIManager.instance?.playerUIHudManager;
-                        if (SceneManager.GetActiveScene().name != "Video1" || player == null || !player.IsSpawned || PlayerInputManager.instance?.player != player || hud == null || !hud.IsHealthBarReady) return;
+                        if (SceneManager.GetActiveScene().name != "Video1" || player == null || !player.IsInitialized || PlayerInputManager.instance?.player != player || hud == null || !hud.IsHealthBarReady) return;
                         if (!player.characterLocomotionManager.isGrounded || Time.timeScale != 1) { groundedSince = -1; return; }
                         if (groundedSince < 0) groundedSince = now;
                         if (now - groundedSince < 1) return;
                         SetStage(Stage.WorldSettling, (warmed ? request.config.retention.settleSeconds : request.config.retention.warmupSeconds) + 15); break;
                     case Stage.WorldSettling:
-                        if (player == null || !player.IsSpawned || !player.IsOwner || player.isDead.Value || !network.IsHost || SceneManager.GetActiveScene().name != "Video1" || Time.timeScale != 1)
+                        if (player == null || !player.IsInitialized || !player.IsInitialized || player.isDead.Value || !network.Session.IsActive || SceneManager.GetActiveScene().name != "Video1" || Time.timeScale != 1)
                             throw new InvalidOperationException("World owner or scene changed during settling.");
                         if (now - stageAt < (warmed ? request.config.retention.settleSeconds : request.config.retention.warmupSeconds)) return;
                         var census = PerformanceActorCensus.Capture(new[] { "-karawaraPerformanceRoster" });
@@ -129,7 +130,7 @@ namespace RPGKarawara.DevTools.Performance
                         if (!report.currentAiHistoryMatched || report.currentAiCount != 24) throw new InvalidOperationException("Expected actual Video1 AI creation set not matched.");
                         var position = player.transform.position;
                         visits.Add(new WorldVisit { visit = visit, scene = SceneManager.GetActiveScene().name, sceneHandle = SceneManager.GetActiveScene().handle,
-                            playerId = player.gameObject.GetInstanceID(), host = network.IsHost, owner = player.IsOwner, grounded = player.characterLocomotionManager.isGrounded,
+                            playerId = player.gameObject.GetInstanceID(), host = network.Session.IsActive, owner = player.IsInitialized, grounded = player.characterLocomotionManager.isGrounded,
                             position = new[] { position.x, position.y, position.z }, aiHistory = report });
                         history.Dispose(); history = null;
                         // Invoke the real HUD return action; errors in that path must fail this diagnostic.
@@ -137,15 +138,15 @@ namespace RPGKarawara.DevTools.Performance
                     case Stage.Returning:
                         if (returning != null && !returning.isDone) return;
                         if (SceneManager.GetActiveScene().name != "SceneMenu") return;
-                        if (ownsHost && network != null && network.IsListening) network.Shutdown();
+                        if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync();
                         shutdownFrame = -1; SetStage(Stage.Shutdown, 20); break;
                     case Stage.Shutdown:
-                        if ((network != null && network.IsListening) || (player != null && player.IsSpawned)) return;
+                        if ((network != null && network.Session.IsActive) || (player != null && player.IsInitialized)) return;
                         if (shutdownFrame < 0) shutdownFrame = Time.frameCount;
                         if (Time.frameCount < shutdownFrame + 2) return;
                         ownsHost = false; player = null; SetStage(Stage.MenuSettling, 15); break;
                     case Stage.MenuSettling:
-                        if (SceneManager.GetActiveScene().name != "SceneMenu" || (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening) || Time.timeScale != 1)
+                        if (SceneManager.GetActiveScene().name != "SceneMenu" || (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive) || Time.timeScale != 1)
                             throw new InvalidOperationException("Unpaused menu and stopped host required for retention snapshot/cycle boundary.");
                         if (now - stageAt < request.config.retention.settleSeconds) return;
                         if (failed) { Finish(false); return; }
@@ -171,7 +172,7 @@ namespace RPGKarawara.DevTools.Performance
             catch (Exception error)
             {
                 errors.Add(error.ToString());
-                if (failed) { if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false); return; }
+                if (failed) { if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false); return; }
                 failed = true; history?.Dispose(); history = null;
                 // Emergency cleanup is retained as failure, never an accepted production-return cycle.
                 returning = SceneManager.GetActiveScene().name == "SceneMenu" ? null : SceneManager.LoadSceneAsync(0);
@@ -201,7 +202,7 @@ namespace RPGKarawara.DevTools.Performance
             if (terminal) return; terminal = true; history?.Dispose(); history = null; Application.logMessageReceived -= OnLog;
             var personalAfter = CaptureFinalFingerprints(personalRoot, errors);
             bool personalUnchanged = personalBefore != null && personalAfter != null && personalBefore.Count == personalAfter.Count && personalBefore.All(pair => personalAfter.TryGetValue(pair.Key, out var value) && value == pair.Value);
-            bool hostStopped = (network == null || !network.IsListening) && (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening);
+            bool hostStopped = (network == null || !network.Session.IsActive) && (GameBootstrap.Instance == null || !GameBootstrap.Instance.Session.IsActive);
             bool passed = !failed && errors.Count == 0 && cleanupPassed && hostStopped && personalUnchanged && completedCycles == 10 && visits.Count == 11 && snapshots.Count == 2 && snapshots.All(s => s.completed && s.succeeded);
             var report = new { utc = DateTime.UtcNow.ToString("O"), completed = true, passed, cleanupPassed, personalUnchanged, personalBefore, personalAfter,
                 mode = request.mode, routeId = request.config.retention.routeId, completedCycles, visits, transitions, snapshots, errors,
@@ -231,7 +232,7 @@ namespace RPGKarawara.DevTools.Performance
         {
             if (!initialized || terminal) return;
             failed = true; errors.Add("Owned world retention process disabled before completion.");
-            history?.Dispose(); history = null; if (ownsHost && network != null && network.IsListening) network.Shutdown(); Finish(false);
+            history?.Dispose(); history = null; if (ownsHost && network != null && network.Session.IsActive) _ = network.Session.ReturnToMenuAsync(); Finish(false);
         }
         void OnDestroy() { Application.logMessageReceived -= OnLog; history?.Dispose(); history = null; }
     }

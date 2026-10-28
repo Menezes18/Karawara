@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace RPGKarawara{
     [CreateAssetMenu(menuName = "Character Effects/Instant Effects/Take Blocked Damage")]
@@ -51,8 +51,7 @@ namespace RPGKarawara{
 
         private void CalculateDamage(CharacterManager character)
         {
-            if (!character.IsOwner)
-                return;
+
 
             if (characterCausingDamage != null)
             {
@@ -69,7 +68,7 @@ namespace RPGKarawara{
             physicalDamage -= physicalDamage; // blockingPhysicalAbsorption = 100
             fireDamage -= fireDamage; // blockingFireAbsorption = 100
             lightningDamage -= lightningDamage; // blockingLightningAbsorption = 100
-            
+
 
 
             finalDamageDealt = Mathf.RoundToInt(physicalDamage + magicDamage + fireDamage + lightningDamage + holyDamage);
@@ -105,8 +104,7 @@ namespace RPGKarawara{
 
         private void PlayDirectionalBasedBlockingAnimation(CharacterManager character)
         {
-            if (!character.IsOwner)
-                return;
+
 
             if (character.isDead.Value)
                 return;
@@ -121,7 +119,7 @@ namespace RPGKarawara{
                     //VFX OU ANIMATION
                     break;
                 case DamageIntensity.Colossal:
-                    
+
                     break;
                 default:
                     break;

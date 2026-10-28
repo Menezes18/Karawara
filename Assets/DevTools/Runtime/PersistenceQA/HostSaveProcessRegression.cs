@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
 using RPGKarawara.SkillTree;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -151,7 +151,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
                         var matches = expected.slots.Where(s => s.slot == slot).ToArray();
                         Require(matches.Length == 1 && matches[0].data != null && matches[0].filename == "characterSlot_0" + slot && matches[0].data.sceneIndex == 1 && SupportedScalarsEqual(matches[0].data, matches[0].data), "Malformed expected slot/scene/scalars.");
                         Require(!string.IsNullOrWhiteSpace(matches[0].data.characterName) && matches[0].data.currentHealth > 1 && matches[0].data.vitality > 0 && matches[0].data.endurance > 0, "Expected supported live state is invalid.");
-                        _ = new Unity.Collections.FixedString64Bytes(matches[0].data.characterName);
+                        _ = Convert.ToString(matches[0].data.characterName);
                         Require(matches[0].equipped != null && matches[0].attack != null && matches[0].defense != null && matches[0].support != null && !string.IsNullOrWhiteSpace(matches[0].rawSaveJson), "Expected writer skill/raw evidence missing.");
                         string primary = Path.Combine(request.saveRoot, matches[0].filename);
                         Require(File.Exists(primary) && HostSaveProcess.Hash(primary) == matches[0].primaryHash, "Reader input differs from writer's committed slot " + slot);
@@ -204,7 +204,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
         public bool scalarHostPassed, spawnPassed, applyOncePassed, skillRoundTripPassed, exactRestoreObserved, host, owner, spawned, hudReady, cameraReady;
         public float hudHealth;
         public long generation;
-        public ulong networkObjectId;
+        public int localCharacterId;
         public Vector3 actualRestore;
         public HostSkillObservation[] equipped, attack, defense, support;
         public List<HostGroundObservation> ground = new List<HostGroundObservation>();
@@ -235,8 +235,8 @@ namespace RPGKarawara.DevTools.PersistenceQA
         int state, writerSlot, stableFrames, initialFrame, perturbHealth;
         double deadline, nextSample;
         float observationGameTime;
-        NetworkVariable<int>.OnValueChangedDelegate healthChanged;
-        NetworkVariable<Vector3>.OnValueChangedDelegate positionChanged;
+        Action<int, int> healthChanged;
+        Action<Vector3, Vector3> positionChanged;
         Dictionary<string, string> inputHashes;
         HostRuntimeLogCollector runtimeLogs;
         int shutdownFrame = -1;
@@ -265,12 +265,15 @@ namespace RPGKarawara.DevTools.PersistenceQA
                 if (state == 0)
                 {
                     manager = WorldSaveGameManager.instance;
-                    if (SceneManager.GetActiveScene().name == "SceneMenu" && manager != null && TitleScreenManager.Instance != null && NetworkManager.Singleton != null)
+                    if (SceneManager.GetActiveScene().name == "SceneMenu" && manager != null && TitleScreenManager.Instance != null && GameBootstrap.Instance != null)
                     {
                         Check(manager.SaveRoot == request.saveRoot, "Validated QA save root must be effective before host startup.");
-                        Check(!NetworkManager.Singleton.IsListening, "Do not reuse an existing host/client.");
-                        Check(TitleScreenManager.Instance.TryStartNetworkAsHost(), "Actual production Title host startup failed: " + TitleScreenManager.Instance.HostStatus);
-                        ownsHost = true; SetState(1, "Awaiting actual local owner/HUD/camera/skills", 30);
+                        Check(!GameBootstrap.Instance.Session.IsActive, "Do not reuse an existing host/client.");
+                        Check(TitleScreenManager.Instance.TryStartLocalRuntime(), "Actual production Title host startup failed: " + TitleScreenManager.Instance.SessionStatus);
+                        ownsHost = true;
+                        if (File.Exists(Path.Combine(request.saveRoot, "characterSlot_01"))) _ = GameBootstrap.Instance.Session.LoadGameAsync(1);
+                        else _ = GameBootstrap.Instance.Session.StartNewGameAsync(1);
+                        SetState(1, "Awaiting actual local session/HUD/camera/skills", 60);
                     }
                 }
                 else if (state == 1)
@@ -290,7 +293,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
                             { current.actualRestore = player.transform.position; current.exactRestoreObserved = true; }
                         };
                         player.playerNetworkManager.currentHealth.OnValueChanged += healthChanged;
-                        player.playerNetworkManager.networkPosition.OnValueChanged += positionChanged;
+
                         BeginSlot();
                     }
                 }
@@ -300,7 +303,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
                     {
                         if (request.action == "read")
                         {
-                            if (!current.exactRestoreObserved && Vector3.Distance(player.playerNetworkManager.networkPosition.Value, Pose(expectedSlot.data)) < .0001f && Vector3.Distance(player.transform.position, Pose(expectedSlot.data)) < .0001f)
+                            if (!current.exactRestoreObserved && Vector3.Distance(player.transform.position, Pose(expectedSlot.data)) < .0001f && Vector3.Distance(player.transform.position, Pose(expectedSlot.data)) < .0001f)
                             { current.actualRestore = player.transform.position; current.exactRestoreObserved = true; }
                             Check(current.exactRestoreObserved, "Actual saved XYZ restore was not observed before physics; no inferred/projected acceptance.");
                             Check(current.restoreEvents == 1, "Fresh reader requires exactly one initial health restoration event; observed " + current.restoreEvents);
@@ -354,7 +357,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
                 }
                 else if (state == 6)
                 {
-                    if ((NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening) && (player == null || !player.IsSpawned))
+                    if ((GameBootstrap.Instance == null || !GameBootstrap.Instance.Session.IsActive) && (player == null || !player.IsInitialized))
                     {
                         if (shutdownFrame < 0) shutdownFrame = Time.frameCount;
                         // Observe production updates after the real player teardown before writing terminal evidence.
@@ -392,7 +395,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
         {
             Check(current.ground.Count >= 5 && HostSaveProcessRegression.IsStableGroundWindow(current.ground.Skip(current.ground.Count - 5).Select(g => g.position).ToArray()), "Actual recent grounded position window changed before gameplay capture.");
             var network = player.playerNetworkManager;
-            network.characterName.Value = new Unity.Collections.FixedString64Bytes("QA Host Slot " + current.slot);
+            network.characterName.Value = Convert.ToString("QA Host Slot " + current.slot);
             network.vitality.Value = 5 + current.slot * 5; network.endurance.Value = 10 + current.slot; network.currentHealth.Value = 60 + 10 * current.slot;
             var skills = player.GetComponent<PlayerSkillManager>();
             for (int i = 0; i < skills.slot.Length; i++) { if (skills.slot[i] == null) skills.slot[i] = new SkillSlot(); skills.slot[i].skillSlot = null; }
@@ -477,7 +480,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
             skillUi = PlayerUIManager.instance != null ? PlayerUIManager.instance.GetComponentInChildren<SkillTreeUiManager>(true) : null;
             var hud = PlayerUIManager.instance != null ? PlayerUIManager.instance.playerUIHudManager : null;
             var skills = player != null ? player.GetComponent<PlayerSkillManager>() : null;
-            return NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost && NetworkManager.Singleton.IsListening && player != null && player.IsSpawned && player.IsOwner && manager != null && manager.player == player &&
+            return GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive && GameBootstrap.Instance.Session.IsActive && player != null && player.IsInitialized && player.IsInitialized && manager != null && manager.player == player &&
                 player.playerNetworkManager != null && player.playerStatsManager != null && player.characterController != null && hud != null && hud.IsHealthBarReady && skillUi != null && skills != null && skills.slot != null && skills.slot.Length >= 3 &&
                 PlayerCamera.instance != null && PlayerCamera.instance.player == player && PlayerCamera.instance.cameraObject != null &&
                 (!world || (SceneManager.GetActiveScene().buildIndex == 1 && SceneManager.GetActiveScene().isLoaded && !Loading() && PlayerCamera.instance.canFollow && PlayerCamera.instance.cameraObject.isActiveAndEnabled));
@@ -492,7 +495,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
             if (current != null) current.generation = generation;
             return recorded;
         }
-        static PlayerManager FindLocalPlayer() => NetworkManager.Singleton != null && NetworkManager.Singleton.LocalClient != null && NetworkManager.Singleton.LocalClient.PlayerObject != null ? NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerManager>() : null;
+        static PlayerManager FindLocalPlayer() => GameBootstrap.Instance != null && GameBootstrap.Instance.Session != null && GameBootstrap.Instance.Session.Player != null ? GameBootstrap.Instance.Session.Player : null;
         static CharacterSlot Slot(int slot) => slot == 1 ? CharacterSlot.CharacterSlot_01 : slot == 2 ? CharacterSlot.CharacterSlot_02 : CharacterSlot.CharacterSlot_03;
         static Vector3 Pose(CharacterSaveData value) => new Vector3(value.xPosition, value.yPosition, value.zPosition);
         CharacterSaveData LiveData()
@@ -510,8 +513,8 @@ namespace RPGKarawara.DevTools.PersistenceQA
         void Snapshot()
         {
             if (current == null || player == null) return;
-            current.host = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost; current.owner = player.IsOwner; current.spawned = player.IsSpawned;
-            current.networkObjectId = player.NetworkObjectId; current.hudReady = PlayerUIManager.instance != null && PlayerUIManager.instance.playerUIHudManager.IsHealthBarReady;
+            current.host = GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive; current.owner = player.IsInitialized; current.spawned = player.IsInitialized;
+            current.localCharacterId = player.LocalId; current.hudReady = PlayerUIManager.instance != null && PlayerUIManager.instance.playerUIHudManager.IsHealthBarReady;
             current.hudHealth = current.hudReady ? HudHealth() : -1; current.cameraReady = PlayerCamera.instance != null && PlayerCamera.instance.player == player && PlayerCamera.instance.canFollow;
         }
         void BlockInput()
@@ -550,9 +553,9 @@ namespace RPGKarawara.DevTools.PersistenceQA
         void Cleanup()
         {
             Unsubscribe();
-            if (player != null && invulnerabilityCaptured && player.IsSpawned) player.characterNetworkManager.isInvulnerable.Value = previousInvulnerable;
+            if (player != null && invulnerabilityCaptured && player.IsInitialized) player.characterNetworkManager.isInvulnerable.Value = previousInvulnerable;
             if (inputCaptured && PlayerInputManager.instance != null) { PlayerInputManager.instance.enabled = previousInputEnabled; if (previousInputEnabled) PlayerInputManager.instance.playerControls?.Enable(); }
-            if (ownsHost && NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening) NetworkManager.Singleton.Shutdown();
+            if (ownsHost && GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive) _ = GameBootstrap.Instance.Session.ReturnToMenuAsync();
             SetState(6, "Awaiting owned host shutdown", 20);
         }
         void Unsubscribe()
@@ -560,7 +563,7 @@ namespace RPGKarawara.DevTools.PersistenceQA
             if (player != null && player.playerNetworkManager != null)
             {
                 if (healthChanged != null) player.playerNetworkManager.currentHealth.OnValueChanged -= healthChanged;
-                if (positionChanged != null) player.playerNetworkManager.networkPosition.OnValueChanged -= positionChanged;
+
             }
             healthChanged = null; positionChanged = null;
         }

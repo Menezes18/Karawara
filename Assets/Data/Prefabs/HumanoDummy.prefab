@@ -767,6 +767,8 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
+  sourceCharacter: {fileID: 0}
   undeadCharacter: {fileID: 0}
 --- !u!1 &2539030892581361228
 GameObject:
@@ -973,7 +975,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8699363194683691576
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -987,6 +989,7 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -1393,6 +1396,11 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1414,9 +1422,11 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -1548,7 +1558,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7735749764116497296}
   - component: {fileID: 8412491272462609278}
-  - component: {fileID: 1885620742663541787}
   - component: {fileID: 5264713949662935277}
   - component: {fileID: 8442535417963434555}
   - component: {fileID: 2386473894482796835}
@@ -1589,7 +1598,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!95 &8412491272462609278
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1603,32 +1612,12 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1885620742663541787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5679174857681126544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3526625479
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &5264713949662935277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,47 +1630,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d123b8a2a0727c447a165062a351bd54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive:
-    m_InternalValue: 1
-  networkPosition:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  networkRotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
-  networkPositionVelocity: {x: 0, y: 0, z: 0}
-  networkPositionSmoothTime: 0.1
-  networkRotationSmoothTime: 0.1
-  isMoving:
-    m_InternalValue: 0
-  horizontalMovement:
-    m_InternalValue: 0
-  verticalMovement:
-    m_InternalValue: 0
-  moveAmount:
-    m_InternalValue: 0
-  currentTargetNetworkObjectID:
-    m_InternalValue: 0
-  isBlocking:
-    m_InternalValue: 0
-  isPowerPet:
-    m_InternalValue: 0
-  isInvulnerable:
-    m_InternalValue: 0
-  isLockedOn:
-    m_InternalValue: 0
-  isSprinting:
-    m_InternalValue: 0
-  isJumping:
-    m_InternalValue: 0
-  isChargingAttack:
-    m_InternalValue: 0
-  currentHealth:
-    m_InternalValue: 400
-  maxHealth:
-    m_InternalValue: 400
-  vitality:
-    m_InternalValue: 1
-  endurance:
-    m_InternalValue: 1
 --- !u!114 &8442535417963434555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1695,8 +1643,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBoss: 0
-  isDead:
-    m_InternalValue: 0
   characterController: {fileID: 0}
   animator: {fileID: 0}
   characterNetworkManager: {fileID: 0}
@@ -1708,7 +1654,8 @@ MonoBehaviour:
   characterLocomotionManager: {fileID: 0}
   characterUIManager: {fileID: 0}
   characterGroup: 1
-  isPerformingAction: 0
+  vfxDead: {fileID: 0}
+  player: 0
   characterName: 
   characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
@@ -1720,6 +1667,7 @@ MonoBehaviour:
   pursueTarget: {fileID: 11400000, guid: 46a124bca52793446bcb4e19208a673a, type: 2}
   combatStance: {fileID: 11400000, guid: aadb5ca115e8fa6429821cbb0d2325d3, type: 2}
   attack: {fileID: 11400000, guid: eaef9a4de849bae449b7ac53c5dc24c2, type: 2}
+  isDisabled: 0
   skinnedMeshRenderer: {fileID: 3603879612579134743}
 --- !u!114 &2386473894482796835
 MonoBehaviour:
@@ -1759,8 +1707,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b292bce86e399843b424c7b2e932d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationAmount: 2
-  staminaRegenerationDelay: 2
   blockingPhysicalAbsorption: 100
   blockingFireAbsorption: 100
   blockingMagicAbsorption: 100
@@ -1778,9 +1724,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3bf28f8099a094eb294b4ec5ae6f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
   applyRootMotion: 0
   lastDamageAnimationPlayed: 
+  hit_Forward_Ping_01: Hit_Forward_Ping_01
+  hit_Forward_Ping_02: Hit_Forward_Ping_02
+  hit_Backward_Ping_01: Hit_Backward_Ping_01
+  hit_Backward_Ping_02: Hit_Backward_Ping_02
+  hit_Left_Ping_01: Hit_Left_Ping_01
+  hit_Left_Ping_02: Hit_Left_Ping_02
+  hit_Right_Ping_01: Hit_Right_Ping_01
+  hit_Right_Ping_02: Hit_Right_Ping_02
+  forward_Ping_Damage: []
+  backward_Ping_Damage: []
+  left_Ping_Damage: []
+  right_Ping_Damage: []
   hit_Forward_Medium_01: Hit_Forward_Medium_01
   hit_Forward_Medium_02: Hit_Forward_Medium_02
   hit_Backward_Medium_01: Hit_Backward_Medium_01
@@ -1817,6 +1774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d3b91f173a45d4badebe8987694537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeSpellWarmUpFX: {fileID: 0}
   bloodSplatterVFX: {fileID: 6970770661046263200, guid: e5a2c0e91245cd84b9a98cdad9ff83a2,
     type: 3}
 --- !u!114 &7310389180656767062
@@ -1853,10 +1811,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5679174857681126544}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1888,7 +1846,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1912,7 +1869,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastAttackAnimationPerformed: 
-  currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTransform: {fileID: 3476448277769722756}
   canPerformRollingAttack: 0
@@ -2180,6 +2136,8 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
+  sourceCharacter: {fileID: 0}
   undeadCharacter: {fileID: 0}
 --- !u!135 &8889196138366345252
 SphereCollider:
@@ -2922,6 +2880,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3340645805657694419, guid: 427e5e628081fc441901f23ad66777d5,
+        type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 3575388029809928885, guid: 427e5e628081fc441901f23ad66777d5,
         type: 3}
       propertyPath: m_Name
@@ -3036,6 +2999,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082797635178623, guid: 427e5e628081fc441901f23ad66777d5,
+        type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

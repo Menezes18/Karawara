@@ -29,6 +29,7 @@ namespace RPGKarawara
 
         public void OpenRightHandDamageCollider()
         {
+            if (aiCharacter == null || !aiCharacter.IsInitialized || aiCharacter.State.IsDead || !aiCharacter.isPerformingAction) return;
             aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             rightHandDamageCollider.EnableDamageCollider();
         }
@@ -40,6 +41,7 @@ namespace RPGKarawara
 
         public void OpenLeftHandDamageCollider()
         {
+            if (aiCharacter == null || !aiCharacter.IsInitialized || aiCharacter.State.IsDead || !aiCharacter.isPerformingAction) return;
             aiCharacter.characterSoundFXManager.PlayAttackGrunt();
             leftHandDamageCollider.EnableDamageCollider();
         }

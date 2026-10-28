@@ -205,7 +205,7 @@ namespace RPGKarawara.DevTools.Performance
         PlayerCamera cameraOwner;
         Camera productionCamera;
         WorldSaveGameManager world;
-        Unity.Netcode.NetworkManager network;
+        GameBootstrap network;
         PlayerControls controls;
         BossBinding boss;
         CounterSnapshot counterBefore;
@@ -248,7 +248,7 @@ namespace RPGKarawara.DevTools.Performance
                 session.lightControl = UseLightControl(request.mode, request.config.measurementArm, session.manifest.scene);
                 session.Evidence.measurementArm = session.lightControl ? "light-control" : "full";
                 session.player = player; session.input = input; session.cameraOwner = cameraOwner; session.productionCamera = cameraOwner.cameraObject; session.history = history;
-                session.world = WorldSaveGameManager.instance; session.network = Unity.Netcode.NetworkManager.Singleton; session.controls = input.playerControls;
+                session.world = WorldSaveGameManager.instance; session.network = GameBootstrap.Instance; session.controls = input.playerControls;
                 Need(session.world != null && session.world.SaveRoot == request.saveRoot && session.controls != null && session.productionCamera != null && session.network != null, "Actual isolated Cuca host/controls/camera required");
                 session.saveOverride = session.world.SaveRootOverride; session.sceneHandle = SceneManager.GetActiveScene().handle;
                 Need(SceneManager.GetActiveScene().name == "CucaLoad", "Actual Cuca scene required");
@@ -328,7 +328,7 @@ namespace RPGKarawara.DevTools.Performance
         void ValidateOwners()
         {
             Need(!UnityEngine.Profiling.Profiler.enabled && !UnityEngine.Profiling.Profiler.enableAllocationCallstacks, "Profiler instrumentation active during Cuca timing");
-            Need(Time.timeScale == 1 && Application.isFocused && world != null && world == WorldSaveGameManager.instance && world.player == player && world.SaveRootOverride == saveOverride && network != null && network == Unity.Netcode.NetworkManager.Singleton && network.IsListening && network.IsHost && player != null && player.IsOwner && player.IsSpawned && network.LocalClient?.PlayerObject == player.NetworkObject && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0 &&
+            Need(Time.timeScale == 1 && Application.isFocused && world != null && world == WorldSaveGameManager.instance && world.player == player && world.SaveRootOverride == saveOverride && network != null && network == GameBootstrap.Instance && network.Session.IsActive && network.Session.IsActive && player != null && player.IsInitialized && player.IsInitialized && network.Session.Player == player && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0 &&
                 input == PlayerInputManager.instance && input.player == player && input.playerControls == controls && controls.asset.enabled && controls.PlayerMovement.enabled && controls.PlayerActions.enabled && controls.PlayerCamera.enabled && cameraOwner == PlayerCamera.instance && cameraOwner.player == player && cameraOwner.canFollow && cameraOwner.cameraObject == productionCamera && SceneManager.GetActiveScene().handle == sceneHandle && boss.Matches(), "Cuca world/host/player/controls/boss/focus changed or an unplanned pause occurred");
             Need(actorContext == null || actorContext.SourceViolationMask == 0, "Observed Cuca actor lifecycle/phase violation");
             Need(actorScope == null || !actorScope.NotificationFaulted, "Cuca lifecycle source journal faulted");
@@ -442,7 +442,7 @@ namespace RPGKarawara.DevTools.Performance
         void ValidateLightOwners()
         {
             // Intentionally no source/context polls, camera inventories or full frozen-driver traversal.
-            Need(Time.timeScale == 1 && Application.isFocused && SceneManager.GetActiveScene().handle == sceneHandle && player != null && player.IsSpawned && player.IsOwner && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0 &&
+            Need(Time.timeScale == 1 && Application.isFocused && SceneManager.GetActiveScene().handle == sceneHandle && player != null && player.IsInitialized && player.IsInitialized && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0 &&
                 productionCamera != null && cameraOwner != null && cameraOwner.cameraObject == productionCamera && boss?.boss != null && boss.boss.isActiveAndEnabled && boss.boss.QaIsActive && boss.health != null && Finite(boss.health.currentHealth) && boss.health.currentHealth > 30, "Cuca light focus/scene/player/boss/camera lifetime changed");
         }
         void PrepareLightControl(double elapsed)

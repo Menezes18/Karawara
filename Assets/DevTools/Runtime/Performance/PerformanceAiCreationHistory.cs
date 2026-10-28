@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Unity.Netcode;
+using Karawara.Core.Characters;
 using UnityEngine;
 
 namespace RPGKarawara.DevTools.Performance
@@ -9,12 +9,12 @@ namespace RPGKarawara.DevTools.Performance
     // Explicit bounded QA observer. Numeric identities only: never retains destroyed actors/prefabs.
     public sealed class PerformanceAiCreationHistory : IDisposable
     {
-        public enum Stage { Requested, Instantiated, NetworkSpawned, Registered, Finished, DespawnRequested, Despawned }
+        public enum Stage { Requested, Instantiated, LocalInitialized, Registered, Finished, DespawnRequested, Despawned }
         [Serializable] public struct Attempt
         {
             public long token;
             public int spawnerId, prefabId, createdId, sceneHandle;
-            public ulong networkObjectId;
+            public int localCharacterId;
             public Stage lastStage;
             public bool spawned, registered, finished, invalid, despawnRequested, despawned;
         }
@@ -115,17 +115,17 @@ namespace RPGKarawara.DevTools.Performance
                     int id = created.GetInstanceID();
                     if (entry.createdId != 0 && entry.createdId != id) entry.invalid = true;
                     entry.createdId = id; entry.sceneHandle = created.scene.handle;
-                    var network = created.GetComponent<NetworkObject>();
-                    if (stage == Stage.NetworkSpawned)
+                    var network = created.GetComponent<CharacterManager>();
+                    if (stage == Stage.LocalInitialized)
                     {
-                        entry.spawned = network != null && network.IsSpawned;
-                        if (entry.spawned) entry.networkObjectId = network.NetworkObjectId; else entry.invalid = true;
+                        entry.spawned = network != null && network.IsInitialized;
+                        if (entry.spawned) entry.localCharacterId = network.LocalId; else entry.invalid = true;
                     }
                     if (stage == Stage.Registered)
                     {
                         var actor = created.GetComponent<AICharacterManager>();
-                        entry.registered = actor != null && actor.IsSpawned && WorldAIManager.instance != null && WorldAIManager.instance.QaIsRegistered(actor);
-                        if (!entry.registered || network == null || !network.IsSpawned || network.NetworkObjectId != entry.networkObjectId) entry.invalid = true;
+                        entry.registered = actor != null && actor.IsInitialized && WorldAIManager.instance != null && WorldAIManager.instance.QaIsRegistered(actor);
+                        if (!entry.registered || network == null || !network.IsInitialized || network.LocalId != entry.localCharacterId) entry.invalid = true;
                     }
                 }
                 entry.lastStage = stage; owner.attempts[index] = entry; owner.Record(token, stage);
@@ -157,11 +157,11 @@ namespace RPGKarawara.DevTools.Performance
             var owner = active; if (owner == null) return 0;
             try
             {
-                if (actor != null && actor.IsSpawned)
+                if (actor != null && actor.IsInitialized)
                     for (int i = owner.length - 1; i >= 0; i--)
                     {
                         var entry = owner.attempts[i];
-                        if (entry.createdId != actor.gameObject.GetInstanceID() || entry.networkObjectId != actor.NetworkObjectId || !entry.registered || entry.despawned) continue;
+                        if (entry.createdId != actor.gameObject.GetInstanceID() || entry.localCharacterId != actor.LocalId || !entry.registered || entry.despawned) continue;
                         if (entry.despawnRequested) entry.invalid = true;
                         entry.despawnRequested = true; entry.lastStage = Stage.DespawnRequested; owner.attempts[i] = entry; owner.Record(entry.token, Stage.DespawnRequested); return entry.token;
                     }
@@ -197,12 +197,12 @@ namespace RPGKarawara.DevTools.Performance
                 failedAttempts = rows.Count(a => !a.finished || !a.spawned || !a.registered || a.invalid), coverageUnavailableReason = "No current census supplied." };
             if (census?.report == null) return report;
             var current = UnityEngine.Object.FindObjectsByType<AICharacterManager>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(a => a.gameObject.scene.IsValid()).ToArray();
-            var unmatched = current.Where(actor => !actor.IsSpawned ||
-                !census.report.actors.Any(a => a.objectId == actor.gameObject.GetInstanceID() && a.supportedBinding && a.spawned && a.networkObjectId == actor.NetworkObjectId) ||
-                rows.Count(a => a.createdId == actor.gameObject.GetInstanceID() && a.networkObjectId == actor.NetworkObjectId && a.finished && a.registered && a.spawned && !a.invalid && !a.despawnRequested && !a.despawned &&
-                    census.report.spawnerAssociations.Any(s => s.linked && s.spawnerId == a.spawnerId && s.prefabId == a.prefabId && s.createdObjectId == a.createdId && s.networkObjectId == a.networkObjectId)) != 1)
+            var unmatched = current.Where(actor => !actor.IsInitialized ||
+                !census.report.actors.Any(a => a.objectId == actor.gameObject.GetInstanceID() && a.supportedBinding && a.spawned && a.localCharacterId == actor.LocalId) ||
+                rows.Count(a => a.createdId == actor.gameObject.GetInstanceID() && a.localCharacterId == actor.LocalId && a.finished && a.registered && a.spawned && !a.invalid && !a.despawnRequested && !a.despawned &&
+                    census.report.spawnerAssociations.Any(s => s.linked && s.spawnerId == a.spawnerId && s.prefabId == a.prefabId && s.createdObjectId == a.createdId && s.localCharacterId == a.localCharacterId)) != 1)
                 .Select(a => a.gameObject.GetInstanceID()).ToArray();
-            var orphan = rows.Where(a => a.registered && !a.despawned && !current.Any(c => c.IsSpawned && c.gameObject.GetInstanceID() == a.createdId && c.NetworkObjectId == a.networkObjectId)).Select(a => a.token).ToArray();
+            var orphan = rows.Where(a => a.registered && !a.despawned && !current.Any(c => c.IsInitialized && c.gameObject.GetInstanceID() == a.createdId && c.LocalId == a.localCharacterId)).Select(a => a.token).ToArray();
             report.currentAiCount = current.Length; report.matchedAiCount = current.Length - unmatched.Length;
             report.unmatchedAiIds = unmatched; report.orphanLiveAttempts = orphan;
             report.currentAiHistoryMatched = current.Length > 0 && unmatched.Length == 0 && orphan.Length == 0 && preexisting.Length == 0 &&

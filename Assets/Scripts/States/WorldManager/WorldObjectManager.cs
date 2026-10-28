@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 namespace RPGKarawara
 {
@@ -13,6 +13,7 @@ namespace RPGKarawara
         [SerializeField] List<NetworkObjectSpawner> networkObjectSpawners = new List<NetworkObjectSpawner>();
         [SerializeField] List<GameObject> spawnedInObjects = new List<GameObject>();
 
+        public event System.Action FogWallsChanged;
         [Header("Fog Walls")]
         public List<FogWallInteractable> fogWalls = new List<FogWallInteractable>();
 
@@ -54,10 +55,10 @@ namespace RPGKarawara
 
         public void SpawnObject(NetworkObjectSpawner networkObjectSpawner)
         {
-            if (NetworkManager.Singleton.IsServer)
+            if (networkObjectSpawner != null)
             {
                 networkObjectSpawners.RemoveAll(spawner => spawner == null);
-                networkObjectSpawners.Add(networkObjectSpawner);
+                if (!networkObjectSpawners.Contains(networkObjectSpawner)) networkObjectSpawners.Add(networkObjectSpawner);
                 networkObjectSpawner.AttemptToSpawnObject();
             }
         }
@@ -67,6 +68,7 @@ namespace RPGKarawara
             if (!fogWalls.Contains(fogWall))
             {
                 fogWalls.Add(fogWall);
+                FogWallsChanged?.Invoke();
             }
         }
 
@@ -75,6 +77,7 @@ namespace RPGKarawara
             if (fogWalls.Contains(fogWall))
             {
                 fogWalls.Remove(fogWall);
+                FogWallsChanged?.Invoke();
             }
         }
     }

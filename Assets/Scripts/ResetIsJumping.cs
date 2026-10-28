@@ -15,7 +15,6 @@ namespace RPGKarawara
                 character = animator.GetComponent<CharacterManager>();
             }
 
-            if (character.IsOwner)
             {
                 character.characterNetworkManager.isJumping.Value = false;
             }

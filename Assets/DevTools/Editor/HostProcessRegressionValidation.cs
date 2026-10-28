@@ -261,13 +261,13 @@ namespace RPGKarawara.DevTools.Editor
             var type = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType("RPGKarawara.DevTools.PersistenceQA.HostRuntimeLogCollector")).FirstOrDefault(t => t != null);
             Require(type != null && typeof(IDisposable).IsAssignableFrom(type), "Actual Application runtime-error collector implementation missing.");
             string[] files = Directory.Exists(root) ? Directory.GetFiles(root, "*", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal).ToArray() : Array.Empty<string>();
-            bool listening = Unity.Netcode.NetworkManager.Singleton != null && Unity.Netcode.NetworkManager.Singleton.IsListening;
+            bool listening = GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive;
             var collector = Activator.CreateInstance(type);
             try { test(collector); }
             finally
             {
                 ((IDisposable)collector).Dispose();
-                Require(listening == (Unity.Netcode.NetworkManager.Singleton != null && Unity.Netcode.NetworkManager.Singleton.IsListening), "Collector regression must not change host state.");
+                Require(listening == (GameBootstrap.Instance != null && GameBootstrap.Instance.Session.IsActive), "Collector regression must not change host state.");
                 Require(!Directory.Exists(save) && !Directory.Exists(output) && files.SequenceEqual(Directory.Exists(root) ? Directory.GetFiles(root, "*", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal).ToArray() : Array.Empty<string>()), "Actual log collector must have no save/output/file side effects.");
             }
         }

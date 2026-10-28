@@ -6,7 +6,7 @@ namespace RPGKarawara.DevTools.Performance
 {
     public enum PerformanceActorLifecycle
     {
-        Enabled, Disabled, Destroyed, NetworkSpawned, NetworkDespawned, HealthChanged, PhaseChanged
+        Enabled, Disabled, Destroyed, LocalInitialized, LocalShutdown, HealthChanged, PhaseChanged
     }
 
     // Explicit QA binding. Complete route creation-path closure remains a separate acceptance gate.
@@ -215,7 +215,7 @@ namespace RPGKarawara.DevTools.Performance
                 {
                     entry.network = entry.character.characterNetworkManager;
                     if (entry.network == null) throw new ArgumentException("Character binding requires its actual network state component.");
-                    entry.spawned = entry.character.IsSpawned;
+                    entry.spawned = entry.character.IsInitialized;
                     entry.maximumNetworkHealth = entry.network.maxHealth.Value;
                 }
                 if (actor is CucaBoss || actor is HealthManager)
@@ -409,7 +409,7 @@ namespace RPGKarawara.DevTools.Performance
                 }
                 if (entry.character != null)
                 {
-                    if (entry.network == null || entry.character.characterNetworkManager != entry.network || entry.character.IsSpawned != entry.spawned)
+                    if (entry.network == null || entry.character.characterNetworkManager != entry.network || entry.character.IsInitialized != entry.spawned)
                         violations |= Violation.References;
                     else if (entry.network.maxHealth.Value != entry.maximumNetworkHealth) violations |= Violation.LivingState;
                 }
@@ -427,7 +427,7 @@ namespace RPGKarawara.DevTools.Performance
         {
             if (entry.actor == null || entry.root == null || !entry.root.activeInHierarchy || entry.behaviour == null || !entry.behaviour.enabled) return false;
             if (entry.character != null)
-                return entry.character.IsSpawned && entry.network != null && entry.network.isActive.Value &&
+                return entry.character.IsInitialized && entry.network != null && entry.network.isActive.Value &&
                     !entry.character.isDead.Value && entry.network.currentHealth.Value > 0;
             if (entry.health != null) return entry.health.isActiveAndEnabled && Finite(entry.health.currentHealth) && entry.health.currentHealth > 30;
             return true; // Healthless ambient/companion entries are workload members, never hostile counts.

@@ -24,7 +24,7 @@ namespace RPGKarawara.DevTools.Performance
         readonly PlayerManager player;
         readonly int sceneHandle;
         readonly WorldSaveGameManager world;
-        readonly Unity.Netcode.NetworkManager network;
+        readonly GameBootstrap network;
         readonly string saveOverride;
         readonly Camera frozenCamera;
         Vector3 frozenCameraPosition;
@@ -39,7 +39,7 @@ namespace RPGKarawara.DevTools.Performance
         public bool Released { get; private set; }
         PerformanceRenderingInventory(PlayerManager player, RenderingInspectionConfig config)
         {
-            world=WorldSaveGameManager.instance;network=Unity.Netcode.NetworkManager.Singleton;saveOverride=world==null?null:world.SaveRootOverride;
+            world=WorldSaveGameManager.instance;network=GameBootstrap.Instance;saveOverride=world==null?null:world.SaveRootOverride;
             frozenCamera=PlayerCamera.instance==null?null:PlayerCamera.instance.cameraObject;frozenCameraPosition=frozenCamera==null?Vector3.zero:frozenCamera.transform.position;frozenCameraRotation=frozenCamera==null?Quaternion.identity:frozenCamera.transform.rotation;
             this.player=player;sceneHandle=SceneManager.GetActiveScene().handle;frozenPosition=player.transform.position;
             priorTimeScale=Time.timeScale;started=Time.realtimeSinceStartupAsDouble;maximumSeconds=config.holdSeconds;token=config.releaseToken;
@@ -135,7 +135,7 @@ namespace RPGKarawara.DevTools.Performance
         }
         public static PerformanceRenderingInventory Begin(PlayerManager player,RenderingInspectionConfig config,string outputRoot,double routeElapsed)
         {
-            if(!Application.isPlaying||Application.isEditor||player==null||!player.IsSpawned||!player.IsOwner||player.isDead.Value||player.playerNetworkManager.currentHealth.Value<=0||Time.timeScale!=1||config==null||config.schemaVersion!=1||config.holdSeconds!=120||!Guid.TryParseExact(config.releaseToken,"N",out _)||!Path.IsPathRooted(outputRoot)||!Directory.Exists(outputRoot))throw new InvalidOperationException("Explicit healthy owned standalone20-second completed route required for rendering hold.");
+            if(!Application.isPlaying||Application.isEditor||player==null||!player.IsInitialized||!player.IsInitialized||player.isDead.Value||player.playerNetworkManager.currentHealth.Value<=0||Time.timeScale!=1||config==null||config.schemaVersion!=1||config.holdSeconds!=120||!Guid.TryParseExact(config.releaseToken,"N",out _)||!Path.IsPathRooted(outputRoot)||!Directory.Exists(outputRoot))throw new InvalidOperationException("Explicit healthy owned standalone20-second completed route required for rendering hold.");
             var hold=new PerformanceRenderingInventory(player,config);
             try
             {
@@ -153,7 +153,7 @@ namespace RPGKarawara.DevTools.Performance
         public bool Poll()
         {
             if(Released)return true;
-            if(!ownsHold||player==null||Time.timeScale!=0||world==null||world!=WorldSaveGameManager.instance||world.player!=player||world.SaveRootOverride!=saveOverride||network==null||network!=Unity.Netcode.NetworkManager.Singleton||!network.IsHost||!network.IsListening||network.LocalClient?.PlayerObject!=player.NetworkObject||frozenCamera==null||PlayerCamera.instance==null||PlayerCamera.instance.cameraObject!=frozenCamera||!player.IsSpawned||!player.IsOwner||player.isDead.Value||player.playerNetworkManager.currentHealth.Value<=0||SceneManager.GetActiveScene().handle!=sceneHandle)throw new InvalidOperationException("Rendering hold world/player/clock ownership changed.");
+            if(!ownsHold||player==null||Time.timeScale!=0||world==null||world!=WorldSaveGameManager.instance||world.player!=player||world.SaveRootOverride!=saveOverride||network==null||network!=GameBootstrap.Instance||!network.Session.IsActive||!network.Session.IsActive||network.Session.Player!=player||frozenCamera==null||PlayerCamera.instance==null||PlayerCamera.instance.cameraObject!=frozenCamera||!player.IsInitialized||!player.IsInitialized||player.isDead.Value||player.playerNetworkManager.currentHealth.Value<=0||SceneManager.GetActiveScene().handle!=sceneHandle)throw new InvalidOperationException("Rendering hold world/player/clock ownership changed.");
             if(Time.realtimeSinceStartupAsDouble-started>maximumSeconds){Evidence["timedOut"]=true;throw new TimeoutException("Rendering inspection hold exceeded120 seconds.");}
             if(Evidence["readyRealtime"]==null)
             {

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+
 
 namespace RPGKarawara
 {
@@ -24,12 +24,13 @@ namespace RPGKarawara
 
         public virtual void AttemptToSpawnObject()
         {
-            if (networkGameObject != null)
+            if (networkGameObject != null && instantiatedGameObject == null)
             {
                 instantiatedGameObject = Instantiate(networkGameObject);
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(instantiatedGameObject, gameObject.scene);
                 instantiatedGameObject.transform.position = transform.position;
                 instantiatedGameObject.transform.rotation = transform.rotation;
-                instantiatedGameObject.GetComponent<NetworkObject>().Spawn();
+
             }
         }
     }

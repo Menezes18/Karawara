@@ -15,7 +15,7 @@ namespace RPGKarawara {
 
         [Header("Damage")]
         public float physicalDamage = 0;
-        [Header("Para lugares que o escudo não ira proteger")] public float magicDamage = 0;
+        [Header("Para lugares que o escudo nÃ£o ira proteger")] public float magicDamage = 0;
         public float fireDamage = 0;
         public float holyDamage = 0;
 
@@ -26,10 +26,14 @@ namespace RPGKarawara {
         protected List<CharacterManager> charactersDamaged = new List<CharacterManager>();
 
         [Header("Pet Check")]
-        public bool isPet; // Indica se é um pet
+        public bool isPet; // Indica se Ã© um pet
+
+        public CharacterManager sourceCharacter;
+        protected virtual CharacterManager SourceCharacter => sourceCharacter != null ? sourceCharacter : GetComponentInParent<CharacterManager>();
 
         protected virtual void Awake()
         {
+            if (damageCollider == null) damageCollider = GetComponent<Collider>();
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -47,53 +51,63 @@ namespace RPGKarawara {
 
                 //  CHECK IF TARGET IS BLOCKING
 
-                //damageTarget.IsOwner
+
                 if (isPet && other.CompareTag("Player"))
                     return;
 
-                CheckForBlock(damageTarget);
-                DamageTarget(damageTarget);
+                if (CanDamage(damageTarget)) DamageTarget(damageTarget);
             }
         }
 
-        protected virtual void CheckForBlock(CharacterManager damageTarget){
-            if (damageTarget.characterNetworkManager.isBlocking.Value){
-                charactersDamaged.Add(damageTarget);
-                TakeBlockedDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.TakeBlockedDamageEffect);
-                damageEffect.physicalDamage = physicalDamage;
-                damageEffect.magicDamage = magicDamage;
-                damageEffect.fireDamage = fireDamage;
-                damageEffect.holyDamage = holyDamage;
-
-                damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
-            }
-        }
-
-        public void DamagePublic(CharacterManager damageTarget){
-            DamageTarget(damageTarget);
-        }
-        protected virtual void DamageTarget(CharacterManager damageTarget)
+        protected bool CanDamage(CharacterManager target)
         {
-            //  WE DON'T WANT TO DAMAGE THE SAME TARGET MORE THAN ONCE IN A SINGLE ATTACK
-            //  SO WE ADD THEM TO A LIST THAT CHECKS BEFORE APPLYING DAMAGE
+            if (target == null || charactersDamaged.Contains(target) || target.State.IsDead || target.State.IsInvulnerable) return false;
+            var source = SourceCharacter;
+            if (source != null && (!source.IsInitialized || !source.State.IsActive || source.State.IsDead)) return false;
+            if (source == target) return false;
+            if (isPet && target is PlayerManager) return false;
+            if (source != null && WorldUtilityManager.Instance != null && !WorldUtilityManager.Instance.CanIDamageThisTarget(source.characterGroup, target.characterGroup)) return false;
+            return true;
+        }
 
-            charactersDamaged.Add(damageTarget);
+        protected virtual void CheckForBlock(CharacterManager target) { }
+        public void DamagePublic(CharacterManager target) { if (CanDamage(target)) DamageTarget(target); }
+        protected virtual void DamageTarget(CharacterManager target)
+        {
+            if (!CanDamage(target)) return;
+            charactersDamaged.Add(target);
+            if (target.State.IsBlocking)
+            {
+                var blocked = Instantiate(WorldCharacterEffectsManager.instance.TakeBlockedDamageEffect);
+                blocked.characterCausingDamage = SourceCharacter;
+                blocked.physicalDamage = physicalDamage; blocked.magicDamage = magicDamage;
+                blocked.fireDamage = fireDamage; blocked.holyDamage = holyDamage;
+                target.characterEffectsManager.ProcessOwnedInstantEffect(blocked);
+                return;
+            }
+            var damage = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
+            damage.characterCausingDamage = SourceCharacter;
+            damage.physicalDamage = physicalDamage; damage.magicDamage = magicDamage;
+            damage.fireDamage = fireDamage; damage.holyDamage = holyDamage;
+            damage.contactPoint = contactPoint;
+            target.characterEffectsManager.ProcessOwnedInstantEffect(damage);
+        }
 
-            TakeDamageEffect damageEffect = Instantiate(WorldCharacterEffectsManager.instance.takeDamageEffect);
-            damageEffect.physicalDamage = physicalDamage;
-            damageEffect.magicDamage = magicDamage;
-            damageEffect.fireDamage = fireDamage;
-            damageEffect.holyDamage = holyDamage;
-            damageEffect.contactPoint = contactPoint;
-
-            damageTarget.characterEffectsManager.ProcessOwnedInstantEffect(damageEffect);
+        protected virtual void OnDisable()
+        {
+            if (damageCollider != null) damageCollider.enabled = false;
+            charactersDamaged.Clear();
         }
 
         public virtual void EnableDamageCollider()
         {
+            if (damageCollider == null) return;
+            var source = SourceCharacter;
+            if (source != null && (!source.isActiveAndEnabled || source.State.IsDead)) return;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             bool wasEnabled = damageCollider.enabled;
 #endif
+            if (!damageCollider.enabled) charactersDamaged.Clear();
             damageCollider.enabled = true;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             if (!wasEnabled) { RPGKarawara.DevTools.Performance.PerformanceCucaSceneSource.NotifyStateChanged(this); DevTools.Performance.PerformanceActorLifecycleScope.NotifyVisualChild(this, DevTools.Performance.PerformanceActorLifecycle.Enabled); }
@@ -102,6 +116,7 @@ namespace RPGKarawara {
 
         public virtual void DisableDamageCollider()
         {
+            if (damageCollider == null) { charactersDamaged.Clear(); return; }
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             bool wasEnabled = damageCollider.enabled;
 #endif

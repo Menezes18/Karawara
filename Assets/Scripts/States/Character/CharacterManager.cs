@@ -1,15 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+using Karawara.Core.Characters;
+using System;
 
 namespace RPGKarawara
 {
-    public class CharacterManager : NetworkBehaviour
+    public class CharacterManager : MonoBehaviour
     {
         public bool isBoss;
-        [Header("Status")]
-        public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public CharacterRuntimeState State { get; private set; } = new CharacterRuntimeState();
+        public ICharacterRegistry Registry { get; private set; }
+        public int LocalId { get; private set; }
+        public bool IsInitialized { get; private set; }
+        private static readonly Dictionary<CharacterRuntimeState, CharacterManager> localCharacters = new Dictionary<CharacterRuntimeState, CharacterManager>();
+        private ICharacterRegistry resumeRegistry;
+        private bool processingDeath;
+        public ObservableValue<bool> isDead;
+        public static CharacterManager Resolve(CharacterRuntimeState state)
+        {
+            if (state == null || !state.IsActive || state.IsDead) return null;
+            return localCharacters.TryGetValue(state, out var value) && value != null && value.IsInitialized ? value : null;
+        }
 
         [HideInInspector] public CharacterController characterController;
 
@@ -26,14 +38,12 @@ namespace RPGKarawara
         [Header("Character Group")]
         public CharacterGroup characterGroup;
 
-        [Header("Flags")]
-        public bool isPerformingAction = false;
+        public bool isPerformingAction { get => State.IsPerformingAction; set => State.SetPerformingAction(value); }
         public GameObject vfxDead;
         protected virtual void Awake()
         {
-            // Players travel between scenes; enemies belong to the scene that spawned them.
-            if (this is PlayerManager)
-                DontDestroyOnLoad(gameObject);
+            isDead = new ObservableValue<bool>(() => State.IsDead, dead => { if (dead) State.SetHealth(0); else if (State.IsDead) State.SetHealth(State.MaxHealth); });
+            // Scene ownership is retained until the session explicitly adopts the player.
 
             characterController = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
@@ -55,29 +65,9 @@ namespace RPGKarawara
 
         protected virtual void Update()
         {
-            animator.SetBool("isGrounded", characterLocomotionManager.isGrounded);
-
-            //  IF THIS CHARACTER IS BEING CONTROLLED FROM OUR SIDE, THEN ASSIGN ITS NETWORK POSITION TO THE POSITION OF OUR TRANSFORM
-            if (IsOwner)
-            {
-                characterNetworkManager.networkPosition.Value = transform.position;
-                characterNetworkManager.networkRotation.Value = transform.rotation;
-            }
-            //  IF THIS CHARACTER IS BEING CONTROLLED FROM ELSE WHERE, THEN ASSIGN ITS POSITION HERE LOCALLY BY THE POSITION OF ITS NETWORK TRANSFORM
-            else
-            {
-                //  Position
-                transform.position = Vector3.SmoothDamp
-                    (transform.position, 
-                    characterNetworkManager.networkPosition.Value, 
-                    ref characterNetworkManager.networkPositionVelocity, 
-                    characterNetworkManager.networkPositionSmoothTime);
-                //  Rotation
-                transform.rotation = Quaternion.Slerp
-                    (transform.rotation, 
-                    characterNetworkManager.networkRotation.Value, 
-                    characterNetworkManager.networkRotationSmoothTime);
-            }
+            if (!IsInitialized) return;
+            if (animator != null && characterLocomotionManager != null)
+                animator.SetBool("isGrounded", characterLocomotionManager.isGrounded);
         }
 
         protected virtual void FixedUpdate()
@@ -93,40 +83,111 @@ namespace RPGKarawara
         protected virtual void OnEnable()
         {
             DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Enabled);
+            if (resumeRegistry != null)
+            {
+                var registry = resumeRegistry;
+                resumeRegistry = null;
+                InitializeLocal(State, registry);
+            }
         }
 
         protected virtual void OnDisable()
         {
             DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.Disabled);
+            if (IsInitialized)
+            {
+                resumeRegistry = Registry;
+                ShutdownLocal();
+                State.SetActive(false);
+            }
         }
 
-        public override void OnNetworkSpawn()
+        public virtual void InitializeLocal(CharacterRuntimeState state, ICharacterRegistry registry)
         {
-            base.OnNetworkSpawn();
-            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.NetworkSpawned);
-
-            animator.SetBool("isMoving", characterNetworkManager.isMoving.Value);
-            characterNetworkManager.OnIsActiveChanged(false, characterNetworkManager.isActive.Value);
-
-            characterNetworkManager.isMoving.OnValueChanged += characterNetworkManager.OnIsMovingChanged;
-            characterNetworkManager.isActive.OnValueChanged += characterNetworkManager.OnIsActiveChanged;
+            if (state == null) throw new ArgumentNullException(nameof(state));
+            if (registry == null) throw new ArgumentNullException(nameof(registry));
+            if (IsInitialized && ReferenceEquals(State, state) && ReferenceEquals(Registry, registry)) return;
+            ShutdownLocal();
+            State = state;
+            Registry = registry;
+            State.SetActive(gameObject.activeInHierarchy);
+            if (!State.IsActive) throw new InvalidOperationException("Initialize an active character.");
+            if (!State.IsDead) LocalId = registry.Register(State);
+            localCharacters[State] = this;
+            IsInitialized = true;
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.LocalInitialized);
+            processingDeath = false;
+            if (characterNetworkManager != null) characterNetworkManager.BindState(State);
+            State.HealthChanged += OnLocalHealthChanged;
+            State.MovingChanged += OnLocalMovingChanged;
+            State.ActiveChanged += OnLocalActiveChanged;
+            State.ChargingAttackChanged += OnLocalChargingChanged;
+            OnLocalMovingChanged(false, State.IsMoving);
+            if (State.IsDead) OnLocalHealthChanged(State.Health, State.Health);
         }
 
-        public override void OnNetworkDespawn()
+        private void OnLocalHealthChanged(int previous, int next)
         {
-            base.OnNetworkDespawn();
-            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.NetworkDespawned);
+            if (!(this is PlayerManager) && characterUIManager != null && characterUIManager.characterHPBar != null)
+                characterUIManager.OnHPChanged(previous, next);
+            if (characterNetworkManager != null) characterNetworkManager.CheckHP(previous, next);
+        }
+        private void OnLocalMovingChanged(bool previous, bool next) { if (animator != null) animator.SetBool("isMoving", next); }
+        private void OnLocalChargingChanged(bool previous, bool next)
+        {
+            if (animator == null) return;
+            animator.SetBool("isChargingAttack", next);
+            if (!next) animator.SetBool("Released", true);
+        }
+        private void OnLocalActiveChanged(bool previous, bool next) { if (characterNetworkManager != null) characterNetworkManager.OnIsActiveChanged(previous, next); else if (gameObject.activeSelf != next) gameObject.SetActive(next); }
+        public void BeginDeath()
+        {
+            if (processingDeath) return;
+            processingDeath = true;
+            isPerformingAction = false;
+            State.SetAttacking(false);
+            State.SetChargingAttack(false);
+            State.SetIsChargingRightSpell(false);
+            State.SetIsChargingLeftSpell(false);
+            foreach (var hitbox in GetComponentsInChildren<DamageCollider>(true)) hitbox.DisableDamageCollider();
+            if (Application.isPlaying && isActiveAndEnabled) StartCoroutine(ProcessDeathEvent());
+        }
 
-            characterNetworkManager.isMoving.OnValueChanged -= characterNetworkManager.OnIsMovingChanged;
-            characterNetworkManager.isActive.OnValueChanged -= characterNetworkManager.OnIsActiveChanged;
+        public virtual void ShutdownLocal()
+        {
+            if (!IsInitialized) return;
+            IsInitialized = false;
+            DevTools.Performance.PerformanceActorLifecycleScope.Notify(this, DevTools.Performance.PerformanceActorLifecycle.LocalShutdown);
+            StopAllCoroutines();
+            State.HealthChanged -= OnLocalHealthChanged;
+            State.MovingChanged -= OnLocalMovingChanged;
+            State.ActiveChanged -= OnLocalActiveChanged;
+            State.ChargingAttackChanged -= OnLocalChargingChanged;
+            if (characterNetworkManager != null) characterNetworkManager.UnbindState(State);
+            Registry?.Unregister(LocalId);
+            localCharacters.Remove(State);
+            State.SetTarget(null);
+            State.SetChargingAttack(false);
+            State.SetAttacking(false);
+            State.SetJumping(false);
+            State.SetInvulnerable(false);
+            State.SetSprinting(false);
+            State.SetMoving(false);
+            if (characterEffectsManager != null && characterEffectsManager.activeSpellWarmUpFX != null)
+                Destroy(characterEffectsManager.activeSpellWarmUpFX);
+            foreach (var collider in GetComponentsInChildren<MeleeWeaponDamageCollider>(true)) collider.DisableDamageCollider();
+            LocalId = 0;
+            Registry = null;
+            isPerformingAction = false;
+            characterLocomotionManager?.ResetLocalMotion();
+            if (characterAnimatorManager != null) characterAnimatorManager.applyRootMotion = false;
         }
 
         public bool player = false;
         public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
         {
-            if (IsOwner)
             {
-                characterNetworkManager.currentHealth.Value = 0;
+                State.SetHealth(0);
                 isDead.Value = true;
 
                 //  RESET ANY FLAGS HERE THAT NEED TO BE RESET
@@ -136,7 +197,7 @@ namespace RPGKarawara
 
                 if (!manuallySelectDeathAnimation)
                 {
-                    characterAnimatorManager.PlayTargetActionAnimation("Dead_01", true);
+                    if (characterAnimatorManager != null && animator != null) characterAnimatorManager.PlayTargetActionAnimation("Dead_01", true);
                     
                 }
             }
@@ -148,7 +209,7 @@ namespace RPGKarawara
             //  AWARD PLAYERS WITH RUNES
 
             //  DISABLE CHARACTER
-            if (player) yield break;
+            if (player || this is PlayerManager) yield break;
             if (vfxDead != null)
             {
                 GameObject vfx = Instantiate(vfxDead, transform.position, Quaternion.identity);
@@ -160,7 +221,15 @@ namespace RPGKarawara
 
         public virtual void ReviveCharacter()
         {
-
+            StopAllCoroutines();
+            processingDeath = false;
+            State.SetHealth(State.MaxHealth);
+            if (IsInitialized && Registry != null) LocalId = Registry.Register(State);
+        }
+        protected virtual void OnDestroy()
+        {
+            resumeRegistry = null;
+            ShutdownLocal();
         }
 
         
@@ -184,7 +253,7 @@ namespace RPGKarawara
             {
                 foreach (var otherCollider in ignoreColliders)
                 {
-                    Physics.IgnoreCollision(collider, otherCollider, true);
+                    if (collider != null && otherCollider != null) Physics.IgnoreCollision(collider, otherCollider, true);
                 }
             }
         }

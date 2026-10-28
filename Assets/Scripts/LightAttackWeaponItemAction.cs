@@ -24,14 +24,10 @@ namespace RPGKarawara
         {
             base.AttemptToPerformAction(playerPerformingAction, weaponPerformingAction);
 
-            if (!playerPerformingAction.IsOwner)
-                return;
-
             if (!playerPerformingAction.characterLocomotionManager.isGrounded)
                 return;
 
-            if (playerPerformingAction.IsOwner)
-                playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
+            playerPerformingAction.playerNetworkManager.isAttacking.Value = true;
 
             //  IF WE ARE SPRINTING, PERFORM A RUNNING ATTACK
             if (playerPerformingAction.characterNetworkManager.isSprinting.Value)

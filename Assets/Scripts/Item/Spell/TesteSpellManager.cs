@@ -32,7 +32,7 @@ namespace RPGKarawara
         void Update()
         {
             if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame && Time.timeScale > 0 &&
-                inventory != null && combatManager != null && combatManager.player.IsOwner &&
+                inventory != null && combatManager != null && combatManager.player.IsInitialized &&
                 !combatManager.player.isPerformingAction && Time.time >= lastPressTime + cooldownTime){
                 
                 

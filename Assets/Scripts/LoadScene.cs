@@ -20,9 +20,9 @@ namespace RPGKarawara
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.LoadingRequest);
 #endif
-            image.SetActive(true);
+            if (image != null) image.SetActive(true);
             
-            _button.enabled = false;
+            if (_button != null) _button.enabled = false;
             
         }
         
@@ -30,7 +30,7 @@ namespace RPGKarawara
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.LoadingRequest);
 #endif
-            image.SetActive(true);
+            if (image != null) image.SetActive(true);
 
         }
 
@@ -38,7 +38,8 @@ namespace RPGKarawara
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA
             RPGKarawara.DevTools.Performance.PerformanceUiSourceContext.NotifyOwner(this, RPGKarawara.DevTools.Performance.PerformanceUiSourceEvent.HiddenRequest);
 #endif
-            image.SetActive(false);
+            if (image != null) image.SetActive(false);
+            if (_button != null) _button.enabled = true;
         }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || KARAWARA_QA

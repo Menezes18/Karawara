@@ -29,7 +29,6 @@ namespace RPGKarawara
             if (character.characterEffectsManager.activeSpellWarmUpFX != null)
                 Destroy(character.characterEffectsManager.activeSpellWarmUpFX);
 
-            if (character.IsOwner)
             {
                 character.characterNetworkManager.isJumping.Value = false;
                 character.characterNetworkManager.isInvulnerable.Value = false;

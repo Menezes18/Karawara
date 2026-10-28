@@ -236,13 +236,11 @@ namespace RPGKarawara
             marcardor.SetActive(true);
         }
 
-        public void ChangeScene()
+        public async void ChangeScene()
         {
-            WorldSaveGameManager.instance.loadscene.LoadGame();
-            WorldAIManager.instance.DespawnAllCharacters();
-            // Single-mode loading unloads the old scene. sceneCount is not a build index.
-            SceneManager.LoadScene("SceneMenu");
-            ConfigureUIBasedOnScene();
+            var session = GameBootstrap.EnsureInstance().Session;
+            var result = await session.ReturnToMenuAsync();
+            if (result != Karawara.Core.Session.SessionResult.Success) Debug.LogWarning(session.LastError);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace RPGKarawara
         [Header("Damage")]
         [SerializeField] int baseDamage = 20;
         [SerializeField] float kickDamageModifier = 1.5f;
-        [SerializeField] float whirlwindDamageModifier = 1.2f;  // Pode ser usado para escalar o dano do tornado se necessário
+        [SerializeField] float whirlwindDamageModifier = 1.2f;  // Pode ser usado para escalar o dano do tornado se necessÃ¡rio
         public float whirlwindDamage = 30;
 
         [Header("VFX")]
@@ -33,37 +33,38 @@ namespace RPGKarawara
 
         public void ActivateMeleeAttack()
         {
-            // Chama a animação de ataque corpo a corpo
+            // Chama a animaÃ§Ã£o de ataque corpo a corpo
             Debug.Log("Ataque corpo a corpo ativado!");
-            // Implementar a lógica de ataque corpo a corpo aqui, se necessário
+            // Implementar a lÃ³gica de ataque corpo a corpo aqui, se necessÃ¡rio
         }
 
         public void ActivateDurkStomp()
         {
-            // Implementação do evento de stomp
+            // ImplementaÃ§Ã£o do evento de stomp
             Debug.Log("Durk Stomp ativado!");
         }
 
-        // Método para ativar o ataque de redemoinho, que agora instancia tornados
+        // MÃ©todo para ativar o ataque de redemoinho, que agora instancia tornados
         public void ActivateSaciWhirlwind()
         {
-            // Invoca o ataque de tornados em direção ao player
+            if (aiCharacter == null || !aiCharacter.IsInitialized || aiCharacter.State.IsDead || !aiCharacter.isPerformingAction) return;
+            // Invoca o ataque de tornados em direÃ§Ã£o ao player
             whirlwindController.WhirlwindAttack(GetPlayer());
 
-            // Instancia o efeito visual do redemoinho na posição do Saci
+            // Instancia o efeito visual do redemoinho na posiÃ§Ã£o do Saci
             //Instantiate(saciWhirlwindVFX, transform.position, Quaternion.identity); 
         }
 
-        // Método para obter a posição do player
+        // MÃ©todo para obter a posiÃ§Ã£o do player
         public Vector3 GetPlayer()
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             return player.transform.position;
         }
-        // Método para ajustar a rotação do Saci, de acordo com o ângulo de visão em relação ao player
+        // MÃ©todo para ajustar a rotaÃ§Ã£o do Saci, de acordo com o Ã¢ngulo de visÃ£o em relaÃ§Ã£o ao player
         public override void PivotTowardsTarget(AICharacterManager aiCharacter)
         {
-            // Ajusta a rotação para focar no alvo, com animações de giros rápidos
+            // Ajusta a rotaÃ§Ã£o para focar no alvo, com animaÃ§Ãµes de giros rÃ¡pidos
             if (aiCharacter.isPerformingAction)
                 return;
 

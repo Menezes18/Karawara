@@ -1,6 +1,7 @@
 using UnityEngine;
-using Unity.Netcode;
-using Unity.Collections;
+using Karawara.Core.Characters;
+
+
 
 namespace RPGKarawara
 {
@@ -8,25 +9,45 @@ namespace RPGKarawara
     {
         PlayerManager player;
 
-        public NetworkVariable<FixedString64Bytes> characterName = new NetworkVariable<FixedString64Bytes>("Character", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public ObservableValue<string> characterName = new ObservableValue<string>("Character");
 
         [Header("Equipment")]
-        public NetworkVariable<int> currentSpellID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<int> currentWeaponBeingUsed = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<int> currentRightHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<int> currentLeftHandWeaponID = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<bool> isUsingRightHand = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<bool> isUsingLeftHand = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public ObservableValue<int> currentSpellID = new ObservableValue<int>(0);
+        public ObservableValue<int> currentWeaponBeingUsed = new ObservableValue<int>(0);
+        public ObservableValue<int> currentRightHandWeaponID = new ObservableValue<int>(0);
+        public ObservableValue<int> currentLeftHandWeaponID = new ObservableValue<int>(0);
+        public ObservableValue<bool> isUsingRightHand;
+        public ObservableValue<bool> isUsingLeftHand;
         [Header("Spells")]
-        public NetworkVariable<bool> isChargingRightSpell = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        public NetworkVariable<bool> isChargingLeftSpell = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        public ObservableValue<bool> isChargingRightSpell;
+        public ObservableValue<bool> isChargingLeftSpell;
         protected override void Awake()
         {
             base.Awake();
 
+            isUsingRightHand = new ObservableValue<bool>(() => character.State.IsUsingRightHand, value => character.State.SetIsUsingRightHand(value), true);
+            isUsingLeftHand = new ObservableValue<bool>(() => character.State.IsUsingLeftHand, value => character.State.SetIsUsingLeftHand(value), true);
+            isChargingRightSpell = new ObservableValue<bool>(() => character.State.IsChargingRightSpell, value => character.State.SetIsChargingRightSpell(value), true);
+            isChargingLeftSpell = new ObservableValue<bool>(() => character.State.IsChargingLeftSpell, value => character.State.SetIsChargingLeftSpell(value), true);
             player = GetComponent<PlayerManager>();
         }
 
+        public override void BindState(CharacterRuntimeState state)
+        {
+            base.BindState(state);
+            state.IsUsingRightHandChanged += isUsingRightHand.Publish;
+            state.IsUsingLeftHandChanged += isUsingLeftHand.Publish;
+            state.IsChargingRightSpellChanged += isChargingRightSpell.Publish;
+            state.IsChargingLeftSpellChanged += isChargingLeftSpell.Publish;
+        }
+        public override void UnbindState(CharacterRuntimeState state)
+        {
+            base.UnbindState(state);
+            state.IsUsingRightHandChanged -= isUsingRightHand.Publish;
+            state.IsUsingLeftHandChanged -= isUsingLeftHand.Publish;
+            state.IsChargingRightSpellChanged -= isChargingRightSpell.Publish;
+            state.IsChargingLeftSpellChanged -= isChargingLeftSpell.Publish;
+        }
         public void SetCharacterActionHand(bool rightHandedAction)
         {
             if (rightHandedAction)
@@ -44,7 +65,7 @@ namespace RPGKarawara
         public void SetNewMaxHealthValue(int oldVitality, int newVitality)
         {
             maxHealth.Value = player.playerStatsManager.CalculateHealthBasedOnVitalityLevel(newVitality);
-            PlayerUIManager.instance.playerUIHudManager.SetMaxHealthValue(maxHealth.Value);
+            if (PlayerUIManager.instance != null) PlayerUIManager.instance.playerUIHudManager?.SetMaxHealthValue(maxHealth.Value);
             currentHealth.Value = maxHealth.Value;
         }
 
@@ -57,77 +78,50 @@ namespace RPGKarawara
 
         public void OnCurrentRightHandWeaponIDChange(int oldID, int newID)
         {
-            WeaponItem newWeapon = Instantiate(WorldItemDatabase.Instance.GetWeaponByID(newID));
+            var template = WorldItemDatabase.Instance != null ? WorldItemDatabase.Instance.GetWeaponByID(newID) : null;
+            if (template == null) return;
+            // Item definitions are immutable; runtime models and action state belong to the player.
+            WeaponItem newWeapon = template;
             player.playerInventoryManager.currentRightHandWeapon = newWeapon;
             player.playerEquipmentManager.LoadRightWeapon();
-
-            if (player.IsOwner)
             {
-                PlayerUIManager.instance.playerUIHudManager.SetRightWeaponQuickSlotIcon(newID);
+                if (PlayerUIManager.instance != null) PlayerUIManager.instance.playerUIHudManager?.SetRightWeaponQuickSlotIcon(newID);
             }
         }
         public void OnCurrentSpellIDChange(int oldID, int newID)
         {
             var template = WorldItemDatabase.Instance != null ? WorldItemDatabase.Instance.GetSpellByID(newID) : null;
-            player.playerInventoryManager.currentSpell = template != null ? Instantiate(template) : null;
+            player.playerInventoryManager.currentSpell = template;
         }
         public void OnCurrentLeftHandWeaponIDChange(int oldID, int newID)
         {
-            WeaponItem newWeapon = Instantiate(WorldItemDatabase.Instance.GetWeaponByID(newID));
+            var template = WorldItemDatabase.Instance != null ? WorldItemDatabase.Instance.GetWeaponByID(newID) : null;
+            if (template == null) return;
+            // Item definitions are immutable; runtime models and action state belong to the player.
+            WeaponItem newWeapon = template;
             player.playerInventoryManager.currentLeftHandWeapon = newWeapon;
             player.playerEquipmentManager.LoadLeftWeapon();
-
-            if (player.IsOwner)
             {
-                PlayerUIManager.instance.playerUIHudManager.SetLeftWeaponQuickSlotIcon(newID);
+                if (PlayerUIManager.instance != null) PlayerUIManager.instance.playerUIHudManager?.SetLeftWeaponQuickSlotIcon(newID);
             }
         }
 
         public void OnCurrentWeaponBeingUsedIDChange(int oldID, int newID)
         {
-            WeaponItem newWeapon = Instantiate(WorldItemDatabase.Instance.GetWeaponByID(newID));
+            var template = WorldItemDatabase.Instance != null ? WorldItemDatabase.Instance.GetWeaponByID(newID) : null;
+            if (template == null) return;
+            // Item definitions are immutable; runtime models and action state belong to the player.
+            WeaponItem newWeapon = template;
             player.playerCombatManager.currentWeaponBeingUsed = newWeapon;
         }
 
-        //  ITEM ACTIONS
-        [ServerRpc]
-        public void NotifyTheServerOfWeaponActionServerRpc(ulong clientID, int actionID, int weaponID)
-        {
-            if (IsServer)
-            {
-                NotifyTheServerOfWeaponActionClientRpc(clientID, actionID, weaponID);
-            }
-        }
-
-        [ClientRpc]
-        private void NotifyTheServerOfWeaponActionClientRpc(ulong clientID, int actionID, int weaponID)
-        {
-            if (clientID != NetworkManager.Singleton.LocalClientId)
-            {
-                PerformWeaponBasedAction(actionID, weaponID);
-            }
-        }
         public void OnIsChargingRightSpellChanged(bool oldStatus, bool newStatus)
         {
-            player.animator.SetBool("isChargingRightSpell", newStatus);
+            if (player.animator != null) player.animator.SetBool("isChargingRightSpell", newStatus);
         }
         public void OnIsChargingLeftSpellChanged(bool oldStatus, bool newStatus)
         {
-            player.animator.SetBool("isChargingLeftSpell", isChargingLeftSpell.Value);
-        }
-        private void PerformWeaponBasedAction(int actionID, int weaponID)
-        {
-            WeaponItemAction weaponAction = WorldActionManager.instance.GetWeaponItemActionByID(actionID);
-
-            if (weaponAction != null)
-            {
-                weaponAction.AttemptToPerformAction(player, WorldItemDatabase.Instance.GetWeaponByID(weaponID));
-                player.animator.SetBool("Released", false);
-            }
-            else
-            {
-                Debug.LogError("ACTION IS NULL, CANNOT BE PERFORMED");
-            }
+            if (player.animator != null) player.animator.SetBool("isChargingLeftSpell", isChargingLeftSpell.Value);
         }
     }
 }

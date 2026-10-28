@@ -156,7 +156,7 @@ namespace RPGKarawara.DevTools.Performance
         PlayerUIHudManager hud;
         GameObject pausePanel, skillPanel, minimapTarget;
         WorldSaveGameManager world;
-        Unity.Netcode.NetworkManager network;
+        GameBootstrap network;
         PlayerControls controls;
         CameraBinding[] cameras;
         Camera[] cameraScratch;
@@ -202,7 +202,7 @@ namespace RPGKarawara.DevTools.Performance
                 session.Evidence = new EvidenceReport { manifestSha256 = session.frozen.sha256, manifest = session.frozen.Snapshot, measurementArm = session.lightControl ? "light-control" : "full" };
                 if (request.config.checkpointImages) session.Evidence.measurementArm = "checkpoint-images-diagnostic";
                 session.player = player; session.input = input; session.cameraOwner = cameraOwner; session.history = history;
-                session.world = WorldSaveGameManager.instance; session.network = Unity.Netcode.NetworkManager.Singleton;
+                session.world = WorldSaveGameManager.instance; session.network = GameBootstrap.Instance;
                 session.controls = input.playerControls;
                 Require(session.world != null && session.world.SaveRoot == request.saveRoot && session.controls != null && session.network != null, "Actual isolated host and controls required");
                 session.saveOverride = session.world.SaveRootOverride; session.sceneHandle = SceneManager.GetActiveScene().handle;
@@ -326,9 +326,9 @@ namespace RPGKarawara.DevTools.Performance
         {
             Require(!UnityEngine.Profiling.Profiler.enabled && !UnityEngine.Profiling.Profiler.enableAllocationCallstacks, "Profiler instrumentation active during UI timing");
             Require(Application.isFocused, "UI application focus changed");
-            Require(player != null && player.IsOwner && player.IsSpawned && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0, "UI player owner/spawn/living state changed");
+            Require(player != null && player.IsInitialized && player.IsInitialized && !player.isDead.Value && player.playerNetworkManager.currentHealth.Value > 0, "UI player owner/spawn/living state changed");
             Require(world != null && world == WorldSaveGameManager.instance && world.player == player && world.SaveRootOverride == saveOverride, "UI world/save owner changed");
-            Require(network != null && network == Unity.Netcode.NetworkManager.Singleton && network.IsListening && network.IsHost && network.LocalClient?.PlayerObject == player.NetworkObject, "UI network host/player owner changed");
+            Require(network != null && network == GameBootstrap.Instance && network.Session.IsActive && network.Session.IsActive && network.Session.Player == player, "UI network host/player owner changed");
             Require(input == PlayerInputManager.instance && input.player == player && input.playerControls == controls, "UI input owner changed");
             Require(cameraOwner == PlayerCamera.instance && cameraOwner.player == player && cameraOwner.canFollow && cameraOwner.cameraObject == productionCamera, "UI production camera owner/follow state changed");
             Require(SceneManager.GetActiveScene().handle == sceneHandle, "UI active scene changed");

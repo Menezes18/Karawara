@@ -116,6 +116,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3340645805657694419, guid: 427e5e628081fc441901f23ad66777d5,
+        type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 3575388029809928885, guid: 427e5e628081fc441901f23ad66777d5,
         type: 3}
       propertyPath: m_Name
@@ -225,6 +230,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823082797635178623, guid: 427e5e628081fc441901f23ad66777d5,
+        type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -367,12 +377,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 701fb9b4742b1654ead901af7dc3c595, type: 3}
---- !u!1 &2542485837176912908 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8910181772973076408, guid: 701fb9b4742b1654ead901af7dc3c595,
-    type: 3}
-  m_PrefabInstance: {fileID: 6408598598931207092}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6142062732373044040 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 996166313176922364, guid: 701fb9b4742b1654ead901af7dc3c595,
@@ -835,10 +839,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f34bb93333b778e448b838fdb4da3ff5,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2581533101452060469}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f34bb93333b778e448b838fdb4da3ff5,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2809614390534765851}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f34bb93333b778e448b838fdb4da3ff5,
         type: 3}
@@ -1250,6 +1250,8 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
+  sourceCharacter: {fileID: 0}
   bossCharacter: {fileID: 0}
 --- !u!4 &4198791171104201986 stripped
 Transform:
@@ -1390,6 +1392,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1487,7 +1490,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  playerLocomotion: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!114 &12212547373508569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1505,6 +1513,8 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
+  sourceCharacter: {fileID: 0}
   durkCharacterManager: {fileID: 0}
 --- !u!1 &7001325615843262258 stripped
 GameObject:
@@ -1524,7 +1534,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd4036faf06e9540bfd05f897a7bd61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  playerLocomotion: {fileID: 0}
+  audioSource: {fileID: 0}
   distanceToGround: 0.05
+  boxSize: {x: 0.5, y: 0.1, z: 0.5}
+  footstepDelay: 0.5
 --- !u!82 &1742791382382146930
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1536,6 +1551,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -1662,27 +1678,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6998125352533042934}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2581533101452060469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7917112914835544999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1473327370
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &2809614390534765851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1722,11 +1717,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBoss: 1
-  isDead:
-    m_InternalValue: 0
   characterController: {fileID: 0}
   animator: {fileID: 0}
-  portal: {fileID: 2542485837176912908}
   characterNetworkManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
   characterAnimatorManager: {fileID: 0}
@@ -1736,7 +1728,8 @@ MonoBehaviour:
   characterLocomotionManager: {fileID: 0}
   characterUIManager: {fileID: 0}
   characterGroup: 1
-  isPerformingAction: 0
+  vfxDead: {fileID: 0}
+  player: 0
   characterName: "Mapinguari, Guardi\xE3o dos Mist\xE9rios Amaz\xF4nicos"
   characterElement: 0
   aiCharacterNetworkManager: {fileID: 0}
@@ -1748,16 +1741,11 @@ MonoBehaviour:
   pursueTarget: {fileID: 11400000, guid: 67edd200b4aa40b4ba654f1c014590cf, type: 2}
   combatStance: {fileID: 11400000, guid: 0a55554c1bdad73408cf47130d29015f, type: 2}
   attack: {fileID: 11400000, guid: 5b25504b331b09b4ba409cef89427d56, type: 2}
+  isDisabled: 0
   skinnedMeshRenderer: {fileID: 0}
   bossID: 1
   bossIntroClip: {fileID: 0}
   bossBattleLoopClip: {fileID: 0}
-  bossFightIsActive:
-    m_InternalValue: 0
-  hasBeenAwakened:
-    m_InternalValue: 0
-  hasBeenDefeated:
-    m_InternalValue: 0
   fogWalls: []
   sleepAnimation: Sleep_01
   awakenAnimation: Awaken_01
@@ -1781,7 +1769,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastAttackAnimationPerformed: 
-  currentTarget: {fileID: 0}
   currentAttackType: 0
   lockOnTransform: {fileID: 3435671916682671609}
   canPerformRollingAttack: 0
@@ -1817,8 +1804,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b292bce86e399843b424c7b2e932d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationAmount: 2
-  staminaRegenerationDelay: 2
   blockingPhysicalAbsorption: 100
   blockingFireAbsorption: 100
   blockingMagicAbsorption: 100
@@ -1836,9 +1821,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3bf28f8099a094eb294b4ec5ae6f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
   applyRootMotion: 0
   lastDamageAnimationPlayed: 
+  hit_Forward_Ping_01: Hit_Forward_Ping_01
+  hit_Forward_Ping_02: Hit_Forward_Ping_02
+  hit_Backward_Ping_01: Hit_Backward_Ping_01
+  hit_Backward_Ping_02: Hit_Backward_Ping_02
+  hit_Left_Ping_01: Hit_Left_Ping_01
+  hit_Left_Ping_02: Hit_Left_Ping_02
+  hit_Right_Ping_01: Hit_Right_Ping_01
+  hit_Right_Ping_02: Hit_Right_Ping_02
+  forward_Ping_Damage: []
+  backward_Ping_Damage: []
+  left_Ping_Damage: []
+  right_Ping_Damage: []
   hit_Forward_Medium_01: Hit_Forward_Medium_01
   hit_Forward_Medium_02: Hit_Forward_Medium_02
   hit_Backward_Medium_01: Hit_Backward_Medium_01
@@ -1847,7 +1843,6 @@ MonoBehaviour:
   hit_Left_Medium_02: Hit_Left_Medium_02
   hit_Right_Medium_01: Hit_Right_Medium_01
   hit_Right_Medium_02: Hit_Right_Medium_02
-  hit_and_fall: Hit_And_Fall
   forward_Medium_Damage: []
   backward_Medium_Damage: []
   left_Medium_Damage: []
@@ -1876,6 +1871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d3b91f173a45d4badebe8987694537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeSpellWarmUpFX: {fileID: 0}
   bloodSplatterVFX: {fileID: 6970770661046263200, guid: e5a2c0e91245cd84b9a98cdad9ff83a2,
     type: 3}
 --- !u!114 &1570984207221588373
@@ -1890,47 +1886,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c8b0f4e30dab940885e736ecbee6eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive:
-    m_InternalValue: 1
-  networkPosition:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  networkRotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
-  networkPositionVelocity: {x: 0, y: 0, z: 0}
-  networkPositionSmoothTime: 0.1
-  networkRotationSmoothTime: 0.1
-  isMoving:
-    m_InternalValue: 0
-  horizontalMovement:
-    m_InternalValue: 0
-  verticalMovement:
-    m_InternalValue: 0
-  moveAmount:
-    m_InternalValue: 0
-  currentTargetNetworkObjectID:
-    m_InternalValue: 0
-  isBlocking:
-    m_InternalValue: 0
-  isPowerPet:
-    m_InternalValue: 0
-  isInvulnerable:
-    m_InternalValue: 0
-  isLockedOn:
-    m_InternalValue: 0
-  isSprinting:
-    m_InternalValue: 0
-  isJumping:
-    m_InternalValue: 0
-  isChargingAttack:
-    m_InternalValue: 0
-  currentHealth:
-    m_InternalValue: 1000
-  maxHealth:
-    m_InternalValue: 1000
-  vitality:
-    m_InternalValue: 1
-  endurance:
-    m_InternalValue: 1
   fogoBoss: 0
 --- !u!114 &2248076081298176643
 MonoBehaviour:
@@ -2004,10 +1959,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7917112914835544999}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2039,7 +1994,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2052,7 +2006,7 @@ CharacterController:
   m_Center: {x: 0, y: 1.7, z: 0}
 --- !u!95 &-8486135318277204557
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2066,6 +2020,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -2082,6 +2037,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

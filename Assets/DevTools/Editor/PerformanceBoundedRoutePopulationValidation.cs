@@ -156,19 +156,19 @@ namespace RPGKarawara.DevTools.Editor
             var actors = new JArray(Enumerable.Range(0, count).Select(i => Actor(1000 + i, Ai, "hostile", (ulong)(100 + i)))); actors.Add(Actor(500, Player, "local-player", 1));
             return new JObject { ["activeScene"] = "Video1", ["frame"] = frame, ["actors"] = actors,
                 ["spawnerAssociations"] = new JArray(Enumerable.Range(0, count).Select(i => new JObject { ["spawnerId"] = 2000 + i, ["prefabId"] = 3000,
-                    ["createdObjectId"] = 1000 + i, ["actorObjectId"] = 1000 + i, ["networkObjectId"] = (ulong)(100 + i),
+                    ["createdObjectId"] = 1000 + i, ["actorObjectId"] = 1000 + i, ["localCharacterId"] = (ulong)(100 + i),
                     ["linked"] = true, ["uniqueOwner"] = true, ["spawned"] = true, ["supportedActor"] = true })) };
         }
         static JObject Actor(int id, string type, string role, ulong network) => new JObject { ["objectId"] = id, ["sceneHandle"] = 1, ["scene"] = "Video1",
             ["path"] = "fixture/" + id, ["primaryType"] = type, ["role"] = role, ["components"] = new JArray(type), ["active"] = true, ["enabled"] = true,
-            ["supportedBinding"] = true, ["spawned"] = true, ["networkObjectId"] = network, ["currentHealth"] = 100, ["maximumHealth"] = 100, ["dead"] = false };
+            ["supportedBinding"] = true, ["spawned"] = true, ["localCharacterId"] = network, ["currentHealth"] = 100, ["maximumHealth"] = 100, ["dead"] = false };
         static JObject History(int count)
         {
             var rows = new JArray(); var events = new JArray();
             for (int i = 0; i < count; i++)
             {
                 rows.Add(new JObject { ["token"] = i + 1, ["spawnerId"] = 2000 + i, ["prefabId"] = 3000, ["createdId"] = 1000 + i,
-                    ["sceneHandle"] = 1, ["networkObjectId"] = (ulong)(100 + i), ["lastStage"] = 4, ["spawned"] = true, ["registered"] = true,
+                    ["sceneHandle"] = 1, ["localCharacterId"] = (ulong)(100 + i), ["lastStage"] = 4, ["spawned"] = true, ["registered"] = true,
                     ["finished"] = true, ["invalid"] = false, ["despawnRequested"] = false, ["despawned"] = false });
                 for (int s = 0; s < 5; s++) events.Add(new JObject { ["token"] = i + 1, ["stage"] = s, ["frame"] = i < 24 ? 1 : 15, ["time"] = (i < 24 ? 1 : 15) + i * .01 + s * .001 });
             }

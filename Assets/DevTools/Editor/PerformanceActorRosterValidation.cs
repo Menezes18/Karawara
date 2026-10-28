@@ -99,7 +99,7 @@ namespace RPGKarawara.DevTools.Editor
                     var ai = root.AddComponent<AICharacterManager>();
                     ai.characterNetworkManager = network; ai.aiCharacterNetworkManager = network;
                     f.Bind(new Component[] { ai }, new[] { "hostile" });
-                    Require(!ai.IsSpawned && Read(f.session) == 0, "EditMode AI must not be counted as an NGO-spawned living hostile.");
+                    Require(!ai.IsInitialized && Read(f.session) == 0, "EditMode AI must not be counted as an NGO-spawned living hostile.");
                     var result = Result(); Validate(f.session, result);
                     Require(!result.populationVerified, "No NGO population proof is produced by this EditMode fixture.");
                 }
@@ -134,7 +134,7 @@ namespace RPGKarawara.DevTools.Editor
                     var network = root.AddComponent<AICharacterNetworkManager>(); var ai = root.AddComponent<AICharacterManager>();
                     ai.characterNetworkManager = network; ai.aiCharacterNetworkManager = network;
                     f.Bind(new Component[] { ai }, new[] { "hostile" });
-                    Observe(f.session, ai, "NetworkDespawned"); Observe(f.session, ai, "NetworkSpawned");
+                    Observe(f.session, ai, "LocalShutdown"); Observe(f.session, ai, "LocalInitialized");
                     Invalid(f.session, "These notifications test only the latch; no NGO ownership/spawn is faked.");
                 }
             });
