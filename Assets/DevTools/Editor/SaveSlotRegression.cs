@@ -48,7 +48,7 @@ public static class SaveSlotRegression
             {
                 var go = new GameObject("SaveSlotRegression slot " + slot); objects.Add(go); go.SetActive(false);
                 var labelGo = new GameObject("Name", typeof(RectTransform)); objects.Add(labelGo);
-                var component = go.AddComponent<UI_Character_Save_Slot>(); component.characterSlot = slot;
+                var component = go.AddComponent<UI_Character_Save_Slot>(); component.characterSlot = slot; component.BindServices(manager, title);
                 component.characterName = labelGo.AddComponent<TextMeshProUGUI>();
                 slots.Add(component);
             }

@@ -41,7 +41,7 @@ namespace RPGKarawara.DevTools
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Initialize()
         {
-            if (Application.isEditor || !Environment.GetCommandLineArgs().Contains("-karawaraG2Validation")) return;
+            if (Application.isEditor || !Environment.GetCommandLineArgs().Any(a => a == "-karawaraG2Validation" || a == "-karawaraG3AValidation")) return;
             var owner = new GameObject("Explicit G2 process validation");
             DontDestroyOnLoad(owner); owner.AddComponent<LocalRuntimeProcessRegression>();
         }
@@ -50,7 +50,8 @@ namespace RPGKarawara.DevTools
             string root = Argument("-karawaraSaveRoot");
             if (!Karawara.Core.Persistence.SaveRootPolicy.Resolve(Application.persistentDataPath, new[] { "-karawaraSaveRoot", root }, true).Success)
             { Debug.LogError("G2 validation requires an isolated absolute save root."); Application.Quit(2); return; }
-            output = Path.Combine(root, "g2-standalone.json"); Directory.CreateDirectory(root);
+            bool g3a = Environment.GetCommandLineArgs().Contains("-karawaraG3AValidation");
+            output = Path.Combine(root, g3a ? "g3a-standalone.json" : "g2-standalone.json"); Directory.CreateDirectory(root);
             report = new Report { utc = DateTime.UtcNow.ToString("O"), buildGuid = Application.buildGUID, saveRoot = root };
             var before = PersonalFingerprint();
             previousBackground = InputSystem.settings.backgroundBehavior;
@@ -83,6 +84,10 @@ namespace RPGKarawara.DevTools
                     while (!player.characterLocomotionManager.isGrounded && Time.realtimeSinceStartup < deadline) await Wait(.1f);
                     Require(player.characterLocomotionManager.isGrounded, "Player did not reach authored ground.");
                     keyboard = InputSystem.AddDevice<Keyboard>("G2 virtual keyboard");
+                    // This explicit functional QA process is hidden and permits background
+                    // virtual input. Exercise the production focus handler explicitly;
+                    // this is not evidence that a hidden window has native focus.
+                    if (g3a) PlayerInputManager.instance.SendMessage("OnApplicationFocus", true);
                     PlayerInputManager.instance.SetSessionInputEnabled(true);
                     Vector3 origin = player.transform.position;
                     InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.W));
@@ -107,6 +112,8 @@ namespace RPGKarawara.DevTools
                     ScreenCapture.CaptureScreenshot(Path.Combine(root, "tutorial-player.png"));
                     await Wait(.5f);
                 });
+                if (g3a) await Check("ActualDialoguePauseSkillFocusOwnership", () => InputRoutingFlowRegression.Run(keyboard));
+                if (g3a) await Check("MouseSpearModelAnimationAndDamage", () => SpearMouseRegression.Run(root));
                 for (int slot = 1; slot <= 3; slot++)
                 {
                     int selected = slot;
@@ -143,7 +150,7 @@ namespace RPGKarawara.DevTools
                 Application.logMessageReceived -= OnLog;
                 report.personalFilesUnchanged = before == PersonalFingerprint();
                 report.completed = true; report.finishedUtc = DateTime.UtcNow.ToString("O");
-                report.passed = report.personalFilesUnchanged && report.errors.Count == 0 && report.cases.Count == 8 && report.cases.TrueForAll(c => c.passed);
+                report.passed = report.personalFilesUnchanged && report.errors.Count == 0 && report.cases.Count == (g3a ? 10 : 8) && report.cases.TrueForAll(c => c.passed);
                 File.WriteAllText(output, JsonUtility.ToJson(report, true));
                 Application.Quit(report.passed ? 0 : 2);
             }
@@ -151,7 +158,12 @@ namespace RPGKarawara.DevTools
         private async Task Check(string name, Func<Task> action)
         {
             var row = new Case { name = name }; report.cases.Add(row);
-            try { await action(); row.passed = true; } catch (Exception e) { row.detail = e.ToString(); }
+            try { await action(); row.passed = true; } catch (Exception e) { row.detail = e.ToString();
+                var input = PlayerInputManager.instance;
+                if (input != null) row.detail += "\nInput guard: blocked=" + input.Gate.IsBlocked + "; session=" + input.SessionInputEnabled +
+                    "; focus=" + typeof(PlayerInputManager).GetField("hasFocus", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(input) +
+                    "; router=" + input.Router.CanRouteGameplay + "; scale=" + Time.timeScale;
+                 }
             File.WriteAllText(output, JsonUtility.ToJson(report, true));
         }
         private async Task Wait(float seconds)
@@ -161,7 +173,7 @@ namespace RPGKarawara.DevTools
             {
                 if (Time.timeScale == 0)
                     foreach (var popup in FindObjectsByType<PopUpTutorial>(FindObjectsSortMode.None))
-                        if (!popup.passou && popup.UI != null && popup.UI.activeInHierarchy)
+                        if (!popup.passou && popup.IsShowing)
                         { popup.close(); report.pauseDismissals++; }
                 await Task.Yield();
             }

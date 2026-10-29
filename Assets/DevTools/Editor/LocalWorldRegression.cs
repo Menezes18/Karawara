@@ -13,7 +13,7 @@ namespace RPGKarawara.DevTools
         [MenuItem("Karawara/Validation/TOBE/Run Local World Regression")]
         public static void Run()
         {
-            foreach (var folder in new[] { "Assets/Scripts/States/AI", "Assets/Scripts/States/State", "Assets/Scripts/States/Colliders" })
+            foreach (var folder in new[] { "Assets/Karawara/Runtime/AI", "Assets/Karawara/Runtime/AI/States", "Assets/Karawara/Runtime/Combat/Colliders" })
                 foreach (var path in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
                     if (Regex.IsMatch(File.ReadAllText(path), @"Unity\.Netcode|NetworkVariable|NetworkBehaviour|NetworkObjectId|\bIsOwner\b|\bIsServer\b|\bIsSpawned\b|ServerRpc|ClientRpc"))
                         throw new InvalidOperationException("World gameplay still has a networking dependency: " + path);

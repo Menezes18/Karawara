@@ -446,7 +446,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9683c679d26c29b418b0813b1205c3b3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Plataforma
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Plataforma
   isPlayerOnPlatform: 0
   timer: 0
   timeToDestruct: 3
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39987456c025f0a41879990f1c3489c4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Lever
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Lever
   isActive: 0
   num: 1
   cutScenePortao: {fileID: 888880265}
@@ -592,7 +592,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ee170e9ce26204ea14b4b7a6ae399d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Interactable
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Interactable
   ShowTopMostFoldoutHeaderGroup: 1
   interactableText: Activate Gate Lever 2 - E
   interactableCollider: {fileID: 0}
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39987456c025f0a41879990f1c3489c4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Lever
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Lever
   isActive: 0
   num: 0
   cutScenePortao: {fileID: 888880265}
@@ -1997,7 +1997,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ee170e9ce26204ea14b4b7a6ae399d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Interactable
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Interactable
   ShowTopMostFoldoutHeaderGroup: 1
   interactableText: Activate Gate Lever 1 - E
   interactableCollider: {fileID: 0}
@@ -3530,7 +3530,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59a5361d0c063e149b837c80d21964bb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.CutScenePortao
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.CutScenePortao
   stone:
   - {fileID: 212098883}
   - {fileID: 1977248587}
@@ -3549,7 +3549,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 767917c3f594cef429b5c692226a515e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.GateActivator
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.GateActivator
   levers:
   - {fileID: 524426061}
   - {fileID: 103620462}
@@ -4304,7 +4304,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073e8e6bf3cf1f0499a07aa320d4a0b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimationTrigger
+  m_EditorClassIdentifier: Karawara.Gameplay::AnimationTrigger
   animator: {fileID: 979275761}
   target: {fileID: 1977248587}
   cam: {fileID: 979275762}
@@ -4601,7 +4601,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ee170e9ce26204ea14b4b7a6ae399d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Interactable
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Interactable
   ShowTopMostFoldoutHeaderGroup: 1
   interactableText: Teleport Back To Hub - E
   interactableCollider: {fileID: 0}
@@ -4718,7 +4718,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073e8e6bf3cf1f0499a07aa320d4a0b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimationTrigger
+  m_EditorClassIdentifier: Karawara.Gameplay::AnimationTrigger
   animator: {fileID: 1220723130}
   target: {fileID: 212098883}
   cam: {fileID: 1220723131}
@@ -5916,7 +5916,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ee170e9ce26204ea14b4b7a6ae399d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Interactable
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Interactable
   ShowTopMostFoldoutHeaderGroup: 1
   interactableText: Read Playground Instructions - E
   interactableCollider: {fileID: 0}
@@ -6241,7 +6241,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 286edba8937429942a4c65507be541e2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.FadeImage
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.FadeImage
   image: {fileID: 1852074969}
   fadeDuration: 0.5
 --- !u!223 &1646062101
@@ -6500,7 +6500,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5ee170e9ce26204ea14b4b7a6ae399d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.Interactable
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.Interactable
   ShowTopMostFoldoutHeaderGroup: 1
   interactableText: Teleport To Movement Course - E
   interactableCollider: {fileID: 0}
@@ -7064,7 +7064,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 943dc7cf78ad51845b80b2a15119f82d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RPGKarawara.DevTools.DevPlaygroundController
+  m_EditorClassIdentifier: Karawara.Gameplay::RPGKarawara.DevTools.DevPlaygroundController
   catalog: {fileID: 11400000, guid: bace6b9f1ba2c3b458752ac1500798a1, type: 2}
   playerSpawn: {fileID: 1440083805}
   enemySpawn: {fileID: 1739789945}

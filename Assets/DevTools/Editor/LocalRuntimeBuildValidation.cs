@@ -40,7 +40,7 @@ namespace RPGKarawara.DevTools
                 report.result = build.summary.result.ToString(); report.errors = build.summary.totalErrors; report.warnings = build.summary.totalWarnings;
                 report.buildGuid = build.summary.guid.ToString();
                 report.error = string.Join("\n", build.steps.SelectMany(s => s.messages).Where(m => m.type == LogType.Error || m.type == LogType.Exception).Select(m => m.content));
-                string assembly = Path.Combine(Path.GetDirectoryName(report.executable), "Karawara_Data/Managed/Assembly-CSharp.dll");
+                string assembly = Path.Combine(Path.GetDirectoryName(report.executable), "Karawara_Data/Managed/Karawara.Gameplay.dll");
                 if (File.Exists(assembly)) using (var hash = SHA256.Create()) report.assemblySha256 = BitConverter.ToString(hash.ComputeHash(File.ReadAllBytes(assembly))).Replace("-", "");
             }
             catch (Exception e) { report.result = "Exception"; report.error = e.ToString(); }

@@ -20,7 +20,7 @@ namespace RPGKarawara.DevTools
             if (type.BaseType != typeof(MonoBehaviour)) throw new InvalidOperationException("Player still depends on a gameplay networking base.");
             foreach (var name in new[] { "State", "Registry", "LocalId", "IsInitialized" })
                 if (type.GetProperty(name) == null) throw new InvalidOperationException("Missing local lifecycle property: " + name);
-            foreach (var folder in new[] { "Assets/Scripts/States/Character", "Assets/Scripts/States/Effects", "Assets/Scripts/Item" })
+            foreach (var folder in new[] { "Assets/Karawara/Runtime/Characters", "Assets/Karawara/Runtime/Combat/Effects", "Assets/Karawara/Runtime/Combat/Spells" })
                 foreach (var path in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
                     if (Regex.IsMatch(File.ReadAllText(path), @"Unity\.Netcode|NetworkVariable|NetworkBehaviour|ServerRpc|ClientRpc|\bIsOwner\b|\bIsServer\b"))
                         throw new InvalidOperationException("Player still depends on networking: " + path);
@@ -60,8 +60,10 @@ namespace RPGKarawara.DevTools
                 var registry = new CharacterRegistry();
                 var state = new CharacterRuntimeState();
                 player.InitializeLocal(state, registry);
+                player.Context.BindPresentation(ui, null, PlayerCamera.instance, null);
                 int id = player.LocalId;
                 player.InitializeLocal(state, registry);
+                player.Context.BindPresentation(ui, null, PlayerCamera.instance, null);
                 Require(player.LocalId == id && registry.TryGet(id, out var registered) && ReferenceEquals(registered, state), "Initialization duplicated or lost identity.");
                 int healthEvents = 0;
                 values.currentHealth.OnValueChanged += (oldValue, nextValue) => healthEvents++;
@@ -90,6 +92,7 @@ namespace RPGKarawara.DevTools
                 Require(!player.IsInitialized && player.Registry == null && !registry.TryGet(player.LocalId, out _) && healthEvents == before, "Shutdown retained listeners or registry identity.");
                 Require(!state.IsJumping && !state.IsChargingRightSpell && !state.IsChargingAttack, "Shutdown retained transient action flags.");
                 player.InitializeLocal(state, registry);
+                player.Context.BindPresentation(ui, null, PlayerCamera.instance, null);
                 values.currentHealth.Value = 90;
                 Require(healthEvents == before + 1, "Reinitialization duplicated state listeners.");
                 Require(NetworkCount() == networkBefore, "Fixture created a gameplay network manager.");
