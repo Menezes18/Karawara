@@ -1,6 +1,7 @@
 ﻿using System;
 using RPGKarawara.SkillTree;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace RPGKarawara
 {
@@ -16,9 +17,11 @@ namespace RPGKarawara
         public SkillType skillType; // Tipo de habilidade: Ataque, Defesa ou Suporte
         public float cooldownDuration;
         public Sprite sprite;
-        public string name;
+        public new string name;
         [TextArea(5,10)]
         public string description;
+        public CustomRenderTexture texture;
+        public VideoClip vClip;
         public GameObject prefab;
         public bool isUnlocked; // Indica se a habilidade está desbloqueada ou não
         public bool active;
@@ -55,22 +58,40 @@ namespace RPGKarawara
             }
         }
 
-        public void AddSkill()
+        public void AddSkill(int index)
         {
-            switch (skillType)
+            switch (index)
             {
-                 case SkillType.Attack:
+                 case 1:
                      PlayerSkillManager.instance.slot[0].skillSlot = this;
                      break;
-                 case SkillType.Defense:
+                 case 2:
                      PlayerSkillManager.instance.slot[1].skillSlot  = this;
                      break;
-                 case SkillType.Support:
+                 case 3:
                      PlayerSkillManager.instance.slot[2].skillSlot  = this;
                      break;
                  default:
                     Debug.LogWarning("Tipo de habilidade desconhecido: " + skillType);
                      break;
+            }
+        }
+        public void RemoveSkill(int slot)
+        {
+            switch (slot)
+            {
+                case 1:
+                    PlayerSkillManager.instance.slot[0].skillSlot = null;
+                    break;
+                case 2:
+                    PlayerSkillManager.instance.slot[1].skillSlot  = null;
+                    break;
+                case 3:
+                    PlayerSkillManager.instance.slot[2].skillSlot  = null;
+                    break;
+                default:
+                    Debug.LogWarning("Tipo de habilidade desconhecido: " + skillType);
+                    break;
             }
         }
         public float GetCooldownProgress()

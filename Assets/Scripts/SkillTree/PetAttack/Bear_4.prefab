@@ -4532,6 +4532,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 0
 --- !u!1 &6826897062099230398
 GameObject:
   m_ObjectHideFlags: 0
@@ -5712,6 +5713,7 @@ MonoBehaviour:
   magicDamage: 0
   fireDamage: 0
   holyDamage: 0
+  isPet: 1
 --- !u!65 &5628486812011638447
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5729,7 +5731,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.0018159299, y: 0.002208317, z: 0.0017428907}
   m_Center: {x: -0.00032693424, y: -0.00017648855, z: 0.0020305878}

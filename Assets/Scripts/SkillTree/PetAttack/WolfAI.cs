@@ -33,6 +33,13 @@ public class WolfAI : MonoBehaviour
         StartCoroutine("Eroding");
         StartCoroutine("Detach");
     }
+
+    public void AtivarCollider(){
+        colliderAttack.enabled = true;
+    }
+    public void DesativarCollider(){
+        colliderAttack.enabled = false;
+    }
     IEnumerator Eroding()
     {
         float t = erodeObject.material.GetFloat("_Erode");

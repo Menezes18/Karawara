@@ -30,7 +30,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2402
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -97,7 +97,7 @@ Material:
     m_Floats:
     - Vector1_242C9891: 0.7
     - Vector1_81088C75: 4.39
-    - Vector1_99B978: 0.1
+    - Vector1_99B978: 0.223
     - _AdditionalLightsSmoothness: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
@@ -113,7 +113,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _Erode: 0
+    - _Erode: -1.65
     - _GlossMapScale: 1
     - _Glossiness: 0.8
     - _GlossyReflections: 1
@@ -122,7 +122,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _QueueControl: 0
-    - _QueueOffset: 0
+    - _QueueOffset: -48
     - _ReceiveShadows: 1
     - _Smoothness: 0.8
     - _SmoothnessTextureChannel: 0
@@ -134,11 +134,11 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_70EBBDEE: {r: 1, g: 1, b: 1, a: 0}
+    - Color_70EBBDEE: {r: 1, g: 0, b: 0, a: 0}
     - Color_CFC87909: {r: 8, g: 8, b: 8, a: 0}
-    - Color_DEE0E45B: {r: 1, g: 1, b: 1, a: 0}
-    - Color_F57A70D0: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0}
-    - _AdditionalLightColor: {r: 0, g: 0, b: 0, a: 0}
+    - Color_DEE0E45B: {r: 1024, g: 0, b: 0, a: 0}
+    - Color_F57A70D0: {r: 1825.2128, g: 0, b: 0, a: 1}
+    - _AdditionalLightColor: {r: 1, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 0.906919, g: 0.85706717, b: 0.8687304, a: 1}
     - _Color: {r: 0.906919, g: 0.85706717, b: 0.8687304, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}

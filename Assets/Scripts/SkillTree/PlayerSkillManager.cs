@@ -28,7 +28,6 @@ namespace RPGKarawara.SkillTree
 
         private void Update()
         {
-          
             if (Keyboard.current.digit1Key.wasReleasedThisFrame && slot[0].canUse)
             {
                 ActivateSkill(0); 
@@ -41,6 +40,47 @@ namespace RPGKarawara.SkillTree
             {
                 ActivateSkill(2); 
             }
+            if (Keyboard.current.lKey.wasReleasedThisFrame)
+            {
+                LoadSkillSlot(WorldSaveGameManager.instance.characterSlot01);
+            }
+        }
+
+        // Método para salvar o estado dos slots de habilidades no CharacterSaveData
+        public void SaveSkillSlot(CharacterSaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Cria o array com o mesmo tamanho que o array de slots de habilidades
+            saveData.skillsSlot = new Skill[slot.Length];
+
+            // Copia as habilidades do slot para saveData.skillsSlot
+            for (int i = 0; i < slot.Length; i++)
+            {
+                if (slot[i] != null)
+                {
+                    saveData.skillsSlot[i] = slot[i].skillSlot;
+                }
+            }
+
+            Debug.Log("Slots de habilidades salvos no CharacterSaveData.");
+        }
+
+        // Método para carregar o estado dos slots de habilidades do CharacterSaveData
+        public void LoadSkillSlot(CharacterSaveData saveData)
+        {
+            if (saveData == null || saveData.skillsSlot == null) return;
+
+            for (int i = 0; i < slot.Length; i++)
+            {
+                if (i < saveData.skillsSlot.Length)
+                {
+                    slot[i].skillSlot = saveData.skillsSlot[i];
+                    slot[i].canUse = true; // Redefine cada slot para "usável" ao carregar
+                }
+            }
+
+            Debug.Log("Slots de habilidades carregados do CharacterSaveData.");
         }
 
         private void ActivateSkill(int slotIndex)
@@ -85,13 +125,13 @@ namespace RPGKarawara.SkillTree
                 // Atualiza o fillAmount baseado no tempo restante
                 SkillCooldownUI.instance.skillCooldownImage[slotIndex].fillAmount = remainingTime / cooldownTime;
 
-                Debug.Log($"Cooldown do slot: {remainingTime} segundos restantes.");
+                
                 yield return null; // Espera até o próximo frame
             }
 
             // Após o cooldown do slot, a habilidade pode ser usada novamente
             slot[slotIndex].canUse = true;
-            Debug.Log("Cooldown do slot terminou. Habilidade pronta para uso novamente.");
+            
             SkillCooldownUI.instance.skillCooldownImage[slotIndex].enabled = false; // Desativa a imagem do cooldown ao final
         }
 

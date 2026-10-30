@@ -1,246 +1,157 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
-namespace RPGKarawara
-{
-    [System.Serializable]
-    public class Projetil
-    {
-        public GameObject projectilePrefab;
-        public Transform firePoint;
-        public float projectileSpeed = 20f;
-        public float fireCooldown = 2f;
-        private float fireCooldownTimer;
-    }
 
-    public class BossAISystem : MonoBehaviour
-    {
-        public AudioClip Risada;
+public class BossAISystem : MonoBehaviour {
+    public GameObject projectilePrefab; // O prefab do projétil
+    public Transform firePoint; // Ponto de origem dos tiros
+    public float range = 10f; // Distância de detecção do player
+    public float heightOffset = 1f; // Altura inicial do projétil
+    public int maxShots = 3; // Número máximo de tiros permitidos
+    public float shotCooldown = 2f; // Cooldown entre os tiros
+    public float minDistanceBetweenShots = 1.5f; // Distância mínima entre os projéteis
+    public float minDistanceFromPlayer = 3f; // Distância mínima do player
 
-        [SerializeField]
-        private Projetil _projectile;
-        private GameObject player;
-        private AudioSource audio;
-        private Animator animator;
-        [SerializeField]
-        private float detectionRadiusPlayer;
-        private bool hasLaughed = false;
-        [SerializeField]
-        private float dashSpeed = 30f; // Velocidade do dash
-        [SerializeField]
-        private float dashDuration = 0.5f; // Duração do dash
-        private bool isDashing = false;
-        [SerializeField]
-        private DamageBoss _damageBossCollider;
+    private int currentShots = 0; // Tiros disparados atualmente
+    private float cooldownTimer = 0f; // Timer para o cooldown dos tiros
+    private bool canFire = false;
 
-        [SerializeField] private float dashTimer = 2.5f;
-        public bool AttackMelee = false;
-        public RaycastHit hit;
-        private Vector3 directionToPlayer;
-        [SerializeField]
-        private bool canDash = false;
+    public float moveDistance = 2.0f; // Distância de recuo do boss
+    public NavMeshAgent agent; // Agente de navegação
+    public float rotationRadius = 5f; // Distância para o boss orbitar ao redor do player
+    public float rotationSpeed = 2f; // Velocidade de órbita
+    private float angle = 0f;
 
-        private NavMeshAgent agent;
-        private EnemyAI _EnemyAI;
+    public float randomMoveInterval = 5f; // Intervalo para mudar de direção
+    public float idleTime = 2f; // Tempo em que o boss para
+    private float nextMoveTime = 0f; // Quando o boss mudará de movimento
+    private bool isMoving = true; // Flag para controle de movimento
 
-        public int AttackIndex = 3;
-        void Start(){
-            _EnemyAI = GetComponent<EnemyAI>();
-            agent = GetComponent<NavMeshAgent>();
-            animator = GetComponent<Animator>();
-            audio = GetComponent<AudioSource>();
-            player = GameObject.FindGameObjectWithTag("Player");
+    private Transform playerTransform; // Cache do player
+    private List<Vector3> previousPositions = new List<Vector3>(); // Armazena as posições dos projéteis
+
+    private void Start() {
+        agent = GetComponent<NavMeshAgent>();
+
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null) {
+            playerTransform = player.transform;
         }
 
-        void Update()
-        {
-            // Faz o boss olhar para o jogador
-            if (player != null)
-            {
-                directionToPlayer = (player.transform.position - transform.position).normalized;
-                if (Physics.Raycast(transform.position, directionToPlayer, out hit, Mathf.Infinity)){
-                    if (hit.collider.CompareTag("Player") && !isDashing &&
-                        hasLaughed){
-                        canDash = true;
-                    }
-                }
-                // Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
-                // if (directionToPlayer != Vector3.zero) // Previne divisão por zero
-                // {
-                //     Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
-                //     transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Ajuste a suavidade
-                // }
-            }
+        nextMoveTime = Time.time + randomMoveInterval;
+    }
 
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadiusPlayer);
-            foreach (var hitCollider in hitColliders)
-            {
-                if (hitCollider.CompareTag("Player") && !audio.isPlaying && !hasLaughed)
-                {
-                    // Começa a risada ao detectar o player
-                    audio.clip = Risada;
-                    animator.SetTrigger("Risada");
-                    audio.Play();
-                    hasLaughed = true; // Previne múltiplas risadas durante o mesmo encontro
-                    StartCoroutine(WaitForLaughToEnd());
+    private void Update() {
+        if (cooldownTimer > 0) {
+            cooldownTimer -= Time.deltaTime;
+        }
+
+        if (playerTransform == null) {
+            Debug.LogWarning("Player não encontrado.");
+            return;
+        }
+
+        if (canFire){
+
+            
+        }
+       
+        HandleShooting();
+    }
+
+    void HandleShooting() {
+        // Atirar projéteis se o player estiver ao alcance
+        if (canFire && currentShots < maxShots && cooldownTimer <= 0 && IsPlayerInRange()) {
+            Vector3 targetPosition = GetPlayerPosition();
+            if (CanShoot(targetPosition)) {
+                ShootProjectile(targetPosition);
+                currentShots++;
+                cooldownTimer = shotCooldown;
+
+                if (currentShots >= maxShots) {
+                    StartCoroutine(ShotCooldown());
                 }
             }
         }
 
-        private bool ridada = false;
-        IEnumerator WaitForLaughToEnd()
-        {
-            // Espera até o fim da risada
-            if (!ridada){
-                yield return new WaitForSeconds(Risada.length);
-                ridada = true;
-            }
-            else{
-                yield return new WaitForSeconds(4f);
-            }
-            FireProjectile();
-            //PlayShootAnimation();
-            
-            yield return new WaitForSeconds(3f); // Pequeno atraso antes de iniciar o dash
-            DashTowardsPlayer();
-        }
-
-        void FireProjectile()
-        {
-
-            GameObject projectile = Instantiate(_projectile.projectilePrefab, _projectile.firePoint.position, _projectile.firePoint.rotation);
-    
-
-            Vector3 direction = (player.transform.position - _projectile.firePoint.position).normalized;
-
-
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            rb.velocity = direction * _projectile.projectileSpeed;
-            
-            rb.useGravity = false; 
-            
-        }
-
-
-        void PlayShootAnimation()
-        {
-            // Chamar a animação de disparo
-           // animator.SetTrigger("Shoot");
-        }
-
-        public IEnumerator attackLoop(){
-            yield return new WaitForSeconds(5);
-            AttackMelee = true;
-            _EnemyAI.isAttacking = false;
-            _EnemyAI.index = 0;
-            AttackIndex++;
-        }
-        public void MoveToRandomPositionIfClear(){
-            float radius = 10f;
-            
-            Vector3 randowmDirection = Random.insideUnitSphere * radius;
-            
-            randowmDirection += transform.position;
-            if (NavMesh.SamplePosition(randowmDirection, out NavMeshHit hit, radius, NavMesh.AllAreas)){
-                transform.position = hit.position;
-
-                
-
-                StartCoroutine(attackLoop());
-
-            }
-            else{
-                Debug.Log("Nehuma posição válida!");
-            }
-        }
-
-
-        void DashTowardsPlayer()
-        {
-            Debug.Log("147");
-            if (player != null && !isDashing){
-                Debug.Log("Entrou 149");
-                if (canDash)
-                {
-                    Debug.Log("Entrou 152");
-                    animator.SetTrigger("DashCharge");
-                    StartCoroutine(DashCoroutine(hit.point));
-                }
-                
-            }
-        }
-
-        private bool hasDamagedPlayer = false; // Adicione esta variável
-
-    IEnumerator DashCoroutine(Vector3 targetPosition)
-    {
-        Debug.Log("AA");
-        _damageBossCollider.AtivarCollider();
-        isDashing = true;
-
-        // Manter a posição y da Cuca constante (ficando no chão)
-        float fixedY = transform.position.y;
-        Vector3 targetPositionFlat = new Vector3(targetPosition.x, fixedY, targetPosition.z); // Alvo no mesmo nível
-
-        // Calcular a posição alvo com um offset
-        Vector3 offset = (targetPositionFlat - transform.position).normalized * 4f; // Ajuste o valor para a distância que deseja passar
-        Vector3 finalTargetPosition = targetPositionFlat + offset;
-
-        while (Vector3.Distance(transform.position, finalTargetPosition) > 0.1f) // Tolerância de 0.1 unidades
-        {
-            // Move o boss na direção do alvo final
-            Vector3 direction = (finalTargetPosition - transform.position).normalized;
-            transform.position += direction * (dashSpeed * Time.deltaTime);
-
-            // Aplique dano apenas uma vez durante o dash
-            if (_damageBossCollider.canDamage && !hasDamagedPlayer)
-            {
-                Debug.Log("185");
-                ApplyDamageToPlayer();
-                hasDamagedPlayer = true; // Marca que o dano já foi aplicado
-            }
-            yield return null;
-        }
-
-        // Garantir que o boss pare exatamente na posição alvo
-        transform.position = finalTargetPosition;
-
-        // Resetar a variável para permitir dano em futuros dashes
-        hasDamagedPlayer = false;
-
-        isDashing = false;
-
-        
-        
-        CallMethodBasedOnChance();
-        _damageBossCollider.DesativarCollider();
+        // Voltar a uma posição mais baixa após atirar
+        // if (currentShots >= maxShots) {
+        //     // Aqui você pode definir uma posição desejada para o boss voltar, por exemplo, na altura do chão
+        //     Vector3 lowerPosition = new Vector3(transform.position.x, 0f, transform.position.z); // Ajuste a altura conforme necessário
+        //     agent.SetDestination(lowerPosition);
+        //     isMoving = true; // Permitir movimento após o disparo
+        // }
     }
 
-    IEnumerator TimeAttack(){
-        yield return new WaitForSeconds(dashTimer);
-        AttackMelee = true;
+    void OrbitAroundPlayer() {
+        // Calcular a posição desejada ao redor do player, mantendo a distância mínima
+        Vector3 direction = (transform.position - playerTransform.position).normalized;
+        Vector3 targetPosition = playerTransform.position + direction * (rotationRadius + minDistanceFromPlayer);
+
+        // Definir o destino no NavMesh para orbitar o player
+        agent.SetDestination(targetPosition);
+
+        // Rotacionar para olhar para o player
+        Vector3 lookDirection = (playerTransform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(lookDirection.x, 0, lookDirection.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
-    
-    void CallMethodBasedOnChance(){
-        StartCoroutine(TimeAttack());
+
+    void StopMovement() {
+        // Parar o boss no local atual
+        agent.SetDestination(transform.position);
     }
-    
 
-
-
-        void ApplyDamageToPlayer()
-        {
-            
-            Debug.Log("Player sofreu dano!");
-            // Exemplo:
-            // player.GetComponent<PlayerHealth>().TakeDamage(damageAmount);
+    private bool IsPlayerInRange() {
+        // Verifica se o player está dentro do alcance
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
+        foreach (var hitCollider in hitColliders) {
+            if (hitCollider.CompareTag("Player")) {
+                return true;
+            }
         }
+        return false;
+    }
 
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, detectionRadiusPlayer);
+    private Vector3 GetPlayerPosition() {
+        return playerTransform.position;
+    }
+
+    private void ShootProjectile(Vector3 targetPosition) {
+        // Dispara o projétil na direção do player
+        Vector3 spawnPosition = firePoint.position + Vector3.up * heightOffset;
+        GameObject projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
+        previousPositions.Add(spawnPosition);
+
+        // Limita o número de projéteis anteriores armazenados
+        if (previousPositions.Count > maxShots) {
+            previousPositions.RemoveAt(0);
         }
+    }
+
+    private bool CanShoot(Vector3 targetPosition) {
+        // Verifica se o novo projétil está a uma distância mínima dos projéteis anteriores
+        foreach (var pos in previousPositions) {
+            if (Vector3.Distance(pos, targetPosition) < minDistanceBetweenShots) {
+                return false; // Não pode disparar se estiver muito próximo
+            }
+        }
+        return true; // Pode disparar se não houver nenhum projétil próximo
+    }
+
+    IEnumerator ShotCooldown() {
+        // Controla o cooldown entre tiros
+        yield return new WaitForSeconds(shotCooldown);
+        currentShots = 0;
+        canFire = false;
+    }
+
+    void OnDrawGizmosSelected() {
+        // Desenha um gizmo para mostrar o alcance de detecção
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }

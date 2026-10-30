@@ -11,6 +11,8 @@ public class PetAttackController : MonoBehaviour
     private PlayerNetworkManager _playerNetworkManager;
     public float damageExtra = 10f;
     private bool _isAttackPressed;
+    public GameObject petPrefab; // Referência ao Prefab do pet
+    public float duration = 10;
 
     private void Awake(){
         
@@ -29,15 +31,14 @@ public class PetAttackController : MonoBehaviour
         _playerNetworkManager = FindObjectOfType<PlayerNetworkManager>();
         _playerNetworkManager.isPowerPet.Value = true;
         InstantiatePet();
-        //Invoke(nameof(DesativarPower), duration);
+        Invoke(nameof(DesativarPower), duration);
     }
 
     private void DesativarPower()
     {
         _playerNetworkManager.isPowerPet.Value = false;
+        Destroy(gameObject);
     }
-
-    public GameObject petPrefab; // Referência ao Prefab do pet
 
     private void InstantiatePet()
     {

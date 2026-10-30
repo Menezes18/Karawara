@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.Video;
 
 namespace RPGKarawara.SkillTree {
     [CreateAssetMenu(fileName = "New Support Skill", menuName = "Skills/SupportSkill")]
     public class SupportSkill : Skill {
-        public float _healingRate;       // Taxa de cura por segundo
-        public int _healingAmount;  
-        public GameObject healCirclePrefab;
-
+        
+        public bool showSkillJacare = false;
+        [HideInInspector] public GameObject skillPrefabJacare;
+        public CustomRenderTexture texture;
+        public VideoClip vClip;
+        [HideInInspector]public float _healingRate;       // Taxa de cura por segundo
+        [HideInInspector]public int _healingAmount;  
+        [HideInInspector]public GameObject healCirclePrefab;
+        public bool showHealVariables = true;
         protected override void Execute(GameObject user) {
             
             if (healCirclePrefab != null) {
@@ -17,9 +23,16 @@ namespace RPGKarawara.SkillTree {
                 healCircleScript.Initialize(_healingRate, _healingAmount);
 
             }
-            else{
-                Debug.Log("null o prefab");
+            else
+            if (skillPrefabJacare != null){
+                GameObject jacare  = Instantiate(skillPrefabJacare, user.transform.position, user.transform.rotation);
+                SkillJacare jacareScript = jacare.GetComponent<SkillJacare>();
+                jacareScript.skillDuration = cooldownDuration;
+                DurationSkill durationSkillScript = jacare.GetComponent<DurationSkill>();
+                durationSkillScript.Init(cooldownDuration);
+                
             }
+            
         }
     }
 }
